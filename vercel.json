@@ -1,0 +1,14 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "server.py": {
+      "includeFiles": "mock_db.json"
+    }
+  },
+  "crons": [
+    {
+      "path": "/api/cron/simulator",
+      "schedule": "0 5 * * *"
+    }
+  ]
+}

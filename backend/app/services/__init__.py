@@ -1,0 +1,1 @@
+"""External service adapters with credentials kept server-side."""

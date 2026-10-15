@@ -1,0 +1,711 @@
+{
+  "last_updated": "2026-10-15T06:53:49.419308+00:00",
+  "manager": {
+    "name": "User",
+    "role": "Procurement manager",
+    "initials": "U"
+  },
+  "products": [
+    {
+      "asin": "B0C8Q4M2K7",
+      "name": "ArcFold Aluminum Laptop Stand",
+      "sku": "AF-LS-02",
+      "category": "Office",
+      "price": 32.74,
+      "competitor_price": 95.78,
+      "min_floor": 27.5,
+      "stock": 420.002,
+      "daily_velocity": 18,
+      "supplier": "Shenzhen Northstar Manufacturing",
+      "po_draft_id": null
+    },
+    {
+      "asin": "B0B7P9R3W1",
+      "name": "QuietClick Wireless Mouse",
+      "sku": "QC-M-11",
+      "category": "Electronics",
+      "price": 17.25,
+      "competitor_price": 29.93,
+      "min_floor": 17.25,
+      "stock": 308.002,
+      "daily_velocity": 14,
+      "supplier": "Ningbo Kestrel Electronics",
+      "po_draft_id": null
+    },
+    {
+      "asin": "B0D2L6T8N4",
+      "name": "TerraGrip Silicone Bottle Sleeve",
+      "sku": "TG-BS-04",
+      "category": "Home & Kitchen",
+      "price": 12.78,
+      "competitor_price": 90.56,
+      "min_floor": 12.75,
+      "stock": 142.001,
+      "daily_velocity": 12,
+      "supplier": "Evergreen Household Goods",
+      "po_draft_id": "PO-7294A8"
+    },
+    {
+      "asin": "B0A9H5X3J6",
+      "name": "Luma USB-C Desk Light",
+      "sku": "LM-DL-08",
+      "category": "Lighting",
+      "price": 21.06,
+      "competitor_price": 22.03,
+      "min_floor": 21.0,
+      "stock": 770.003,
+      "daily_velocity": 22,
+      "supplier": "Shenzhen Northstar Manufacturing",
+      "po_draft_id": null
+    },
+    {
+      "asin": "B0C3F7Y1V9",
+      "name": "SnapDock Cable Organizer Set",
+      "sku": "SD-CO-06",
+      "category": "Office",
+      "price": 8.57,
+      "competitor_price": 27.47,
+      "min_floor": 8.5,
+      "stock": 244.002,
+      "daily_velocity": 20,
+      "supplier": "Evergreen Household Goods",
+      "po_draft_id": "PO-E302BC"
+    }
+  ],
+  "search_terms": [
+    {
+      "term": "foldable laptop riser",
+      "clicks": 246,
+      "spend": 118.42,
+      "conversions": 21,
+      "acos": 18.4
+    },
+    {
+      "term": "portable computer stand aluminum",
+      "clicks": 137,
+      "spend": 96.18,
+      "conversions": 9,
+      "acos": 23.1
+    },
+    {
+      "term": "ergonomic laptop holder for desk",
+      "clicks": 82,
+      "spend": 65.9,
+      "conversions": 6,
+      "acos": 31.7
+    },
+    {
+      "term": "cheap plastic laptop stand",
+      "clicks": 38,
+      "spend": 24.66,
+      "conversions": 0,
+      "acos": 0
+    },
+    {
+      "term": "laptop stand with cooling fan",
+      "clicks": 17,
+      "spend": 19.4,
+      "conversions": 0,
+      "acos": 0
+    },
+    {
+      "term": "adjustable laptop stand for travel",
+      "clicks": 104,
+      "spend": 51.33,
+      "conversions": 8,
+      "acos": 19.8
+    },
+    {
+      "term": "wooden monitor shelf",
+      "clicks": 11,
+      "spend": 8.2,
+      "conversions": 1,
+      "acos": 27.4
+    }
+  ],
+  "targeted_exact_keywords": [
+    {
+      "term": "foldable laptop riser",
+      "added_at": "2026-10-09T19:13:59.504930+00:00",
+      "source": "Auto harvest"
+    },
+    {
+      "term": "portable computer stand aluminum",
+      "added_at": "2026-10-09T19:13:59.505302+00:00",
+      "source": "Auto harvest"
+    },
+    {
+      "term": "adjustable laptop stand for travel",
+      "added_at": "2026-10-09T19:13:59.505399+00:00",
+      "source": "Auto harvest"
+    }
+  ],
+  "negative_keywords": [
+    {
+      "term": "cheap plastic laptop stand",
+      "added_at": "2026-10-09T19:13:59.505346+00:00",
+      "source": "Zero-conversion guard"
+    },
+    {
+      "term": "laptop stand with cooling fan",
+      "added_at": "2026-10-09T19:13:59.505368+00:00",
+      "source": "Zero-conversion guard"
+    }
+  ],
+  "orders": [
+    {
+      "id": "WF-2048",
+      "product_name": "ArcFold Aluminum Laptop Stand",
+      "category": "Office",
+      "supplier": "Shenzhen Northstar Manufacturing",
+      "units": 600,
+      "amount": 9240,
+      "submitted_by": "Jordan Lee",
+      "submitted_at": "2026-10-09T08:42:00Z",
+      "status": "pending",
+      "reason": "Q4 replenishment \u00b7 34 days of cover"
+    },
+    {
+      "id": "WF-2047",
+      "product_name": "QuietClick Wireless Mouse",
+      "category": "Electronics",
+      "supplier": "Ningbo Kestrel Electronics",
+      "units": 400,
+      "amount": 6380,
+      "submitted_by": "Avery Patel",
+      "submitted_at": "2026-10-09T08:16:00Z",
+      "status": "pending",
+      "reason": "Velocity increase \u00b7 22% week over week"
+    },
+    {
+      "id": "WF-2046",
+      "product_name": "Luma USB-C Desk Light",
+      "category": "Lighting",
+      "supplier": "Shenzhen Northstar Manufacturing",
+      "units": 320,
+      "amount": 7014.4,
+      "submitted_by": "Jordan Lee",
+      "submitted_at": "2026-10-09T07:55:00Z",
+      "status": "pending",
+      "reason": "Supplier lead time \u00b7 41 days"
+    },
+    {
+      "id": "WF-2045",
+      "product_name": "TerraGrip Silicone Bottle Sleeve",
+      "category": "Home & Kitchen",
+      "supplier": "Evergreen Household Goods",
+      "units": 500,
+      "amount": 4750,
+      "submitted_by": "Morgan Diaz",
+      "submitted_at": "2026-10-08T16:28:00Z",
+      "status": "pending",
+      "reason": "Low stock \u00b7 12 days of cover"
+    },
+    {
+      "id": "WF-2044",
+      "product_name": "SnapDock Cable Organizer Set",
+      "category": "Office",
+      "supplier": "Evergreen Household Goods",
+      "units": 700,
+      "amount": 5390,
+      "submitted_by": "Avery Patel",
+      "submitted_at": "2026-10-08T15:03:00Z",
+      "status": "approved",
+      "reason": "Reorder point reached",
+      "reviewed_by": "User",
+      "reviewed_at": "2026-10-09T23:19:16.460334+00:00"
+    }
+  ],
+  "purchase_orders": [
+    {
+      "id": "PO-E302BC",
+      "product_asin": "B0C3F7Y1V9",
+      "product_name": "SnapDock Cable Organizer Set",
+      "supplier": "Evergreen Household Goods",
+      "units": 600,
+      "status": "draft",
+      "created_at": "2026-10-09T19:13:59.505541+00:00"
+    },
+    {
+      "id": "PO-7294A8",
+      "product_asin": "B0D2L6T8N4",
+      "product_name": "TerraGrip Silicone Bottle Sleeve",
+      "supplier": "Evergreen Household Goods",
+      "units": 360,
+      "status": "draft",
+      "created_at": "2026-10-09T19:13:59.505474+00:00"
+    }
+  ],
+  "reviews": [
+    {
+      "rating": 1,
+      "product": "ArcFold Aluminum Laptop Stand",
+      "date": "2026-10-08",
+      "text": "The hinge snapped the second week. I only adjusted it a few times and now it will not hold my laptop up."
+    },
+    {
+      "rating": 1,
+      "product": "ArcFold Aluminum Laptop Stand",
+      "date": "2026-10-07",
+      "text": "Arrived with the hinge cracked. The box looked fine outside, but the stand was loose in the package."
+    },
+    {
+      "rating": 1,
+      "product": "ArcFold Aluminum Laptop Stand",
+      "date": "2026-10-06",
+      "text": "Plastic connector broke while I was tightening the stand. The instructions say not to overtighten but it barely felt snug."
+    },
+    {
+      "rating": 1,
+      "product": "QuietClick Wireless Mouse",
+      "date": "2026-10-05",
+      "text": "The scroll wheel stopped working after a month. It still clicks, but the wheel no longer moves the page."
+    },
+    {
+      "rating": 1,
+      "product": "TerraGrip Silicone Bottle Sleeve",
+      "date": "2026-10-03",
+      "text": "Much tighter than the listing implied. I cannot get the sleeve over my bottle without stretching it hard."
+    }
+  ],
+  "acos_history": [
+    24.2,
+    23.7,
+    25.1,
+    22.9,
+    22.4,
+    23.2,
+    21.8,
+    22.6,
+    20.9,
+    21.4,
+    20.2,
+    21.7,
+    19.8,
+    20.6,
+    19.4,
+    20.1,
+    18.9,
+    19.7,
+    20.4,
+    18.8,
+    19.2,
+    18.1,
+    19.5,
+    17.9,
+    18.6,
+    18.2,
+    17.4,
+    18.1,
+    17.6,
+    18.3
+  ],
+  "activity": [
+    {
+      "id": "96042477-6502-4be5-b377-25a7d2b4a9bd",
+      "timestamp": "2026-10-14T19:27:28.482700+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0C3F7Y1V9 moved from $8.59 to $8.57, one cent below its competitor."
+    },
+    {
+      "id": "ab710cb5-25c9-4add-b92d-63b04fc26293",
+      "timestamp": "2026-10-14T17:44:10.058483+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0C3F7Y1V9 moved from $9.06 to $8.59, one cent below its competitor."
+    },
+    {
+      "id": "093f872c-f4f4-4a4a-acb5-89cd1ee4ef01",
+      "timestamp": "2026-10-14T17:43:50.048889+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0C3F7Y1V9 moved from $9.65 to $9.06, one cent below its competitor."
+    },
+    {
+      "id": "26463f79-50b9-4254-85c8-f7c588ea88e2",
+      "timestamp": "2026-10-14T17:42:10.015510+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0C3F7Y1V9 moved from $10.15 to $9.65, one cent below its competitor."
+    },
+    {
+      "id": "1b11ace8-fb9d-40d9-ad23-ecc874a74838",
+      "timestamp": "2026-10-14T17:42:00.012866+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0C3F7Y1V9 moved from $10.82 to $10.15, one cent below its competitor."
+    },
+    {
+      "id": "e57f172e-b632-4c1c-962f-843da6c3b605",
+      "timestamp": "2026-10-14T17:41:50.009696+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0C3F7Y1V9 moved from $11.01 to $10.82, one cent below its competitor."
+    },
+    {
+      "id": "cba176b9-7371-4b3a-8ecf-768e1003beb2",
+      "timestamp": "2026-10-14T17:41:40.006924+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0C3F7Y1V9 moved from $11.03 to $11.01, one cent below its competitor."
+    },
+    {
+      "id": "de30573e-3ed5-4858-b7be-36d0f63205dc",
+      "timestamp": "2026-10-14T17:30:59.822098+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0C3F7Y1V9 moved from $11.18 to $11.03, one cent below its competitor."
+    },
+    {
+      "id": "8c810c6a-8c7e-4e0a-8d89-e3ba8bbc0e9d",
+      "timestamp": "2026-10-14T17:28:59.786991+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0A9H5X3J6 moved from $21.26 to $21.06, one cent below its competitor."
+    },
+    {
+      "id": "3140e5d6-8d44-4d11-ab28-d2e0db3a2ec3",
+      "timestamp": "2026-10-14T17:28:29.779146+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0A9H5X3J6 moved from $22.47 to $21.26, one cent below its competitor."
+    },
+    {
+      "id": "a0c78128-dd1d-4a3d-beef-0cc724024021",
+      "timestamp": "2026-10-14T17:28:19.776897+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0A9H5X3J6 moved from $22.81 to $22.47, one cent below its competitor."
+    },
+    {
+      "id": "5b9ed6fc-b503-414e-9b39-401a017436e9",
+      "timestamp": "2026-10-14T17:28:09.774862+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0A9H5X3J6 moved from $23.17 to $22.81, one cent below its competitor."
+    },
+    {
+      "id": "68fa888f-26c5-44db-ad0a-87f14f10da70",
+      "timestamp": "2026-10-14T17:26:29.736530+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0A9H5X3J6 moved from $23.59 to $23.17, one cent below its competitor."
+    },
+    {
+      "id": "406f85de-7ba5-440d-bad4-c1c017971800",
+      "timestamp": "2026-10-14T17:25:29.717549+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0A9H5X3J6 moved from $24.04 to $23.59, one cent below its competitor."
+    },
+    {
+      "id": "88dfa9b9-546a-4c91-81a6-7feee11e127f",
+      "timestamp": "2026-10-14T06:41:22.699813+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0A9H5X3J6 moved from $24.75 to $24.04, one cent below its competitor."
+    },
+    {
+      "id": "d0e06609-1cb8-4351-93cd-6b26d52b6927",
+      "timestamp": "2026-10-14T06:40:52.691796+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0A9H5X3J6 moved from $26.24 to $24.75, one cent below its competitor."
+    },
+    {
+      "id": "9c914a6a-10d9-48ce-80c3-d70ac61e1e19",
+      "timestamp": "2026-10-14T06:40:42.687761+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0A9H5X3J6 moved from $27.13 to $26.24, one cent below its competitor."
+    },
+    {
+      "id": "292bf991-51ac-4b19-bdfa-dcbd6af14d4c",
+      "timestamp": "2026-10-14T06:40:32.685128+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0A9H5X3J6 moved from $27.21 to $27.13, one cent below its competitor."
+    },
+    {
+      "id": "c93f4010-9e40-43b5-acb4-a5d5e8e253c3",
+      "timestamp": "2026-10-14T06:36:42.619195+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0A9H5X3J6 moved from $27.36 to $27.21, one cent below its competitor."
+    },
+    {
+      "id": "2498a144-458c-4d07-829e-b7ef7c9f04fb",
+      "timestamp": "2026-10-14T06:36:22.614018+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0A9H5X3J6 moved from $27.94 to $27.36, one cent below its competitor."
+    },
+    {
+      "id": "aa6e8af0-308b-4920-b737-8b59783226a2",
+      "timestamp": "2026-10-09T23:19:16.460562+00:00",
+      "category": "procurement",
+      "title": "Purchase workflow approved",
+      "detail": "WF-2044 for SnapDock Cable Organizer Set was approved by User."
+    },
+    {
+      "id": "d3686b84-11f9-422f-9c82-632ab4d876c2",
+      "timestamp": "2026-10-09T22:55:47.944177+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0D2L6T8N4 moved from $12.82 to $12.78, one cent below its competitor."
+    },
+    {
+      "id": "50c7cb05-03e7-4e08-8c01-1086963a82e1",
+      "timestamp": "2026-10-09T21:51:30.688027+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0B7P9R3W1 moved from $17.28 to $17.25, one cent below its competitor."
+    },
+    {
+      "id": "1a71f1b7-8ddb-40d5-b12e-5b8fe28ab34d",
+      "timestamp": "2026-10-09T21:35:10.480166+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0B7P9R3W1 moved from $17.36 to $17.28, one cent below its competitor."
+    },
+    {
+      "id": "91fe8022-1cc2-4047-904c-bb79e0a171ee",
+      "timestamp": "2026-10-09T21:27:50.389830+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0B7P9R3W1 moved from $17.39 to $17.36, one cent below its competitor."
+    },
+    {
+      "id": "f052b7cc-0658-41d2-b869-3a20dbcf3180",
+      "timestamp": "2026-10-09T21:23:40.339639+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0B7P9R3W1 moved from $17.42 to $17.39, one cent below its competitor."
+    },
+    {
+      "id": "40c7c19f-4207-42d9-9a62-e9e554e8e3bb",
+      "timestamp": "2026-10-09T19:35:09.774910+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0C8Q4M2K7 moved from $33.34 to $32.74, one cent below its competitor."
+    },
+    {
+      "id": "0f200bcd-a447-48f3-b508-0bf4117a7c2b",
+      "timestamp": "2026-10-09T19:34:59.772514+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0C8Q4M2K7 moved from $33.78 to $33.34, one cent below its competitor."
+    },
+    {
+      "id": "886ded4c-e5b6-40bd-b9e5-173d1301fbe9",
+      "timestamp": "2026-10-09T19:32:29.727815+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0D2L6T8N4 moved from $12.89 to $12.82, one cent below its competitor."
+    },
+    {
+      "id": "10faefd9-4375-4b8e-916b-04645d6319b2",
+      "timestamp": "2026-10-09T19:31:59.717486+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0C8Q4M2K7 moved from $33.98 to $33.78, one cent below its competitor."
+    },
+    {
+      "id": "dff29186-0a57-4a79-b631-ad6ffb5231ea",
+      "timestamp": "2026-10-09T19:27:59.670634+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0D2L6T8N4 moved from $13.63 to $12.89, one cent below its competitor."
+    },
+    {
+      "id": "8b4825dd-3da8-4a9c-9547-837658ff84aa",
+      "timestamp": "2026-10-09T19:27:29.665227+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0D2L6T8N4 moved from $14.18 to $13.63, one cent below its competitor."
+    },
+    {
+      "id": "97714c3b-53f7-4da1-9c65-0692b0db1cd7",
+      "timestamp": "2026-10-09T19:24:39.634055+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0B7P9R3W1 moved from $18.45 to $17.42, one cent below its competitor."
+    },
+    {
+      "id": "62a43a14-7a65-459e-b283-bda0349cf584",
+      "timestamp": "2026-10-09T19:24:29.631769+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0B7P9R3W1 moved from $19.39 to $18.45, one cent below its competitor."
+    },
+    {
+      "id": "338e32f8-e9b6-463f-a2c5-a1c5992cad6b",
+      "timestamp": "2026-10-09T19:24:19.629800+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0B7P9R3W1 moved from $19.60 to $19.39, one cent below its competitor."
+    },
+    {
+      "id": "704f9130-a31c-43c2-9570-0538f7bd838f",
+      "timestamp": "2026-10-09T19:23:49.624671+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0B7P9R3W1 moved from $19.92 to $19.60, one cent below its competitor."
+    },
+    {
+      "id": "92252534-0b96-4402-baea-62ca81068b2f",
+      "timestamp": "2026-10-09T19:22:39.612317+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0D2L6T8N4 moved from $14.32 to $14.18, one cent below its competitor."
+    },
+    {
+      "id": "336968b4-9ae6-4979-bbaf-34e03f30768d",
+      "timestamp": "2026-10-09T19:21:19.599615+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0D2L6T8N4 moved from $15.23 to $14.32, one cent below its competitor."
+    },
+    {
+      "id": "aa78308b-de53-4088-a8a4-2847393a2747",
+      "timestamp": "2026-10-09T19:20:49.594959+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0D2L6T8N4 moved from $15.32 to $15.23, one cent below its competitor."
+    },
+    {
+      "id": "72cfd6ad-a9a9-4ab4-afa4-ee09130ff8de",
+      "timestamp": "2026-10-09T19:20:09.588090+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0D2L6T8N4 moved from $16.36 to $15.32, one cent below its competitor."
+    },
+    {
+      "id": "bcce130e-1c80-4203-baf6-59c3211454a0",
+      "timestamp": "2026-10-09T19:19:59.586232+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0D2L6T8N4 moved from $16.40 to $16.36, one cent below its competitor."
+    },
+    {
+      "id": "9eebdc8c-24d7-4101-bcde-efba88f899a7",
+      "timestamp": "2026-10-09T19:19:09.574145+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0B7P9R3W1 moved from $20.02 to $19.92, one cent below its competitor."
+    },
+    {
+      "id": "f27c4ade-7ee5-4009-a8b9-89191b3ef6f7",
+      "timestamp": "2026-10-09T19:15:19.531848+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0B7P9R3W1 moved from $20.53 to $20.02, one cent below its competitor."
+    },
+    {
+      "id": "a978aee2-7f8c-40bd-9a87-50ebbe886e96",
+      "timestamp": "2026-10-09T19:15:09.529650+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0B7P9R3W1 moved from $21.21 to $20.53, one cent below its competitor."
+    },
+    {
+      "id": "baa6e048-1dec-4229-af5a-dd4ff213cddf",
+      "timestamp": "2026-10-09T19:14:39.523202+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0B7P9R3W1 moved from $21.97 to $21.21, one cent below its competitor."
+    },
+    {
+      "id": "417cc1c9-4058-4573-8b4e-79d3dffe997f",
+      "timestamp": "2026-10-09T19:14:09.514657+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0A9H5X3J6 moved from $28.41 to $27.94, one cent below its competitor."
+    },
+    {
+      "id": "50a60ffc-c5eb-4d0a-8fc2-eef0114dbda9",
+      "timestamp": "2026-10-09T19:13:59.505564+00:00",
+      "category": "inventory",
+      "title": "Critical stock alert \u00b7 PO drafted",
+      "detail": "SnapDock Cable Organizer Set has 12.6 days of supply. Draft PO-E302BC created for 600 units."
+    },
+    {
+      "id": "709a87d3-2d33-4584-89ce-0e0c8d55227d",
+      "timestamp": "2026-10-09T19:13:59.505500+00:00",
+      "category": "inventory",
+      "title": "Critical stock alert \u00b7 PO drafted",
+      "detail": "TerraGrip Silicone Bottle Sleeve has 12.2 days of supply. Draft PO-7294A8 created for 360 units."
+    },
+    {
+      "id": "711c2ba7-bd7b-4629-9306-86aa9c00056c",
+      "timestamp": "2026-10-09T19:13:59.505415+00:00",
+      "category": "ppc",
+      "title": "Exact keyword harvested",
+      "detail": "adjustable laptop stand for travel qualified with 8 conversions at 19.8% ACoS."
+    },
+    {
+      "id": "14cbc7a6-1f50-4f3f-9cdf-9e7f5c227c6c",
+      "timestamp": "2026-10-09T19:13:59.505392+00:00",
+      "category": "ppc",
+      "title": "Negative keyword added",
+      "detail": "laptop stand with cooling fan reached 17 clicks without a conversion."
+    },
+    {
+      "id": "a7fd4194-5c8c-4b30-818a-afdf77a35d89",
+      "timestamp": "2026-10-09T19:13:59.505363+00:00",
+      "category": "ppc",
+      "title": "Negative keyword added",
+      "detail": "cheap plastic laptop stand reached 38 clicks without a conversion."
+    },
+    {
+      "id": "ddd3a6ec-d0f7-40de-a75e-04f62582398a",
+      "timestamp": "2026-10-09T19:13:59.505335+00:00",
+      "category": "ppc",
+      "title": "Exact keyword harvested",
+      "detail": "portable computer stand aluminum qualified with 9 conversions at 23.1% ACoS."
+    },
+    {
+      "id": "c28f7e6a-448e-41f8-a1ec-e1bae0a8bfaf",
+      "timestamp": "2026-10-09T19:13:59.505282+00:00",
+      "category": "ppc",
+      "title": "Exact keyword harvested",
+      "detail": "foldable laptop riser qualified with 21 conversions at 18.4% ACoS."
+    },
+    {
+      "id": "4d7d5240-1ed1-42d5-906a-8fcc2380abde",
+      "timestamp": "2026-10-09T19:13:59.504912+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0C3F7Y1V9 moved from $12.99 to $11.18, one cent below its competitor."
+    },
+    {
+      "id": "abd4391b-832d-4415-bbff-30a414e4ea92",
+      "timestamp": "2026-10-09T19:13:59.504877+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0A9H5X3J6 moved from $28.95 to $28.41, one cent below its competitor."
+    },
+    {
+      "id": "5e9040d3-a39e-4c25-bef9-627e44641f16",
+      "timestamp": "2026-10-09T19:13:59.504843+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0D2L6T8N4 moved from $16.99 to $16.40, one cent below its competitor."
+    },
+    {
+      "id": "d559eb82-59b4-4573-8b3e-5bffa9eeca7c",
+      "timestamp": "2026-10-09T19:13:59.504804+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0B7P9R3W1 moved from $22.49 to $21.97, one cent below its competitor."
+    },
+    {
+      "id": "e39eb889-afbe-4af8-986c-f83e494c99dc",
+      "timestamp": "2026-10-09T19:13:59.504700+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0C8Q4M2K7 moved from $34.99 to $33.98, one cent below its competitor."
+    }
+  ]
+}

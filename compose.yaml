@@ -1,0 +1,111 @@
+name: amzsphere
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: amzsphere
+      POSTGRES_USER: amzsphere
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in the ignored local .env}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/migrations/001_initial.sql:/docker-entrypoint-initdb.d/001_initial.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U amzsphere -d amzsphere"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    networks: [internal]
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    networks: [internal]
+
+  api:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    env_file: .env
+    environment:
+      APP_ENV: production
+      DATABASE_URL: postgresql+asyncpg://amzsphere:${POSTGRES_PASSWORD}@postgres:5432/amzsphere
+      REDIS_URL: redis://redis:6379/0
+    ports:
+      - "127.0.0.1:8001:8001"
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+    networks: [internal]
+
+  worker:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    env_file: .env
+    environment:
+      APP_ENV: production
+      DATABASE_URL: postgresql+asyncpg://amzsphere:${POSTGRES_PASSWORD}@postgres:5432/amzsphere
+      REDIS_URL: redis://redis:6379/0
+    command: ["celery", "-A", "backend.app.celery_app:celery_app", "worker", "--loglevel=INFO", "--concurrency=4", "-Q", "amzsphere.default,amzsphere.catalog,amzsphere.inventory,amzsphere.ingestion,amzsphere.notifications"]
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+    networks: [internal]
+
+  beat:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    env_file: .env
+    environment:
+      APP_ENV: production
+      DATABASE_URL: postgresql+asyncpg://amzsphere:${POSTGRES_PASSWORD}@postgres:5432/amzsphere
+      REDIS_URL: redis://redis:6379/0
+    command: ["celery", "-A", "backend.app.celery_app:celery_app", "beat", "--loglevel=INFO"]
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+    networks: [internal]
+
+  amazon-notifications:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://amzsphere:${POSTGRES_PASSWORD}@postgres:5432/amzsphere
+      REDIS_URL: redis://redis:6379/0
+    command: ["python", "-m", "backend.app.workers.amazon_sqs_consumer"]
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+    networks: [internal]
+
+  web:
+    build:
+      context: web
+      dockerfile: Dockerfile
+    env_file: .env
+    environment:
+      AMZSPHERE_BACKEND_URL: http://api:8001
+      AUTH_URL: ${AUTH_URL:-http://localhost:3000}
+    ports:
+      - "127.0.0.1:3000:3000"
+    depends_on: [api]
+    networks: [internal]
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  internal:
+    driver: bridge
