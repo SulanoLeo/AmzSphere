@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-10-17T10:04:51.975369+00:00",
+  "last_updated": "2026-10-17T11:52:39.997092+00:00",
   "history_end": "2026-10-17",
   "manager": {
     "name": "User",
@@ -12,14 +12,14 @@
       "name": "ArcFold Aluminum Laptop Stand",
       "sku": "AF-LS-02",
       "category": "Office",
-      "price": 34.02,
-      "competitor_price": 34.08,
+      "price": 32.78,
+      "competitor_price": 32.62,
       "market_price": 34.5,
       "min_floor": 27.5,
       "max_price": 39.99,
       "unit_cost": 15.4,
-      "stock": 618.772,
-      "daily_velocity": 17.8,
+      "stock": 618.836,
+      "daily_velocity": 17.7,
       "lead_time_days": 34,
       "supplier": "Shenzhen Northstar Manufacturing",
       "po_draft_id": null
@@ -29,14 +29,14 @@
       "name": "QuietClick Wireless Mouse",
       "sku": "QC-M-11",
       "category": "Electronics",
-      "price": 22.99,
-      "competitor_price": 23.01,
+      "price": 23.11,
+      "competitor_price": 22.64,
       "market_price": 22.99,
       "min_floor": 17.25,
       "max_price": 26.99,
       "unit_cost": 11.5,
-      "stock": 378.772,
-      "daily_velocity": 14.5,
+      "stock": 377.836,
+      "daily_velocity": 14.1,
       "lead_time_days": 28,
       "supplier": "Ningbo Kestrel Electronics",
       "po_draft_id": null
@@ -46,31 +46,31 @@
       "name": "TerraGrip Silicone Bottle Sleeve",
       "sku": "TG-BS-04",
       "category": "Home & Kitchen",
-      "price": 12.78,
-      "competitor_price": 12.97,
+      "price": 14.04,
+      "competitor_price": 14.05,
       "market_price": 13.49,
       "min_floor": 9.25,
       "max_price": 16.99,
       "unit_cost": 4.75,
-      "stock": 141.386,
-      "daily_velocity": 12.2,
+      "stock": 140.918,
+      "daily_velocity": 12.3,
       "lead_time_days": 21,
       "supplier": "Evergreen Household Goods",
-      "po_draft_id": "PO-44D068"
+      "po_draft_id": "PO-724255"
     },
     {
       "asin": "B0A9H5X3J6",
       "name": "Luma USB-C Desk Light",
       "sku": "LM-DL-08",
       "category": "Lighting",
-      "price": 24.78,
-      "competitor_price": 25.1,
+      "price": 24.14,
+      "competitor_price": 23.62,
       "market_price": 24.49,
       "min_floor": 21.0,
       "max_price": 29.99,
       "unit_cost": 12.8,
-      "stock": 768.158,
-      "daily_velocity": 21.9,
+      "stock": 767.754,
+      "daily_velocity": 22.2,
       "lead_time_days": 41,
       "supplier": "Shenzhen Northstar Manufacturing",
       "po_draft_id": null
@@ -80,179 +80,435 @@
       "name": "SnapDock Cable Organizer Set",
       "sku": "SD-CO-06",
       "category": "Office",
-      "price": 9.7,
-      "competitor_price": 9.84,
+      "price": 9.68,
+      "competitor_price": 9.74,
       "market_price": 9.79,
       "min_floor": 8.5,
       "max_price": 11.99,
       "unit_cost": 3.85,
-      "stock": 242.772,
-      "daily_velocity": 19.5,
+      "stock": 242.836,
+      "daily_velocity": 19.6,
       "lead_time_days": 19,
       "supplier": "Evergreen Household Goods",
-      "po_draft_id": "PO-67CF93"
+      "po_draft_id": "PO-D9CB67"
+    }
+  ],
+  "global_products": [
+    {
+      "asin": "B0C8Q4M2K7",
+      "name": "ArcFold Aluminum Laptop Stand",
+      "sku": "AF-LS-02",
+      "category": "Office",
+      "price": 34.99,
+      "competitor_price": 34.5,
+      "market_price": 34.5,
+      "min_floor": 27.5,
+      "max_price": 39.99,
+      "unit_cost": 15.4,
+      "stock": 619.0,
+      "daily_velocity": 17.7,
+      "lead_time_days": 34,
+      "supplier": "Shenzhen Northstar Manufacturing",
+      "po_draft_id": null
+    },
+    {
+      "asin": "B0B7P9R3W1",
+      "name": "QuietClick Wireless Mouse",
+      "sku": "QC-M-11",
+      "category": "Electronics",
+      "price": 22.49,
+      "competitor_price": 22.99,
+      "market_price": 22.99,
+      "min_floor": 17.25,
+      "max_price": 26.99,
+      "unit_cost": 11.5,
+      "stock": 378.0,
+      "daily_velocity": 14.1,
+      "lead_time_days": 28,
+      "supplier": "Ningbo Kestrel Electronics",
+      "po_draft_id": null
+    },
+    {
+      "asin": "B0D2L6T8N4",
+      "name": "TerraGrip Silicone Bottle Sleeve",
+      "sku": "TG-BS-04",
+      "category": "Home & Kitchen",
+      "price": 13.99,
+      "competitor_price": 13.49,
+      "market_price": 13.49,
+      "min_floor": 9.25,
+      "max_price": 16.99,
+      "unit_cost": 4.75,
+      "stock": 141.0,
+      "daily_velocity": 12.3,
+      "lead_time_days": 21,
+      "supplier": "Evergreen Household Goods",
+      "po_draft_id": null
+    },
+    {
+      "asin": "B0A9H5X3J6",
+      "name": "Luma USB-C Desk Light",
+      "sku": "LM-DL-08",
+      "category": "Lighting",
+      "price": 24.99,
+      "competitor_price": 24.49,
+      "market_price": 24.49,
+      "min_floor": 21.0,
+      "max_price": 29.99,
+      "unit_cost": 12.8,
+      "stock": 768.0,
+      "daily_velocity": 22.2,
+      "lead_time_days": 41,
+      "supplier": "Shenzhen Northstar Manufacturing",
+      "po_draft_id": null
+    },
+    {
+      "asin": "B0C3F7Y1V9",
+      "name": "SnapDock Cable Organizer Set",
+      "sku": "SD-CO-06",
+      "category": "Office",
+      "price": 9.99,
+      "competitor_price": 9.79,
+      "market_price": 9.79,
+      "min_floor": 8.5,
+      "max_price": 11.99,
+      "unit_cost": 3.85,
+      "stock": 243.0,
+      "daily_velocity": 19.6,
+      "lead_time_days": 19,
+      "supplier": "Evergreen Household Goods",
+      "po_draft_id": null
+    }
+  ],
+  "marketplace_listings": [
+    {
+      "id": "657504d0-af39-49d0-8615-84cbaca06b4a",
+      "global_product_id": "B0C8Q4M2K7",
+      "sku": "AF-LS-02",
+      "platform": "Amazon US",
+      "status": "Live & In Sync",
+      "title": "ArcFold Aluminum Laptop Stand",
+      "description": "ArcFold Aluminum Laptop Stand premium listing"
+    },
+    {
+      "id": "666fa29c-fe68-46f9-998f-f196d9e18a43",
+      "global_product_id": "B0C8Q4M2K7",
+      "sku": "AF-LS-02",
+      "platform": "Amazon UK",
+      "status": "Live & In Sync",
+      "title": "ArcFold Aluminum Laptop Stand",
+      "description": "ArcFold Aluminum Laptop Stand premium listing"
+    },
+    {
+      "id": "a6c9930a-fc34-4dc6-aad7-da8568dbf8cb",
+      "global_product_id": "B0C8Q4M2K7",
+      "sku": "AF-LS-02",
+      "platform": "Walmart",
+      "status": "Live & In Sync",
+      "title": "ArcFold Aluminum Laptop Stand",
+      "description": "ArcFold Aluminum Laptop Stand premium listing"
+    },
+    {
+      "id": "2fa760cb-f3cc-49e4-b419-18c144a2f722",
+      "global_product_id": "B0B7P9R3W1",
+      "sku": "QC-M-11",
+      "platform": "Amazon US",
+      "status": "Live & In Sync",
+      "title": "QuietClick Wireless Mouse",
+      "description": "QuietClick Wireless Mouse premium listing"
+    },
+    {
+      "id": "32a3307d-42bd-4bbd-a4a9-f2a2ab9d9a3a",
+      "global_product_id": "B0B7P9R3W1",
+      "sku": "QC-M-11",
+      "platform": "Amazon UK",
+      "status": "Live & In Sync",
+      "title": "QuietClick Wireless Mouse",
+      "description": "QuietClick Wireless Mouse premium listing"
+    },
+    {
+      "id": "efe45628-3586-4b98-95b7-d5d48d7ad35c",
+      "global_product_id": "B0B7P9R3W1",
+      "sku": "QC-M-11",
+      "platform": "Walmart",
+      "status": "Live & In Sync",
+      "title": "QuietClick Wireless Mouse",
+      "description": "QuietClick Wireless Mouse premium listing"
+    },
+    {
+      "id": "57428a31-c88a-49e6-9b86-3a4d32d016ff",
+      "global_product_id": "B0D2L6T8N4",
+      "sku": "TG-BS-04",
+      "platform": "Amazon US",
+      "status": "Live & In Sync",
+      "title": "TerraGrip Silicone Bottle Sleeve",
+      "description": "TerraGrip Silicone Bottle Sleeve premium listing"
+    },
+    {
+      "id": "82d2832e-771c-47f6-a63c-efb0fda08dd4",
+      "global_product_id": "B0D2L6T8N4",
+      "sku": "TG-BS-04",
+      "platform": "Amazon UK",
+      "status": "Live & In Sync",
+      "title": "TerraGrip Silicone Bottle Sleeve",
+      "description": "TerraGrip Silicone Bottle Sleeve premium listing"
+    },
+    {
+      "id": "eed1dab0-6436-498e-a034-11afe4e23db5",
+      "global_product_id": "B0D2L6T8N4",
+      "sku": "TG-BS-04",
+      "platform": "Walmart",
+      "status": "Live & In Sync",
+      "title": "TerraGrip Silicone Bottle Sleeve",
+      "description": "TerraGrip Silicone Bottle Sleeve premium listing"
+    },
+    {
+      "id": "eaf01e0a-efca-4344-8c69-bb1e2462799f",
+      "global_product_id": "B0A9H5X3J6",
+      "sku": "LM-DL-08",
+      "platform": "Amazon US",
+      "status": "Live & In Sync",
+      "title": "Luma USB-C Desk Light",
+      "description": "Luma USB-C Desk Light premium listing"
+    },
+    {
+      "id": "7941fda5-49c6-48ac-89a8-f8553b30dde3",
+      "global_product_id": "B0A9H5X3J6",
+      "sku": "LM-DL-08",
+      "platform": "Amazon UK",
+      "status": "Live & In Sync",
+      "title": "Luma USB-C Desk Light",
+      "description": "Luma USB-C Desk Light premium listing"
+    },
+    {
+      "id": "8a2bafb3-f413-4709-a4fe-b7735ce42f95",
+      "global_product_id": "B0A9H5X3J6",
+      "sku": "LM-DL-08",
+      "platform": "Walmart",
+      "status": "Live & In Sync",
+      "title": "Luma USB-C Desk Light",
+      "description": "Luma USB-C Desk Light premium listing"
+    },
+    {
+      "id": "5cd968b6-8f8f-4b97-b737-7320ce943408",
+      "global_product_id": "B0C3F7Y1V9",
+      "sku": "SD-CO-06",
+      "platform": "Amazon US",
+      "status": "Live & In Sync",
+      "title": "SnapDock Cable Organizer Set",
+      "description": "SnapDock Cable Organizer Set premium listing"
+    },
+    {
+      "id": "7aaddf24-d7b5-48e5-872d-5505efb49c49",
+      "global_product_id": "B0C3F7Y1V9",
+      "sku": "SD-CO-06",
+      "platform": "Amazon UK",
+      "status": "Live & In Sync",
+      "title": "SnapDock Cable Organizer Set",
+      "description": "SnapDock Cable Organizer Set premium listing"
+    },
+    {
+      "id": "3c2b6d85-cc53-4230-88a8-8d1fae5065e3",
+      "global_product_id": "B0C3F7Y1V9",
+      "sku": "SD-CO-06",
+      "platform": "Walmart",
+      "status": "Live & In Sync",
+      "title": "SnapDock Cable Organizer Set",
+      "description": "SnapDock Cable Organizer Set premium listing"
+    }
+  ],
+  "order_shipments": [
+    {
+      "tracking_number": "1Z999AA10123456784",
+      "carrier": "UPS",
+      "status": "In Transit",
+      "order_id": "ORD-001"
+    },
+    {
+      "tracking_number": "7894561230",
+      "carrier": "FedEx",
+      "status": "Label Created",
+      "order_id": "ORD-002"
+    },
+    {
+      "tracking_number": "1234567890",
+      "carrier": "DHL",
+      "status": "Out for Delivery",
+      "order_id": "ORD-003"
+    },
+    {
+      "tracking_number": "TBA123456789000",
+      "carrier": "Amazon Logistics",
+      "status": "Delivered",
+      "order_id": "ORD-004"
+    },
+    {
+      "tracking_number": "1Z999AA10987654321",
+      "carrier": "UPS",
+      "status": "In Transit",
+      "order_id": "ORD-005"
     }
   ],
   "sales_history": {
     "AF-LS-02": [
       21,
-      19,
-      14,
-      18,
-      19,
-      16,
-      14,
-      17,
-      20,
-      18,
-      19,
-      19,
-      15,
-      18,
-      16,
-      20,
-      16,
-      20,
-      17,
-      15,
-      17,
-      21,
-      20,
-      15,
-      19,
-      17,
-      16,
-      17,
-      19,
-      23
-    ],
-    "QC-M-11": [
-      10,
-      11,
-      9,
-      12,
-      10,
-      12,
-      15,
-      11,
-      14,
-      13,
-      12,
-      12,
-      14,
-      14,
-      16,
-      18,
-      14,
-      13,
-      14,
-      13,
-      16,
-      14,
-      15,
-      14,
-      17,
-      21,
-      18,
-      20,
-      20,
-      22
-    ],
-    "TG-BS-04": [
-      10,
-      15,
-      11,
-      12,
-      12,
-      10,
-      11,
-      12,
-      13,
-      10,
-      10,
-      11,
-      11,
-      10,
-      13,
-      15,
-      11,
-      14,
-      13,
-      14,
-      13,
-      13,
-      13,
-      14,
-      11,
-      14,
-      12,
-      14,
-      13,
-      12
-    ],
-    "LM-DL-08": [
-      24,
-      24,
-      23,
-      24,
-      21,
-      25,
-      17,
-      23,
-      26,
-      23,
-      24,
-      21,
-      21,
-      25,
-      24,
-      25,
-      20,
-      19,
-      17,
-      21,
       22,
-      22,
-      22,
-      20,
-      21,
-      22,
-      23,
+      15,
+      16,
+      18,
+      18,
       17,
+      14,
+      18,
+      15,
+      21,
+      19,
+      18,
+      16,
+      19,
+      17,
+      16,
+      18,
       20,
+      16,
+      16,
+      18,
+      22,
+      15,
+      17,
+      19,
+      16,
+      17,
+      18,
       20
     ],
-    "SD-CO-06": [
-      21,
-      21,
-      17,
-      23,
-      18,
-      18,
-      16,
-      21,
-      23,
-      16,
-      21,
-      19,
-      20,
-      21,
-      20,
-      21,
+    "QC-M-11": [
+      11,
+      11,
+      9,
+      11,
+      12,
+      9,
+      12,
       15,
-      21,
+      12,
+      10,
+      15,
+      12,
+      12,
+      15,
+      14,
+      17,
+      14,
+      16,
+      13,
+      13,
+      13,
+      17,
+      15,
+      12,
+      16,
       17,
       20,
+      19,
       21,
-      21,
+      21
+    ],
+    "TG-BS-04": [
+      11,
+      10,
+      11,
+      13,
+      12,
+      12,
+      11,
+      11,
+      12,
+      10,
+      12,
+      10,
+      11,
+      11,
+      11,
+      14,
+      12,
+      12,
+      14,
+      13,
+      15,
+      14,
+      13,
+      10,
+      17,
+      11,
+      14,
+      12,
+      15,
+      14
+    ],
+    "LM-DL-08": [
+      28,
       25,
+      18,
+      26,
+      24,
+      21,
+      26,
+      18,
+      25,
+      20,
+      26,
+      24,
+      20,
+      22,
+      26,
+      25,
+      19,
+      23,
+      19,
+      17,
+      22,
+      23,
+      23,
+      17,
+      23,
+      21,
+      22,
+      24,
+      17,
+      22
+    ],
+    "SD-CO-06": [
+      20,
+      23,
       16,
       19,
+      23,
       18,
+      19,
       17,
+      23,
       18,
-      20,
-      21
+      19,
+      21,
+      19,
+      21,
+      22,
+      21,
+      16,
+      18,
+      21,
+      17,
+      21,
+      22,
+      22,
+      19,
+      18,
+      19,
+      18,
+      18,
+      19,
+      22
     ]
   },
   "campaigns": [
@@ -263,26 +519,32 @@
       "sku": "AF-LS-02",
       "bid_floor": 0.55,
       "avg_cpc": 0.48,
-      "base_acos": 20.88,
+      "base_acos": 20.78,
       "ad_share": 0.0846,
       "acos_modifier": 1.0,
       "ad_history": [
         {
-          "spend": 15.88,
+          "spend": 14.32,
           "sales": 62.15,
-          "clicks": 33,
+          "clicks": 30,
           "orders": 2
         },
         {
-          "spend": 13.23,
-          "sales": 56.23,
-          "clicks": 28,
+          "spend": 16.63,
+          "sales": 65.11,
+          "clicks": 35,
           "orders": 2
         },
         {
-          "spend": 11.34,
-          "sales": 41.44,
-          "clicks": 24,
+          "spend": 10.44,
+          "sales": 44.4,
+          "clicks": 22,
+          "orders": 1
+        },
+        {
+          "spend": 12.96,
+          "sales": 47.35,
+          "clicks": 27,
           "orders": 1
         },
         {
@@ -292,15 +554,15 @@
           "orders": 2
         },
         {
-          "spend": 13.96,
-          "sales": 56.23,
-          "clicks": 29,
+          "spend": 13.22,
+          "sales": 53.27,
+          "clicks": 28,
           "orders": 2
         },
         {
-          "spend": 10.11,
-          "sales": 47.35,
-          "clicks": 21,
+          "spend": 10.74,
+          "sales": 50.31,
+          "clicks": 22,
           "orders": 1
         },
         {
@@ -310,105 +572,105 @@
           "orders": 1
         },
         {
-          "spend": 10.89,
-          "sales": 50.31,
-          "clicks": 23,
-          "orders": 1
-        },
-        {
-          "spend": 12.74,
-          "sales": 59.19,
-          "clicks": 27,
-          "orders": 2
-        },
-        {
-          "spend": 12.57,
-          "sales": 53.27,
-          "clicks": 26,
-          "orders": 2
-        },
-        {
-          "spend": 13.04,
-          "sales": 56.23,
-          "clicks": 27,
-          "orders": 2
-        },
-        {
-          "spend": 12.63,
-          "sales": 56.23,
-          "clicks": 26,
-          "orders": 2
-        },
-        {
-          "spend": 9.81,
-          "sales": 44.4,
-          "clicks": 20,
-          "orders": 1
-        },
-        {
-          "spend": 11.71,
+          "spend": 11.53,
           "sales": 53.27,
           "clicks": 24,
           "orders": 2
         },
         {
-          "spend": 11.95,
-          "sales": 47.35,
-          "clicks": 25,
+          "spend": 9.55,
+          "sales": 44.4,
+          "clicks": 20,
           "orders": 1
         },
         {
-          "spend": 12.22,
-          "sales": 59.19,
+          "spend": 14.66,
+          "sales": 62.15,
+          "clicks": 31,
+          "orders": 2
+        },
+        {
+          "spend": 13.03,
+          "sales": 56.23,
+          "clicks": 27,
+          "orders": 2
+        },
+        {
+          "spend": 11.96,
+          "sales": 53.27,
           "clicks": 25,
           "orders": 2
         },
         {
-          "spend": 9.7,
+          "spend": 10.46,
+          "sales": 47.35,
+          "clicks": 22,
+          "orders": 1
+        },
+        {
+          "spend": 12.36,
+          "sales": 56.23,
+          "clicks": 26,
+          "orders": 2
+        },
+        {
+          "spend": 12.7,
+          "sales": 50.31,
+          "clicks": 26,
+          "orders": 1
+        },
+        {
+          "spend": 9.77,
           "sales": 47.35,
           "clicks": 20,
           "orders": 1
         },
         {
-          "spend": 14.03,
+          "spend": 10.91,
+          "sales": 53.27,
+          "clicks": 23,
+          "orders": 2
+        },
+        {
+          "spend": 14.02,
           "sales": 59.19,
           "clicks": 29,
           "orders": 2
         },
         {
-          "spend": 11.83,
-          "sales": 50.31,
-          "clicks": 25,
+          "spend": 11.14,
+          "sales": 47.35,
+          "clicks": 23,
           "orders": 1
         },
         {
-          "spend": 9.57,
+          "spend": 10.21,
+          "sales": 47.35,
+          "clicks": 21,
+          "orders": 1
+        },
+        {
+          "spend": 10.96,
+          "sales": 53.27,
+          "clicks": 23,
+          "orders": 2
+        },
+        {
+          "spend": 13.5,
+          "sales": 65.11,
+          "clicks": 28,
+          "orders": 2
+        },
+        {
+          "spend": 9.83,
           "sales": 44.4,
           "clicks": 20,
           "orders": 1
         },
         {
-          "spend": 10.35,
+          "spend": 10.2,
           "sales": 50.31,
-          "clicks": 22,
-          "orders": 1
-        },
-        {
-          "spend": 12.89,
-          "sales": 62.15,
-          "clicks": 27,
-          "orders": 2
-        },
-        {
-          "spend": 13.11,
-          "sales": 59.19,
-          "clicks": 27,
-          "orders": 2
-        },
-        {
-          "spend": 9.0,
-          "sales": 44.4,
-          "clicks": 19,
+          "clicks": 21,
           "orders": 1
         },
         {
@@ -418,37 +680,31 @@
           "orders": 2
         },
         {
-          "spend": 11.05,
-          "sales": 50.31,
-          "clicks": 23,
-          "orders": 1
-        },
-        {
-          "spend": 9.79,
+          "spend": 10.4,
           "sales": 47.35,
-          "clicks": 20,
+          "clicks": 22,
           "orders": 1
         },
         {
-          "spend": 9.5,
+          "spend": 10.4,
           "sales": 50.31,
-          "clicks": 20,
+          "clicks": 22,
           "orders": 1
         },
         {
-          "spend": 11.23,
-          "sales": 56.23,
-          "clicks": 23,
+          "spend": 10.06,
+          "sales": 53.27,
+          "clicks": 21,
           "orders": 2
         },
         {
-          "spend": 13.21,
-          "sales": 68.08,
-          "clicks": 28,
+          "spend": 11.82,
+          "sales": 59.19,
+          "clicks": 25,
           "orders": 2
         }
       ],
-      "trailing_acos": 20.4
+      "trailing_acos": 20.8
     },
     {
       "id": "CMP-QC",
@@ -457,199 +713,199 @@
       "sku": "QC-M-11",
       "bid_floor": 0.44,
       "avg_cpc": 0.52,
-      "base_acos": 30.73,
-      "ad_share": 0.064,
+      "base_acos": 30.71,
+      "ad_share": 0.0637,
       "acos_modifier": 0.94,
       "ad_history": [
         {
-          "spend": 2.99,
-          "sales": 14.39,
+          "spend": 3.2,
+          "sales": 15.75,
           "clicks": 6,
-          "orders": 1
-        },
-        {
-          "spend": 3.22,
-          "sales": 15.83,
-          "clicks": 6,
-          "orders": 1
-        },
-        {
-          "spend": 2.93,
-          "sales": 12.95,
-          "clicks": 6,
-          "orders": 1
-        },
-        {
-          "spend": 3.53,
-          "sales": 17.27,
-          "clicks": 7,
           "orders": 1
         },
         {
           "spend": 3.27,
-          "sales": 14.39,
+          "sales": 15.75,
           "clicks": 6,
           "orders": 1
         },
         {
-          "spend": 4.01,
-          "sales": 17.27,
+          "spend": 2.62,
+          "sales": 12.89,
+          "clicks": 5,
+          "orders": 1
+        },
+        {
+          "spend": 3.57,
+          "sales": 15.75,
+          "clicks": 7,
+          "orders": 1
+        },
+        {
+          "spend": 3.52,
+          "sales": 17.19,
+          "clicks": 7,
+          "orders": 1
+        },
+        {
+          "spend": 2.92,
+          "sales": 12.89,
+          "clicks": 6,
+          "orders": 1
+        },
+        {
+          "spend": 3.99,
+          "sales": 17.19,
           "clicks": 8,
           "orders": 1
         },
         {
-          "spend": 4.75,
-          "sales": 21.58,
+          "spend": 4.73,
+          "sales": 21.48,
           "clicks": 9,
           "orders": 1
         },
         {
-          "spend": 3.96,
-          "sales": 15.83,
+          "spend": 4.3,
+          "sales": 17.19,
           "clicks": 8,
           "orders": 1
         },
         {
-          "spend": 4.75,
-          "sales": 20.15,
-          "clicks": 9,
+          "spend": 3.38,
+          "sales": 14.32,
+          "clicks": 6,
           "orders": 1
         },
         {
-          "spend": 4.64,
-          "sales": 18.71,
-          "clicks": 9,
-          "orders": 1
-        },
-        {
-          "spend": 4.05,
-          "sales": 17.27,
-          "clicks": 8,
-          "orders": 1
-        },
-        {
-          "spend": 4.97,
-          "sales": 17.27,
+          "spend": 5.33,
+          "sales": 21.48,
           "clicks": 10,
           "orders": 1
         },
         {
-          "spend": 4.2,
-          "sales": 20.15,
+          "spend": 4.03,
+          "sales": 17.19,
           "clicks": 8,
           "orders": 1
         },
         {
-          "spend": 5.16,
-          "sales": 20.15,
+          "spend": 4.95,
+          "sales": 17.19,
           "clicks": 10,
           "orders": 1
         },
         {
-          "spend": 6.95,
-          "sales": 23.02,
-          "clicks": 13,
+          "spend": 4.48,
+          "sales": 21.48,
+          "clicks": 9,
+          "orders": 1
+        },
+        {
+          "spend": 5.13,
+          "sales": 20.05,
+          "clicks": 10,
           "orders": 1
         },
         {
           "spend": 7.35,
-          "sales": 25.9,
+          "sales": 24.35,
           "clicks": 14,
           "orders": 1
         },
         {
-          "spend": 5.48,
-          "sales": 20.15,
+          "spend": 5.69,
+          "sales": 20.05,
           "clicks": 11,
           "orders": 1
         },
         {
-          "spend": 5.43,
-          "sales": 18.71,
-          "clicks": 10,
-          "orders": 1
-        },
-        {
-          "spend": 5.57,
-          "sales": 20.15,
-          "clicks": 11,
-          "orders": 1
-        },
-        {
-          "spend": 5.55,
-          "sales": 18.71,
-          "clicks": 11,
-          "orders": 1
-        },
-        {
-          "spend": 7.16,
-          "sales": 23.02,
-          "clicks": 14,
-          "orders": 1
-        },
-        {
-          "spend": 5.67,
-          "sales": 20.15,
-          "clicks": 11,
-          "orders": 1
-        },
-        {
-          "spend": 6.57,
-          "sales": 21.58,
-          "clicks": 13,
-          "orders": 1
-        },
-        {
-          "spend": 6.18,
-          "sales": 20.15,
+          "spend": 6.23,
+          "sales": 22.91,
           "clicks": 12,
           "orders": 1
         },
         {
-          "spend": 7.76,
-          "sales": 24.46,
+          "spend": 5.4,
+          "sales": 18.62,
+          "clicks": 10,
+          "orders": 1
+        },
+        {
+          "spend": 5.15,
+          "sales": 18.62,
+          "clicks": 10,
+          "orders": 1
+        },
+        {
+          "spend": 5.52,
+          "sales": 18.62,
+          "clicks": 11,
+          "orders": 1
+        },
+        {
+          "spend": 7.57,
+          "sales": 24.35,
           "clicks": 15,
           "orders": 1
         },
         {
-          "spend": 9.56,
-          "sales": 30.22,
-          "clicks": 18,
+          "spend": 6.05,
+          "sales": 21.48,
+          "clicks": 12,
           "orders": 1
         },
         {
-          "spend": 7.55,
-          "sales": 25.9,
+          "spend": 5.23,
+          "sales": 17.19,
+          "clicks": 10,
+          "orders": 1
+        },
+        {
+          "spend": 7.03,
+          "sales": 22.91,
+          "clicks": 14,
+          "orders": 1
+        },
+        {
+          "spend": 7.72,
+          "sales": 24.35,
           "clicks": 15,
           "orders": 1
         },
         {
-          "spend": 8.48,
-          "sales": 28.78,
-          "clicks": 16,
+          "spend": 9.06,
+          "sales": 28.64,
+          "clicks": 17,
           "orders": 1
         },
         {
-          "spend": 9.18,
-          "sales": 28.78,
+          "spend": 7.93,
+          "sales": 27.21,
+          "clicks": 15,
+          "orders": 1
+        },
+        {
+          "spend": 8.86,
+          "sales": 30.08,
+          "clicks": 17,
+          "orders": 1
+        },
+        {
+          "spend": 9.59,
+          "sales": 30.08,
           "clicks": 18,
-          "orders": 1
-        },
-        {
-          "spend": 9.91,
-          "sales": 31.67,
-          "clicks": 19,
           "orders": 1
         }
       ],
-      "trailing_acos": 30.9,
+      "trailing_acos": 30.7,
       "last_guardrail_date": "2026-10-17",
       "bid_changes": [
         {
           "date": "2026-10-17",
           "from": 0.5,
           "to": 0.44,
-          "trailing_acos": 30.9
+          "trailing_acos": 30.7
         }
       ]
     },
@@ -660,192 +916,192 @@
       "sku": "TG-BS-04",
       "bid_floor": 0.32,
       "avg_cpc": 0.3,
-      "base_acos": 19.76,
-      "ad_share": 0.1014,
+      "base_acos": 19.78,
+      "ad_share": 0.1005,
       "acos_modifier": 1.0,
       "ad_history": [
         {
-          "spend": 2.5,
-          "sales": 14.18,
+          "spend": 2.93,
+          "sales": 15.47,
+          "clicks": 10,
+          "orders": 1
+        },
+        {
+          "spend": 2.48,
+          "sales": 14.07,
           "clicks": 8,
           "orders": 1
         },
         {
-          "spend": 4.06,
-          "sales": 21.27,
-          "clicks": 14,
-          "orders": 2
-        },
-        {
-          "spend": 3.03,
-          "sales": 15.6,
+          "spend": 2.95,
+          "sales": 15.47,
           "clicks": 10,
           "orders": 1
         },
         {
-          "spend": 3.55,
-          "sales": 17.02,
+          "spend": 3.54,
+          "sales": 18.29,
           "clicks": 12,
-          "orders": 1
-        },
-        {
-          "spend": 3.14,
-          "sales": 17.02,
-          "clicks": 10,
-          "orders": 1
-        },
-        {
-          "spend": 2.61,
-          "sales": 14.18,
-          "clicks": 9,
-          "orders": 1
-        },
-        {
-          "spend": 3.12,
-          "sales": 15.6,
-          "clicks": 10,
-          "orders": 1
-        },
-        {
-          "spend": 3.12,
-          "sales": 17.02,
-          "clicks": 10,
           "orders": 1
         },
         {
           "spend": 3.52,
-          "sales": 18.44,
+          "sales": 16.88,
           "clicks": 12,
           "orders": 1
         },
         {
-          "spend": 2.81,
-          "sales": 14.18,
-          "clicks": 9,
-          "orders": 1
-        },
-        {
-          "spend": 2.6,
-          "sales": 14.18,
-          "clicks": 9,
-          "orders": 1
-        },
-        {
-          "spend": 2.66,
-          "sales": 15.6,
-          "clicks": 9,
-          "orders": 1
-        },
-        {
-          "spend": 3.29,
-          "sales": 15.6,
-          "clicks": 11,
-          "orders": 1
-        },
-        {
-          "spend": 2.78,
-          "sales": 14.18,
-          "clicks": 9,
-          "orders": 1
-        },
-        {
-          "spend": 3.36,
-          "sales": 18.44,
-          "clicks": 11,
-          "orders": 1
-        },
-        {
-          "spend": 4.09,
-          "sales": 21.27,
-          "clicks": 14,
-          "orders": 2
-        },
-        {
-          "spend": 2.95,
-          "sales": 15.6,
+          "spend": 3.12,
+          "sales": 16.88,
           "clicks": 10,
           "orders": 1
         },
         {
-          "spend": 3.78,
-          "sales": 19.85,
-          "clicks": 13,
-          "orders": 1
-        },
-        {
-          "spend": 3.63,
-          "sales": 18.44,
-          "clicks": 12,
-          "orders": 1
-        },
-        {
-          "spend": 3.59,
-          "sales": 19.85,
-          "clicks": 12,
-          "orders": 1
-        },
-        {
-          "spend": 3.65,
-          "sales": 18.44,
-          "clicks": 12,
-          "orders": 1
-        },
-        {
-          "spend": 3.8,
-          "sales": 18.44,
-          "clicks": 13,
-          "orders": 1
-        },
-        {
-          "spend": 3.64,
-          "sales": 18.44,
-          "clicks": 12,
-          "orders": 1
-        },
-        {
-          "spend": 4.27,
-          "sales": 19.85,
-          "clicks": 14,
-          "orders": 1
-        },
-        {
-          "spend": 3.13,
-          "sales": 15.6,
+          "spend": 2.85,
+          "sales": 15.47,
           "clicks": 10,
           "orders": 1
         },
         {
-          "spend": 3.95,
-          "sales": 19.85,
-          "clicks": 13,
+          "spend": 3.1,
+          "sales": 15.47,
+          "clicks": 10,
           "orders": 1
         },
         {
-          "spend": 3.3,
-          "sales": 17.02,
-          "clicks": 11,
+          "spend": 3.09,
+          "sales": 16.88,
+          "clicks": 10,
           "orders": 1
         },
         {
-          "spend": 3.87,
-          "sales": 19.85,
-          "clicks": 13,
+          "spend": 2.69,
+          "sales": 14.07,
+          "clicks": 9,
           "orders": 1
         },
         {
           "spend": 3.34,
-          "sales": 18.44,
+          "sales": 16.88,
           "clicks": 11,
           "orders": 1
         },
         {
-          "spend": 3.29,
-          "sales": 17.02,
+          "spend": 2.58,
+          "sales": 14.07,
+          "clicks": 9,
+          "orders": 1
+        },
+        {
+          "spend": 2.64,
+          "sales": 15.47,
+          "clicks": 9,
+          "orders": 1
+        },
+        {
+          "spend": 3.26,
+          "sales": 15.47,
           "clicks": 11,
+          "orders": 1
+        },
+        {
+          "spend": 3.03,
+          "sales": 15.47,
+          "clicks": 10,
+          "orders": 1
+        },
+        {
+          "spend": 3.59,
+          "sales": 19.69,
+          "clicks": 12,
+          "orders": 1
+        },
+        {
+          "spend": 3.24,
+          "sales": 16.88,
+          "clicks": 11,
+          "orders": 1
+        },
+        {
+          "spend": 3.19,
+          "sales": 16.88,
+          "clicks": 11,
+          "orders": 1
+        },
+        {
+          "spend": 3.75,
+          "sales": 19.69,
+          "clicks": 12,
+          "orders": 1
+        },
+        {
+          "spend": 3.6,
+          "sales": 18.29,
+          "clicks": 12,
+          "orders": 1
+        },
+        {
+          "spend": 3.82,
+          "sales": 21.1,
+          "clicks": 13,
+          "orders": 2
+        },
+        {
+          "spend": 3.9,
+          "sales": 19.69,
+          "clicks": 13,
+          "orders": 1
+        },
+        {
+          "spend": 3.77,
+          "sales": 18.29,
+          "clicks": 13,
+          "orders": 1
+        },
+        {
+          "spend": 2.78,
+          "sales": 14.07,
+          "clicks": 9,
+          "orders": 1
+        },
+        {
+          "spend": 5.14,
+          "sales": 23.91,
+          "clicks": 17,
+          "orders": 2
+        },
+        {
+          "spend": 3.1,
+          "sales": 15.47,
+          "clicks": 10,
+          "orders": 1
+        },
+        {
+          "spend": 3.91,
+          "sales": 19.69,
+          "clicks": 13,
+          "orders": 1
+        },
+        {
+          "spend": 3.27,
+          "sales": 16.88,
+          "clicks": 11,
+          "orders": 1
+        },
+        {
+          "spend": 4.11,
+          "sales": 21.1,
+          "clicks": 14,
+          "orders": 2
+        },
+        {
+          "spend": 3.57,
+          "sales": 19.69,
+          "clicks": 12,
           "orders": 1
         }
       ],
-      "trailing_acos": 19.7
+      "trailing_acos": 19.8
     },
     {
       "id": "CMP-LM",
@@ -854,192 +1110,192 @@
       "sku": "LM-DL-08",
       "bid_floor": 0.48,
       "avg_cpc": 0.47,
-      "base_acos": 20.05,
-      "ad_share": 0.0498,
+      "base_acos": 20.04,
+      "ad_share": 0.0495,
       "acos_modifier": 1.0,
       "ad_history": [
         {
-          "spend": 6.62,
-          "sales": 29.9,
+          "spend": 7.71,
+          "sales": 34.67,
+          "clicks": 16,
+          "orders": 1
+        },
+        {
+          "spend": 6.86,
+          "sales": 30.96,
+          "clicks": 15,
+          "orders": 1
+        },
+        {
+          "spend": 4.8,
+          "sales": 22.29,
+          "clicks": 10,
+          "orders": 1
+        },
+        {
+          "spend": 6.51,
+          "sales": 32.19,
           "clicks": 14,
           "orders": 1
         },
         {
-          "spend": 6.44,
-          "sales": 29.9,
+          "spend": 6.64,
+          "sales": 29.72,
           "clicks": 14,
           "orders": 1
         },
         {
-          "spend": 5.79,
-          "sales": 28.65,
-          "clicks": 12,
+          "spend": 6.03,
+          "sales": 26.0,
+          "clicks": 13,
           "orders": 1
         },
         {
-          "spend": 6.68,
-          "sales": 29.9,
+          "spend": 6.83,
+          "sales": 32.19,
+          "clicks": 15,
+          "orders": 1
+        },
+        {
+          "spend": 4.51,
+          "sales": 22.29,
+          "clicks": 10,
+          "orders": 1
+        },
+        {
+          "spend": 6.77,
+          "sales": 30.96,
           "clicks": 14,
+          "orders": 1
+        },
+        {
+          "spend": 5.12,
+          "sales": 24.76,
+          "clicks": 11,
+          "orders": 1
+        },
+        {
+          "spend": 7.07,
+          "sales": 32.19,
+          "clicks": 15,
           "orders": 1
         },
         {
           "spend": 6.06,
-          "sales": 26.16,
+          "sales": 29.72,
           "clicks": 13,
           "orders": 1
         },
         {
-          "spend": 6.61,
-          "sales": 31.14,
-          "clicks": 14,
+          "spend": 5.14,
+          "sales": 24.76,
+          "clicks": 11,
           "orders": 1
         },
         {
-          "spend": 4.28,
-          "sales": 21.18,
+          "spend": 5.97,
+          "sales": 27.24,
+          "clicks": 13,
+          "orders": 1
+        },
+        {
+          "spend": 7.01,
+          "sales": 32.19,
+          "clicks": 15,
+          "orders": 1
+        },
+        {
+          "spend": 6.26,
+          "sales": 30.96,
+          "clicks": 13,
+          "orders": 1
+        },
+        {
+          "spend": 5.15,
+          "sales": 23.53,
+          "clicks": 11,
+          "orders": 1
+        },
+        {
+          "spend": 5.78,
+          "sales": 28.48,
+          "clicks": 12,
+          "orders": 1
+        },
+        {
+          "spend": 4.37,
+          "sales": 23.53,
           "clicks": 9,
           "orders": 1
         },
         {
-          "spend": 6.27,
-          "sales": 28.65,
+          "spend": 4.7,
+          "sales": 21.05,
+          "clicks": 10,
+          "orders": 1
+        },
+        {
+          "spend": 6.21,
+          "sales": 27.24,
           "clicks": 13,
           "orders": 1
         },
         {
-          "spend": 6.7,
-          "sales": 32.39,
-          "clicks": 14,
+          "spend": 5.66,
+          "sales": 28.48,
+          "clicks": 12,
           "orders": 1
         },
         {
-          "spend": 6.29,
-          "sales": 28.65,
-          "clicks": 13,
+          "spend": 5.49,
+          "sales": 28.48,
+          "clicks": 12,
           "orders": 1
         },
         {
-          "spend": 6.09,
-          "sales": 29.9,
-          "clicks": 13,
+          "spend": 4.24,
+          "sales": 21.05,
+          "clicks": 9,
+          "orders": 1
+        },
+        {
+          "spend": 5.32,
+          "sales": 28.48,
+          "clicks": 11,
+          "orders": 1
+        },
+        {
+          "spend": 5.3,
+          "sales": 26.0,
+          "clicks": 11,
           "orders": 1
         },
         {
           "spend": 5.42,
-          "sales": 26.16,
+          "sales": 27.24,
           "clicks": 12,
           "orders": 1
         },
         {
-          "spend": 5.74,
-          "sales": 26.16,
-          "clicks": 12,
-          "orders": 1
-        },
-        {
-          "spend": 6.78,
-          "sales": 31.14,
-          "clicks": 14,
-          "orders": 1
-        },
-        {
-          "spend": 6.05,
-          "sales": 29.9,
+          "spend": 6.07,
+          "sales": 29.72,
           "clicks": 13,
           "orders": 1
         },
         {
-          "spend": 6.81,
-          "sales": 31.14,
-          "clicks": 14,
-          "orders": 1
-        },
-        {
-          "spend": 5.05,
-          "sales": 24.91,
-          "clicks": 11,
-          "orders": 1
-        },
-        {
-          "spend": 4.4,
-          "sales": 23.67,
+          "spend": 4.13,
+          "sales": 21.05,
           "clicks": 9,
           "orders": 1
         },
         {
-          "spend": 4.72,
-          "sales": 21.18,
-          "clicks": 10,
-          "orders": 1
-        },
-        {
-          "spend": 5.96,
-          "sales": 26.16,
-          "clicks": 13,
-          "orders": 1
-        },
-        {
-          "spend": 5.44,
-          "sales": 27.41,
+          "spend": 5.75,
+          "sales": 27.24,
           "clicks": 12,
-          "orders": 1
-        },
-        {
-          "spend": 5.28,
-          "sales": 27.41,
-          "clicks": 11,
-          "orders": 1
-        },
-        {
-          "spend": 5.52,
-          "sales": 27.41,
-          "clicks": 12,
-          "orders": 1
-        },
-        {
-          "spend": 4.65,
-          "sales": 24.91,
-          "clicks": 10,
-          "orders": 1
-        },
-        {
-          "spend": 5.33,
-          "sales": 26.16,
-          "clicks": 11,
-          "orders": 1
-        },
-        {
-          "spend": 5.45,
-          "sales": 27.41,
-          "clicks": 12,
-          "orders": 1
-        },
-        {
-          "spend": 5.85,
-          "sales": 28.65,
-          "clicks": 12,
-          "orders": 1
-        },
-        {
-          "spend": 4.16,
-          "sales": 21.18,
-          "clicks": 9,
-          "orders": 1
-        },
-        {
-          "spend": 5.26,
-          "sales": 24.91,
-          "clicks": 11,
-          "orders": 1
-        },
-        {
-          "spend": 4.69,
-          "sales": 24.89,
-          "clicks": 10,
           "orders": 1
         }
       ],
-      "trailing_acos": 19.9
+      "trailing_acos": 20.0
     },
     {
       "id": "CMP-SD",
@@ -1048,192 +1304,192 @@
       "sku": "SD-CO-06",
       "bid_floor": 0.22,
       "avg_cpc": 0.17,
-      "base_acos": 24.04,
-      "ad_share": 0.036,
+      "base_acos": 24.02,
+      "ad_share": 0.0357,
       "acos_modifier": 1.0,
       "ad_history": [
         {
-          "spend": 1.73,
-          "sales": 7.56,
-          "clicks": 10,
-          "orders": 1
-        },
-        {
           "spend": 1.74,
-          "sales": 7.56,
+          "sales": 7.12,
           "clicks": 10,
-          "orders": 1
-        },
-        {
-          "spend": 1.3,
-          "sales": 6.12,
-          "clicks": 8,
-          "orders": 1
-        },
-        {
-          "spend": 2.05,
-          "sales": 8.28,
-          "clicks": 12,
-          "orders": 1
-        },
-        {
-          "spend": 1.52,
-          "sales": 6.48,
-          "clicks": 9,
-          "orders": 1
-        },
-        {
-          "spend": 1.51,
-          "sales": 6.48,
-          "clicks": 9,
-          "orders": 1
-        },
-        {
-          "spend": 1.41,
-          "sales": 5.76,
-          "clicks": 8,
-          "orders": 1
-        },
-        {
-          "spend": 1.8,
-          "sales": 7.56,
-          "clicks": 11,
-          "orders": 1
-        },
-        {
-          "spend": 1.92,
-          "sales": 8.28,
-          "clicks": 11,
-          "orders": 1
-        },
-        {
-          "spend": 1.32,
-          "sales": 5.76,
-          "clicks": 8,
-          "orders": 1
-        },
-        {
-          "spend": 1.95,
-          "sales": 7.56,
-          "clicks": 11,
-          "orders": 1
-        },
-        {
-          "spend": 1.59,
-          "sales": 6.84,
-          "clicks": 9,
-          "orders": 1
-        },
-        {
-          "spend": 1.75,
-          "sales": 7.2,
-          "clicks": 10,
-          "orders": 1
-        },
-        {
-          "spend": 1.65,
-          "sales": 7.56,
-          "clicks": 10,
-          "orders": 1
-        },
-        {
-          "spend": 1.7,
-          "sales": 7.2,
-          "clicks": 10,
-          "orders": 1
-        },
-        {
-          "spend": 1.76,
-          "sales": 7.56,
-          "clicks": 10,
-          "orders": 1
-        },
-        {
-          "spend": 1.39,
-          "sales": 5.4,
-          "clicks": 8,
-          "orders": 1
-        },
-        {
-          "spend": 1.79,
-          "sales": 7.56,
-          "clicks": 11,
-          "orders": 1
-        },
-        {
-          "spend": 1.65,
-          "sales": 6.12,
-          "clicks": 10,
-          "orders": 1
-        },
-        {
-          "spend": 1.61,
-          "sales": 7.2,
-          "clicks": 9,
           "orders": 1
         },
         {
           "spend": 1.88,
-          "sales": 7.56,
+          "sales": 8.19,
           "clicks": 11,
           "orders": 1
         },
         {
-          "spend": 1.87,
-          "sales": 7.56,
-          "clicks": 11,
-          "orders": 1
-        },
-        {
-          "spend": 2.2,
-          "sales": 9.0,
-          "clicks": 13,
-          "orders": 1
-        },
-        {
-          "spend": 1.35,
-          "sales": 5.76,
+          "spend": 1.31,
+          "sales": 5.7,
           "clicks": 8,
           "orders": 1
         },
         {
-          "spend": 1.67,
-          "sales": 6.84,
-          "clicks": 10,
+          "spend": 1.43,
+          "sales": 6.77,
+          "clicks": 8,
           "orders": 1
         },
         {
-          "spend": 1.83,
-          "sales": 6.48,
-          "clicks": 11,
+          "spend": 2.03,
+          "sales": 8.19,
+          "clicks": 12,
           "orders": 1
         },
         {
-          "spend": 1.26,
-          "sales": 6.12,
-          "clicks": 7,
-          "orders": 1
-        },
-        {
-          "spend": 1.57,
-          "sales": 6.48,
+          "spend": 1.51,
+          "sales": 6.41,
           "clicks": 9,
           "orders": 1
         },
         {
-          "spend": 1.63,
-          "sales": 7.2,
+          "spend": 1.58,
+          "sales": 6.77,
+          "clicks": 9,
+          "orders": 1
+        },
+        {
+          "spend": 1.48,
+          "sales": 6.06,
+          "clicks": 9,
+          "orders": 1
+        },
+        {
+          "spend": 1.95,
+          "sales": 8.19,
+          "clicks": 11,
+          "orders": 1
+        },
+        {
+          "spend": 1.49,
+          "sales": 6.41,
+          "clicks": 9,
+          "orders": 1
+        },
+        {
+          "spend": 1.56,
+          "sales": 6.77,
+          "clicks": 9,
+          "orders": 1
+        },
+        {
+          "spend": 1.93,
+          "sales": 7.48,
+          "clicks": 11,
+          "orders": 1
+        },
+        {
+          "spend": 1.57,
+          "sales": 6.77,
+          "clicks": 9,
+          "orders": 1
+        },
+        {
+          "spend": 1.82,
+          "sales": 7.48,
+          "clicks": 11,
+          "orders": 1
+        },
+        {
+          "spend": 1.72,
+          "sales": 7.84,
           "clicks": 10,
           "orders": 1
         },
         {
-          "spend": 1.9,
-          "sales": 7.55,
+          "spend": 1.77,
+          "sales": 7.48,
+          "clicks": 10,
+          "orders": 1
+        },
+        {
+          "spend": 1.33,
+          "sales": 5.7,
+          "clicks": 8,
+          "orders": 1
+        },
+        {
+          "spend": 1.65,
+          "sales": 6.41,
+          "clicks": 10,
+          "orders": 1
+        },
+        {
+          "spend": 1.78,
+          "sales": 7.48,
+          "clicks": 10,
+          "orders": 1
+        },
+        {
+          "spend": 1.63,
+          "sales": 6.06,
+          "clicks": 10,
+          "orders": 1
+        },
+        {
+          "spend": 1.67,
+          "sales": 7.48,
+          "clicks": 10,
+          "orders": 1
+        },
+        {
+          "spend": 1.95,
+          "sales": 7.84,
           "clicks": 11,
+          "orders": 1
+        },
+        {
+          "spend": 1.94,
+          "sales": 7.84,
+          "clicks": 11,
+          "orders": 1
+        },
+        {
+          "spend": 1.66,
+          "sales": 6.77,
+          "clicks": 10,
+          "orders": 1
+        },
+        {
+          "spend": 1.5,
+          "sales": 6.41,
+          "clicks": 9,
+          "orders": 1
+        },
+        {
+          "spend": 1.65,
+          "sales": 6.77,
+          "clicks": 10,
+          "orders": 1
+        },
+        {
+          "spend": 1.82,
+          "sales": 6.41,
+          "clicks": 11,
+          "orders": 1
+        },
+        {
+          "spend": 1.33,
+          "sales": 6.41,
+          "clicks": 8,
+          "orders": 1
+        },
+        {
+          "spend": 1.64,
+          "sales": 6.77,
+          "clicks": 10,
+          "orders": 1
+        },
+        {
+          "spend": 1.78,
+          "sales": 7.84,
+          "clicks": 10,
           "orders": 1
         }
       ],
-      "trailing_acos": 24.1
+      "trailing_acos": 24.0
     }
   ],
   "ppc_guardrail": {
@@ -1247,45 +1503,45 @@
       "term": "foldable laptop riser",
       "asin": "B0C8Q4M2K7",
       "campaign_id": "CMP-AF",
-      "impressions": 11438,
-      "clicks": 314,
-      "spend": 150.72,
-      "conversions": 23,
-      "sales": 804.77,
+      "impressions": 10106,
+      "clicks": 257,
+      "spend": 123.36,
+      "conversions": 21,
+      "sales": 734.79,
       "order_value": 34.99,
-      "acos": 18.7
+      "acos": 16.8
     },
     {
       "term": "portable computer stand aluminum",
       "asin": "B0C8Q4M2K7",
       "campaign_id": "CMP-AF",
-      "impressions": 7316,
-      "clicks": 191,
-      "spend": 95.5,
-      "conversions": 10,
-      "sales": 349.9,
+      "impressions": 6167,
+      "clicks": 143,
+      "spend": 71.5,
+      "conversions": 9,
+      "sales": 314.91,
       "order_value": 34.99,
-      "acos": 27.3
+      "acos": 22.7
     },
     {
       "term": "ergonomic laptop holder for desk",
       "asin": "B0C8Q4M2K7",
       "campaign_id": "CMP-AF",
-      "impressions": 4769,
-      "clicks": 131,
-      "spend": 104.8,
-      "conversions": 10,
-      "sales": 349.9,
+      "impressions": 3896,
+      "clicks": 92,
+      "spend": 73.6,
+      "conversions": 6,
+      "sales": 209.94,
       "order_value": 34.99,
-      "acos": 30.0
+      "acos": 35.1
     },
     {
       "term": "cheap plastic laptop stand",
       "asin": "B0C8Q4M2K7",
       "campaign_id": "CMP-AF",
-      "impressions": 3018,
-      "clicks": 98,
-      "spend": 63.7,
+      "impressions": 1965,
+      "clicks": 54,
+      "spend": 35.1,
       "conversions": 0,
       "sales": 0.0,
       "order_value": 34.99,
@@ -1295,9 +1551,9 @@
       "term": "laptop stand with cooling fan",
       "asin": "B0C8Q4M2K7",
       "campaign_id": "CMP-AF",
-      "impressions": 2339,
-      "clicks": 90,
-      "spend": 102.6,
+      "impressions": 639,
+      "clicks": 20,
+      "spend": 22.8,
       "conversions": 0,
       "sales": 0.0,
       "order_value": 34.99,
@@ -1307,153 +1563,153 @@
       "term": "adjustable laptop stand for travel",
       "asin": "B0C8Q4M2K7",
       "campaign_id": "CMP-AF",
-      "impressions": 5211,
-      "clicks": 164,
-      "spend": 80.36,
+      "impressions": 3870,
+      "clicks": 105,
+      "spend": 51.45,
       "conversions": 8,
       "sales": 279.92,
       "order_value": 34.99,
-      "acos": 28.7
+      "acos": 18.4
     },
     {
       "term": "wooden monitor shelf",
       "asin": "B0C8Q4M2K7",
       "campaign_id": "CMP-AF",
-      "impressions": 1886,
-      "clicks": 67,
-      "spend": 50.25,
-      "conversions": 3,
-      "sales": 104.97,
+      "impressions": 761,
+      "clicks": 22,
+      "spend": 16.5,
+      "conversions": 1,
+      "sales": 34.99,
       "order_value": 34.99,
-      "acos": 47.9
+      "acos": 47.2
     },
     {
       "term": "silent wireless mouse",
       "asin": "B0B7P9R3W1",
       "campaign_id": "CMP-QC",
-      "impressions": 6401,
-      "clicks": 228,
-      "spend": 114.0,
+      "impressions": 5585,
+      "clicks": 193,
+      "spend": 96.5,
       "conversions": 18,
       "sales": 404.82,
       "order_value": 22.49,
-      "acos": 28.2
+      "acos": 23.8
     },
     {
       "term": "ergonomic mouse for laptop",
       "asin": "B0B7P9R3W1",
       "campaign_id": "CMP-QC",
-      "impressions": 4932,
-      "clicks": 147,
-      "spend": 80.85,
+      "impressions": 4093,
+      "clicks": 115,
+      "spend": 63.25,
       "conversions": 8,
       "sales": 179.92,
       "order_value": 22.49,
-      "acos": 44.9
+      "acos": 35.2
     },
     {
       "term": "gaming mouse rgb",
       "asin": "B0B7P9R3W1",
       "campaign_id": "CMP-QC",
-      "impressions": 2142,
-      "clicks": 87,
-      "spend": 43.5,
-      "conversions": 2,
-      "sales": 44.98,
+      "impressions": 680,
+      "clicks": 24,
+      "spend": 12.0,
+      "conversions": 0,
+      "sales": 0.0,
       "order_value": 22.49,
-      "acos": 96.7
+      "acos": 0.0
     },
     {
       "term": "wireless mouse bluetooth",
       "asin": "B0B7P9R3W1",
       "campaign_id": "CMP-QC",
-      "impressions": 1804,
-      "clicks": 67,
-      "spend": 33.5,
-      "conversions": 2,
-      "sales": 44.98,
+      "impressions": 601,
+      "clicks": 16,
+      "spend": 8.0,
+      "conversions": 1,
+      "sales": 22.49,
       "order_value": 22.49,
-      "acos": 74.5
+      "acos": 35.6
     },
     {
       "term": "silicone water bottle sleeve",
       "asin": "B0D2L6T8N4",
       "campaign_id": "CMP-TG",
-      "impressions": 5218,
-      "clicks": 207,
-      "spend": 53.82,
-      "conversions": 20,
-      "sales": 279.8,
+      "impressions": 4107,
+      "clicks": 165,
+      "spend": 42.9,
+      "conversions": 18,
+      "sales": 251.82,
       "order_value": 13.99,
-      "acos": 19.2
+      "acos": 17.0
     },
     {
       "term": "bottle protective cover",
       "asin": "B0D2L6T8N4",
       "campaign_id": "CMP-TG",
-      "impressions": 4186,
-      "clicks": 132,
-      "spend": 39.6,
-      "conversions": 10,
-      "sales": 139.9,
+      "impressions": 3313,
+      "clicks": 96,
+      "spend": 28.8,
+      "conversions": 9,
+      "sales": 125.91,
       "order_value": 13.99,
-      "acos": 28.3
+      "acos": 22.9
     },
     {
       "term": "stanley cup boot",
       "asin": "B0D2L6T8N4",
       "campaign_id": "CMP-TG",
-      "impressions": 2894,
-      "clicks": 106,
-      "spend": 31.8,
-      "conversions": 2,
-      "sales": 27.98,
+      "impressions": 1040,
+      "clicks": 29,
+      "spend": 8.7,
+      "conversions": 0,
+      "sales": 0.0,
       "order_value": 13.99,
-      "acos": 113.7
+      "acos": 0.0
     },
     {
       "term": "insulated bottle sleeve 40oz",
       "asin": "B0D2L6T8N4",
       "campaign_id": "CMP-TG",
-      "impressions": 5245,
-      "clicks": 146,
-      "spend": 48.18,
-      "conversions": 13,
-      "sales": 181.87,
+      "impressions": 4205,
+      "clicks": 100,
+      "spend": 33.0,
+      "conversions": 11,
+      "sales": 153.89,
       "order_value": 13.99,
-      "acos": 26.5
+      "acos": 21.4
     },
     {
       "term": "usb c desk lamp",
       "asin": "B0A9H5X3J6",
       "campaign_id": "CMP-LM",
-      "impressions": 9260,
-      "clicks": 279,
-      "spend": 125.55,
-      "conversions": 26,
-      "sales": 649.74,
+      "impressions": 7653,
+      "clicks": 214,
+      "spend": 96.3,
+      "conversions": 22,
+      "sales": 549.78,
       "order_value": 24.99,
-      "acos": 19.3
+      "acos": 17.5
     },
     {
       "term": "led desk lamp for office",
       "asin": "B0A9H5X3J6",
       "campaign_id": "CMP-LM",
-      "impressions": 6412,
-      "clicks": 186,
-      "spend": 96.72,
+      "impressions": 4800,
+      "clicks": 120,
+      "spend": 62.4,
       "conversions": 11,
       "sales": 274.89,
       "order_value": 24.99,
-      "acos": 35.2
+      "acos": 22.7
     },
     {
       "term": "dimmable reading light",
       "asin": "B0A9H5X3J6",
       "campaign_id": "CMP-LM",
-      "impressions": 1759,
-      "clicks": 64,
-      "spend": 32.0,
+      "impressions": 840,
+      "clicks": 27,
+      "spend": 13.5,
       "conversions": 0,
       "sales": 0.0,
       "order_value": 24.99,
@@ -1463,154 +1719,154 @@
       "term": "clip on desk light",
       "asin": "B0A9H5X3J6",
       "campaign_id": "CMP-LM",
-      "impressions": 1944,
-      "clicks": 72,
-      "spend": 36.0,
-      "conversions": 1,
-      "sales": 24.99,
+      "impressions": 584,
+      "clicks": 16,
+      "spend": 8.0,
+      "conversions": 0,
+      "sales": 0.0,
       "order_value": 24.99,
-      "acos": 144.1
+      "acos": 0.0
     },
     {
       "term": "desk cable organizer",
       "asin": "B0C3F7Y1V9",
       "campaign_id": "CMP-SD",
-      "impressions": 5809,
-      "clicks": 218,
-      "spend": 34.88,
-      "conversions": 13,
-      "sales": 129.87,
+      "impressions": 4495,
+      "clicks": 163,
+      "spend": 26.08,
+      "conversions": 12,
+      "sales": 119.88,
       "order_value": 9.99,
-      "acos": 26.9
+      "acos": 21.8
     },
     {
       "term": "cord clips adhesive",
       "asin": "B0C3F7Y1V9",
       "campaign_id": "CMP-SD",
-      "impressions": 4237,
-      "clicks": 134,
-      "spend": 25.46,
-      "conversions": 8,
-      "sales": 79.92,
+      "impressions": 3337,
+      "clicks": 96,
+      "spend": 18.24,
+      "conversions": 7,
+      "sales": 69.93,
       "order_value": 9.99,
-      "acos": 31.9
+      "acos": 26.1
     },
     {
       "term": "wire management box",
       "asin": "B0C3F7Y1V9",
       "campaign_id": "CMP-SD",
-      "impressions": 2768,
-      "clicks": 86,
-      "spend": 12.9,
-      "conversions": 1,
-      "sales": 9.99,
+      "impressions": 2070,
+      "clicks": 56,
+      "spend": 8.4,
+      "conversions": 2,
+      "sales": 19.98,
       "order_value": 9.99,
-      "acos": 129.1
+      "acos": 42.0
     },
     {
       "term": "cable ties reusable",
       "asin": "B0C3F7Y1V9",
       "campaign_id": "CMP-SD",
-      "impressions": 2477,
-      "clicks": 90,
-      "spend": 16.2,
+      "impressions": 839,
+      "clicks": 23,
+      "spend": 4.14,
       "conversions": 3,
       "sales": 29.97,
       "order_value": 9.99,
-      "acos": 54.1
+      "acos": 13.8
     }
   ],
   "targeted_exact_keywords": [
     {
       "term": "foldable laptop riser",
-      "added_at": "2026-10-16T09:34:50.687992+00:00",
+      "added_at": "2026-10-17T11:32:02.956605+00:00",
       "source": "Auto harvest"
     },
     {
       "term": "portable computer stand aluminum",
-      "added_at": "2026-10-16T09:34:50.688019+00:00",
+      "added_at": "2026-10-17T11:32:02.956653+00:00",
       "source": "Auto harvest"
     },
     {
       "term": "adjustable laptop stand for travel",
-      "added_at": "2026-10-16T09:34:50.688048+00:00",
+      "added_at": "2026-10-17T11:32:02.956766+00:00",
       "source": "Auto harvest"
     },
     {
       "term": "silent wireless mouse",
-      "added_at": "2026-10-16T09:34:50.688057+00:00",
+      "added_at": "2026-10-17T11:32:02.956783+00:00",
       "source": "Auto harvest"
     },
     {
       "term": "silicone water bottle sleeve",
-      "added_at": "2026-10-16T09:34:50.688072+00:00",
+      "added_at": "2026-10-17T11:32:02.956841+00:00",
       "source": "Auto harvest"
     },
     {
       "term": "bottle protective cover",
-      "added_at": "2026-10-16T09:34:50.688080+00:00",
+      "added_at": "2026-10-17T11:32:02.956857+00:00",
       "source": "Auto harvest"
     },
     {
       "term": "insulated bottle sleeve 40oz",
-      "added_at": "2026-10-16T09:34:50.688096+00:00",
+      "added_at": "2026-10-17T11:32:02.956886+00:00",
       "source": "Auto harvest"
     },
     {
       "term": "usb c desk lamp",
-      "added_at": "2026-10-16T09:34:50.688105+00:00",
+      "added_at": "2026-10-17T11:32:02.956899+00:00",
       "source": "Auto harvest"
     },
     {
       "term": "led desk lamp for office",
-      "added_at": "2026-10-16T09:34:50.688113+00:00",
+      "added_at": "2026-10-17T11:32:02.956934+00:00",
       "source": "Auto harvest"
     },
     {
       "term": "desk cable organizer",
-      "added_at": "2026-10-16T09:34:50.688131+00:00",
+      "added_at": "2026-10-17T11:32:02.956960+00:00",
       "source": "Auto harvest"
     },
     {
       "term": "cord clips adhesive",
-      "added_at": "2026-10-16T09:34:50.688138+00:00",
+      "added_at": "2026-10-17T11:32:02.956979+00:00",
       "source": "Auto harvest"
     }
   ],
   "negative_keywords": [
     {
       "term": "cheap plastic laptop stand",
-      "added_at": "2026-10-16T09:34:50.688032+00:00",
+      "added_at": "2026-10-17T11:32:02.956721+00:00",
       "source": "Zero-conversion guard"
     },
     {
       "term": "laptop stand with cooling fan",
-      "added_at": "2026-10-16T09:34:50.688041+00:00",
+      "added_at": "2026-10-17T11:32:02.956752+00:00",
       "source": "Zero-conversion guard"
     },
     {
       "term": "gaming mouse rgb",
-      "added_at": "2026-10-16T09:34:50.688065+00:00",
+      "added_at": "2026-10-17T11:32:02.956797+00:00",
       "source": "Zero-conversion guard"
     },
     {
       "term": "stanley cup boot",
-      "added_at": "2026-10-16T09:34:50.688089+00:00",
+      "added_at": "2026-10-17T11:32:02.956871+00:00",
       "source": "Zero-conversion guard"
     },
     {
       "term": "dimmable reading light",
-      "added_at": "2026-10-16T09:34:50.688124+00:00",
+      "added_at": "2026-10-17T11:32:02.956947+00:00",
       "source": "Zero-conversion guard"
     },
     {
       "term": "wire management box",
-      "added_at": "2026-10-16T09:34:50.688145+00:00",
+      "added_at": "2026-10-17T11:32:02.956992+00:00",
       "source": "Zero-conversion guard"
     },
     {
       "term": "clip on desk light",
-      "added_at": "2026-10-17T06:31:57.986755+00:00",
+      "added_at": "2026-10-17T11:52:39.996948+00:00",
       "source": "Zero-conversion guard"
     }
   ],
@@ -1623,7 +1879,7 @@
       "units": 600,
       "amount": 9240.0,
       "submitted_by": "Jordan Lee",
-      "submitted_at": "2026-10-15T09:34:50Z",
+      "submitted_at": "2026-10-16T11:32:02Z",
       "status": "pending",
       "reason": "Q4 replenishment \u00b7 35 days of cover"
     },
@@ -1635,9 +1891,9 @@
       "units": 400,
       "amount": 4600.0,
       "submitted_by": "Avery Patel",
-      "submitted_at": "2026-10-15T08:34:50Z",
+      "submitted_at": "2026-10-16T10:32:02Z",
       "status": "pending",
-      "reason": "Velocity increase \u00b7 23% week over week"
+      "reason": "Velocity increase \u00b7 25% week over week"
     },
     {
       "id": "WF-2058",
@@ -1647,7 +1903,7 @@
       "units": 320,
       "amount": 4096.0,
       "submitted_by": "Morgan Diaz",
-      "submitted_at": "2026-10-15T07:34:50Z",
+      "submitted_at": "2026-10-16T09:32:02Z",
       "status": "pending",
       "reason": "Supplier lead time \u00b7 41 days"
     },
@@ -1659,9 +1915,9 @@
       "units": 500,
       "amount": 2375.0,
       "submitted_by": "Jordan Lee",
-      "submitted_at": "2026-10-14T06:34:50Z",
+      "submitted_at": "2026-10-15T08:32:02Z",
       "status": "pending",
-      "reason": "Low stock \u00b7 12 days of cover"
+      "reason": "Low stock \u00b7 11 days of cover"
     },
     {
       "id": "WF-2056",
@@ -1671,9 +1927,9 @@
       "units": 800,
       "amount": 3080.0,
       "submitted_by": "Avery Patel",
-      "submitted_at": "2026-10-14T05:34:50Z",
+      "submitted_at": "2026-10-15T07:32:02Z",
       "status": "pending",
-      "reason": "Low stock \u00b7 13 days of cover"
+      "reason": "Low stock \u00b7 12 days of cover"
     },
     {
       "id": "WF-2055",
@@ -1683,11 +1939,11 @@
       "units": 700,
       "amount": 2695.0,
       "submitted_by": "Morgan Diaz",
-      "submitted_at": "2026-10-13T09:34:50Z",
+      "submitted_at": "2026-10-14T11:32:02Z",
       "status": "approved",
       "reason": "Reorder point reached",
       "reviewed_by": "User",
-      "reviewed_at": "2026-10-14T09:34:50Z",
+      "reviewed_at": "2026-10-15T11:32:02Z",
       "review_note": "Within cover budget"
     },
     {
@@ -1698,11 +1954,11 @@
       "units": 600,
       "amount": 7680.0,
       "submitted_by": "Jordan Lee",
-      "submitted_at": "2026-10-11T08:34:50Z",
+      "submitted_at": "2026-10-12T10:32:02Z",
       "status": "denied",
       "reason": "Exceeds 60-day cover budget",
       "reviewed_by": "User",
-      "reviewed_at": "2026-10-12T09:34:50Z",
+      "reviewed_at": "2026-10-13T11:32:02Z",
       "review_note": "Resubmit at 320 units"
     },
     {
@@ -1713,11 +1969,11 @@
       "units": 300,
       "amount": 3450.0,
       "submitted_by": "Avery Patel",
-      "submitted_at": "2026-10-07T07:34:50Z",
+      "submitted_at": "2026-10-08T09:32:02Z",
       "status": "approved",
-      "reason": "Velocity increase \u00b7 23% week over week",
+      "reason": "Velocity increase \u00b7 25% week over week",
       "reviewed_by": "User",
-      "reviewed_at": "2026-10-08T09:34:50Z",
+      "reviewed_at": "2026-10-09T11:32:02Z",
       "review_note": "Approved at requested quantity"
     },
     {
@@ -1728,11 +1984,11 @@
       "units": 1200,
       "amount": 18480.0,
       "submitted_by": "Morgan Diaz",
-      "submitted_at": "2026-10-05T06:34:50Z",
+      "submitted_at": "2026-10-06T08:32:02Z",
       "status": "denied",
       "reason": "Quantity above $20k budget cap",
       "reviewed_by": "User",
-      "reviewed_at": "2026-10-06T09:34:50Z",
+      "reviewed_at": "2026-10-07T11:32:02Z",
       "review_note": "Split across two POs"
     },
     {
@@ -1743,11 +1999,11 @@
       "units": 500,
       "amount": 7700.0,
       "submitted_by": "Jordan Lee",
-      "submitted_at": "2026-10-04T05:34:50Z",
+      "submitted_at": "2026-10-05T07:32:02Z",
       "status": "approved",
       "reason": "Q4 replenishment \u00b7 35 days of cover",
       "reviewed_by": "User",
-      "reviewed_at": "2026-10-05T09:34:50Z",
+      "reviewed_at": "2026-10-06T11:32:02Z",
       "review_note": "Approved"
     },
     {
@@ -1758,11 +2014,11 @@
       "units": 400,
       "amount": 1900.0,
       "submitted_by": "Avery Patel",
-      "submitted_at": "2026-09-30T09:34:50Z",
+      "submitted_at": "2026-10-01T11:32:02Z",
       "status": "approved",
-      "reason": "Low stock \u00b7 12 days of cover",
+      "reason": "Low stock \u00b7 11 days of cover",
       "reviewed_by": "User",
-      "reviewed_at": "2026-10-01T09:34:50Z",
+      "reviewed_at": "2026-10-02T11:32:02Z",
       "review_note": "Approved"
     },
     {
@@ -1773,228 +2029,228 @@
       "units": 2000,
       "amount": 7700.0,
       "submitted_by": "Morgan Diaz",
-      "submitted_at": "2026-09-26T08:34:50Z",
+      "submitted_at": "2026-09-27T10:32:02Z",
       "status": "denied",
       "reason": "Quantity above supplier MOQ ceiling",
       "reviewed_by": "User",
-      "reviewed_at": "2026-09-27T09:34:50Z",
+      "reviewed_at": "2026-09-28T11:32:02Z",
       "review_note": "Reduce to one pallet"
     }
   ],
   "purchase_orders": [
     {
-      "id": "PO-67CF93",
+      "id": "PO-D9CB67",
       "product_asin": "B0C3F7Y1V9",
       "product_name": "SnapDock Cable Organizer Set",
       "supplier": "Evergreen Household Goods",
-      "units": 582,
+      "units": 588,
       "status": "draft",
-      "created_at": "2026-10-16T09:34:50.688174+00:00"
+      "created_at": "2026-10-17T11:32:02.957060+00:00"
     },
     {
-      "id": "PO-44D068",
+      "id": "PO-724255",
       "product_asin": "B0D2L6T8N4",
       "product_name": "TerraGrip Silicone Bottle Sleeve",
       "supplier": "Evergreen Household Goods",
-      "units": 366,
+      "units": 369,
       "status": "draft",
-      "created_at": "2026-10-16T09:34:50.688161+00:00"
+      "created_at": "2026-10-17T11:32:02.957037+00:00"
     }
   ],
   "reviews": [
     {
       "rating": 1,
       "product": "ArcFold Aluminum Laptop Stand",
-      "date": "2026-10-14",
+      "date": "2026-10-15",
       "theme": "hinge_defect",
       "text": "The hinge snapped the second week. I only adjusted it a few times and now it will not hold my laptop up."
     },
     {
       "rating": 5,
       "product": "Luma USB-C Desk Light",
-      "date": "2026-10-14",
+      "date": "2026-10-15",
       "theme": "usb_power",
       "text": "Love that it runs off my laptop's USB-C port. Clean and compact."
     },
     {
       "rating": 1,
       "product": "ArcFold Aluminum Laptop Stand",
-      "date": "2026-10-13",
+      "date": "2026-10-14",
       "theme": "arrives_damaged",
       "text": "Arrived with the hinge cracked. The box looked fine outside, but the stand was loose in the package."
     },
     {
       "rating": 5,
       "product": "QuietClick Wireless Mouse",
-      "date": "2026-10-13",
+      "date": "2026-10-14",
       "theme": "quiet_clicks",
       "text": "Finally a quiet mouse. My coworkers have stopped asking what that clicking is."
     },
     {
       "rating": 1,
       "product": "SnapDock Cable Organizer Set",
-      "date": "2026-10-13",
+      "date": "2026-10-14",
       "theme": "adhesive_weak",
       "text": "The adhesive let go within a week and the clips ended up on the floor."
     },
     {
       "rating": 1,
       "product": "ArcFold Aluminum Laptop Stand",
-      "date": "2026-10-12",
+      "date": "2026-10-13",
       "theme": "hinge_defect",
       "text": "Plastic connector broke while I was tightening the stand. The instructions say not to overtighten but it barely felt snug."
     },
     {
       "rating": 4,
       "product": "TerraGrip Silicone Bottle Sleeve",
-      "date": "2026-10-12",
+      "date": "2026-10-13",
       "theme": "grip",
       "text": "Nice grippy texture and no more scratches on my bottle. Runs a little snug."
     },
     {
       "rating": 1,
       "product": "QuietClick Wireless Mouse",
-      "date": "2026-10-11",
+      "date": "2026-10-12",
       "theme": "scroll_wheel",
       "text": "The scroll wheel stopped working after a month. It still clicks, but the wheel no longer moves the page."
     },
     {
       "rating": 5,
       "product": "SnapDock Cable Organizer Set",
-      "date": "2026-10-11",
+      "date": "2026-10-12",
       "theme": "great_value",
       "text": "Cheap and does exactly what it says. My desk finally looks tidy."
     },
     {
       "rating": 5,
       "product": "ArcFold Aluminum Laptop Stand",
-      "date": "2026-10-10",
+      "date": "2026-10-11",
       "theme": "great_value",
       "text": "Sturdy for the price and it folds flat into my bag. Raised my screen to eye level right away."
     },
     {
       "rating": 2,
       "product": "Luma USB-C Desk Light",
-      "date": "2026-10-10",
+      "date": "2026-10-11",
       "theme": "brightness",
       "text": "Too dim for real work. Fine as a bedside light but not for a desk."
     },
     {
       "rating": 1,
       "product": "TerraGrip Silicone Bottle Sleeve",
-      "date": "2026-10-09",
+      "date": "2026-10-10",
       "theme": "fit_too_tight",
       "text": "Much tighter than the listing implied. I cannot get the sleeve over my bottle without stretching it hard."
     },
     {
       "rating": 2,
       "product": "QuietClick Wireless Mouse",
-      "date": "2026-10-08",
+      "date": "2026-10-09",
       "theme": "connectivity",
       "text": "Drops its Bluetooth connection every hour or so and needs to be re-paired."
     },
     {
       "rating": 2,
       "product": "ArcFold Aluminum Laptop Stand",
-      "date": "2026-10-07",
+      "date": "2026-10-08",
       "theme": "hinge_defect",
       "text": "Works fine flat but the angle adjustment keeps slipping and the hinge feels flimsy."
     },
     {
       "rating": 2,
       "product": "SnapDock Cable Organizer Set",
-      "date": "2026-10-07",
+      "date": "2026-10-08",
       "theme": "adhesive_weak",
       "text": "Stuck fine on my wood desk but would not hold on the painted side panel."
     },
     {
       "rating": 4,
       "product": "QuietClick Wireless Mouse",
-      "date": "2026-10-06",
+      "date": "2026-10-07",
       "theme": "quiet_clicks",
       "text": "Clicks are nearly silent and the battery is lasting well. Scroll wheel feels a bit loose though."
     },
     {
       "rating": 2,
       "product": "TerraGrip Silicone Bottle Sleeve",
-      "date": "2026-10-05",
+      "date": "2026-10-06",
       "theme": "fit_too_tight",
       "text": "Does not fit my 40 oz bottle even though the listing says it fits most. Had to return it."
     },
     {
       "rating": 4,
       "product": "ArcFold Aluminum Laptop Stand",
-      "date": "2026-10-04",
+      "date": "2026-10-05",
       "theme": "portability",
       "text": "Light and packs small. Wish the rubber pads were a bit grippier."
     },
     {
       "rating": 4,
       "product": "Luma USB-C Desk Light",
-      "date": "2026-10-03",
+      "date": "2026-10-04",
       "theme": "usb_power",
       "text": "Neck holds position well. Light is a bit cool-white for my taste."
     },
     {
       "rating": 5,
       "product": "TerraGrip Silicone Bottle Sleeve",
-      "date": "2026-10-02",
+      "date": "2026-10-03",
       "theme": "great_value",
       "text": "Keeps my bottle from sliding around the cup holder and washes easily."
     },
     {
       "rating": 5,
       "product": "ArcFold Aluminum Laptop Stand",
-      "date": "2026-10-01",
+      "date": "2026-10-02",
       "theme": "great_value",
       "text": "Best desk upgrade I made this year. No wobble when typing."
     },
     {
       "rating": 4,
       "product": "SnapDock Cable Organizer Set",
-      "date": "2026-09-30",
+      "date": "2026-10-01",
       "theme": "great_value",
       "text": "Good variety of sizes in the set. A couple of clips are a bit loose."
     },
     {
       "rating": 3,
       "product": "Luma USB-C Desk Light",
-      "date": "2026-09-29",
+      "date": "2026-09-30",
       "theme": "brightness",
       "text": "Okay light but the touch dimmer is finicky."
     },
     {
       "rating": 5,
       "product": "QuietClick Wireless Mouse",
-      "date": "2026-09-28",
+      "date": "2026-09-29",
       "theme": "great_value",
       "text": "Great mouse for the money. Setup took ten seconds with the USB receiver."
     },
     {
       "rating": 3,
       "product": "QuietClick Wireless Mouse",
-      "date": "2026-09-26",
+      "date": "2026-09-27",
       "theme": "comfort",
       "text": "Fine for small hands but a bit narrow for me. Gets uncomfortable after a long day."
     },
     {
       "rating": 5,
       "product": "SnapDock Cable Organizer Set",
-      "date": "2026-09-25",
+      "date": "2026-09-26",
       "theme": "great_value",
       "text": "Held up after two months on a standing desk with no peeling."
     },
     {
       "rating": 5,
       "product": "TerraGrip Silicone Bottle Sleeve",
-      "date": "2026-09-24",
+      "date": "2026-09-25",
       "theme": "great_value",
       "text": "Bought three for the family. Colors are exactly as shown."
     },
     {
       "rating": 5,
       "product": "Luma USB-C Desk Light",
-      "date": "2026-09-21",
+      "date": "2026-09-22",
       "theme": "great_value",
       "text": "Perfect for my small desk and the brightness range is plenty."
     }
@@ -2165,764 +2421,256 @@
     }
   },
   "acos_history": [
+    22.1,
     23.2,
-    21.9,
+    22.0,
     23.3,
     24.2,
     23.2,
     21.3,
     23.0,
-    21.8,
+    21.9,
     21.4,
     22.9,
     22.2,
-    22.3,
+    22.4,
     21.8,
     22.2,
     23.8,
     22.2,
     21.7,
     22.8,
-    23.6,
-    22.6,
+    23.5,
     22.5,
-    21.7,
+    22.5,
+    21.8,
     22.9,
     22.1,
     23.4,
     23.7,
     22.2,
     21.8,
-    22.6,
-    22.1
+    22.6
   ],
   "activity": [
     {
-      "id": "9f63b8ee-7ed2-42a7-aca2-efa5983eb0a8",
-      "timestamp": "2026-10-17T10:02:08.819926+00:00",
-      "category": "repricer",
-      "title": "Buy Box price matched",
-      "detail": "B0B7P9R3W1 moved from $23.60 to $22.99, one cent below its competitor."
-    },
-    {
-      "id": "5a2a0bd5-49e2-487b-b907-52e5d662e044",
-      "timestamp": "2026-10-17T10:02:08.819868+00:00",
-      "category": "repricer",
-      "title": "Buy Box price matched",
-      "detail": "B0C8Q4M2K7 moved from $35.24 to $34.02, one cent below its competitor."
-    },
-    {
-      "id": "1af514b3-26e7-4759-b677-ef660df28b57",
-      "timestamp": "2026-10-17T09:57:08.658285+00:00",
-      "category": "repricer",
-      "title": "Price raised toward competitor",
-      "detail": "B0C8Q4M2K7 moved from $34.27 to $35.24 as its competitor rose to $35.25."
-    },
-    {
-      "id": "fb00a9f3-44a9-4422-b765-31b5721d25bb",
-      "timestamp": "2026-10-17T09:56:08.626895+00:00",
-      "category": "repricer",
-      "title": "Buy Box price matched",
-      "detail": "B0D2L6T8N4 moved from $13.18 to $12.78, one cent below its competitor."
-    },
-    {
-      "id": "9c4aabc2-374e-47be-b6d7-3e726c650419",
-      "timestamp": "2026-10-17T08:52:15.455865+00:00",
-      "category": "repricer",
-      "title": "Buy Box price matched",
-      "detail": "B0D2L6T8N4 moved from $13.52 to $13.18, one cent below its competitor."
-    },
-    {
-      "id": "679a9094-bfc7-4d51-a078-f95305d19cac",
-      "timestamp": "2026-10-17T08:51:15.425441+00:00",
-      "category": "repricer",
-      "title": "Price raised toward competitor",
-      "detail": "B0B7P9R3W1 moved from $22.91 to $23.60 as its competitor rose to $23.67."
-    },
-    {
-      "id": "1f2981f3-1245-4113-9581-89a39f4408e6",
-      "timestamp": "2026-10-17T08:50:15.396014+00:00",
-      "category": "repricer",
-      "title": "Price raised toward competitor",
-      "detail": "B0C3F7Y1V9 moved from $9.42 to $9.70 as its competitor rose to $9.74."
-    },
-    {
-      "id": "ff5b10a3-ea28-48bc-bddb-69b6d0c0ee72",
-      "timestamp": "2026-10-17T08:37:49.649901+00:00",
-      "category": "repricer",
-      "title": "Buy Box price matched",
-      "detail": "B0D2L6T8N4 moved from $13.97 to $13.52, one cent below its competitor."
-    },
-    {
-      "id": "283907cf-2250-4ed1-91b0-03a301d21120",
-      "timestamp": "2026-10-17T08:36:49.616909+00:00",
-      "category": "repricer",
-      "title": "Buy Box price matched",
-      "detail": "B0C3F7Y1V9 moved from $9.68 to $9.42, one cent below its competitor."
-    },
-    {
-      "id": "e44a5ebc-d814-4c7e-aa26-f45165a560e5",
-      "timestamp": "2026-10-17T08:35:49.586593+00:00",
-      "category": "repricer",
-      "title": "Price raised toward competitor",
-      "detail": "B0D2L6T8N4 moved from $13.60 to $13.97 as its competitor rose to $13.98."
-    },
-    {
-      "id": "c76bc4bb-7f04-44aa-8db6-411ac21e3b94",
-      "timestamp": "2026-10-17T08:28:14.559093+00:00",
-      "category": "repricer",
-      "title": "Price raised toward competitor",
-      "detail": "B0D2L6T8N4 moved from $13.20 to $13.60 as its competitor rose to $13.63."
-    },
-    {
-      "id": "08334556-c333-47d8-a6a7-6e7ed2ffbfbc",
-      "timestamp": "2026-10-17T08:26:14.498818+00:00",
-      "category": "repricer",
-      "title": "Price raised toward competitor",
-      "detail": "B0C3F7Y1V9 moved from $9.40 to $9.68 as its competitor rose to $9.77."
-    },
-    {
-      "id": "d947a2a0-4acc-449c-9b65-39305f53a511",
-      "timestamp": "2026-10-17T08:25:14.467938+00:00",
-      "category": "repricer",
-      "title": "Price raised toward competitor",
-      "detail": "B0A9H5X3J6 moved from $24.12 to $24.78 as its competitor rose to $24.79."
-    },
-    {
-      "id": "3753c5f3-8c55-4532-912d-7423066a2191",
-      "timestamp": "2026-10-17T08:23:14.409370+00:00",
-      "category": "repricer",
-      "title": "Buy Box price matched",
-      "detail": "B0D2L6T8N4 moved from $13.63 to $13.20, one cent below its competitor."
-    },
-    {
-      "id": "b625df33-64fb-452b-a2d9-e6d369613e88",
-      "timestamp": "2026-10-17T08:20:14.314943+00:00",
-      "category": "repricer",
-      "title": "Price raised toward competitor",
-      "detail": "B0D2L6T8N4 moved from $13.29 to $13.63 as its competitor rose to $13.64."
-    },
-    {
-      "id": "37e809b0-1402-427c-ba27-b0ce06797eb3",
-      "timestamp": "2026-10-17T08:18:14.221151+00:00",
-      "category": "repricer",
-      "title": "Buy Box price matched",
-      "detail": "B0A9H5X3J6 moved from $25.07 to $24.12, one cent below its competitor."
-    },
-    {
-      "id": "8f1239a6-2cbc-4af5-aa96-a4f817e464d1",
-      "timestamp": "2026-10-17T08:17:14.166877+00:00",
-      "category": "repricer",
-      "title": "Price raised toward competitor",
-      "detail": "B0C8Q4M2K7 moved from $33.27 to $34.27 as its competitor rose to $34.35."
-    },
-    {
-      "id": "2b7a2138-c4af-4fe7-a8de-9ca8f2c1f952",
-      "timestamp": "2026-10-17T08:16:14.117855+00:00",
-      "category": "repricer",
-      "title": "Buy Box price matched",
-      "detail": "B0C3F7Y1V9 moved from $9.68 to $9.40, one cent below its competitor."
-    },
-    {
-      "id": "f6606c34-5ca9-409b-91b0-e5bd0dfcc2e5",
-      "timestamp": "2026-10-17T08:14:14.041449+00:00",
-      "category": "repricer",
-      "title": "Price raised toward competitor",
-      "detail": "B0D2L6T8N4 moved from $12.95 to $13.29 as its competitor rose to $13.30."
-    },
-    {
-      "id": "15556375-d3b3-4c40-8329-345d6d29ee28",
-      "timestamp": "2026-10-17T08:13:14.002827+00:00",
-      "category": "repricer",
-      "title": "Buy Box price matched",
-      "detail": "B0C8Q4M2K7 moved from $34.33 to $33.27, one cent below its competitor."
-    },
-    {
-      "id": "bf90f73e-ea4f-4081-bb51-6c2e2f034cdb",
-      "timestamp": "2026-10-17T08:12:13.963200+00:00",
-      "category": "repricer",
-      "title": "Price raised toward competitor",
-      "detail": "B0C3F7Y1V9 moved from $9.44 to $9.68 as its competitor rose to $9.69."
-    },
-    {
-      "id": "60f56feb-b339-4708-8c8b-3fbabd10a8a0",
-      "timestamp": "2026-10-17T08:12:13.963139+00:00",
-      "category": "repricer",
-      "title": "Buy Box price matched",
-      "detail": "B0D2L6T8N4 moved from $13.30 to $12.95, one cent below its competitor."
-    },
-    {
-      "id": "2019a5f2-1cd0-4130-bbdd-74b3a6a491be",
-      "timestamp": "2026-10-17T08:10:13.902064+00:00",
-      "category": "repricer",
-      "title": "Price raised toward competitor",
-      "detail": "B0A9H5X3J6 moved from $24.34 to $25.07 as its competitor rose to $25.08."
-    },
-    {
-      "id": "b15b5cee-616e-4293-be13-288ce8f5af41",
-      "timestamp": "2026-10-17T08:08:13.833558+00:00",
-      "category": "repricer",
-      "title": "Buy Box price matched",
-      "detail": "B0D2L6T8N4 moved from $13.67 to $13.30, one cent below its competitor."
-    },
-    {
-      "id": "5cce47b9-b206-4815-a4eb-520521f7e34a",
-      "timestamp": "2026-10-17T08:08:13.833529+00:00",
-      "category": "repricer",
-      "title": "Buy Box price matched",
-      "detail": "B0B7P9R3W1 moved from $23.74 to $22.91, one cent below its competitor."
-    },
-    {
-      "id": "d1a02c99-8c3d-47da-932e-b2c4713e450b",
-      "timestamp": "2026-10-17T08:08:13.833455+00:00",
-      "category": "repricer",
-      "title": "Price raised toward competitor",
-      "detail": "B0C8Q4M2K7 moved from $33.33 to $34.33 as its competitor rose to $34.43."
-    },
-    {
-      "id": "546f4891-3c8b-491d-8da9-fca7d2b738fa",
-      "timestamp": "2026-10-17T08:06:13.771975+00:00",
-      "category": "repricer",
-      "title": "Buy Box price matched",
-      "detail": "B0C3F7Y1V9 moved from $9.70 to $9.44, one cent below its competitor."
-    },
-    {
-      "id": "35388c3c-948b-461d-9cae-a6c39ed8bf65",
-      "timestamp": "2026-10-17T08:06:13.771933+00:00",
-      "category": "repricer",
-      "title": "Buy Box price matched",
-      "detail": "B0A9H5X3J6 moved from $25.03 to $24.34, one cent below its competitor."
-    },
-    {
-      "id": "34b8e65c-32ce-4f32-bbc6-2969210d73ba",
-      "timestamp": "2026-10-17T08:04:13.708418+00:00",
-      "category": "repricer",
-      "title": "Buy Box price matched",
-      "detail": "B0C8Q4M2K7 moved from $34.20 to $33.33, one cent below its competitor."
-    },
-    {
-      "id": "4c567ef2-46d5-4b48-9aac-c43c2720a168",
-      "timestamp": "2026-10-17T08:03:13.677353+00:00",
-      "category": "repricer",
-      "title": "Buy Box price matched",
-      "detail": "B0D2L6T8N4 moved from $14.04 to $13.67, one cent below its competitor."
-    },
-    {
-      "id": "619c0855-59a1-4129-93e0-fdef51a9b2ae",
-      "timestamp": "2026-10-17T07:42:37.038232+00:00",
-      "category": "repricer",
-      "title": "Buy Box price matched",
-      "detail": "B0A9H5X3J6 moved from $25.74 to $25.03, one cent below its competitor."
-    },
-    {
-      "id": "b611b6f5-f71c-4aa6-babd-0d50de11e9ef",
-      "timestamp": "2026-10-17T07:38:36.923602+00:00",
-      "category": "repricer",
-      "title": "Price raised toward competitor",
-      "detail": "B0B7P9R3W1 moved from $23.05 to $23.74 as its competitor rose to $23.78."
-    },
-    {
-      "id": "2bc3d8e3-2b18-485b-8102-d48a71ad0323",
-      "timestamp": "2026-10-17T07:35:36.816360+00:00",
-      "category": "repricer",
-      "title": "Buy Box price matched",
-      "detail": "B0B7P9R3W1 moved from $23.79 to $23.05, one cent below its competitor."
-    },
-    {
-      "id": "f250573a-32c7-4d06-a29d-11e51a9cdada",
-      "timestamp": "2026-10-17T07:30:36.674675+00:00",
-      "category": "repricer",
-      "title": "Price raised toward competitor",
-      "detail": "B0D2L6T8N4 moved from $13.63 to $14.04 as its competitor rose to $14.09."
-    },
-    {
-      "id": "fb107dda-d9ee-4f3f-83f4-d8dd9b5deee3",
-      "timestamp": "2026-10-17T07:27:36.583990+00:00",
-      "category": "repricer",
-      "title": "Price raised toward competitor",
-      "detail": "B0B7P9R3W1 moved from $23.10 to $23.79 as its competitor rose to $23.85."
-    },
-    {
-      "id": "0beb3548-638e-4fdc-928a-876810501edf",
-      "timestamp": "2026-10-17T07:26:36.555598+00:00",
-      "category": "repricer",
-      "title": "Price raised toward competitor",
-      "detail": "B0C8Q4M2K7 moved from $33.20 to $34.20 as its competitor rose to $34.38."
-    },
-    {
-      "id": "23bdac7e-1ea8-44c7-9b5a-cef96c371ab7",
-      "timestamp": "2026-10-17T07:22:36.432801+00:00",
-      "category": "repricer",
-      "title": "Buy Box price matched",
-      "detail": "B0C8Q4M2K7 moved from $34.10 to $33.20, one cent below its competitor."
-    },
-    {
-      "id": "47d11273-008c-42a8-b680-caba4cbf91ce",
-      "timestamp": "2026-10-17T07:21:36.406966+00:00",
-      "category": "repricer",
-      "title": "Price raised toward competitor",
-      "detail": "B0A9H5X3J6 moved from $25.02 to $25.74 as its competitor rose to $25.75."
-    },
-    {
-      "id": "2aca23b0-fdb9-4578-be1d-9554fcd96a7d",
-      "timestamp": "2026-10-17T07:20:36.377043+00:00",
-      "category": "repricer",
-      "title": "Price raised toward competitor",
-      "detail": "B0B7P9R3W1 moved from $22.49 to $23.10 as its competitor rose to $23.11."
-    },
-    {
-      "id": "1dd9df06-eafd-439e-8ee2-a86140dbc277",
-      "timestamp": "2026-10-17T06:42:18.329741+00:00",
-      "category": "repricer",
-      "title": "Price raised toward competitor",
-      "detail": "B0A9H5X3J6 moved from $24.31 to $25.02 as its competitor rose to $25.03."
-    },
-    {
-      "id": "e31bbb29-dfba-4800-a240-5db0494084a6",
-      "timestamp": "2026-10-17T06:39:18.249746+00:00",
-      "category": "repricer",
-      "title": "Price raised toward competitor",
-      "detail": "B0D2L6T8N4 moved from $13.24 to $13.63 as its competitor rose to $13.64."
-    },
-    {
-      "id": "21c14b56-70ff-4b23-9980-75bf83bb433c",
-      "timestamp": "2026-10-17T06:33:18.033600+00:00",
-      "category": "repricer",
-      "title": "Buy Box price matched",
-      "detail": "B0A9H5X3J6 moved from $24.99 to $24.31, one cent below its competitor."
-    },
-    {
-      "id": "6a7190e8-8692-4e39-a361-567ebf8e20c5",
-      "timestamp": "2026-10-17T06:31:57.986855+00:00",
+      "id": "d3295932-7bdc-4df5-89e5-7686eeab0900",
+      "timestamp": "2026-10-17T11:52:39.997012+00:00",
       "category": "ppc",
       "title": "Negative keyword added",
-      "detail": "clip on desk light reached 18 clicks without a conversion."
+      "detail": "clip on desk light reached 16 clicks without a conversion."
     },
     {
-      "id": "5046bf21-c5d4-44bd-86b5-67624bd188eb",
-      "timestamp": "2026-10-17T06:31:17.967086+00:00",
+      "id": "581de1f9-2ca7-454a-a0b3-cccd02d7b8f4",
+      "timestamp": "2026-10-17T11:51:59.981520+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0D2L6T8N4 moved from $13.69 to $14.04 as its competitor rose to $14.05."
+    },
+    {
+      "id": "59c28f87-842f-49fc-b590-395b78e602d7",
+      "timestamp": "2026-10-17T11:49:59.929866+00:00",
       "category": "repricer",
       "title": "Buy Box price matched",
-      "detail": "B0D2L6T8N4 moved from $13.61 to $13.24, one cent below its competitor."
+      "detail": "B0C8Q4M2K7 moved from $33.79 to $32.78, one cent below its competitor."
     },
     {
-      "id": "3e12d835-17b8-4f8b-8457-a555708319f5",
-      "timestamp": "2026-10-17T06:30:17.932179+00:00",
+      "id": "7d919042-4b10-4e5a-8dbe-ad74b56625db",
+      "timestamp": "2026-10-17T11:48:59.903114+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0D2L6T8N4 moved from $13.34 to $13.69 as its competitor rose to $13.70."
+    },
+    {
+      "id": "e2caa7c7-a67e-44c5-a871-3b6d04516005",
+      "timestamp": "2026-10-17T11:41:00.508030+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0A9H5X3J6 moved from $23.44 to $24.14 as its competitor rose to $24.15."
+    },
+    {
+      "id": "4064089f-9c3f-496a-bcbe-5c08ce33425e",
+      "timestamp": "2026-10-17T11:36:00.389796+00:00",
       "category": "repricer",
       "title": "Buy Box price matched",
-      "detail": "B0C3F7Y1V9 moved from $9.99 to $9.70, one cent below its competitor."
+      "detail": "B0A9H5X3J6 moved from $24.12 to $23.44, one cent below its competitor."
     },
     {
-      "id": "d022547c-4107-4aab-a9f8-b5cf494795d5",
-      "timestamp": "2026-10-17T06:28:17.872556+00:00",
+      "id": "cbd678a4-092c-4113-a20c-0ae8bd36065f",
+      "timestamp": "2026-10-17T11:35:00.367129+00:00",
       "category": "repricer",
       "title": "Buy Box price matched",
-      "detail": "B0D2L6T8N4 moved from $13.99 to $13.61, one cent below its competitor."
+      "detail": "B0C8Q4M2K7 moved from $34.99 to $33.79, one cent below its competitor."
     },
     {
-      "id": "27053f44-070f-4cb6-a68c-36c6ee7cca9b",
-      "timestamp": "2026-10-17T06:28:17.872450+00:00",
+      "id": "578b4e1a-2a78-4b8a-b89d-3f5b5cbf3689",
+      "timestamp": "2026-10-17T11:33:00.323858+00:00",
       "category": "repricer",
       "title": "Buy Box price matched",
-      "detail": "B0C8Q4M2K7 moved from $34.99 to $34.10, one cent below its competitor."
+      "detail": "B0C3F7Y1V9 moved from $9.99 to $9.68, one cent below its competitor."
     },
     {
-      "id": "a5035091-339a-4394-bc03-085a100fe6b9",
-      "timestamp": "2026-10-17T06:22:05.018050+00:00",
+      "id": "1603a8e3-2f8c-44e6-b3e0-aca722dc2e25",
+      "timestamp": "2026-10-17T11:33:00.323762+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0A9H5X3J6 moved from $24.99 to $24.12, one cent below its competitor."
+    },
+    {
+      "id": "075a9771-03c1-49b4-987e-1f482817399d",
+      "timestamp": "2026-10-17T11:33:00.323716+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0D2L6T8N4 moved from $13.99 to $13.34, one cent below its competitor."
+    },
+    {
+      "id": "c7f13a2a-97d8-4de9-8db8-48e7a7df1fd7",
+      "timestamp": "2026-10-17T11:33:00.323647+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0B7P9R3W1 moved from $22.49 to $23.11 as its competitor rose to $23.12."
+    },
+    {
+      "id": "8ff50f84-bc87-4dac-b4c8-6eb2b7f36b08",
+      "timestamp": "2026-10-17T11:32:10.301830+00:00",
       "category": "ppc",
       "title": "Bid guardrail triggered",
-      "detail": "QuietClick Mouse \u00b7 Auto trailing 7-day ACoS was 30.9% (limit 25%). Bid lowered from $0.50 to $0.44."
+      "detail": "QuietClick Mouse \u00b7 Auto trailing 7-day ACoS was 30.7% (limit 25%). Bid lowered from $0.50 to $0.44."
     },
     {
-      "id": "d8598134-5359-4d6b-8e94-500037d651e0",
-      "timestamp": "2026-10-16T09:34:50.688181+00:00",
+      "id": "4717b4f4-1b64-4ed3-80b0-7e64f8c63717",
+      "timestamp": "2026-10-17T11:32:02.957069+00:00",
       "category": "inventory",
       "title": "Critical stock alert \u00b7 PO drafted",
-      "detail": "SnapDock Cable Organizer Set has 12.6 days of supply. Draft PO-67CF93 created for 582 units."
+      "detail": "SnapDock Cable Organizer Set has 12.4 days of supply. Draft PO-D9CB67 created for 588 units."
     },
     {
-      "id": "6312431c-b404-4292-a5cd-cd5098c677c0",
-      "timestamp": "2026-10-16T09:34:50.688167+00:00",
+      "id": "9ff38d1a-34e1-4bac-b649-126200749828",
+      "timestamp": "2026-10-17T11:32:02.957050+00:00",
       "category": "inventory",
       "title": "Critical stock alert \u00b7 PO drafted",
-      "detail": "TerraGrip Silicone Bottle Sleeve has 11.6 days of supply. Draft PO-44D068 created for 366 units."
+      "detail": "TerraGrip Silicone Bottle Sleeve has 11.5 days of supply. Draft PO-724255 created for 369 units."
     },
     {
-      "id": "28a9f4fa-4f70-47ec-8e19-8c35da9fd601",
-      "timestamp": "2026-10-16T09:34:50.688150+00:00",
+      "id": "07e05520-3d06-4db1-8362-ba46e94aae8d",
+      "timestamp": "2026-10-17T11:32:02.957001+00:00",
       "category": "ppc",
       "title": "Negative keyword added",
       "detail": "wire management box reached 42 clicks without a conversion."
     },
     {
-      "id": "6c810149-428a-4d8b-b49f-9e40bbb9a9db",
-      "timestamp": "2026-10-16T09:34:50.688143+00:00",
+      "id": "6c5762b2-8e43-4cde-a8a2-46a5eb96c4ee",
+      "timestamp": "2026-10-17T11:32:02.956988+00:00",
       "category": "ppc",
       "title": "Exact keyword harvested",
       "detail": "cord clips adhesive qualified with 7 conversions at 23.9% ACoS."
     },
     {
-      "id": "6719967d-2b15-4049-ad42-af768f1b6425",
-      "timestamp": "2026-10-16T09:34:50.688136+00:00",
+      "id": "fcee560b-924f-4042-b6c9-eb929aecf75d",
+      "timestamp": "2026-10-17T11:32:02.956975+00:00",
       "category": "ppc",
       "title": "Exact keyword harvested",
       "detail": "desk cable organizer qualified with 12 conversions at 20.0% ACoS."
     },
     {
-      "id": "ecd27a83-7826-4602-b870-c136ba3f020f",
-      "timestamp": "2026-10-16T09:34:50.688129+00:00",
+      "id": "e45aaf12-2ae9-49c8-be0c-3255278188fb",
+      "timestamp": "2026-10-17T11:32:02.956956+00:00",
       "category": "ppc",
       "title": "Negative keyword added",
       "detail": "dimmable reading light reached 18 clicks without a conversion."
     },
     {
-      "id": "83819e4e-84bb-45d9-b8e6-1e6213b5a540",
-      "timestamp": "2026-10-16T09:34:50.688122+00:00",
+      "id": "e85c7e59-f4b2-4868-a3d3-784b7fd5df3e",
+      "timestamp": "2026-10-17T11:32:02.956943+00:00",
       "category": "ppc",
       "title": "Exact keyword harvested",
       "detail": "led desk lamp for office qualified with 11 conversions at 22.7% ACoS."
     },
     {
-      "id": "655ebd49-0866-4b45-8b53-acfa5b06f513",
-      "timestamp": "2026-10-16T09:34:50.688111+00:00",
+      "id": "3fdef774-0350-4f3c-8d65-669219955e00",
+      "timestamp": "2026-10-17T11:32:02.956929+00:00",
       "category": "ppc",
       "title": "Exact keyword harvested",
       "detail": "usb c desk lamp qualified with 22 conversions at 17.2% ACoS."
     },
     {
-      "id": "1df07532-8288-45ad-9247-5b67fe70d0a6",
-      "timestamp": "2026-10-16T09:34:50.688103+00:00",
+      "id": "1fbe6f81-804b-4135-a91c-1bb13c4100f2",
+      "timestamp": "2026-10-17T11:32:02.956895+00:00",
       "category": "ppc",
       "title": "Exact keyword harvested",
       "detail": "insulated bottle sleeve 40oz qualified with 10 conversions at 21.5% ACoS."
     },
     {
-      "id": "09a73e8f-e69b-420b-98f7-1e6ff72eecb9",
-      "timestamp": "2026-10-16T09:34:50.688094+00:00",
+      "id": "218d6ccd-7254-4d83-84f7-29ba1276679e",
+      "timestamp": "2026-10-17T11:32:02.956879+00:00",
       "category": "ppc",
       "title": "Negative keyword added",
       "detail": "stanley cup boot reached 20 clicks without a conversion."
     },
     {
-      "id": "caf606d8-842d-4129-979d-afec673a34d2",
-      "timestamp": "2026-10-16T09:34:50.688086+00:00",
+      "id": "bb17b45d-79b4-4f0c-9fba-d9c708044a3a",
+      "timestamp": "2026-10-17T11:32:02.956867+00:00",
       "category": "ppc",
       "title": "Exact keyword harvested",
       "detail": "bottle protective cover qualified with 9 conversions at 17.6% ACoS."
     },
     {
-      "id": "eb0ff62c-924f-4b7b-afed-97a0cd7f694a",
-      "timestamp": "2026-10-16T09:34:50.688077+00:00",
+      "id": "41e22a45-db23-44ac-b849-0f6e7ed80f40",
+      "timestamp": "2026-10-17T11:32:02.956853+00:00",
       "category": "ppc",
       "title": "Exact keyword harvested",
       "detail": "silicone water bottle sleeve qualified with 18 conversions at 16.5% ACoS."
     },
     {
-      "id": "2d396450-9c5c-4601-a775-397ab450b6a1",
-      "timestamp": "2026-10-16T09:34:50.688070+00:00",
+      "id": "a9c88901-13ee-4211-ab79-8613512dc323",
+      "timestamp": "2026-10-17T11:32:02.956834+00:00",
       "category": "ppc",
       "title": "Negative keyword added",
       "detail": "gaming mouse rgb reached 20 clicks without a conversion."
     },
     {
-      "id": "262b0ab8-8bf1-493b-ab0c-69bb6cda7f19",
-      "timestamp": "2026-10-16T09:34:50.688062+00:00",
+      "id": "209e5b3c-87b1-47d0-ad7f-7a1d50346ec5",
+      "timestamp": "2026-10-17T11:32:02.956792+00:00",
       "category": "ppc",
       "title": "Exact keyword harvested",
       "detail": "silent wireless mouse qualified with 18 conversions at 23.5% ACoS."
     },
     {
-      "id": "e4c46160-9f02-44f7-926c-a0b9400da285",
-      "timestamp": "2026-10-16T09:34:50.688054+00:00",
+      "id": "f8e219fc-2391-4148-ac03-4352dd7c5b95",
+      "timestamp": "2026-10-17T11:32:02.956777+00:00",
       "category": "ppc",
       "title": "Exact keyword harvested",
       "detail": "adjustable laptop stand for travel qualified with 8 conversions at 18.2% ACoS."
     },
     {
-      "id": "4468bc50-0823-4e1f-b907-4a5c54b1d1dc",
-      "timestamp": "2026-10-16T09:34:50.688046+00:00",
+      "id": "ea29a8bd-5607-4e31-9ec4-23dcb514aab1",
+      "timestamp": "2026-10-17T11:32:02.956762+00:00",
       "category": "ppc",
       "title": "Negative keyword added",
       "detail": "laptop stand with cooling fan reached 17 clicks without a conversion."
     },
     {
-      "id": "b5d1ee12-91b7-4d39-aec5-57cbd2b3ebd2",
-      "timestamp": "2026-10-16T09:34:50.688038+00:00",
+      "id": "f587fabd-8532-4d14-8a90-b078d828670f",
+      "timestamp": "2026-10-17T11:32:02.956746+00:00",
       "category": "ppc",
       "title": "Negative keyword added",
       "detail": "cheap plastic laptop stand reached 38 clicks without a conversion."
     },
     {
-      "id": "1b2a5eed-48eb-4e43-bf33-bb61a8d30f52",
-      "timestamp": "2026-10-16T09:34:50.688028+00:00",
+      "id": "d139c005-4194-403e-8926-ece400cfbfbb",
+      "timestamp": "2026-10-17T11:32:02.956674+00:00",
       "category": "ppc",
       "title": "Exact keyword harvested",
       "detail": "portable computer stand aluminum qualified with 9 conversions at 21.8% ACoS."
     },
     {
-      "id": "6aa495e5-08e3-4f59-b02f-8d5bf074689a",
-      "timestamp": "2026-10-16T09:34:50.688014+00:00",
+      "id": "d656eee1-ec17-48e8-a45f-c6c15a3ded78",
+      "timestamp": "2026-10-17T11:32:02.956644+00:00",
       "category": "ppc",
       "title": "Exact keyword harvested",
       "detail": "foldable laptop riser qualified with 21 conversions at 16.1% ACoS."
     }
   ],
   "execution_queue": [],
-  "tick_count": 614,
-  "global_products": [
-    {
-      "asin": "B0C8Q4M2K7",
-      "name": "ArcFold Aluminum Laptop Stand",
-      "sku": "AF-LS-02",
-      "category": "Office",
-      "price": 34.27,
-      "competitor_price": 34.35,
-      "market_price": 34.5,
-      "min_floor": 27.5,
-      "max_price": 39.99,
-      "unit_cost": 15.4,
-      "stock": 619.3,
-      "daily_velocity": 17.8,
-      "lead_time_days": 34,
-      "supplier": "Shenzhen Northstar Manufacturing",
-      "po_draft_id": null
-    },
-    {
-      "asin": "B0B7P9R3W1",
-      "name": "QuietClick Wireless Mouse",
-      "sku": "QC-M-11",
-      "category": "Electronics",
-      "price": 22.91,
-      "competitor_price": 22.59,
-      "market_price": 22.99,
-      "min_floor": 17.25,
-      "max_price": 26.99,
-      "unit_cost": 11.5,
-      "stock": 379.3,
-      "daily_velocity": 14.5,
-      "lead_time_days": 28,
-      "supplier": "Ningbo Kestrel Electronics",
-      "po_draft_id": null
-    },
-    {
-      "asin": "B0D2L6T8N4",
-      "name": "TerraGrip Silicone Bottle Sleeve",
-      "sku": "TG-BS-04",
-      "category": "Home & Kitchen",
-      "price": 13.29,
-      "competitor_price": 13.47,
-      "market_price": 13.49,
-      "min_floor": 9.25,
-      "max_price": 16.99,
-      "unit_cost": 4.75,
-      "stock": 141.65,
-      "daily_velocity": 12.2,
-      "lead_time_days": 21,
-      "supplier": "Evergreen Household Goods",
-      "po_draft_id": "PO-44D068"
-    },
-    {
-      "asin": "B0A9H5X3J6",
-      "name": "Luma USB-C Desk Light",
-      "sku": "LM-DL-08",
-      "category": "Lighting",
-      "price": 25.07,
-      "competitor_price": 24.49,
-      "market_price": 24.49,
-      "min_floor": 21.0,
-      "max_price": 29.99,
-      "unit_cost": 12.8,
-      "stock": 768.95,
-      "daily_velocity": 21.9,
-      "lead_time_days": 41,
-      "supplier": "Shenzhen Northstar Manufacturing",
-      "po_draft_id": null
-    },
-    {
-      "asin": "B0C3F7Y1V9",
-      "name": "SnapDock Cable Organizer Set",
-      "sku": "SD-CO-06",
-      "category": "Office",
-      "price": 9.4,
-      "competitor_price": 9.55,
-      "market_price": 9.79,
-      "min_floor": 8.5,
-      "max_price": 11.99,
-      "unit_cost": 3.85,
-      "stock": 243.3,
-      "daily_velocity": 19.5,
-      "lead_time_days": 19,
-      "supplier": "Evergreen Household Goods",
-      "po_draft_id": "PO-67CF93"
-    }
-  ],
-  "marketplace_listings": [
-    {
-      "id": "6fdb8ad5-b4df-4833-b4b0-999354b31643",
-      "global_product_id": "B0C8Q4M2K7",
-      "sku": "AF-LS-02",
-      "platform": "Amazon US",
-      "status": "Live & In Sync",
-      "title": "ArcFold Aluminum Laptop Stand",
-      "description": "ArcFold Aluminum Laptop Stand premium listing"
-    },
-    {
-      "id": "fa6f855a-c078-4252-92ae-ee6e118ebca3",
-      "global_product_id": "B0C8Q4M2K7",
-      "sku": "AF-LS-02",
-      "platform": "Amazon UK",
-      "status": "Live & In Sync",
-      "title": "ArcFold Aluminum Laptop Stand",
-      "description": "ArcFold Aluminum Laptop Stand premium listing"
-    },
-    {
-      "id": "c2a6f1e3-8b42-4867-89e8-175512f4c303",
-      "global_product_id": "B0C8Q4M2K7",
-      "sku": "AF-LS-02",
-      "platform": "Walmart",
-      "status": "Live & In Sync",
-      "title": "ArcFold Aluminum Laptop Stand",
-      "description": "ArcFold Aluminum Laptop Stand premium listing"
-    },
-    {
-      "id": "e8e25212-193b-43fd-95df-ac8202467501",
-      "global_product_id": "B0B7P9R3W1",
-      "sku": "QC-M-11",
-      "platform": "Amazon US",
-      "status": "Live & In Sync",
-      "title": "QuietClick Wireless Mouse",
-      "description": "QuietClick Wireless Mouse premium listing"
-    },
-    {
-      "id": "702e05e9-bc9b-49e4-97c6-f6a704b99cdd",
-      "global_product_id": "B0B7P9R3W1",
-      "sku": "QC-M-11",
-      "platform": "Amazon UK",
-      "status": "Live & In Sync",
-      "title": "QuietClick Wireless Mouse",
-      "description": "QuietClick Wireless Mouse premium listing"
-    },
-    {
-      "id": "b25cdea2-f36f-454d-9fa6-a8f08bc4487f",
-      "global_product_id": "B0B7P9R3W1",
-      "sku": "QC-M-11",
-      "platform": "Walmart",
-      "status": "Live & In Sync",
-      "title": "QuietClick Wireless Mouse",
-      "description": "QuietClick Wireless Mouse premium listing"
-    },
-    {
-      "id": "b466dca2-bf5b-435c-8caa-43b19b3e7e75",
-      "global_product_id": "B0D2L6T8N4",
-      "sku": "TG-BS-04",
-      "platform": "Amazon US",
-      "status": "Live & In Sync",
-      "title": "TerraGrip Silicone Bottle Sleeve",
-      "description": "TerraGrip Silicone Bottle Sleeve premium listing"
-    },
-    {
-      "id": "7ccfea85-b952-490d-94ee-32b63ac4f894",
-      "global_product_id": "B0D2L6T8N4",
-      "sku": "TG-BS-04",
-      "platform": "Amazon UK",
-      "status": "Live & In Sync",
-      "title": "TerraGrip Silicone Bottle Sleeve",
-      "description": "TerraGrip Silicone Bottle Sleeve premium listing"
-    },
-    {
-      "id": "4d2cfbc7-69e5-42c3-8bc9-29b406a0b90b",
-      "global_product_id": "B0D2L6T8N4",
-      "sku": "TG-BS-04",
-      "platform": "Walmart",
-      "status": "Live & In Sync",
-      "title": "TerraGrip Silicone Bottle Sleeve",
-      "description": "TerraGrip Silicone Bottle Sleeve premium listing"
-    },
-    {
-      "id": "7342a4e6-313b-425e-a66e-c2a03d3d38cc",
-      "global_product_id": "B0A9H5X3J6",
-      "sku": "LM-DL-08",
-      "platform": "Amazon US",
-      "status": "Live & In Sync",
-      "title": "Luma USB-C Desk Light",
-      "description": "Luma USB-C Desk Light premium listing"
-    },
-    {
-      "id": "30fe2e18-d2bc-4628-ad50-abe4bc29ae87",
-      "global_product_id": "B0A9H5X3J6",
-      "sku": "LM-DL-08",
-      "platform": "Amazon UK",
-      "status": "Live & In Sync",
-      "title": "Luma USB-C Desk Light",
-      "description": "Luma USB-C Desk Light premium listing"
-    },
-    {
-      "id": "d3cff2fb-d97a-451e-95c1-8684a385e632",
-      "global_product_id": "B0A9H5X3J6",
-      "sku": "LM-DL-08",
-      "platform": "Walmart",
-      "status": "Live & In Sync",
-      "title": "Luma USB-C Desk Light",
-      "description": "Luma USB-C Desk Light premium listing"
-    },
-    {
-      "id": "e1c79eab-cdc8-4e78-91b4-5d4c0af64996",
-      "global_product_id": "B0C3F7Y1V9",
-      "sku": "SD-CO-06",
-      "platform": "Amazon US",
-      "status": "Live & In Sync",
-      "title": "SnapDock Cable Organizer Set",
-      "description": "SnapDock Cable Organizer Set premium listing"
-    },
-    {
-      "id": "eed6612b-7838-49a0-bebb-8abdbd702b05",
-      "global_product_id": "B0C3F7Y1V9",
-      "sku": "SD-CO-06",
-      "platform": "Amazon UK",
-      "status": "Live & In Sync",
-      "title": "SnapDock Cable Organizer Set",
-      "description": "SnapDock Cable Organizer Set premium listing"
-    },
-    {
-      "id": "d06e85a6-cf47-4028-9528-8e2ae6a78c2c",
-      "global_product_id": "B0C3F7Y1V9",
-      "sku": "SD-CO-06",
-      "platform": "Walmart",
-      "status": "Live & In Sync",
-      "title": "SnapDock Cable Organizer Set",
-      "description": "SnapDock Cable Organizer Set premium listing"
-    }
-  ],
-  "order_shipments": [
-    {
-      "tracking_number": "1Z999AA10123456784",
-      "carrier": "UPS",
-      "status": "In Transit",
-      "order_id": "ORD-001"
-    },
-    {
-      "tracking_number": "7894561230",
-      "carrier": "FedEx",
-      "status": "Label Created",
-      "order_id": "ORD-002"
-    },
-    {
-      "tracking_number": "1234567890",
-      "carrier": "DHL",
-      "status": "Out for Delivery",
-      "order_id": "ORD-003"
-    },
-    {
-      "tracking_number": "TBA123456789000",
-      "carrier": "Amazon Logistics",
-      "status": "Delivered",
-      "order_id": "ORD-004"
-    },
-    {
-      "tracking_number": "1Z999AA10987654321",
-      "carrier": "UPS",
-      "status": "In Transit",
-      "order_id": "ORD-005"
-    }
-  ]
+  "tick_count": 82
 }

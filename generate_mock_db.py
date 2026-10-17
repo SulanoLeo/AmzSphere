@@ -13,6 +13,7 @@ Consistency rules enforced here (and checked in tests/test_simulator.py):
 import json
 import random
 import sys
+import uuid
 from datetime import timedelta
 from pathlib import Path
 
@@ -30,23 +31,23 @@ now = __import__("datetime").datetime.now(__import__("datetime").timezone.utc)
 PRODUCTS = [
     dict(asin="B0C8Q4M2K7", name="ArcFold Aluminum Laptop Stand", sku="AF-LS-02", category="Office",
          price=34.99, market_price=34.50, unit_cost=15.40, min_floor=27.50, max_price=39.99,
-         stock=620, velocity=18, trend=0.0, lead_days=34, supplier="Shenzhen Northstar Manufacturing",
+         stock=619, velocity=18, trend=0.0, lead_days=34, supplier="Shenzhen Northstar Manufacturing",
          campaign=dict(id="CMP-AF", name="ArcFold Stand · Exact + Phrase", bid=0.55, cpc=0.48, ramp=(1.10, 0.90))),
     dict(asin="B0B7P9R3W1", name="QuietClick Wireless Mouse", sku="QC-M-11", category="Electronics",
          price=22.49, market_price=22.99, unit_cost=11.50, min_floor=17.25, max_price=26.99,
-         stock=380, velocity=14, trend=0.5, lead_days=28, supplier="Ningbo Kestrel Electronics",
+         stock=378, velocity=14, trend=0.5, lead_days=28, supplier="Ningbo Kestrel Electronics",
          campaign=dict(id="CMP-QC", name="QuietClick Mouse · Auto", bid=0.50, cpc=0.52, ramp=(0.80, 1.25))),
     dict(asin="B0D2L6T8N4", name="TerraGrip Silicone Bottle Sleeve", sku="TG-BS-04", category="Home & Kitchen",
          price=13.99, market_price=13.49, unit_cost=4.75, min_floor=9.25, max_price=16.99,
-         stock=142, velocity=12, trend=0.15, lead_days=21, supplier="Evergreen Household Goods",
+         stock=141, velocity=12, trend=0.15, lead_days=21, supplier="Evergreen Household Goods",
          campaign=dict(id="CMP-TG", name="TerraGrip Sleeve · Broad", bid=0.32, cpc=0.30, ramp=(1.0, 1.0))),
     dict(asin="B0A9H5X3J6", name="Luma USB-C Desk Light", sku="LM-DL-08", category="Lighting",
          price=24.99, market_price=24.49, unit_cost=12.80, min_floor=21.00, max_price=29.99,
-         stock=770, velocity=22, trend=-0.10, lead_days=41, supplier="Shenzhen Northstar Manufacturing",
+         stock=768, velocity=22, trend=-0.10, lead_days=41, supplier="Shenzhen Northstar Manufacturing",
          campaign=dict(id="CMP-LM", name="Luma Desk Light · Exact", bid=0.48, cpc=0.47, ramp=(1.05, 0.95))),
     dict(asin="B0C3F7Y1V9", name="SnapDock Cable Organizer Set", sku="SD-CO-06", category="Office",
          price=9.99, market_price=9.79, unit_cost=3.85, min_floor=8.50, max_price=11.99,
-         stock=244, velocity=20, trend=0.0, lead_days=19, supplier="Evergreen Household Goods",
+         stock=243, velocity=20, trend=0.0, lead_days=19, supplier="Evergreen Household Goods",
          campaign=dict(id="CMP-SD", name="SnapDock Organizer · Auto", bid=0.22, cpc=0.17, ramp=(1.0, 1.0))),
 ]
 
@@ -247,6 +248,9 @@ def build():
         "history_end": today.isoformat(),
         "manager": {"name": "User", "role": "Procurement manager", "initials": "U"},
         "products": products,
+        "global_products": [dict(p, stock=p["stock"]) for p in products],
+        "marketplace_listings": [],
+        "order_shipments": [],
         "sales_history": sales_history,
         "campaigns": campaigns,
         "ppc_guardrail": {"acos_threshold": 25.0, "window_days": 7, "bid_reduction_pct": 12, "min_bid": 0.20},
@@ -258,6 +262,26 @@ def build():
         "review_themes": THEMES, "catalog_profiles": CATALOG_PROFILES,
         "acos_history": [], "activity": [], "execution_queue": [],
     }
+
+    for p in products:
+        for platform in ("Amazon US", "Amazon UK", "Walmart"):
+            state["marketplace_listings"].append({
+                "id": str(uuid.uuid4()),
+                "global_product_id": p["asin"],
+                "sku": p["sku"],
+                "platform": platform,
+                "status": "Live & In Sync",
+                "title": p["name"],
+                "description": f"{p['name']} premium listing",
+            })
+
+    state["order_shipments"] = [
+        {"tracking_number": "1Z999AA10123456784", "carrier": "UPS", "status": "In Transit", "order_id": "ORD-001"},
+        {"tracking_number": "7894561230", "carrier": "FedEx", "status": "Label Created", "order_id": "ORD-002"},
+        {"tracking_number": "1234567890", "carrier": "DHL", "status": "Out for Delivery", "order_id": "ORD-003"},
+        {"tracking_number": "TBA123456789000", "carrier": "Amazon Logistics", "status": "Delivered", "order_id": "ORD-004"},
+        {"tracking_number": "1Z999AA10987654321", "carrier": "UPS", "status": "In Transit", "order_id": "ORD-005"},
+    ]
     recompute_acos_history(state)
     sim = MockSimulator()
     sim._harvest_keywords(state)        # seed keyword lists using the live rules
