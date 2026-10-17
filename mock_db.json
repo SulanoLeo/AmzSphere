@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-10-17T13:12:08.354487+00:00",
+  "last_updated": "2026-10-17T16:54:18.081005+00:00",
   "history_end": "2026-10-17",
   "manager": {
     "name": "User",
@@ -12,13 +12,13 @@
       "name": "ArcFold Aluminum Laptop Stand",
       "sku": "AF-LS-02",
       "category": "Office",
-      "price": 35.89,
-      "competitor_price": 35.68,
+      "price": 35.07,
+      "competitor_price": 35.13,
       "market_price": 34.5,
       "min_floor": 27.5,
       "max_price": 39.99,
       "unit_cost": 15.4,
-      "stock": 618.812,
+      "stock": 617.472,
       "daily_velocity": 17.7,
       "lead_time_days": 34,
       "supplier": "Shenzhen Northstar Manufacturing",
@@ -29,13 +29,13 @@
       "name": "QuietClick Wireless Mouse",
       "sku": "QC-M-11",
       "category": "Electronics",
-      "price": 22.49,
-      "competitor_price": 22.21,
+      "price": 22.93,
+      "competitor_price": 23.32,
       "market_price": 22.99,
       "min_floor": 17.25,
       "max_price": 26.99,
       "unit_cost": 11.5,
-      "stock": 377.812,
+      "stock": 376.472,
       "daily_velocity": 14.1,
       "lead_time_days": 28,
       "supplier": "Ningbo Kestrel Electronics",
@@ -46,13 +46,13 @@
       "name": "TerraGrip Silicone Bottle Sleeve",
       "sku": "TG-BS-04",
       "category": "Home & Kitchen",
-      "price": 13.53,
-      "competitor_price": 13.63,
+      "price": 13.11,
+      "competitor_price": 13.18,
       "market_price": 13.49,
       "min_floor": 9.25,
       "max_price": 16.99,
       "unit_cost": 4.75,
-      "stock": 140.906,
+      "stock": 140.236,
       "daily_velocity": 12.3,
       "lead_time_days": 21,
       "supplier": "Evergreen Household Goods",
@@ -63,13 +63,13 @@
       "name": "Luma USB-C Desk Light",
       "sku": "LM-DL-08",
       "category": "Lighting",
-      "price": 24.25,
-      "competitor_price": 24.21,
+      "price": 24.32,
+      "competitor_price": 24.46,
       "market_price": 24.49,
       "min_floor": 21.0,
       "max_price": 29.99,
       "unit_cost": 12.8,
-      "stock": 767.718,
+      "stock": 765.708,
       "daily_velocity": 22.2,
       "lead_time_days": 41,
       "supplier": "Shenzhen Northstar Manufacturing",
@@ -80,13 +80,13 @@
       "name": "SnapDock Cable Organizer Set",
       "sku": "SD-CO-06",
       "category": "Office",
-      "price": 9.41,
-      "competitor_price": 9.43,
+      "price": 9.6,
+      "competitor_price": 9.74,
       "market_price": 9.79,
       "min_floor": 8.5,
       "max_price": 11.99,
       "unit_cost": 3.85,
-      "stock": 242.812,
+      "stock": 241.472,
       "daily_velocity": 19.6,
       "lead_time_days": 19,
       "supplier": "Evergreen Household Goods",
@@ -97,13 +97,13 @@
       "name": "Test Bamboo Desk Organizer",
       "sku": "BD-OG-01",
       "category": "Office",
-      "price": 24.99,
-      "competitor_price": 25.07,
+      "price": 24.76,
+      "competitor_price": 24.77,
       "market_price": 24.99,
       "min_floor": 19.992,
       "max_price": 29.987999999999996,
       "unit_cost": 12.495,
-      "stock": 499.832,
+      "stock": 498.492,
       "daily_velocity": 15.0,
       "lead_time_days": 21,
       "supplier": "Test Supplier",
@@ -122,7 +122,7 @@
       "min_floor": 27.5,
       "max_price": 39.99,
       "unit_cost": 15.4,
-      "stock": 618.812,
+      "stock": 617.472,
       "daily_velocity": 17.7,
       "lead_time_days": 34,
       "supplier": "Shenzhen Northstar Manufacturing",
@@ -139,7 +139,7 @@
       "min_floor": 17.25,
       "max_price": 26.99,
       "unit_cost": 11.5,
-      "stock": 377.812,
+      "stock": 376.472,
       "daily_velocity": 14.1,
       "lead_time_days": 28,
       "supplier": "Ningbo Kestrel Electronics",
@@ -156,7 +156,7 @@
       "min_floor": 9.25,
       "max_price": 16.99,
       "unit_cost": 4.75,
-      "stock": 140.906,
+      "stock": 140.236,
       "daily_velocity": 12.3,
       "lead_time_days": 21,
       "supplier": "Evergreen Household Goods",
@@ -173,7 +173,7 @@
       "min_floor": 21.0,
       "max_price": 29.99,
       "unit_cost": 12.8,
-      "stock": 767.718,
+      "stock": 765.708,
       "daily_velocity": 22.2,
       "lead_time_days": 41,
       "supplier": "Shenzhen Northstar Manufacturing",
@@ -190,7 +190,7 @@
       "min_floor": 8.5,
       "max_price": 11.99,
       "unit_cost": 3.85,
-      "stock": 242.812,
+      "stock": 241.472,
       "daily_velocity": 19.6,
       "lead_time_days": 19,
       "supplier": "Evergreen Household Goods",
@@ -207,7 +207,7 @@
       "min_floor": 19.992,
       "max_price": 29.987999999999996,
       "unit_cost": 12.495,
-      "stock": 499.832,
+      "stock": 498.492,
       "daily_velocity": 15.0,
       "lead_time_days": 21,
       "supplier": "Test Supplier",
@@ -1569,45 +1569,45 @@
       "term": "foldable laptop riser",
       "asin": "B0C8Q4M2K7",
       "campaign_id": "CMP-AF",
-      "impressions": 10213,
-      "clicks": 262,
-      "spend": 125.76,
+      "impressions": 11489,
+      "clicks": 311,
+      "spend": 149.28,
       "conversions": 23,
       "sales": 804.77,
       "order_value": 34.99,
-      "acos": 15.6
+      "acos": 18.5
     },
     {
       "term": "portable computer stand aluminum",
       "asin": "B0C8Q4M2K7",
       "campaign_id": "CMP-AF",
-      "impressions": 6579,
-      "clicks": 160,
-      "spend": 80.0,
-      "conversions": 10,
-      "sales": 349.9,
+      "impressions": 7567,
+      "clicks": 204,
+      "spend": 102.0,
+      "conversions": 15,
+      "sales": 524.85,
       "order_value": 34.99,
-      "acos": 22.9
+      "acos": 19.4
     },
     {
       "term": "ergonomic laptop holder for desk",
       "asin": "B0C8Q4M2K7",
       "campaign_id": "CMP-AF",
-      "impressions": 3895,
-      "clicks": 95,
-      "spend": 76.0,
-      "conversions": 7,
-      "sales": 244.93,
+      "impressions": 5430,
+      "clicks": 161,
+      "spend": 128.8,
+      "conversions": 9,
+      "sales": 314.91,
       "order_value": 34.99,
-      "acos": 31.0
+      "acos": 40.9
     },
     {
       "term": "cheap plastic laptop stand",
       "asin": "B0C8Q4M2K7",
       "campaign_id": "CMP-AF",
-      "impressions": 1585,
-      "clicks": 39,
-      "spend": 25.35,
+      "impressions": 3058,
+      "clicks": 100,
+      "spend": 65.0,
       "conversions": 0,
       "sales": 0.0,
       "order_value": 34.99,
@@ -1617,117 +1617,117 @@
       "term": "laptop stand with cooling fan",
       "asin": "B0C8Q4M2K7",
       "campaign_id": "CMP-AF",
-      "impressions": 817,
-      "clicks": 27,
-      "spend": 30.78,
-      "conversions": 0,
-      "sales": 0.0,
+      "impressions": 2550,
+      "clicks": 100,
+      "spend": 114.0,
+      "conversions": 1,
+      "sales": 34.99,
       "order_value": 34.99,
-      "acos": 0.0
+      "acos": 325.8
     },
     {
       "term": "adjustable laptop stand for travel",
       "asin": "B0C8Q4M2K7",
       "campaign_id": "CMP-AF",
-      "impressions": 3926,
-      "clicks": 108,
-      "spend": 52.92,
-      "conversions": 8,
-      "sales": 279.92,
+      "impressions": 5874,
+      "clicks": 190,
+      "spend": 93.1,
+      "conversions": 10,
+      "sales": 349.9,
       "order_value": 34.99,
-      "acos": 18.9
+      "acos": 26.6
     },
     {
       "term": "wooden monitor shelf",
       "asin": "B0C8Q4M2K7",
       "campaign_id": "CMP-AF",
-      "impressions": 887,
-      "clicks": 28,
-      "spend": 21.0,
-      "conversions": 2,
-      "sales": 69.98,
+      "impressions": 2656,
+      "clicks": 100,
+      "spend": 75.0,
+      "conversions": 4,
+      "sales": 139.96,
       "order_value": 34.99,
-      "acos": 30.0
+      "acos": 53.6
     },
     {
       "term": "silent wireless mouse",
       "asin": "B0B7P9R3W1",
       "campaign_id": "CMP-QC",
-      "impressions": 5634,
-      "clicks": 195,
-      "spend": 97.5,
-      "conversions": 18,
-      "sales": 404.82,
+      "impressions": 8131,
+      "clicks": 293,
+      "spend": 146.5,
+      "conversions": 21,
+      "sales": 472.29,
       "order_value": 22.49,
-      "acos": 24.1
+      "acos": 31.0
     },
     {
       "term": "ergonomic mouse for laptop",
       "asin": "B0B7P9R3W1",
       "campaign_id": "CMP-QC",
-      "impressions": 4003,
-      "clicks": 112,
-      "spend": 61.6,
-      "conversions": 8,
-      "sales": 179.92,
+      "impressions": 5476,
+      "clicks": 175,
+      "spend": 96.25,
+      "conversions": 10,
+      "sales": 224.9,
       "order_value": 22.49,
-      "acos": 34.2
+      "acos": 42.8
     },
     {
       "term": "gaming mouse rgb",
       "asin": "B0B7P9R3W1",
       "campaign_id": "CMP-QC",
-      "impressions": 630,
-      "clicks": 22,
-      "spend": 11.0,
-      "conversions": 0,
-      "sales": 0.0,
+      "impressions": 2127,
+      "clicks": 88,
+      "spend": 44.0,
+      "conversions": 2,
+      "sales": 44.98,
       "order_value": 22.49,
-      "acos": 0.0
+      "acos": 97.8
     },
     {
       "term": "wireless mouse bluetooth",
       "asin": "B0B7P9R3W1",
       "campaign_id": "CMP-QC",
-      "impressions": 904,
-      "clicks": 28,
-      "spend": 14.0,
-      "conversions": 1,
-      "sales": 22.49,
+      "impressions": 2657,
+      "clicks": 99,
+      "spend": 49.5,
+      "conversions": 4,
+      "sales": 89.96,
       "order_value": 22.49,
-      "acos": 62.2
+      "acos": 55.0
     },
     {
       "term": "silicone water bottle sleeve",
       "asin": "B0D2L6T8N4",
       "campaign_id": "CMP-TG",
-      "impressions": 4081,
-      "clicks": 163,
-      "spend": 42.38,
-      "conversions": 19,
-      "sales": 265.81,
+      "impressions": 5788,
+      "clicks": 229,
+      "spend": 59.54,
+      "conversions": 20,
+      "sales": 279.8,
       "order_value": 13.99,
-      "acos": 15.9
+      "acos": 21.3
     },
     {
       "term": "bottle protective cover",
       "asin": "B0D2L6T8N4",
       "campaign_id": "CMP-TG",
-      "impressions": 3010,
-      "clicks": 85,
-      "spend": 25.5,
-      "conversions": 10,
-      "sales": 139.9,
+      "impressions": 5122,
+      "clicks": 174,
+      "spend": 52.2,
+      "conversions": 14,
+      "sales": 195.86,
       "order_value": 13.99,
-      "acos": 18.2
+      "acos": 26.7
     },
     {
       "term": "stanley cup boot",
       "asin": "B0D2L6T8N4",
       "campaign_id": "CMP-TG",
-      "impressions": 998,
-      "clicks": 26,
-      "spend": 7.8,
+      "impressions": 2372,
+      "clicks": 81,
+      "spend": 24.3,
       "conversions": 0,
       "sales": 0.0,
       "order_value": 13.99,
@@ -1737,109 +1737,109 @@
       "term": "insulated bottle sleeve 40oz",
       "asin": "B0D2L6T8N4",
       "campaign_id": "CMP-TG",
-      "impressions": 4217,
-      "clicks": 99,
-      "spend": 32.67,
-      "conversions": 12,
-      "sales": 167.88,
+      "impressions": 6063,
+      "clicks": 174,
+      "spend": 57.42,
+      "conversions": 16,
+      "sales": 223.84,
       "order_value": 13.99,
-      "acos": 19.5
+      "acos": 25.7
     },
     {
       "term": "usb c desk lamp",
       "asin": "B0A9H5X3J6",
       "campaign_id": "CMP-LM",
-      "impressions": 7737,
-      "clicks": 217,
-      "spend": 97.65,
-      "conversions": 22,
-      "sales": 549.78,
+      "impressions": 9300,
+      "clicks": 283,
+      "spend": 127.35,
+      "conversions": 25,
+      "sales": 624.75,
       "order_value": 24.99,
-      "acos": 17.8
+      "acos": 20.4
     },
     {
       "term": "led desk lamp for office",
       "asin": "B0A9H5X3J6",
       "campaign_id": "CMP-LM",
-      "impressions": 5202,
-      "clicks": 139,
-      "spend": 72.28,
-      "conversions": 11,
-      "sales": 274.89,
+      "impressions": 6141,
+      "clicks": 182,
+      "spend": 94.64,
+      "conversions": 12,
+      "sales": 299.88,
       "order_value": 24.99,
-      "acos": 26.3
+      "acos": 31.6
     },
     {
       "term": "dimmable reading light",
       "asin": "B0A9H5X3J6",
       "campaign_id": "CMP-LM",
-      "impressions": 935,
-      "clicks": 32,
-      "spend": 16.0,
-      "conversions": 0,
-      "sales": 0.0,
+      "impressions": 3038,
+      "clicks": 121,
+      "spend": 60.5,
+      "conversions": 1,
+      "sales": 24.99,
       "order_value": 24.99,
-      "acos": 0.0
+      "acos": 242.1
     },
     {
       "term": "clip on desk light",
       "asin": "B0A9H5X3J6",
       "campaign_id": "CMP-LM",
-      "impressions": 762,
-      "clicks": 24,
-      "spend": 12.0,
-      "conversions": 0,
-      "sales": 0.0,
+      "impressions": 2157,
+      "clicks": 84,
+      "spend": 42.0,
+      "conversions": 2,
+      "sales": 49.98,
       "order_value": 24.99,
-      "acos": 0.0
+      "acos": 84.0
     },
     {
       "term": "desk cable organizer",
       "asin": "B0C3F7Y1V9",
       "campaign_id": "CMP-SD",
-      "impressions": 4292,
-      "clicks": 154,
-      "spend": 24.64,
-      "conversions": 12,
-      "sales": 119.88,
+      "impressions": 6092,
+      "clicks": 229,
+      "spend": 36.64,
+      "conversions": 13,
+      "sales": 129.87,
       "order_value": 9.99,
-      "acos": 20.6
+      "acos": 28.2
     },
     {
       "term": "cord clips adhesive",
       "asin": "B0C3F7Y1V9",
       "campaign_id": "CMP-SD",
-      "impressions": 3235,
-      "clicks": 91,
-      "spend": 17.29,
-      "conversions": 8,
-      "sales": 79.92,
+      "impressions": 4863,
+      "clicks": 159,
+      "spend": 30.21,
+      "conversions": 12,
+      "sales": 119.88,
       "order_value": 9.99,
-      "acos": 21.6
+      "acos": 25.2
     },
     {
       "term": "wire management box",
       "asin": "B0C3F7Y1V9",
       "campaign_id": "CMP-SD",
-      "impressions": 1988,
-      "clicks": 52,
-      "spend": 7.8,
-      "conversions": 0,
-      "sales": 0.0,
+      "impressions": 4036,
+      "clicks": 140,
+      "spend": 21.0,
+      "conversions": 3,
+      "sales": 29.97,
       "order_value": 9.99,
-      "acos": 0.0
+      "acos": 70.1
     },
     {
       "term": "cable ties reusable",
       "asin": "B0C3F7Y1V9",
       "campaign_id": "CMP-SD",
-      "impressions": 706,
-      "clicks": 18,
-      "spend": 3.24,
-      "conversions": 2,
-      "sales": 19.98,
+      "impressions": 2569,
+      "clicks": 96,
+      "spend": 17.28,
+      "conversions": 4,
+      "sales": 39.96,
       "order_value": 9.99,
-      "acos": 16.2
+      "acos": 43.2
     }
   ],
   "targeted_exact_keywords": [
@@ -2520,6 +2520,370 @@
   ],
   "activity": [
     {
+      "id": "d47eff00-192a-40f4-a31c-2d1f2fa120bb",
+      "timestamp": "2026-10-17T16:53:58.069542+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0TEST1234 moved from $25.48 to $24.76, one cent below its competitor."
+    },
+    {
+      "id": "aa65ab75-6084-4434-b300-a3f3201349c2",
+      "timestamp": "2026-10-17T16:53:58.069418+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0C8Q4M2K7 moved from $34.05 to $35.07 as its competitor rose to $35.13."
+    },
+    {
+      "id": "e4195fad-1819-4905-8512-4f98a2d6c99c",
+      "timestamp": "2026-10-17T16:52:58.037503+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0B7P9R3W1 moved from $22.26 to $22.93 as its competitor rose to $23.08."
+    },
+    {
+      "id": "db39ebd0-7a24-4bce-ac5a-6a0e32727b2d",
+      "timestamp": "2026-10-17T16:44:21.584258+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0B7P9R3W1 moved from $23.04 to $22.26, one cent below its competitor."
+    },
+    {
+      "id": "a78a53c4-f671-466e-b0e8-a076477cf6fe",
+      "timestamp": "2026-10-17T16:36:21.280522+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0C8Q4M2K7 moved from $35.00 to $34.05, one cent below its competitor."
+    },
+    {
+      "id": "b545ef59-f2b3-41c8-b66f-1d9b00ef86c9",
+      "timestamp": "2026-10-17T16:34:21.212478+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0B7P9R3W1 moved from $22.37 to $23.04 as its competitor rose to $23.07."
+    },
+    {
+      "id": "4eb9daca-e73c-44af-a9f4-bb8fb65b068f",
+      "timestamp": "2026-10-17T16:33:21.175125+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0A9H5X3J6 moved from $23.61 to $24.32 as its competitor rose to $24.34."
+    },
+    {
+      "id": "2271c0e5-d9b3-4cd4-ba26-573e6f9ae5e8",
+      "timestamp": "2026-10-17T15:40:57.361154+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0TEST1234 moved from $24.74 to $25.48 as its competitor rose to $25.57."
+    },
+    {
+      "id": "b919c79c-c3a9-4a98-b491-f87b2eb2c883",
+      "timestamp": "2026-10-17T15:38:57.297238+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0B7P9R3W1 moved from $22.99 to $22.37, one cent below its competitor."
+    },
+    {
+      "id": "42d9f81f-cce7-49ba-8dd2-dee7b6f656fb",
+      "timestamp": "2026-10-17T15:37:57.266430+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0TEST1234 moved from $25.53 to $24.74, one cent below its competitor."
+    },
+    {
+      "id": "f5834255-3cbb-4882-8b82-472ab15a0ec1",
+      "timestamp": "2026-10-17T15:37:57.266359+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0D2L6T8N4 moved from $13.48 to $13.11, one cent below its competitor."
+    },
+    {
+      "id": "f669bb5a-ed8c-4bda-8d66-e5364f4639f9",
+      "timestamp": "2026-10-17T15:32:57.115867+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0C3F7Y1V9 moved from $9.94 to $9.60, one cent below its competitor."
+    },
+    {
+      "id": "67d0eff9-b072-401c-8341-42c6f0e5fcde",
+      "timestamp": "2026-10-17T15:30:57.054970+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0B7P9R3W1 moved from $22.32 to $22.99 as its competitor rose to $23.05."
+    },
+    {
+      "id": "cb98bbf0-4f1b-4aa9-8f0e-6f7cc82c6e47",
+      "timestamp": "2026-10-17T15:27:56.967760+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0A9H5X3J6 moved from $24.32 to $23.61, one cent below its competitor."
+    },
+    {
+      "id": "39d6f30d-1591-4956-9cd6-ae7401584f4b",
+      "timestamp": "2026-10-17T15:26:56.937153+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0C8Q4M2K7 moved from $35.90 to $35.00, one cent below its competitor."
+    },
+    {
+      "id": "62d36477-893a-42cc-9eae-63866420e510",
+      "timestamp": "2026-10-17T15:24:56.875857+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0D2L6T8N4 moved from $13.87 to $13.48, one cent below its competitor."
+    },
+    {
+      "id": "837db317-6180-4e7d-b775-9b4db8551229",
+      "timestamp": "2026-10-17T15:23:56.847022+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0TEST1234 moved from $24.90 to $25.53 as its competitor rose to $25.54."
+    },
+    {
+      "id": "0e823c00-fac2-4e1d-ad7d-c9ebfed4a6fa",
+      "timestamp": "2026-10-17T15:21:56.787908+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0TEST1234 moved from $25.62 to $24.90, one cent below its competitor."
+    },
+    {
+      "id": "b0300ad3-c1b1-4e9d-b8ca-42866ef479b4",
+      "timestamp": "2026-10-17T15:20:56.759608+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0A9H5X3J6 moved from $23.64 to $24.32 as its competitor rose to $24.33."
+    },
+    {
+      "id": "8ffa0240-be78-4b4e-977f-c59b73a1f0ef",
+      "timestamp": "2026-10-17T15:18:56.703852+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0A9H5X3J6 moved from $24.31 to $23.64, one cent below its competitor."
+    },
+    {
+      "id": "fa706d66-bffe-47f6-9fe8-b47e1715669d",
+      "timestamp": "2026-10-17T15:15:56.611408+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0D2L6T8N4 moved from $13.47 to $13.87 as its competitor rose to $13.89."
+    },
+    {
+      "id": "b1fb0409-a052-4006-8e95-b5621ccc752c",
+      "timestamp": "2026-10-17T15:14:56.581379+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0B7P9R3W1 moved from $23.12 to $22.32, one cent below its competitor."
+    },
+    {
+      "id": "22ade6ac-f2ec-4c73-9335-40e26666cea1",
+      "timestamp": "2026-10-17T15:12:56.526707+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0A9H5X3J6 moved from $23.71 to $24.31 as its competitor rose to $24.32."
+    },
+    {
+      "id": "cf94b671-b2aa-417e-9067-4d4137f52740",
+      "timestamp": "2026-10-17T15:08:56.410025+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0TEST1234 moved from $24.87 to $25.62 as its competitor rose to $25.68."
+    },
+    {
+      "id": "22d570c6-b93b-44a3-81ff-e4857227c311",
+      "timestamp": "2026-10-17T15:07:56.381350+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0C3F7Y1V9 moved from $9.67 to $9.94 as its competitor rose to $9.95."
+    },
+    {
+      "id": "3cd55328-724f-41ef-92f0-6cc769c43f2b",
+      "timestamp": "2026-10-17T15:05:56.315894+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0TEST1234 moved from $25.67 to $24.87, one cent below its competitor."
+    },
+    {
+      "id": "6b272db5-7c80-4c9b-a0da-f2100ab33efc",
+      "timestamp": "2026-10-17T15:05:56.315790+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0C8Q4M2K7 moved from $34.85 to $35.90 as its competitor rose to $35.96."
+    },
+    {
+      "id": "b4215607-eec7-4356-a552-39df639f7b2e",
+      "timestamp": "2026-10-17T15:02:56.226044+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0B7P9R3W1 moved from $22.45 to $23.12 as its competitor rose to $23.17."
+    },
+    {
+      "id": "6ffa519e-f01c-4259-b757-4c86e3d11cad",
+      "timestamp": "2026-10-17T14:05:48.014801+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0D2L6T8N4 moved from $13.08 to $13.47 as its competitor rose to $13.48."
+    },
+    {
+      "id": "fe3c51b4-4b30-41fa-b053-fddab20a76a3",
+      "timestamp": "2026-10-17T14:04:47.986066+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0B7P9R3W1 moved from $23.05 to $22.45, one cent below its competitor."
+    },
+    {
+      "id": "ca492e41-de07-4443-b97c-3594be9b3d06",
+      "timestamp": "2026-10-17T14:03:17.947552+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0A9H5X3J6 moved from $24.32 to $23.71, one cent below its competitor."
+    },
+    {
+      "id": "127a819a-a8e8-4174-afb1-6b94203059b0",
+      "timestamp": "2026-10-17T14:00:41.963711+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0TEST1234 moved from $24.95 to $25.67 as its competitor rose to $25.68."
+    },
+    {
+      "id": "a974cc9f-451d-4118-81ef-4ab604765117",
+      "timestamp": "2026-10-17T13:58:41.914704+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0A9H5X3J6 moved from $25.04 to $24.32, one cent below its competitor."
+    },
+    {
+      "id": "1d65e4da-d2f0-41b7-a51a-483fa9b81f31",
+      "timestamp": "2026-10-17T13:54:41.796523+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0D2L6T8N4 moved from $13.43 to $13.08, one cent below its competitor."
+    },
+    {
+      "id": "7cf10b06-6a60-43b6-ba88-9925f406af16",
+      "timestamp": "2026-10-17T13:45:46.925653+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0B7P9R3W1 moved from $22.44 to $23.05 as its competitor rose to $23.06."
+    },
+    {
+      "id": "271f45ce-e9d7-4911-94ae-b20a3f324082",
+      "timestamp": "2026-10-17T13:43:46.870468+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0C3F7Y1V9 moved from $9.93 to $9.67, one cent below its competitor."
+    },
+    {
+      "id": "ee86f572-4bcf-46b3-8f67-f2e10d9cfb0b",
+      "timestamp": "2026-10-17T13:40:46.788229+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0C3F7Y1V9 moved from $10.25 to $9.93, one cent below its competitor."
+    },
+    {
+      "id": "f21c979a-ff8b-4862-83e5-e96dc9c302b0",
+      "timestamp": "2026-10-17T13:35:46.659334+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0A9H5X3J6 moved from $25.72 to $25.04, one cent below its competitor."
+    },
+    {
+      "id": "4b1814a8-2a2e-40be-87c8-f9ac6801512b",
+      "timestamp": "2026-10-17T13:32:46.579971+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0A9H5X3J6 moved from $24.98 to $25.72 as its competitor rose to $25.73."
+    },
+    {
+      "id": "4bdcbbb7-7794-47f8-8c55-0905fe54134a",
+      "timestamp": "2026-10-17T13:29:46.508646+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0TEST1234 moved from $24.34 to $24.95 as its competitor rose to $24.96."
+    },
+    {
+      "id": "f424de71-1b35-43b0-9ead-bdac0f59439a",
+      "timestamp": "2026-10-17T13:29:46.508493+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0C8Q4M2K7 moved from $35.89 to $34.85, one cent below its competitor."
+    },
+    {
+      "id": "674e729a-3678-4b01-9854-f9e38ad54db6",
+      "timestamp": "2026-10-17T13:27:28.770673+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0A9H5X3J6 moved from $25.64 to $24.98, one cent below its competitor."
+    },
+    {
+      "id": "6242b90b-f8fc-4eee-8eb2-ccf70d0586c6",
+      "timestamp": "2026-10-17T13:26:28.741374+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0TEST1234 moved from $24.99 to $24.34, one cent below its competitor."
+    },
+    {
+      "id": "7c991374-05f9-4601-a131-791be435e41d",
+      "timestamp": "2026-10-17T13:26:28.741341+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0C3F7Y1V9 moved from $9.98 to $10.25 as its competitor rose to $10.26."
+    },
+    {
+      "id": "86446607-9dd3-4288-ba66-226c6bcd8e28",
+      "timestamp": "2026-10-17T13:26:28.741266+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0B7P9R3W1 moved from $23.10 to $22.44, one cent below its competitor."
+    },
+    {
+      "id": "06a85a36-ca7b-4954-a415-b18a3783ea1e",
+      "timestamp": "2026-10-17T13:25:28.715188+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0D2L6T8N4 moved from $13.08 to $13.43 as its competitor rose to $13.44."
+    },
+    {
+      "id": "5a0026e5-6522-44fc-90cd-9d8179fc1de6",
+      "timestamp": "2026-10-17T13:24:28.689985+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0A9H5X3J6 moved from $24.98 to $25.64 as its competitor rose to $25.65."
+    },
+    {
+      "id": "98fd887b-206f-482e-8f0f-e39a7a6cf8df",
+      "timestamp": "2026-10-17T13:19:28.560913+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0C3F7Y1V9 moved from $9.69 to $9.98 as its competitor rose to $10.00."
+    },
+    {
+      "id": "2bb1a8da-6ec2-4266-ab8a-44f573888217",
+      "timestamp": "2026-10-17T13:17:18.504102+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0A9H5X3J6 moved from $24.25 to $24.98 as its competitor rose to $25.00."
+    },
+    {
+      "id": "5056b208-171c-4211-9095-b137997176e0",
+      "timestamp": "2026-10-17T13:16:18.476236+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0C3F7Y1V9 moved from $9.41 to $9.69 as its competitor rose to $9.78."
+    },
+    {
+      "id": "315596ac-439c-43d3-b8c6-812c461f5793",
+      "timestamp": "2026-10-17T13:16:18.476187+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0D2L6T8N4 moved from $13.53 to $13.08, one cent below its competitor."
+    },
+    {
+      "id": "8cff327d-88bf-464a-8eaa-1d34a541c0f6",
+      "timestamp": "2026-10-17T13:16:18.476120+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0B7P9R3W1 moved from $22.49 to $23.10 as its competitor rose to $23.11."
+    },
+    {
       "id": "cb01396d-11b7-4d15-982f-f8a8d4902977",
       "timestamp": "2026-10-17T13:07:28.225975+00:00",
       "category": "repricer",
@@ -2767,5 +3131,5 @@
       "added_at": "2026-10-17T12:56:35.580167+00:00"
     }
   ],
-  "tick_count": 94
+  "tick_count": 764
 }

@@ -745,6 +745,9 @@ document.addEventListener("change", (event) => {
     sellerStoreAddAsin = event.target.value;
     render();
   }
+});
+
+document.addEventListener("submit", async (event) => {
   const addCatalogForm = event.target.closest("#add-catalog-product-form");
   if (addCatalogForm) {
     event.preventDefault();
