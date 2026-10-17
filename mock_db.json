@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-10-17T11:52:39.997092+00:00",
+  "last_updated": "2026-10-17T13:03:08.112093+00:00",
   "history_end": "2026-10-17",
   "manager": {
     "name": "User",
@@ -12,13 +12,13 @@
       "name": "ArcFold Aluminum Laptop Stand",
       "sku": "AF-LS-02",
       "category": "Office",
-      "price": 32.78,
-      "competitor_price": 32.62,
+      "price": 34.99,
+      "competitor_price": 35.45,
       "market_price": 34.5,
       "min_floor": 27.5,
       "max_price": 39.99,
       "unit_cost": 15.4,
-      "stock": 618.836,
+      "stock": 618.922,
       "daily_velocity": 17.7,
       "lead_time_days": 34,
       "supplier": "Shenzhen Northstar Manufacturing",
@@ -29,13 +29,13 @@
       "name": "QuietClick Wireless Mouse",
       "sku": "QC-M-11",
       "category": "Electronics",
-      "price": 23.11,
-      "competitor_price": 22.64,
+      "price": 22.49,
+      "competitor_price": 22.66,
       "market_price": 22.99,
       "min_floor": 17.25,
       "max_price": 26.99,
       "unit_cost": 11.5,
-      "stock": 377.836,
+      "stock": 377.922,
       "daily_velocity": 14.1,
       "lead_time_days": 28,
       "supplier": "Ningbo Kestrel Electronics",
@@ -46,30 +46,30 @@
       "name": "TerraGrip Silicone Bottle Sleeve",
       "sku": "TG-BS-04",
       "category": "Home & Kitchen",
-      "price": 14.04,
-      "competitor_price": 14.05,
+      "price": 13.53,
+      "competitor_price": 13.33,
       "market_price": 13.49,
       "min_floor": 9.25,
       "max_price": 16.99,
       "unit_cost": 4.75,
-      "stock": 140.918,
+      "stock": 140.961,
       "daily_velocity": 12.3,
       "lead_time_days": 21,
       "supplier": "Evergreen Household Goods",
-      "po_draft_id": "PO-724255"
+      "po_draft_id": "PO-DEC8A6"
     },
     {
       "asin": "B0A9H5X3J6",
       "name": "Luma USB-C Desk Light",
       "sku": "LM-DL-08",
       "category": "Lighting",
-      "price": 24.14,
-      "competitor_price": 23.62,
+      "price": 24.25,
+      "competitor_price": 24.44,
       "market_price": 24.49,
       "min_floor": 21.0,
       "max_price": 29.99,
       "unit_cost": 12.8,
-      "stock": 767.754,
+      "stock": 767.883,
       "daily_velocity": 22.2,
       "lead_time_days": 41,
       "supplier": "Shenzhen Northstar Manufacturing",
@@ -80,17 +80,34 @@
       "name": "SnapDock Cable Organizer Set",
       "sku": "SD-CO-06",
       "category": "Office",
-      "price": 9.68,
-      "competitor_price": 9.74,
+      "price": 9.66,
+      "competitor_price": 9.45,
       "market_price": 9.79,
       "min_floor": 8.5,
       "max_price": 11.99,
       "unit_cost": 3.85,
-      "stock": 242.836,
+      "stock": 242.922,
       "daily_velocity": 19.6,
       "lead_time_days": 19,
       "supplier": "Evergreen Household Goods",
-      "po_draft_id": "PO-D9CB67"
+      "po_draft_id": "PO-7C3D86"
+    },
+    {
+      "asin": "B0TEST1234",
+      "name": "Test Bamboo Desk Organizer",
+      "sku": "BD-OG-01",
+      "category": "Office",
+      "price": 24.99,
+      "competitor_price": 25.12,
+      "market_price": 24.99,
+      "min_floor": 19.992,
+      "max_price": 29.987999999999996,
+      "unit_cost": 12.495,
+      "stock": 499.942,
+      "daily_velocity": 15.0,
+      "lead_time_days": 21,
+      "supplier": "Test Supplier",
+      "po_draft_id": null
     }
   ],
   "global_products": [
@@ -105,7 +122,7 @@
       "min_floor": 27.5,
       "max_price": 39.99,
       "unit_cost": 15.4,
-      "stock": 619.0,
+      "stock": 618.922,
       "daily_velocity": 17.7,
       "lead_time_days": 34,
       "supplier": "Shenzhen Northstar Manufacturing",
@@ -122,7 +139,7 @@
       "min_floor": 17.25,
       "max_price": 26.99,
       "unit_cost": 11.5,
-      "stock": 378.0,
+      "stock": 377.922,
       "daily_velocity": 14.1,
       "lead_time_days": 28,
       "supplier": "Ningbo Kestrel Electronics",
@@ -139,7 +156,7 @@
       "min_floor": 9.25,
       "max_price": 16.99,
       "unit_cost": 4.75,
-      "stock": 141.0,
+      "stock": 140.961,
       "daily_velocity": 12.3,
       "lead_time_days": 21,
       "supplier": "Evergreen Household Goods",
@@ -156,7 +173,7 @@
       "min_floor": 21.0,
       "max_price": 29.99,
       "unit_cost": 12.8,
-      "stock": 768.0,
+      "stock": 767.883,
       "daily_velocity": 22.2,
       "lead_time_days": 41,
       "supplier": "Shenzhen Northstar Manufacturing",
@@ -173,16 +190,33 @@
       "min_floor": 8.5,
       "max_price": 11.99,
       "unit_cost": 3.85,
-      "stock": 243.0,
+      "stock": 242.922,
       "daily_velocity": 19.6,
       "lead_time_days": 19,
       "supplier": "Evergreen Household Goods",
+      "po_draft_id": null
+    },
+    {
+      "asin": "B0TEST1234",
+      "name": "Test Bamboo Desk Organizer",
+      "sku": "BD-OG-01",
+      "category": "Office",
+      "price": 24.99,
+      "competitor_price": 24.99,
+      "market_price": 24.99,
+      "min_floor": 19.992,
+      "max_price": 29.987999999999996,
+      "unit_cost": 12.495,
+      "stock": 499.942,
+      "daily_velocity": 15.0,
+      "lead_time_days": 21,
+      "supplier": "Test Supplier",
       "po_draft_id": null
     }
   ],
   "marketplace_listings": [
     {
-      "id": "657504d0-af39-49d0-8615-84cbaca06b4a",
+      "id": "23a551a4-1534-4926-a0e4-85f9a1324471",
       "global_product_id": "B0C8Q4M2K7",
       "sku": "AF-LS-02",
       "platform": "Amazon US",
@@ -191,7 +225,7 @@
       "description": "ArcFold Aluminum Laptop Stand premium listing"
     },
     {
-      "id": "666fa29c-fe68-46f9-998f-f196d9e18a43",
+      "id": "78891c1f-dd85-4ae7-b47b-cc521547ef21",
       "global_product_id": "B0C8Q4M2K7",
       "sku": "AF-LS-02",
       "platform": "Amazon UK",
@@ -200,7 +234,7 @@
       "description": "ArcFold Aluminum Laptop Stand premium listing"
     },
     {
-      "id": "a6c9930a-fc34-4dc6-aad7-da8568dbf8cb",
+      "id": "fcff2a1a-cf25-4b68-a53d-f0a8ca3477c8",
       "global_product_id": "B0C8Q4M2K7",
       "sku": "AF-LS-02",
       "platform": "Walmart",
@@ -209,7 +243,7 @@
       "description": "ArcFold Aluminum Laptop Stand premium listing"
     },
     {
-      "id": "2fa760cb-f3cc-49e4-b419-18c144a2f722",
+      "id": "0195145e-c936-4769-b376-1cd5f19fc3e1",
       "global_product_id": "B0B7P9R3W1",
       "sku": "QC-M-11",
       "platform": "Amazon US",
@@ -218,7 +252,7 @@
       "description": "QuietClick Wireless Mouse premium listing"
     },
     {
-      "id": "32a3307d-42bd-4bbd-a4a9-f2a2ab9d9a3a",
+      "id": "eeff4737-1900-41ee-ace6-d32209a59bd7",
       "global_product_id": "B0B7P9R3W1",
       "sku": "QC-M-11",
       "platform": "Amazon UK",
@@ -227,7 +261,7 @@
       "description": "QuietClick Wireless Mouse premium listing"
     },
     {
-      "id": "efe45628-3586-4b98-95b7-d5d48d7ad35c",
+      "id": "afb3a3fd-c812-4db0-902c-6dc5a25259ea",
       "global_product_id": "B0B7P9R3W1",
       "sku": "QC-M-11",
       "platform": "Walmart",
@@ -236,7 +270,7 @@
       "description": "QuietClick Wireless Mouse premium listing"
     },
     {
-      "id": "57428a31-c88a-49e6-9b86-3a4d32d016ff",
+      "id": "ee75db13-8cdc-4892-9715-282b13bc02f0",
       "global_product_id": "B0D2L6T8N4",
       "sku": "TG-BS-04",
       "platform": "Amazon US",
@@ -245,7 +279,7 @@
       "description": "TerraGrip Silicone Bottle Sleeve premium listing"
     },
     {
-      "id": "82d2832e-771c-47f6-a63c-efb0fda08dd4",
+      "id": "235538aa-e4ae-4ce8-9279-4b67af3e8163",
       "global_product_id": "B0D2L6T8N4",
       "sku": "TG-BS-04",
       "platform": "Amazon UK",
@@ -254,7 +288,7 @@
       "description": "TerraGrip Silicone Bottle Sleeve premium listing"
     },
     {
-      "id": "eed1dab0-6436-498e-a034-11afe4e23db5",
+      "id": "b5ead146-2be2-41af-9118-1e1373d5101f",
       "global_product_id": "B0D2L6T8N4",
       "sku": "TG-BS-04",
       "platform": "Walmart",
@@ -263,7 +297,7 @@
       "description": "TerraGrip Silicone Bottle Sleeve premium listing"
     },
     {
-      "id": "eaf01e0a-efca-4344-8c69-bb1e2462799f",
+      "id": "752b0532-e6fd-4d53-b6f6-3e71c7c73f4e",
       "global_product_id": "B0A9H5X3J6",
       "sku": "LM-DL-08",
       "platform": "Amazon US",
@@ -272,7 +306,7 @@
       "description": "Luma USB-C Desk Light premium listing"
     },
     {
-      "id": "7941fda5-49c6-48ac-89a8-f8553b30dde3",
+      "id": "369c022c-cc88-4b6e-8ae4-0c45d659b83a",
       "global_product_id": "B0A9H5X3J6",
       "sku": "LM-DL-08",
       "platform": "Amazon UK",
@@ -281,7 +315,7 @@
       "description": "Luma USB-C Desk Light premium listing"
     },
     {
-      "id": "8a2bafb3-f413-4709-a4fe-b7735ce42f95",
+      "id": "aee5e8bf-c546-43c9-bd3a-b82be3789873",
       "global_product_id": "B0A9H5X3J6",
       "sku": "LM-DL-08",
       "platform": "Walmart",
@@ -290,7 +324,7 @@
       "description": "Luma USB-C Desk Light premium listing"
     },
     {
-      "id": "5cd968b6-8f8f-4b97-b737-7320ce943408",
+      "id": "b2a5ef0e-eaad-4eae-801f-cbfb01c7222f",
       "global_product_id": "B0C3F7Y1V9",
       "sku": "SD-CO-06",
       "platform": "Amazon US",
@@ -299,7 +333,7 @@
       "description": "SnapDock Cable Organizer Set premium listing"
     },
     {
-      "id": "7aaddf24-d7b5-48e5-872d-5505efb49c49",
+      "id": "7aa75237-4063-4b33-9a63-725e85ba8b55",
       "global_product_id": "B0C3F7Y1V9",
       "sku": "SD-CO-06",
       "platform": "Amazon UK",
@@ -308,7 +342,7 @@
       "description": "SnapDock Cable Organizer Set premium listing"
     },
     {
-      "id": "3c2b6d85-cc53-4230-88a8-8d1fae5065e3",
+      "id": "a79fbbe2-40b2-48a4-b311-32bae22dce88",
       "global_product_id": "B0C3F7Y1V9",
       "sku": "SD-CO-06",
       "platform": "Walmart",
@@ -509,6 +543,38 @@
       18,
       19,
       22
+    ],
+    "BD-OG-01": [
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15
     ]
   },
   "campaigns": [
@@ -1503,45 +1569,45 @@
       "term": "foldable laptop riser",
       "asin": "B0C8Q4M2K7",
       "campaign_id": "CMP-AF",
-      "impressions": 10106,
-      "clicks": 257,
-      "spend": 123.36,
-      "conversions": 21,
-      "sales": 734.79,
+      "impressions": 10003,
+      "clicks": 253,
+      "spend": 121.44,
+      "conversions": 22,
+      "sales": 769.78,
       "order_value": 34.99,
-      "acos": 16.8
+      "acos": 15.8
     },
     {
       "term": "portable computer stand aluminum",
       "asin": "B0C8Q4M2K7",
       "campaign_id": "CMP-AF",
-      "impressions": 6167,
-      "clicks": 143,
-      "spend": 71.5,
-      "conversions": 9,
-      "sales": 314.91,
+      "impressions": 6188,
+      "clicks": 145,
+      "spend": 72.5,
+      "conversions": 10,
+      "sales": 349.9,
       "order_value": 34.99,
-      "acos": 22.7
+      "acos": 20.7
     },
     {
       "term": "ergonomic laptop holder for desk",
       "asin": "B0C8Q4M2K7",
       "campaign_id": "CMP-AF",
-      "impressions": 3896,
-      "clicks": 92,
-      "spend": 73.6,
-      "conversions": 6,
-      "sales": 209.94,
+      "impressions": 3700,
+      "clicks": 86,
+      "spend": 68.8,
+      "conversions": 7,
+      "sales": 244.93,
       "order_value": 34.99,
-      "acos": 35.1
+      "acos": 28.1
     },
     {
       "term": "cheap plastic laptop stand",
       "asin": "B0C8Q4M2K7",
       "campaign_id": "CMP-AF",
-      "impressions": 1965,
-      "clicks": 54,
-      "spend": 35.1,
+      "impressions": 1585,
+      "clicks": 39,
+      "spend": 25.35,
       "conversions": 0,
       "sales": 0.0,
       "order_value": 34.99,
@@ -1551,9 +1617,9 @@
       "term": "laptop stand with cooling fan",
       "asin": "B0C8Q4M2K7",
       "campaign_id": "CMP-AF",
-      "impressions": 639,
-      "clicks": 20,
-      "spend": 22.8,
+      "impressions": 759,
+      "clicks": 25,
+      "spend": 28.5,
       "conversions": 0,
       "sales": 0.0,
       "order_value": 34.99,
@@ -1563,57 +1629,57 @@
       "term": "adjustable laptop stand for travel",
       "asin": "B0C8Q4M2K7",
       "campaign_id": "CMP-AF",
-      "impressions": 3870,
-      "clicks": 105,
-      "spend": 51.45,
+      "impressions": 3886,
+      "clicks": 106,
+      "spend": 51.94,
       "conversions": 8,
       "sales": 279.92,
       "order_value": 34.99,
-      "acos": 18.4
+      "acos": 18.6
     },
     {
       "term": "wooden monitor shelf",
       "asin": "B0C8Q4M2K7",
       "campaign_id": "CMP-AF",
-      "impressions": 761,
-      "clicks": 22,
-      "spend": 16.5,
-      "conversions": 1,
-      "sales": 34.99,
+      "impressions": 633,
+      "clicks": 17,
+      "spend": 12.75,
+      "conversions": 2,
+      "sales": 69.98,
       "order_value": 34.99,
-      "acos": 47.2
+      "acos": 18.2
     },
     {
       "term": "silent wireless mouse",
       "asin": "B0B7P9R3W1",
       "campaign_id": "CMP-QC",
-      "impressions": 5585,
-      "clicks": 193,
-      "spend": 96.5,
+      "impressions": 5570,
+      "clicks": 192,
+      "spend": 96.0,
       "conversions": 18,
       "sales": 404.82,
       "order_value": 22.49,
-      "acos": 23.8
+      "acos": 23.7
     },
     {
       "term": "ergonomic mouse for laptop",
       "asin": "B0B7P9R3W1",
       "campaign_id": "CMP-QC",
-      "impressions": 4093,
-      "clicks": 115,
-      "spend": 63.25,
+      "impressions": 3677,
+      "clicks": 97,
+      "spend": 53.35,
       "conversions": 8,
       "sales": 179.92,
       "order_value": 22.49,
-      "acos": 35.2
+      "acos": 29.7
     },
     {
       "term": "gaming mouse rgb",
       "asin": "B0B7P9R3W1",
       "campaign_id": "CMP-QC",
-      "impressions": 680,
-      "clicks": 24,
-      "spend": 12.0,
+      "impressions": 580,
+      "clicks": 20,
+      "spend": 10.0,
       "conversions": 0,
       "sales": 0.0,
       "order_value": 22.49,
@@ -1623,45 +1689,45 @@
       "term": "wireless mouse bluetooth",
       "asin": "B0B7P9R3W1",
       "campaign_id": "CMP-QC",
-      "impressions": 601,
-      "clicks": 16,
-      "spend": 8.0,
+      "impressions": 748,
+      "clicks": 22,
+      "spend": 11.0,
       "conversions": 1,
       "sales": 22.49,
       "order_value": 22.49,
-      "acos": 35.6
+      "acos": 48.9
     },
     {
       "term": "silicone water bottle sleeve",
       "asin": "B0D2L6T8N4",
       "campaign_id": "CMP-TG",
-      "impressions": 4107,
-      "clicks": 165,
-      "spend": 42.9,
-      "conversions": 18,
-      "sales": 251.82,
+      "impressions": 4081,
+      "clicks": 163,
+      "spend": 42.38,
+      "conversions": 19,
+      "sales": 265.81,
       "order_value": 13.99,
-      "acos": 17.0
+      "acos": 15.9
     },
     {
       "term": "bottle protective cover",
       "asin": "B0D2L6T8N4",
       "campaign_id": "CMP-TG",
-      "impressions": 3313,
-      "clicks": 96,
-      "spend": 28.8,
-      "conversions": 9,
-      "sales": 125.91,
+      "impressions": 2950,
+      "clicks": 83,
+      "spend": 24.9,
+      "conversions": 10,
+      "sales": 139.9,
       "order_value": 13.99,
-      "acos": 22.9
+      "acos": 17.8
     },
     {
       "term": "stanley cup boot",
       "asin": "B0D2L6T8N4",
       "campaign_id": "CMP-TG",
-      "impressions": 1040,
-      "clicks": 29,
-      "spend": 8.7,
+      "impressions": 840,
+      "clicks": 20,
+      "spend": 6.0,
       "conversions": 0,
       "sales": 0.0,
       "order_value": 13.99,
@@ -1671,45 +1737,45 @@
       "term": "insulated bottle sleeve 40oz",
       "asin": "B0D2L6T8N4",
       "campaign_id": "CMP-TG",
-      "impressions": 4205,
-      "clicks": 100,
-      "spend": 33.0,
-      "conversions": 11,
-      "sales": 153.89,
+      "impressions": 4111,
+      "clicks": 95,
+      "spend": 31.35,
+      "conversions": 12,
+      "sales": 167.88,
       "order_value": 13.99,
-      "acos": 21.4
+      "acos": 18.7
     },
     {
       "term": "usb c desk lamp",
       "asin": "B0A9H5X3J6",
       "campaign_id": "CMP-LM",
-      "impressions": 7653,
-      "clicks": 214,
-      "spend": 96.3,
+      "impressions": 7683,
+      "clicks": 215,
+      "spend": 96.75,
       "conversions": 22,
       "sales": 549.78,
       "order_value": 24.99,
-      "acos": 17.5
+      "acos": 17.6
     },
     {
       "term": "led desk lamp for office",
       "asin": "B0A9H5X3J6",
       "campaign_id": "CMP-LM",
-      "impressions": 4800,
-      "clicks": 120,
-      "spend": 62.4,
+      "impressions": 4898,
+      "clicks": 125,
+      "spend": 65.0,
       "conversions": 11,
       "sales": 274.89,
       "order_value": 24.99,
-      "acos": 22.7
+      "acos": 23.6
     },
     {
       "term": "dimmable reading light",
       "asin": "B0A9H5X3J6",
       "campaign_id": "CMP-LM",
-      "impressions": 840,
-      "clicks": 27,
-      "spend": 13.5,
+      "impressions": 789,
+      "clicks": 26,
+      "spend": 13.0,
       "conversions": 0,
       "sales": 0.0,
       "order_value": 24.99,
@@ -1719,9 +1785,9 @@
       "term": "clip on desk light",
       "asin": "B0A9H5X3J6",
       "campaign_id": "CMP-LM",
-      "impressions": 584,
-      "clicks": 16,
-      "spend": 8.0,
+      "impressions": 665,
+      "clicks": 19,
+      "spend": 9.5,
       "conversions": 0,
       "sales": 0.0,
       "order_value": 24.99,
@@ -1731,142 +1797,142 @@
       "term": "desk cable organizer",
       "asin": "B0C3F7Y1V9",
       "campaign_id": "CMP-SD",
-      "impressions": 4495,
-      "clicks": 163,
-      "spend": 26.08,
+      "impressions": 4200,
+      "clicks": 150,
+      "spend": 24.0,
       "conversions": 12,
       "sales": 119.88,
       "order_value": 9.99,
-      "acos": 21.8
+      "acos": 20.0
     },
     {
       "term": "cord clips adhesive",
       "asin": "B0C3F7Y1V9",
       "campaign_id": "CMP-SD",
-      "impressions": 3337,
-      "clicks": 96,
-      "spend": 18.24,
+      "impressions": 3168,
+      "clicks": 88,
+      "spend": 16.72,
       "conversions": 7,
       "sales": 69.93,
       "order_value": 9.99,
-      "acos": 26.1
+      "acos": 23.9
     },
     {
       "term": "wire management box",
       "asin": "B0C3F7Y1V9",
       "campaign_id": "CMP-SD",
-      "impressions": 2070,
-      "clicks": 56,
-      "spend": 8.4,
-      "conversions": 2,
-      "sales": 19.98,
+      "impressions": 1722,
+      "clicks": 42,
+      "spend": 6.3,
+      "conversions": 0,
+      "sales": 0.0,
       "order_value": 9.99,
-      "acos": 42.0
+      "acos": 0.0
     },
     {
       "term": "cable ties reusable",
       "asin": "B0C3F7Y1V9",
       "campaign_id": "CMP-SD",
-      "impressions": 839,
-      "clicks": 23,
-      "spend": 4.14,
-      "conversions": 3,
-      "sales": 29.97,
+      "impressions": 706,
+      "clicks": 18,
+      "spend": 3.24,
+      "conversions": 2,
+      "sales": 19.98,
       "order_value": 9.99,
-      "acos": 13.8
+      "acos": 16.2
     }
   ],
   "targeted_exact_keywords": [
     {
       "term": "foldable laptop riser",
-      "added_at": "2026-10-17T11:32:02.956605+00:00",
+      "added_at": "2026-10-17T12:56:35.580284+00:00",
       "source": "Auto harvest"
     },
     {
       "term": "portable computer stand aluminum",
-      "added_at": "2026-10-17T11:32:02.956653+00:00",
+      "added_at": "2026-10-17T12:56:35.580307+00:00",
       "source": "Auto harvest"
     },
     {
       "term": "adjustable laptop stand for travel",
-      "added_at": "2026-10-17T11:32:02.956766+00:00",
+      "added_at": "2026-10-17T12:56:35.580351+00:00",
       "source": "Auto harvest"
     },
     {
       "term": "silent wireless mouse",
-      "added_at": "2026-10-17T11:32:02.956783+00:00",
+      "added_at": "2026-10-17T12:56:35.580361+00:00",
       "source": "Auto harvest"
     },
     {
       "term": "silicone water bottle sleeve",
-      "added_at": "2026-10-17T11:32:02.956841+00:00",
+      "added_at": "2026-10-17T12:56:35.580381+00:00",
       "source": "Auto harvest"
     },
     {
       "term": "bottle protective cover",
-      "added_at": "2026-10-17T11:32:02.956857+00:00",
+      "added_at": "2026-10-17T12:56:35.580393+00:00",
       "source": "Auto harvest"
     },
     {
       "term": "insulated bottle sleeve 40oz",
-      "added_at": "2026-10-17T11:32:02.956886+00:00",
+      "added_at": "2026-10-17T12:56:35.580412+00:00",
       "source": "Auto harvest"
     },
     {
       "term": "usb c desk lamp",
-      "added_at": "2026-10-17T11:32:02.956899+00:00",
+      "added_at": "2026-10-17T12:56:35.580421+00:00",
       "source": "Auto harvest"
     },
     {
       "term": "led desk lamp for office",
-      "added_at": "2026-10-17T11:32:02.956934+00:00",
+      "added_at": "2026-10-17T12:56:35.580430+00:00",
       "source": "Auto harvest"
     },
     {
       "term": "desk cable organizer",
-      "added_at": "2026-10-17T11:32:02.956960+00:00",
+      "added_at": "2026-10-17T12:56:35.580449+00:00",
       "source": "Auto harvest"
     },
     {
       "term": "cord clips adhesive",
-      "added_at": "2026-10-17T11:32:02.956979+00:00",
+      "added_at": "2026-10-17T12:56:35.580465+00:00",
       "source": "Auto harvest"
     }
   ],
   "negative_keywords": [
     {
       "term": "cheap plastic laptop stand",
-      "added_at": "2026-10-17T11:32:02.956721+00:00",
+      "added_at": "2026-10-17T12:56:35.580326+00:00",
       "source": "Zero-conversion guard"
     },
     {
       "term": "laptop stand with cooling fan",
-      "added_at": "2026-10-17T11:32:02.956752+00:00",
+      "added_at": "2026-10-17T12:56:35.580338+00:00",
       "source": "Zero-conversion guard"
     },
     {
       "term": "gaming mouse rgb",
-      "added_at": "2026-10-17T11:32:02.956797+00:00",
+      "added_at": "2026-10-17T12:56:35.580371+00:00",
       "source": "Zero-conversion guard"
     },
     {
       "term": "stanley cup boot",
-      "added_at": "2026-10-17T11:32:02.956871+00:00",
+      "added_at": "2026-10-17T12:56:35.580403+00:00",
       "source": "Zero-conversion guard"
     },
     {
       "term": "dimmable reading light",
-      "added_at": "2026-10-17T11:32:02.956947+00:00",
+      "added_at": "2026-10-17T12:56:35.580440+00:00",
       "source": "Zero-conversion guard"
     },
     {
       "term": "wire management box",
-      "added_at": "2026-10-17T11:32:02.956992+00:00",
+      "added_at": "2026-10-17T12:56:35.580475+00:00",
       "source": "Zero-conversion guard"
     },
     {
       "term": "clip on desk light",
-      "added_at": "2026-10-17T11:52:39.996948+00:00",
+      "added_at": "2026-10-17T12:58:27.988987+00:00",
       "source": "Zero-conversion guard"
     }
   ],
@@ -1879,7 +1945,7 @@
       "units": 600,
       "amount": 9240.0,
       "submitted_by": "Jordan Lee",
-      "submitted_at": "2026-10-16T11:32:02Z",
+      "submitted_at": "2026-10-16T12:56:35Z",
       "status": "pending",
       "reason": "Q4 replenishment \u00b7 35 days of cover"
     },
@@ -1891,7 +1957,7 @@
       "units": 400,
       "amount": 4600.0,
       "submitted_by": "Avery Patel",
-      "submitted_at": "2026-10-16T10:32:02Z",
+      "submitted_at": "2026-10-16T11:56:35Z",
       "status": "pending",
       "reason": "Velocity increase \u00b7 25% week over week"
     },
@@ -1903,7 +1969,7 @@
       "units": 320,
       "amount": 4096.0,
       "submitted_by": "Morgan Diaz",
-      "submitted_at": "2026-10-16T09:32:02Z",
+      "submitted_at": "2026-10-16T10:56:35Z",
       "status": "pending",
       "reason": "Supplier lead time \u00b7 41 days"
     },
@@ -1915,7 +1981,7 @@
       "units": 500,
       "amount": 2375.0,
       "submitted_by": "Jordan Lee",
-      "submitted_at": "2026-10-15T08:32:02Z",
+      "submitted_at": "2026-10-15T09:56:35Z",
       "status": "pending",
       "reason": "Low stock \u00b7 11 days of cover"
     },
@@ -1927,7 +1993,7 @@
       "units": 800,
       "amount": 3080.0,
       "submitted_by": "Avery Patel",
-      "submitted_at": "2026-10-15T07:32:02Z",
+      "submitted_at": "2026-10-15T08:56:35Z",
       "status": "pending",
       "reason": "Low stock \u00b7 12 days of cover"
     },
@@ -1939,11 +2005,11 @@
       "units": 700,
       "amount": 2695.0,
       "submitted_by": "Morgan Diaz",
-      "submitted_at": "2026-10-14T11:32:02Z",
+      "submitted_at": "2026-10-14T12:56:35Z",
       "status": "approved",
       "reason": "Reorder point reached",
       "reviewed_by": "User",
-      "reviewed_at": "2026-10-15T11:32:02Z",
+      "reviewed_at": "2026-10-15T12:56:35Z",
       "review_note": "Within cover budget"
     },
     {
@@ -1954,11 +2020,11 @@
       "units": 600,
       "amount": 7680.0,
       "submitted_by": "Jordan Lee",
-      "submitted_at": "2026-10-12T10:32:02Z",
+      "submitted_at": "2026-10-12T11:56:35Z",
       "status": "denied",
       "reason": "Exceeds 60-day cover budget",
       "reviewed_by": "User",
-      "reviewed_at": "2026-10-13T11:32:02Z",
+      "reviewed_at": "2026-10-13T12:56:35Z",
       "review_note": "Resubmit at 320 units"
     },
     {
@@ -1969,11 +2035,11 @@
       "units": 300,
       "amount": 3450.0,
       "submitted_by": "Avery Patel",
-      "submitted_at": "2026-10-08T09:32:02Z",
+      "submitted_at": "2026-10-08T10:56:35Z",
       "status": "approved",
       "reason": "Velocity increase \u00b7 25% week over week",
       "reviewed_by": "User",
-      "reviewed_at": "2026-10-09T11:32:02Z",
+      "reviewed_at": "2026-10-09T12:56:35Z",
       "review_note": "Approved at requested quantity"
     },
     {
@@ -1984,11 +2050,11 @@
       "units": 1200,
       "amount": 18480.0,
       "submitted_by": "Morgan Diaz",
-      "submitted_at": "2026-10-06T08:32:02Z",
+      "submitted_at": "2026-10-06T09:56:35Z",
       "status": "denied",
       "reason": "Quantity above $20k budget cap",
       "reviewed_by": "User",
-      "reviewed_at": "2026-10-07T11:32:02Z",
+      "reviewed_at": "2026-10-07T12:56:35Z",
       "review_note": "Split across two POs"
     },
     {
@@ -1999,11 +2065,11 @@
       "units": 500,
       "amount": 7700.0,
       "submitted_by": "Jordan Lee",
-      "submitted_at": "2026-10-05T07:32:02Z",
+      "submitted_at": "2026-10-05T08:56:35Z",
       "status": "approved",
       "reason": "Q4 replenishment \u00b7 35 days of cover",
       "reviewed_by": "User",
-      "reviewed_at": "2026-10-06T11:32:02Z",
+      "reviewed_at": "2026-10-06T12:56:35Z",
       "review_note": "Approved"
     },
     {
@@ -2014,11 +2080,11 @@
       "units": 400,
       "amount": 1900.0,
       "submitted_by": "Avery Patel",
-      "submitted_at": "2026-10-01T11:32:02Z",
+      "submitted_at": "2026-10-01T12:56:35Z",
       "status": "approved",
       "reason": "Low stock \u00b7 11 days of cover",
       "reviewed_by": "User",
-      "reviewed_at": "2026-10-02T11:32:02Z",
+      "reviewed_at": "2026-10-02T12:56:35Z",
       "review_note": "Approved"
     },
     {
@@ -2029,32 +2095,32 @@
       "units": 2000,
       "amount": 7700.0,
       "submitted_by": "Morgan Diaz",
-      "submitted_at": "2026-09-27T10:32:02Z",
+      "submitted_at": "2026-09-27T11:56:35Z",
       "status": "denied",
       "reason": "Quantity above supplier MOQ ceiling",
       "reviewed_by": "User",
-      "reviewed_at": "2026-09-28T11:32:02Z",
+      "reviewed_at": "2026-09-28T12:56:35Z",
       "review_note": "Reduce to one pallet"
     }
   ],
   "purchase_orders": [
     {
-      "id": "PO-D9CB67",
+      "id": "PO-7C3D86",
       "product_asin": "B0C3F7Y1V9",
       "product_name": "SnapDock Cable Organizer Set",
       "supplier": "Evergreen Household Goods",
       "units": 588,
       "status": "draft",
-      "created_at": "2026-10-17T11:32:02.957060+00:00"
+      "created_at": "2026-10-17T12:56:35.580575+00:00"
     },
     {
-      "id": "PO-724255",
+      "id": "PO-DEC8A6",
       "product_asin": "B0D2L6T8N4",
       "product_name": "TerraGrip Silicone Bottle Sleeve",
       "supplier": "Evergreen Household Goods",
       "units": 369,
       "status": "draft",
-      "created_at": "2026-10-17T11:32:02.957037+00:00"
+      "created_at": "2026-10-17T12:56:35.580553+00:00"
     }
   ],
   "reviews": [
@@ -2454,223 +2520,238 @@
   ],
   "activity": [
     {
-      "id": "d3295932-7bdc-4df5-89e5-7686eeab0900",
-      "timestamp": "2026-10-17T11:52:39.997012+00:00",
+      "id": "a74019cf-b7a8-4bb0-9f7a-b5c95293d385",
+      "timestamp": "2026-10-17T12:58:27.989102+00:00",
       "category": "ppc",
       "title": "Negative keyword added",
-      "detail": "clip on desk light reached 16 clicks without a conversion."
+      "detail": "clip on desk light reached 17 clicks without a conversion."
     },
     {
-      "id": "581de1f9-2ca7-454a-a0b3-cccd02d7b8f4",
-      "timestamp": "2026-10-17T11:51:59.981520+00:00",
-      "category": "repricer",
-      "title": "Price raised toward competitor",
-      "detail": "B0D2L6T8N4 moved from $13.69 to $14.04 as its competitor rose to $14.05."
+      "id": "3504fc73-9301-44f9-bc22-e382dce92ffa",
+      "timestamp": "2026-10-17T12:58:27.860036+00:00",
+      "category": "catalog",
+      "title": "Product added to catalog",
+      "detail": "Test Bamboo Desk Organizer (BD-OG-01) added to catalog with 500 units."
     },
     {
-      "id": "59c28f87-842f-49fc-b590-395b78e602d7",
-      "timestamp": "2026-10-17T11:49:59.929866+00:00",
-      "category": "repricer",
-      "title": "Buy Box price matched",
-      "detail": "B0C8Q4M2K7 moved from $33.79 to $32.78, one cent below its competitor."
-    },
-    {
-      "id": "7d919042-4b10-4e5a-8dbe-ad74b56625db",
-      "timestamp": "2026-10-17T11:48:59.903114+00:00",
-      "category": "repricer",
-      "title": "Price raised toward competitor",
-      "detail": "B0D2L6T8N4 moved from $13.34 to $13.69 as its competitor rose to $13.70."
-    },
-    {
-      "id": "e2caa7c7-a67e-44c5-a871-3b6d04516005",
-      "timestamp": "2026-10-17T11:41:00.508030+00:00",
-      "category": "repricer",
-      "title": "Price raised toward competitor",
-      "detail": "B0A9H5X3J6 moved from $23.44 to $24.14 as its competitor rose to $24.15."
-    },
-    {
-      "id": "4064089f-9c3f-496a-bcbe-5c08ce33425e",
-      "timestamp": "2026-10-17T11:36:00.389796+00:00",
+      "id": "aeb3834f-03fe-458f-8636-71a5f2c71318",
+      "timestamp": "2026-10-17T12:57:27.231927+00:00",
       "category": "repricer",
       "title": "Buy Box price matched",
-      "detail": "B0A9H5X3J6 moved from $24.12 to $23.44, one cent below its competitor."
+      "detail": "B0C3F7Y1V9 moved from $9.99 to $9.66, one cent below its competitor."
     },
     {
-      "id": "cbd678a4-092c-4113-a20c-0ae8bd36065f",
-      "timestamp": "2026-10-17T11:35:00.367129+00:00",
+      "id": "fb02faae-f419-4cf8-8262-566a48ba13a3",
+      "timestamp": "2026-10-17T12:57:27.231866+00:00",
       "category": "repricer",
       "title": "Buy Box price matched",
-      "detail": "B0C8Q4M2K7 moved from $34.99 to $33.79, one cent below its competitor."
+      "detail": "B0A9H5X3J6 moved from $24.99 to $24.25, one cent below its competitor."
     },
     {
-      "id": "578b4e1a-2a78-4b8a-b89d-3f5b5cbf3689",
-      "timestamp": "2026-10-17T11:33:00.323858+00:00",
+      "id": "0d360aaf-d947-4df5-8010-c1e86cff7757",
+      "timestamp": "2026-10-17T12:57:27.231762+00:00",
       "category": "repricer",
       "title": "Buy Box price matched",
-      "detail": "B0C3F7Y1V9 moved from $9.99 to $9.68, one cent below its competitor."
+      "detail": "B0D2L6T8N4 moved from $13.99 to $13.53, one cent below its competitor."
     },
     {
-      "id": "1603a8e3-2f8c-44e6-b3e0-aca722dc2e25",
-      "timestamp": "2026-10-17T11:33:00.323762+00:00",
-      "category": "repricer",
-      "title": "Buy Box price matched",
-      "detail": "B0A9H5X3J6 moved from $24.99 to $24.12, one cent below its competitor."
-    },
-    {
-      "id": "075a9771-03c1-49b4-987e-1f482817399d",
-      "timestamp": "2026-10-17T11:33:00.323716+00:00",
-      "category": "repricer",
-      "title": "Buy Box price matched",
-      "detail": "B0D2L6T8N4 moved from $13.99 to $13.34, one cent below its competitor."
-    },
-    {
-      "id": "c7f13a2a-97d8-4de9-8db8-48e7a7df1fd7",
-      "timestamp": "2026-10-17T11:33:00.323647+00:00",
-      "category": "repricer",
-      "title": "Price raised toward competitor",
-      "detail": "B0B7P9R3W1 moved from $22.49 to $23.11 as its competitor rose to $23.12."
-    },
-    {
-      "id": "8ff50f84-bc87-4dac-b4c8-6eb2b7f36b08",
-      "timestamp": "2026-10-17T11:32:10.301830+00:00",
+      "id": "2fb4104c-1e29-43c4-9489-d980ebe52f2c",
+      "timestamp": "2026-10-17T12:56:37.212191+00:00",
       "category": "ppc",
       "title": "Bid guardrail triggered",
       "detail": "QuietClick Mouse \u00b7 Auto trailing 7-day ACoS was 30.7% (limit 25%). Bid lowered from $0.50 to $0.44."
     },
     {
-      "id": "4717b4f4-1b64-4ed3-80b0-7e64f8c63717",
-      "timestamp": "2026-10-17T11:32:02.957069+00:00",
+      "id": "fad38192-1ae8-4388-b96a-b224e141db4a",
+      "timestamp": "2026-10-17T12:56:35.580582+00:00",
       "category": "inventory",
       "title": "Critical stock alert \u00b7 PO drafted",
-      "detail": "SnapDock Cable Organizer Set has 12.4 days of supply. Draft PO-D9CB67 created for 588 units."
+      "detail": "SnapDock Cable Organizer Set has 12.4 days of supply. Draft PO-7C3D86 created for 588 units."
     },
     {
-      "id": "9ff38d1a-34e1-4bac-b649-126200749828",
-      "timestamp": "2026-10-17T11:32:02.957050+00:00",
+      "id": "9ea4c96c-fadb-4cda-95ec-2b10d98dfddc",
+      "timestamp": "2026-10-17T12:56:35.580566+00:00",
       "category": "inventory",
       "title": "Critical stock alert \u00b7 PO drafted",
-      "detail": "TerraGrip Silicone Bottle Sleeve has 11.5 days of supply. Draft PO-724255 created for 369 units."
+      "detail": "TerraGrip Silicone Bottle Sleeve has 11.5 days of supply. Draft PO-DEC8A6 created for 369 units."
     },
     {
-      "id": "07e05520-3d06-4db1-8362-ba46e94aae8d",
-      "timestamp": "2026-10-17T11:32:02.957001+00:00",
+      "id": "126a6f61-e5d1-44cf-9e13-4bbdc0a85ed4",
+      "timestamp": "2026-10-17T12:56:35.580487+00:00",
       "category": "ppc",
       "title": "Negative keyword added",
       "detail": "wire management box reached 42 clicks without a conversion."
     },
     {
-      "id": "6c5762b2-8e43-4cde-a8a2-46a5eb96c4ee",
-      "timestamp": "2026-10-17T11:32:02.956988+00:00",
+      "id": "256a3aa0-97ef-43f0-9f81-08d44cf86302",
+      "timestamp": "2026-10-17T12:56:35.580472+00:00",
       "category": "ppc",
       "title": "Exact keyword harvested",
       "detail": "cord clips adhesive qualified with 7 conversions at 23.9% ACoS."
     },
     {
-      "id": "fcee560b-924f-4042-b6c9-eb929aecf75d",
-      "timestamp": "2026-10-17T11:32:02.956975+00:00",
+      "id": "397a2846-b652-4a23-a407-412c208a66b8",
+      "timestamp": "2026-10-17T12:56:35.580462+00:00",
       "category": "ppc",
       "title": "Exact keyword harvested",
       "detail": "desk cable organizer qualified with 12 conversions at 20.0% ACoS."
     },
     {
-      "id": "e45aaf12-2ae9-49c8-be0c-3255278188fb",
-      "timestamp": "2026-10-17T11:32:02.956956+00:00",
+      "id": "55f98abe-c3cd-4462-b923-972a185d1c2e",
+      "timestamp": "2026-10-17T12:56:35.580446+00:00",
       "category": "ppc",
       "title": "Negative keyword added",
       "detail": "dimmable reading light reached 18 clicks without a conversion."
     },
     {
-      "id": "e85c7e59-f4b2-4868-a3d3-784b7fd5df3e",
-      "timestamp": "2026-10-17T11:32:02.956943+00:00",
+      "id": "ce74c566-dfb1-45bc-b22a-8724c7f72228",
+      "timestamp": "2026-10-17T12:56:35.580437+00:00",
       "category": "ppc",
       "title": "Exact keyword harvested",
       "detail": "led desk lamp for office qualified with 11 conversions at 22.7% ACoS."
     },
     {
-      "id": "3fdef774-0350-4f3c-8d65-669219955e00",
-      "timestamp": "2026-10-17T11:32:02.956929+00:00",
+      "id": "d6e98acb-ac01-4326-a8f1-4a7a0cb69ed8",
+      "timestamp": "2026-10-17T12:56:35.580428+00:00",
       "category": "ppc",
       "title": "Exact keyword harvested",
       "detail": "usb c desk lamp qualified with 22 conversions at 17.2% ACoS."
     },
     {
-      "id": "1fbe6f81-804b-4135-a91c-1bb13c4100f2",
-      "timestamp": "2026-10-17T11:32:02.956895+00:00",
+      "id": "ac9a7757-53d2-4625-bc05-8b82423f9079",
+      "timestamp": "2026-10-17T12:56:35.580419+00:00",
       "category": "ppc",
       "title": "Exact keyword harvested",
       "detail": "insulated bottle sleeve 40oz qualified with 10 conversions at 21.5% ACoS."
     },
     {
-      "id": "218d6ccd-7254-4d83-84f7-29ba1276679e",
-      "timestamp": "2026-10-17T11:32:02.956879+00:00",
+      "id": "3e67a716-5d37-45f3-85c4-f7ef813402c7",
+      "timestamp": "2026-10-17T12:56:35.580409+00:00",
       "category": "ppc",
       "title": "Negative keyword added",
       "detail": "stanley cup boot reached 20 clicks without a conversion."
     },
     {
-      "id": "bb17b45d-79b4-4f0c-9fba-d9c708044a3a",
-      "timestamp": "2026-10-17T11:32:02.956867+00:00",
+      "id": "edadfa21-b7d6-49f9-b26d-a89dbb4a75bc",
+      "timestamp": "2026-10-17T12:56:35.580400+00:00",
       "category": "ppc",
       "title": "Exact keyword harvested",
       "detail": "bottle protective cover qualified with 9 conversions at 17.6% ACoS."
     },
     {
-      "id": "41e22a45-db23-44ac-b849-0f6e7ed80f40",
-      "timestamp": "2026-10-17T11:32:02.956853+00:00",
+      "id": "d1f1c2fd-29b0-4afa-bf1f-8354c660a993",
+      "timestamp": "2026-10-17T12:56:35.580390+00:00",
       "category": "ppc",
       "title": "Exact keyword harvested",
       "detail": "silicone water bottle sleeve qualified with 18 conversions at 16.5% ACoS."
     },
     {
-      "id": "a9c88901-13ee-4211-ab79-8613512dc323",
-      "timestamp": "2026-10-17T11:32:02.956834+00:00",
+      "id": "f16cf739-aec3-45d1-b612-845a9790fe9d",
+      "timestamp": "2026-10-17T12:56:35.580377+00:00",
       "category": "ppc",
       "title": "Negative keyword added",
       "detail": "gaming mouse rgb reached 20 clicks without a conversion."
     },
     {
-      "id": "209e5b3c-87b1-47d0-ad7f-7a1d50346ec5",
-      "timestamp": "2026-10-17T11:32:02.956792+00:00",
+      "id": "f61fbcb6-5480-4f40-ba83-ed6747c192e0",
+      "timestamp": "2026-10-17T12:56:35.580368+00:00",
       "category": "ppc",
       "title": "Exact keyword harvested",
       "detail": "silent wireless mouse qualified with 18 conversions at 23.5% ACoS."
     },
     {
-      "id": "f8e219fc-2391-4148-ac03-4352dd7c5b95",
-      "timestamp": "2026-10-17T11:32:02.956777+00:00",
+      "id": "6435ffd0-1991-4964-9476-3fb05227d207",
+      "timestamp": "2026-10-17T12:56:35.580358+00:00",
       "category": "ppc",
       "title": "Exact keyword harvested",
       "detail": "adjustable laptop stand for travel qualified with 8 conversions at 18.2% ACoS."
     },
     {
-      "id": "ea29a8bd-5607-4e31-9ec4-23dcb514aab1",
-      "timestamp": "2026-10-17T11:32:02.956762+00:00",
+      "id": "7d214ce4-35e6-4e7a-be5f-e1beb917840f",
+      "timestamp": "2026-10-17T12:56:35.580347+00:00",
       "category": "ppc",
       "title": "Negative keyword added",
       "detail": "laptop stand with cooling fan reached 17 clicks without a conversion."
     },
     {
-      "id": "f587fabd-8532-4d14-8a90-b078d828670f",
-      "timestamp": "2026-10-17T11:32:02.956746+00:00",
+      "id": "91eca33b-48e7-43c6-b210-42aa6a45dcd6",
+      "timestamp": "2026-10-17T12:56:35.580334+00:00",
       "category": "ppc",
       "title": "Negative keyword added",
       "detail": "cheap plastic laptop stand reached 38 clicks without a conversion."
     },
     {
-      "id": "d139c005-4194-403e-8926-ece400cfbfbb",
-      "timestamp": "2026-10-17T11:32:02.956674+00:00",
+      "id": "6f7223a9-1526-488a-bc82-f43cc32cd2c0",
+      "timestamp": "2026-10-17T12:56:35.580321+00:00",
       "category": "ppc",
       "title": "Exact keyword harvested",
       "detail": "portable computer stand aluminum qualified with 9 conversions at 21.8% ACoS."
     },
     {
-      "id": "d656eee1-ec17-48e8-a45f-c6c15a3ded78",
-      "timestamp": "2026-10-17T11:32:02.956644+00:00",
+      "id": "fc5b2407-c343-4419-8b0f-69016b12663a",
+      "timestamp": "2026-10-17T12:56:35.580301+00:00",
       "category": "ppc",
       "title": "Exact keyword harvested",
       "detail": "foldable laptop riser qualified with 21 conversions at 16.1% ACoS."
     }
   ],
   "execution_queue": [],
-  "tick_count": 82
+  "seller_store": [
+    {
+      "id": "37761e90-4fcf-455b-bac6-5daf054d1550",
+      "asin": "B0C8Q4M2K7",
+      "name": "ArcFold Aluminum Laptop Stand",
+      "sku": "AF-LS-02",
+      "category": "Office",
+      "price": 34.99,
+      "stock": 619.0,
+      "visible": true,
+      "added_at": "2026-10-17T12:56:35.580131+00:00"
+    },
+    {
+      "id": "e41b47a6-5727-41cc-aec5-d5be3d49df1b",
+      "asin": "B0B7P9R3W1",
+      "name": "QuietClick Wireless Mouse",
+      "sku": "QC-M-11",
+      "category": "Electronics",
+      "price": 22.49,
+      "stock": 378.0,
+      "visible": true,
+      "added_at": "2026-10-17T12:56:35.580149+00:00"
+    },
+    {
+      "id": "b7e79379-57d4-447f-974a-47b0e7e3c5d4",
+      "asin": "B0D2L6T8N4",
+      "name": "TerraGrip Silicone Bottle Sleeve",
+      "sku": "TG-BS-04",
+      "category": "Home & Kitchen",
+      "price": 13.99,
+      "stock": 141.0,
+      "visible": true,
+      "added_at": "2026-10-17T12:56:35.580155+00:00"
+    },
+    {
+      "id": "1ade934d-eb2d-4c06-acdf-745d1536c6c1",
+      "asin": "B0A9H5X3J6",
+      "name": "Luma USB-C Desk Light",
+      "sku": "LM-DL-08",
+      "category": "Lighting",
+      "price": 24.99,
+      "stock": 768.0,
+      "visible": true,
+      "added_at": "2026-10-17T12:56:35.580161+00:00"
+    },
+    {
+      "id": "06eac11f-b11b-408d-b79e-a1dd2cd4e1a3",
+      "asin": "B0C3F7Y1V9",
+      "name": "SnapDock Cable Organizer Set",
+      "sku": "SD-CO-06",
+      "category": "Office",
+      "price": 9.99,
+      "stock": 243.0,
+      "visible": true,
+      "added_at": "2026-10-17T12:56:35.580167+00:00"
+    }
+  ],
+  "tick_count": 39
 }

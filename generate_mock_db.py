@@ -261,6 +261,7 @@ def build():
                      "theme": theme, "text": text} for ago, i, r, theme, text in sorted(REVIEWS)],
         "review_themes": THEMES, "catalog_profiles": CATALOG_PROFILES,
         "acos_history": [], "activity": [], "execution_queue": [],
+        "seller_store": [],
     }
 
     for p in products:
@@ -282,6 +283,19 @@ def build():
         {"tracking_number": "TBA123456789000", "carrier": "Amazon Logistics", "status": "Delivered", "order_id": "ORD-004"},
         {"tracking_number": "1Z999AA10987654321", "carrier": "UPS", "status": "In Transit", "order_id": "ORD-005"},
     ]
+
+    for p in products:
+        state["seller_store"].append({
+            "id": str(uuid.uuid4()),
+            "asin": p["asin"],
+            "name": p["name"],
+            "sku": p["sku"],
+            "category": p["category"],
+            "price": p["price"],
+            "stock": p["stock"],
+            "visible": True,
+            "added_at": now_iso(),
+        })
     recompute_acos_history(state)
     sim = MockSimulator()
     sim._harvest_keywords(state)        # seed keyword lists using the live rules

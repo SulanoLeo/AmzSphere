@@ -4,6 +4,7 @@ const routeTitles = {
   catalog: "SEO & catalog agent",
   ppc: "PPC ads engine",
   inventory: "Inventory hub",
+  "seller-store": "Seller Store",
   repricer: "Repricer monitor",
   activity: "Automation activity logs",
   approvals: "Procurement approvals",
@@ -14,6 +15,7 @@ const navigation = [
   ["catalog", "SEO", "SEO & Catalog Agent"],
   ["ppc", "AD", "PPC Ads Engine"],
   ["inventory", "IN", "Inventory Hub"],
+  ["seller-store", "SS", "Seller Store"],
   ["repricer", "RP", "Repricer Monitor"],
   ["activity", "LG", "Automation Activity Logs"],
   ["approvals", "PO", "B2B Approvals"],
@@ -25,6 +27,7 @@ let charts = [];
 let activityFilter = "all";
 let approvalFilter = "pending";
 let selectedCatalogAsin = "";
+let sellerStoreAddAsin = "";
 let toastTimer = null;
 let renderPending = false;
 
@@ -325,6 +328,18 @@ function renderCatalog() {
       <section class="panel listing-panel"><div class="panel-header"><div><h2 class="panel-title">Current live listing copy</h2><div class="panel-subtitle">Snapshot view · ${escapeHtml(selected.asin)}</div></div><span class="status pending">Current</span></div><div class="panel-content"><div class="listing-field"><span>Title</span><p>${escapeHtml(profile.currentTitle)}</p></div><div class="listing-field"><span>Key features</span><ul>${profile.currentBullets.map((bullet) => `<li>${escapeHtml(bullet)}</li>`).join("")}</ul></div><div class="listing-meta"><span>Organic rank</span><strong>${profile.rank ? "#" + profile.rank : "—"}</strong><span>Catalog source</span><strong>Mock snapshot</strong></div></div></section>
       <section class="panel listing-panel optimized-panel"><div class="panel-header"><div><h2 class="panel-title">AI-optimized / remapped listing copy</h2><div class="panel-subtitle">Suggested draft · keyword coverage mapped</div></div><span class="status warning">Review required</span></div><div class="panel-content"><div class="listing-field"><span>Proposed title</span><p>${escapeHtml(profile.optimizedTitle)}</p></div><div class="listing-field"><span>Proposed key features</span><ul>${profile.optimizedBullets.map((bullet) => `<li>${escapeHtml(bullet)}</li>`).join("")}</ul></div><div class="listing-meta"><span>Target gaps</span><strong>${profile.gaps.length} mapped</strong><span>Sync state</span><strong>${queued ? "Staged in sandbox" : "Not submitted"}</strong></div></div></section>
     </div>
+    <section class="panel"><div class="panel-header"><div><h2 class="panel-title">Add new product to catalog</h2><div class="panel-subtitle">Create a new catalog listing that appears across inventory, procurement, and seller store</div></div></div>
+      <div class="panel-content"><form id="add-catalog-product-form" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;align-items:end;">
+        <div><label style="display:block;margin-bottom:4px;color:var(--muted);font-size:10px;font-weight:700;text-transform:uppercase;">Product Name</label><input name="name" type="text" placeholder="e.g. Bamboo Desk Organizer" required style="width:100%;min-height:34px;padding:0 10px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink);font:inherit;font-size:11px;"></div>
+        <div><label style="display:block;margin-bottom:4px;color:var(--muted);font-size:10px;font-weight:700;text-transform:uppercase;">SKU</label><input name="sku" type="text" placeholder="e.g. BD-OG-01" required style="width:100%;min-height:34px;padding:0 10px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink);font:inherit;font-size:11px;"></div>
+        <div><label style="display:block;margin-bottom:4px;color:var(--muted);font-size:10px;font-weight:700;text-transform:uppercase;">ASIN</label><input name="asin" type="text" placeholder="e.g. B0XYZ12345" required style="width:100%;min-height:34px;padding:0 10px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink);font:inherit;font-size:11px;"></div>
+        <div><label style="display:block;margin-bottom:4px;color:var(--muted);font-size:10px;font-weight:700;text-transform:uppercase;">Category</label><input name="category" type="text" placeholder="e.g. Office" required style="width:100%;min-height:34px;padding:0 10px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink);font:inherit;font-size:11px;"></div>
+        <div><label style="display:block;margin-bottom:4px;color:var(--muted);font-size:10px;font-weight:700;text-transform:uppercase;">Price ($)</label><input name="price" type="number" step="0.01" placeholder="24.99" required style="width:100%;min-height:34px;padding:0 10px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink);font:inherit;font-size:11px;"></div>
+        <div><label style="display:block;margin-bottom:4px;color:var(--muted);font-size:10px;font-weight:700;text-transform:uppercase;">Stock Units</label><input name="stock" type="number" step="1" placeholder="500" required style="width:100%;min-height:34px;padding:0 10px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink);font:inherit;font-size:11px;"></div>
+        <div><label style="display:block;margin-bottom:4px;color:var(--muted);font-size:10px;font-weight:700;text-transform:uppercase;">Daily Velocity</label><input name="daily_velocity" type="number" step="0.1" placeholder="15" style="width:100%;min-height:34px;padding:0 10px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink);font:inherit;font-size:11px;"></div>
+        <div><label style="display:block;margin-bottom:4px;color:var(--muted);font-size:10px;font-weight:700;text-transform:uppercase;">Supplier</label><input name="supplier" type="text" placeholder="e.g. Acme Mfg" style="width:100%;min-height:34px;padding:0 10px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink);font:inherit;font-size:11px;"></div>
+        <button type="submit" class="button button-primary" style="min-height:36px;padding:0 16px;">Add Product to Catalog</button>
+      </form></div></section>
     <section class="panel"><div class="panel-header"><div><h2 class="panel-title">Organic indexing and keyword gaps</h2><div class="panel-subtitle">Ranks and gaps are illustrative until connected to approved search data</div></div><span class="category-pill">${state.products.length} ASINs</span></div><div class="table-wrap"><table><thead><tr><th>ASIN</th><th>Current organic indexing rank</th><th>Keyword gaps detected</th><th>Sync status</th></tr></thead><tbody>${rows}</tbody></table></div></section>
     <div class="catalog-action"><div><strong>Seller Central update</strong><span>Approval stages the selected draft in this sandbox; an SP-API worker is not configured.</span></div><button class="button button-primary" type="button" data-agent-action="catalog_push" data-asin="${escapeHtml(selectedCatalogAsin)}" ${queued ? "disabled" : ""}>Approve &amp; Push to Seller Central via SP-API</button></div>`;
 }
@@ -386,6 +401,32 @@ function renderInventory() {
     </div>
     <section class="panel"><div class="panel-header"><div><h2 class="panel-title">Inventory by product</h2><div class="panel-subtitle">Days of supply = on-hand stock ÷ daily sales velocity</div></div></div>
       <div class="table-wrap"><table><thead><tr><th>Product</th><th>Stock cover</th><th>Velocity</th><th>Risk status</th><th>PO draft</th></tr></thead><tbody>${rows}</tbody></table></div></section>`;
+}
+
+function renderSellerStore() {
+  const products = state.seller_store || [];
+  const visible = products.filter((p) => p.visible);
+  const hidden = products.filter((p) => !p.visible);
+  const catalogNotAdded = state.products.filter((p) => !products.some((s) => s.asin === p.asin));
+  const rows = products.map((product) => {
+    const tone = product.visible ? "approved" : "denied";
+    return `<tr><td><div class="product-name">${escapeHtml(product.name)}</div><div class="product-meta">${escapeHtml(product.sku)} · <span class="asin">${escapeHtml(product.asin)}</span></div></td>
+      <td class="number-cell">${number(product.price, 2)}</td><td class="number-cell">${number(product.stock, 1)} units</td>
+      <td>${escapeHtml(product.category)}</td>
+      <td>${statusPill(tone)}</td>
+      <td class="action-row"><button class="button ${product.visible ? "button-deny" : "button-approve"}" data-seller-toggle="${escapeHtml(product.id)}">${product.visible ? "Hide" : "Show"}</button></td></tr>`;
+  }).join("");
+  const addOptions = catalogNotAdded.map((p) => `<option value="${escapeHtml(p.asin)}">${escapeHtml(p.name)} (${escapeHtml(p.sku)})</option>`).join("");
+  return `${heading("Seller Store", "Products listed and visible on your seller storefront.", "Marketplace")}
+    <div class="metrics">
+      ${metric("Listed products", number(products.length), `${visible.length} visible · ${hidden.length} hidden`, "blue", "SELLER STORE")}
+      ${metric("Visible products", number(visible.length), "Live on storefront", "green", "VISIBLE")}
+      ${metric("Hidden products", number(hidden.length), hidden.length ? '<span class="metric-change warn">Not shown to shoppers</span>' : "All products visible", hidden.length ? "orange" : "green", "HIDDEN")}
+    </div>
+    <section class="panel"><div class="panel-header"><div><h2 class="panel-title">Add product to seller store</h2><div class="panel-subtitle">Select from your catalog to list on the storefront</div></div></div>
+      <div class="panel-content"><div class="catalog-controls"><label>Catalog product</label><select id="seller-store-add-select">${addOptions}</select></div><div style="margin-top:10px;"><button class="button button-primary" data-seller-add>${sellerStoreAddAsin ? "Selected: " + escapeHtml(sellerStoreAddAsin) : "Add to seller store"}</button></div></div></section>
+    <section class="panel"><div class="panel-header"><div><h2 class="panel-title">Products on seller store</h2><div class="panel-subtitle">Toggle visibility to show/hide items from shoppers</div></div></div>
+      <div class="table-wrap"><table><thead><tr><th>Product</th><th>Price</th><th>Stock</th><th>Category</th><th>Visibility</th><th>Action</th></tr></thead><tbody>${rows || '<tr><td colspan="6" class="empty-state">No products listed yet. Add products from your catalog.</td></tr>'}</tbody></table></div></section>`;
 }
 
 function renderRepricer() {
@@ -537,6 +578,7 @@ function render() {
     catalog: renderCatalog,
     ppc: renderPpc,
     inventory: renderInventory,
+    "seller-store": renderSellerStore,
     repricer: renderRepricer,
     activity: renderActivity,
     approvals: renderApprovals,
@@ -650,12 +692,93 @@ document.addEventListener("click", async (event) => {
     approvalFilter = approvalButton.dataset.approvalFilter;
     render();
   }
+  const sellerAddButton = event.target.closest("[data-seller-add]");
+  if (sellerAddButton) {
+    if (!sellerStoreAddAsin) {
+      showToast("Please select a product from the catalog first.", true);
+      return;
+    }
+    sellerAddButton.disabled = true;
+    try {
+      const response = await fetch("/api/seller-store/add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({ asin: sellerStoreAddAsin }),
+      });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.detail || "Could not add product to seller store");
+      await fetchState();
+      sellerStoreAddAsin = "";
+      showToast(payload.message || "Product added to seller store.");
+    } catch (error) {
+      sellerAddButton.disabled = false;
+      showToast(error.message, true);
+    }
+    return;
+  }
+  const sellerToggleButton = event.target.closest("[data-seller-toggle]");
+  if (sellerToggleButton) {
+    sellerToggleButton.disabled = true;
+    try {
+      const response = await fetch(`/api/seller-store/${sellerToggleButton.dataset.sellerToggle}/toggle-visibility`, {
+        method: "POST",
+        headers: { Accept: "application/json" },
+      });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.detail || "Could not update visibility");
+      await fetchState();
+      showToast(`Product visibility set to ${payload.product.visible ? "visible" : "hidden"} in seller store.`);
+    } catch (error) {
+      sellerToggleButton.disabled = false;
+      showToast(error.message, true);
+    }
+    return;
+  }
 });
 
 document.addEventListener("change", (event) => {
   if (event.target.matches("[data-catalog-product]")) {
     selectedCatalogAsin = event.target.value;
     render();
+  }
+  if (event.target.id === "seller-store-add-select") {
+    sellerStoreAddAsin = event.target.value;
+    render();
+  }
+  const addCatalogForm = event.target.closest("#add-catalog-product-form");
+  if (addCatalogForm) {
+    event.preventDefault();
+    const formData = new FormData(addCatalogForm);
+    const payload = {
+      name: formData.get("name"),
+      sku: formData.get("sku"),
+      asin: formData.get("asin"),
+      category: formData.get("category"),
+      price: parseFloat(formData.get("price")),
+      stock: parseFloat(formData.get("stock")),
+      daily_velocity: formData.get("daily_velocity") ? parseFloat(formData.get("daily_velocity")) : undefined,
+      supplier: formData.get("supplier") || undefined,
+    };
+    const submitBtn = addCatalogForm.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Adding...";
+    try {
+      const response = await fetch("/api/catalog-products", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.detail || "Could not add product to catalog");
+      await fetchState();
+      addCatalogForm.reset();
+      showToast(result.message || "Product added to catalog.");
+    } catch (error) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Add Product to Catalog";
+      showToast(error.message, true);
+    }
+    return;
   }
 });
 

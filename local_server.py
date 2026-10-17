@@ -69,6 +69,11 @@ class DashboardHandler(BaseHTTPRequestHandler):
             state["generated_at"] = now_iso()
             self.send_json(200, state)
             return
+        if path == "/api/seller-store":
+            with STATE_LOCK:
+                state = read_database()
+            self.send_json(200, {"products": state.get("seller_store", [])})
+            return
 
         relative_path = "index.html" if path == "/" else path.removeprefix("/static/")
         file_path = (STATIC_DIR / relative_path).resolve()
@@ -169,44 +174,173 @@ class DashboardHandler(BaseHTTPRequestHandler):
             return
 
         match = re.fullmatch(r"/api/orders/([^/]+)/decision", path)
-        if not match:
-            self.send_json(404, {"detail": "Not found"})
-            return
-        try:
-            length = int(self.headers.get("Content-Length", "0"))
-            decision = json.loads(self.rfile.read(length))
-        except (ValueError, json.JSONDecodeError):
-            self.send_json(400, {"detail": "Invalid JSON request"})
-            return
-        action = decision.get("action")
-        if action not in ("approve", "deny"):
-            self.send_json(422, {"detail": "Action must be approve or deny"})
+        if match:
+            try:
+                length = int(self.headers.get("Content-Length", "0"))
+                decision = json.loads(self.rfile.read(length))
+            except (ValueError, json.JSONDecodeError):
+                self.send_json(400, {"detail": "Invalid JSON request"})
+                return
+            action = decision.get("action")
+            if action not in ("approve", "deny"):
+                self.send_json(422, {"detail": "Action must be approve or deny"})
+                return
+
+            order_id = unquote(match.group(1))
+            with STATE_LOCK:
+                state = read_database()
+                order = next((item for item in state["orders"] if item["id"] == order_id), None)
+                if order is None:
+                    self.send_json(404, {"detail": "Order not found"})
+                    return
+                if order["status"] != "pending":
+                    self.send_json(409, {"detail": "This workflow has already been reviewed"})
+                    return
+                order["status"] = "approved" if action == "approve" else "denied"
+                order["reviewed_by"] = state["manager"]["name"]
+                order["reviewed_at"] = now_iso()
+                record_activity(
+                    state,
+                    "procurement",
+                    f"Purchase workflow {order['status']}",
+                    f"{order['id']} for {order['product_name']} was {order['status']} by {order['reviewed_by']}.",
+                )
+                write_database(state)
+                payload = {"order": order, "activity": state["activity"][0]}
+            self.send_json(200, payload)
             return
 
-        order_id = unquote(match.group(1))
-        with STATE_LOCK:
-            state = read_database()
-            order = next((item for item in state["orders"] if item["id"] == order_id), None)
-            if order is None:
-                self.send_json(404, {"detail": "Order not found"})
+        match = re.fullmatch(r"/api/seller-store/([^/]+)/(toggle-visibility)", path)
+        if match:
+            try:
+                length = int(self.headers.get("Content-Length", "0"))
+                request = json.loads(self.rfile.read(length))
+            except (ValueError, json.JSONDecodeError):
+                self.send_json(400, {"detail": "Invalid JSON request"})
                 return
-            if order["status"] != "pending":
-                self.send_json(409, {"detail": "This workflow has already been reviewed"})
-                return
-            order["status"] = "approved" if action == "approve" else "denied"
-            order["reviewed_by"] = state["manager"]["name"]
-            order["reviewed_at"] = now_iso()
-            record_activity(
-                state,
-                "procurement",
-                f"Purchase workflow {order['status']}",
-                f"{order['id']} for {order['product_name']} was {order['status']} by {order['reviewed_by']}.",
-            )
-            write_database(state)
-            payload = {"order": order, "activity": state["activity"][0]}
-        self.send_json(200, payload)
+            product_id = unquote(match.group(1))
+            with STATE_LOCK:
+                state = read_database()
+                product = next((item for item in state.get("seller_store", []) if item["id"] == product_id), None)
+                if product is None:
+                    self.send_json(404, {"detail": "Product not found in seller store"})
+                    return
+                product["visible"] = not product.get("visible", True)
+                record_activity(
+                    state,
+                    "seller-store",
+                    "Product visibility updated",
+                    f"{product['name']} visibility set to {'visible' if product['visible'] else 'hidden'} in seller store.",
+                )
+                write_database(state)
+            self.send_json(200, {"product": product, "message": "Visibility updated"})
+            return
 
-    def log_message(self, _format, *_args):
+        match = re.fullmatch(r"/api/seller-store/add", path)
+        if match:
+            try:
+                length = int(self.headers.get("Content-Length", "0"))
+                request = json.loads(self.rfile.read(length))
+            except (ValueError, json.JSONDecodeError):
+                self.send_json(400, {"detail": "Invalid JSON request"})
+                return
+            asin = request.get("asin")
+            if not asin:
+                self.send_json(422, {"detail": "asin is required"})
+                return
+            with STATE_LOCK:
+                state = read_database()
+                catalog_product = next((item for item in state["products"] if item["asin"] == asin), None)
+                if catalog_product is None:
+                    self.send_json(404, {"detail": "Catalog item not found"})
+                    return
+                if any(item["asin"] == asin for item in state.get("seller_store", [])):
+                    self.send_json(409, {"detail": "Product already in seller store"})
+                    return
+                new_product = {
+                    "id": uuid.uuid4().hex,
+                    "asin": catalog_product["asin"],
+                    "name": catalog_product["name"],
+                    "sku": catalog_product["sku"],
+                    "category": catalog_product["category"],
+                    "price": catalog_product["price"],
+                    "stock": catalog_product["stock"],
+                    "visible": True,
+                    "added_at": now_iso(),
+                }
+                state.setdefault("seller_store", []).append(new_product)
+                record_activity(
+                    state,
+                    "seller-store",
+                    "Product added to seller store",
+                    f"{catalog_product['name']} added to seller store.",
+                )
+                write_database(state)
+            self.send_json(200, {"product": new_product, "message": "Product added to seller store"})
+            return
+
+        match = re.fullmatch(r"/api/catalog-products", path)
+        if match:
+            try:
+                length = int(self.headers.get("Content-Length", "0"))
+                request = json.loads(self.rfile.read(length))
+            except (ValueError, json.JSONDecodeError):
+                self.send_json(400, {"detail": "Invalid JSON request"})
+                return
+            name = request.get("name")
+            sku = request.get("sku")
+            asin = request.get("asin")
+            category = request.get("category")
+            price = request.get("price")
+            stock = request.get("stock")
+            daily_velocity = request.get("daily_velocity")
+            unit_cost = request.get("unit_cost")
+            min_floor = request.get("min_floor")
+            max_price = request.get("max_price")
+            supplier = request.get("supplier")
+            lead_time_days = request.get("lead_time_days")
+            if not all([name, sku, asin, category, price is not None, stock is not None]):
+                self.send_json(422, {"detail": "name, sku, asin, category, price, and stock are required"})
+                return
+            with STATE_LOCK:
+                state = read_database()
+                if any(item["asin"] == asin for item in state["products"]):
+                    self.send_json(409, {"detail": "Product with this ASIN already exists"})
+                    return
+                if any(item["sku"] == sku for item in state["products"]):
+                    self.send_json(409, {"detail": "Product with this SKU already exists"})
+                    return
+                new_product = {
+                    "asin": asin,
+                    "name": name,
+                    "sku": sku,
+                    "category": category,
+                    "price": float(price),
+                    "competitor_price": float(price),
+                    "market_price": float(price),
+                    "min_floor": float(min_floor) if min_floor is not None else float(price) * 0.8,
+                    "max_price": float(max_price) if max_price is not None else float(price) * 1.2,
+                    "unit_cost": float(unit_cost) if unit_cost is not None else float(price) * 0.5,
+                    "stock": float(stock),
+                    "daily_velocity": float(daily_velocity) if daily_velocity is not None else 10.0,
+                    "lead_time_days": int(lead_time_days) if lead_time_days is not None else 21,
+                    "supplier": supplier or "Unknown Supplier",
+                    "po_draft_id": None,
+                }
+                state["products"].append(new_product)
+                state.setdefault("global_products", []).append(dict(new_product))
+                state.setdefault("sales_history", {})[sku] = [int(new_product["daily_velocity"])] * 30
+                record_activity(
+                    state,
+                    "catalog",
+                    "Product added to catalog",
+                    f"{name} ({sku}) added to catalog with {stock} units.",
+                )
+                write_database(state)
+            self.send_json(200, {"product": new_product, "message": "Product added to catalog"})
+            return
+
+        self.send_json(404, {"detail": "Not found"})
         return
 
 
