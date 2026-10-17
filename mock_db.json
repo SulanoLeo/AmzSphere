@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-10-17T06:22:25.026973+00:00",
+  "last_updated": "2026-10-17T10:04:51.975369+00:00",
   "history_end": "2026-10-17",
   "manager": {
     "name": "User",
@@ -12,13 +12,13 @@
       "name": "ArcFold Aluminum Laptop Stand",
       "sku": "AF-LS-02",
       "category": "Office",
-      "price": 34.99,
-      "competitor_price": 34.5,
+      "price": 34.02,
+      "competitor_price": 34.08,
       "market_price": 34.5,
       "min_floor": 27.5,
       "max_price": 39.99,
       "unit_cost": 15.4,
-      "stock": 619.994,
+      "stock": 618.772,
       "daily_velocity": 17.8,
       "lead_time_days": 34,
       "supplier": "Shenzhen Northstar Manufacturing",
@@ -29,13 +29,13 @@
       "name": "QuietClick Wireless Mouse",
       "sku": "QC-M-11",
       "category": "Electronics",
-      "price": 22.49,
-      "competitor_price": 22.99,
+      "price": 22.99,
+      "competitor_price": 23.01,
       "market_price": 22.99,
       "min_floor": 17.25,
       "max_price": 26.99,
       "unit_cost": 11.5,
-      "stock": 379.994,
+      "stock": 378.772,
       "daily_velocity": 14.5,
       "lead_time_days": 28,
       "supplier": "Ningbo Kestrel Electronics",
@@ -46,13 +46,13 @@
       "name": "TerraGrip Silicone Bottle Sleeve",
       "sku": "TG-BS-04",
       "category": "Home & Kitchen",
-      "price": 13.99,
-      "competitor_price": 13.49,
+      "price": 12.78,
+      "competitor_price": 12.97,
       "market_price": 13.49,
       "min_floor": 9.25,
       "max_price": 16.99,
       "unit_cost": 4.75,
-      "stock": 141.997,
+      "stock": 141.386,
       "daily_velocity": 12.2,
       "lead_time_days": 21,
       "supplier": "Evergreen Household Goods",
@@ -63,13 +63,13 @@
       "name": "Luma USB-C Desk Light",
       "sku": "LM-DL-08",
       "category": "Lighting",
-      "price": 24.99,
-      "competitor_price": 24.49,
+      "price": 24.78,
+      "competitor_price": 25.1,
       "market_price": 24.49,
       "min_floor": 21.0,
       "max_price": 29.99,
       "unit_cost": 12.8,
-      "stock": 769.991,
+      "stock": 768.158,
       "daily_velocity": 21.9,
       "lead_time_days": 41,
       "supplier": "Shenzhen Northstar Manufacturing",
@@ -80,13 +80,13 @@
       "name": "SnapDock Cable Organizer Set",
       "sku": "SD-CO-06",
       "category": "Office",
-      "price": 9.99,
-      "competitor_price": 9.79,
+      "price": 9.7,
+      "competitor_price": 9.84,
       "market_price": 9.79,
       "min_floor": 8.5,
       "max_price": 11.99,
       "unit_cost": 3.85,
-      "stock": 243.994,
+      "stock": 242.772,
       "daily_velocity": 19.5,
       "lead_time_days": 19,
       "supplier": "Evergreen Household Goods",
@@ -1247,45 +1247,45 @@
       "term": "foldable laptop riser",
       "asin": "B0C8Q4M2K7",
       "campaign_id": "CMP-AF",
-      "impressions": 9840,
-      "clicks": 246,
-      "spend": 118.08,
-      "conversions": 21,
-      "sales": 734.79,
+      "impressions": 11438,
+      "clicks": 314,
+      "spend": 150.72,
+      "conversions": 23,
+      "sales": 804.77,
       "order_value": 34.99,
-      "acos": 16.1
+      "acos": 18.7
     },
     {
       "term": "portable computer stand aluminum",
       "asin": "B0C8Q4M2K7",
       "campaign_id": "CMP-AF",
-      "impressions": 6028,
-      "clicks": 137,
-      "spend": 68.5,
-      "conversions": 9,
-      "sales": 314.91,
+      "impressions": 7316,
+      "clicks": 191,
+      "spend": 95.5,
+      "conversions": 10,
+      "sales": 349.9,
       "order_value": 34.99,
-      "acos": 21.8
+      "acos": 27.3
     },
     {
       "term": "ergonomic laptop holder for desk",
       "asin": "B0C8Q4M2K7",
       "campaign_id": "CMP-AF",
-      "impressions": 3608,
-      "clicks": 82,
-      "spend": 65.6,
-      "conversions": 6,
-      "sales": 209.94,
+      "impressions": 4769,
+      "clicks": 131,
+      "spend": 104.8,
+      "conversions": 10,
+      "sales": 349.9,
       "order_value": 34.99,
-      "acos": 31.2
+      "acos": 30.0
     },
     {
       "term": "cheap plastic laptop stand",
       "asin": "B0C8Q4M2K7",
       "campaign_id": "CMP-AF",
-      "impressions": 1558,
-      "clicks": 38,
-      "spend": 24.7,
+      "impressions": 3018,
+      "clicks": 98,
+      "spend": 63.7,
       "conversions": 0,
       "sales": 0.0,
       "order_value": 34.99,
@@ -1295,9 +1295,9 @@
       "term": "laptop stand with cooling fan",
       "asin": "B0C8Q4M2K7",
       "campaign_id": "CMP-AF",
-      "impressions": 561,
-      "clicks": 17,
-      "spend": 19.38,
+      "impressions": 2339,
+      "clicks": 90,
+      "spend": 102.6,
       "conversions": 0,
       "sales": 0.0,
       "order_value": 34.99,
@@ -1307,153 +1307,153 @@
       "term": "adjustable laptop stand for travel",
       "asin": "B0C8Q4M2K7",
       "campaign_id": "CMP-AF",
-      "impressions": 3848,
-      "clicks": 104,
-      "spend": 50.96,
+      "impressions": 5211,
+      "clicks": 164,
+      "spend": 80.36,
       "conversions": 8,
       "sales": 279.92,
       "order_value": 34.99,
-      "acos": 18.2
+      "acos": 28.7
     },
     {
       "term": "wooden monitor shelf",
       "asin": "B0C8Q4M2K7",
       "campaign_id": "CMP-AF",
-      "impressions": 567,
-      "clicks": 14,
-      "spend": 10.5,
-      "conversions": 1,
-      "sales": 34.99,
+      "impressions": 1886,
+      "clicks": 67,
+      "spend": 50.25,
+      "conversions": 3,
+      "sales": 104.97,
       "order_value": 34.99,
-      "acos": 30.0
+      "acos": 47.9
     },
     {
       "term": "silent wireless mouse",
       "asin": "B0B7P9R3W1",
       "campaign_id": "CMP-QC",
-      "impressions": 5510,
-      "clicks": 190,
-      "spend": 95.0,
+      "impressions": 6401,
+      "clicks": 228,
+      "spend": 114.0,
       "conversions": 18,
       "sales": 404.82,
       "order_value": 22.49,
-      "acos": 23.5
+      "acos": 28.2
     },
     {
       "term": "ergonomic mouse for laptop",
       "asin": "B0B7P9R3W1",
       "campaign_id": "CMP-QC",
-      "impressions": 3648,
-      "clicks": 96,
-      "spend": 52.8,
+      "impressions": 4932,
+      "clicks": 147,
+      "spend": 80.85,
       "conversions": 8,
       "sales": 179.92,
       "order_value": 22.49,
-      "acos": 29.3
+      "acos": 44.9
     },
     {
       "term": "gaming mouse rgb",
       "asin": "B0B7P9R3W1",
       "campaign_id": "CMP-QC",
-      "impressions": 580,
-      "clicks": 20,
-      "spend": 10.0,
-      "conversions": 0,
-      "sales": 0.0,
+      "impressions": 2142,
+      "clicks": 87,
+      "spend": 43.5,
+      "conversions": 2,
+      "sales": 44.98,
       "order_value": 22.49,
-      "acos": 0.0
+      "acos": 96.7
     },
     {
       "term": "wireless mouse bluetooth",
       "asin": "B0B7P9R3W1",
       "campaign_id": "CMP-QC",
-      "impressions": 538,
-      "clicks": 13,
-      "spend": 6.5,
-      "conversions": 1,
-      "sales": 22.49,
+      "impressions": 1804,
+      "clicks": 67,
+      "spend": 33.5,
+      "conversions": 2,
+      "sales": 44.98,
       "order_value": 22.49,
-      "acos": 28.9
+      "acos": 74.5
     },
     {
       "term": "silicone water bottle sleeve",
       "asin": "B0D2L6T8N4",
       "campaign_id": "CMP-TG",
-      "impressions": 4000,
-      "clicks": 160,
-      "spend": 41.6,
-      "conversions": 18,
-      "sales": 251.82,
+      "impressions": 5218,
+      "clicks": 207,
+      "spend": 53.82,
+      "conversions": 20,
+      "sales": 279.8,
       "order_value": 13.99,
-      "acos": 16.5
+      "acos": 19.2
     },
     {
       "term": "bottle protective cover",
       "asin": "B0D2L6T8N4",
       "campaign_id": "CMP-TG",
-      "impressions": 2816,
-      "clicks": 77,
-      "spend": 23.1,
-      "conversions": 9,
-      "sales": 125.91,
+      "impressions": 4186,
+      "clicks": 132,
+      "spend": 39.6,
+      "conversions": 10,
+      "sales": 139.9,
       "order_value": 13.99,
-      "acos": 18.3
+      "acos": 28.3
     },
     {
       "term": "stanley cup boot",
       "asin": "B0D2L6T8N4",
       "campaign_id": "CMP-TG",
-      "impressions": 840,
-      "clicks": 20,
-      "spend": 6.0,
-      "conversions": 0,
-      "sales": 0.0,
+      "impressions": 2894,
+      "clicks": 106,
+      "spend": 31.8,
+      "conversions": 2,
+      "sales": 27.98,
       "order_value": 13.99,
-      "acos": 0.0
+      "acos": 113.7
     },
     {
       "term": "insulated bottle sleeve 40oz",
       "asin": "B0D2L6T8N4",
       "campaign_id": "CMP-TG",
-      "impressions": 4004,
-      "clicks": 91,
-      "spend": 30.03,
-      "conversions": 10,
-      "sales": 139.9,
+      "impressions": 5245,
+      "clicks": 146,
+      "spend": 48.18,
+      "conversions": 13,
+      "sales": 181.87,
       "order_value": 13.99,
-      "acos": 21.5
+      "acos": 26.5
     },
     {
       "term": "usb c desk lamp",
       "asin": "B0A9H5X3J6",
       "campaign_id": "CMP-LM",
-      "impressions": 7560,
-      "clicks": 210,
-      "spend": 94.5,
-      "conversions": 22,
-      "sales": 549.78,
+      "impressions": 9260,
+      "clicks": 279,
+      "spend": 125.55,
+      "conversions": 26,
+      "sales": 649.74,
       "order_value": 24.99,
-      "acos": 17.2
+      "acos": 19.3
     },
     {
       "term": "led desk lamp for office",
       "asin": "B0A9H5X3J6",
       "campaign_id": "CMP-LM",
-      "impressions": 4800,
-      "clicks": 120,
-      "spend": 62.4,
+      "impressions": 6412,
+      "clicks": 186,
+      "spend": 96.72,
       "conversions": 11,
       "sales": 274.89,
       "order_value": 24.99,
-      "acos": 22.7
+      "acos": 35.2
     },
     {
       "term": "dimmable reading light",
       "asin": "B0A9H5X3J6",
       "campaign_id": "CMP-LM",
-      "impressions": 594,
-      "clicks": 18,
-      "spend": 9.0,
+      "impressions": 1759,
+      "clicks": 64,
+      "spend": 32.0,
       "conversions": 0,
       "sales": 0.0,
       "order_value": 24.99,
@@ -1463,61 +1463,61 @@
       "term": "clip on desk light",
       "asin": "B0A9H5X3J6",
       "campaign_id": "CMP-LM",
-      "impressions": 546,
-      "clicks": 14,
-      "spend": 7.0,
-      "conversions": 0,
-      "sales": 0.0,
+      "impressions": 1944,
+      "clicks": 72,
+      "spend": 36.0,
+      "conversions": 1,
+      "sales": 24.99,
       "order_value": 24.99,
-      "acos": 0.0
+      "acos": 144.1
     },
     {
       "term": "desk cable organizer",
       "asin": "B0C3F7Y1V9",
       "campaign_id": "CMP-SD",
-      "impressions": 4200,
-      "clicks": 150,
-      "spend": 24.0,
-      "conversions": 12,
-      "sales": 119.88,
+      "impressions": 5809,
+      "clicks": 218,
+      "spend": 34.88,
+      "conversions": 13,
+      "sales": 129.87,
       "order_value": 9.99,
-      "acos": 20.0
+      "acos": 26.9
     },
     {
       "term": "cord clips adhesive",
       "asin": "B0C3F7Y1V9",
       "campaign_id": "CMP-SD",
-      "impressions": 3168,
-      "clicks": 88,
-      "spend": 16.72,
-      "conversions": 7,
-      "sales": 69.93,
+      "impressions": 4237,
+      "clicks": 134,
+      "spend": 25.46,
+      "conversions": 8,
+      "sales": 79.92,
       "order_value": 9.99,
-      "acos": 23.9
+      "acos": 31.9
     },
     {
       "term": "wire management box",
       "asin": "B0C3F7Y1V9",
       "campaign_id": "CMP-SD",
-      "impressions": 1722,
-      "clicks": 42,
-      "spend": 6.3,
-      "conversions": 0,
-      "sales": 0.0,
+      "impressions": 2768,
+      "clicks": 86,
+      "spend": 12.9,
+      "conversions": 1,
+      "sales": 9.99,
       "order_value": 9.99,
-      "acos": 0.0
+      "acos": 129.1
     },
     {
       "term": "cable ties reusable",
       "asin": "B0C3F7Y1V9",
       "campaign_id": "CMP-SD",
-      "impressions": 680,
-      "clicks": 17,
-      "spend": 3.06,
-      "conversions": 2,
-      "sales": 19.98,
+      "impressions": 2477,
+      "clicks": 90,
+      "spend": 16.2,
+      "conversions": 3,
+      "sales": 29.97,
       "order_value": 9.99,
-      "acos": 15.3
+      "acos": 54.1
     }
   ],
   "targeted_exact_keywords": [
@@ -1606,6 +1606,11 @@
     {
       "term": "wire management box",
       "added_at": "2026-10-16T09:34:50.688145+00:00",
+      "source": "Zero-conversion guard"
+    },
+    {
+      "term": "clip on desk light",
+      "added_at": "2026-10-17T06:31:57.986755+00:00",
       "source": "Zero-conversion guard"
     }
   ],
@@ -2193,6 +2198,335 @@
   ],
   "activity": [
     {
+      "id": "9f63b8ee-7ed2-42a7-aca2-efa5983eb0a8",
+      "timestamp": "2026-10-17T10:02:08.819926+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0B7P9R3W1 moved from $23.60 to $22.99, one cent below its competitor."
+    },
+    {
+      "id": "5a2a0bd5-49e2-487b-b907-52e5d662e044",
+      "timestamp": "2026-10-17T10:02:08.819868+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0C8Q4M2K7 moved from $35.24 to $34.02, one cent below its competitor."
+    },
+    {
+      "id": "1af514b3-26e7-4759-b677-ef660df28b57",
+      "timestamp": "2026-10-17T09:57:08.658285+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0C8Q4M2K7 moved from $34.27 to $35.24 as its competitor rose to $35.25."
+    },
+    {
+      "id": "fb00a9f3-44a9-4422-b765-31b5721d25bb",
+      "timestamp": "2026-10-17T09:56:08.626895+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0D2L6T8N4 moved from $13.18 to $12.78, one cent below its competitor."
+    },
+    {
+      "id": "9c4aabc2-374e-47be-b6d7-3e726c650419",
+      "timestamp": "2026-10-17T08:52:15.455865+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0D2L6T8N4 moved from $13.52 to $13.18, one cent below its competitor."
+    },
+    {
+      "id": "679a9094-bfc7-4d51-a078-f95305d19cac",
+      "timestamp": "2026-10-17T08:51:15.425441+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0B7P9R3W1 moved from $22.91 to $23.60 as its competitor rose to $23.67."
+    },
+    {
+      "id": "1f2981f3-1245-4113-9581-89a39f4408e6",
+      "timestamp": "2026-10-17T08:50:15.396014+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0C3F7Y1V9 moved from $9.42 to $9.70 as its competitor rose to $9.74."
+    },
+    {
+      "id": "ff5b10a3-ea28-48bc-bddb-69b6d0c0ee72",
+      "timestamp": "2026-10-17T08:37:49.649901+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0D2L6T8N4 moved from $13.97 to $13.52, one cent below its competitor."
+    },
+    {
+      "id": "283907cf-2250-4ed1-91b0-03a301d21120",
+      "timestamp": "2026-10-17T08:36:49.616909+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0C3F7Y1V9 moved from $9.68 to $9.42, one cent below its competitor."
+    },
+    {
+      "id": "e44a5ebc-d814-4c7e-aa26-f45165a560e5",
+      "timestamp": "2026-10-17T08:35:49.586593+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0D2L6T8N4 moved from $13.60 to $13.97 as its competitor rose to $13.98."
+    },
+    {
+      "id": "c76bc4bb-7f04-44aa-8db6-411ac21e3b94",
+      "timestamp": "2026-10-17T08:28:14.559093+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0D2L6T8N4 moved from $13.20 to $13.60 as its competitor rose to $13.63."
+    },
+    {
+      "id": "08334556-c333-47d8-a6a7-6e7ed2ffbfbc",
+      "timestamp": "2026-10-17T08:26:14.498818+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0C3F7Y1V9 moved from $9.40 to $9.68 as its competitor rose to $9.77."
+    },
+    {
+      "id": "d947a2a0-4acc-449c-9b65-39305f53a511",
+      "timestamp": "2026-10-17T08:25:14.467938+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0A9H5X3J6 moved from $24.12 to $24.78 as its competitor rose to $24.79."
+    },
+    {
+      "id": "3753c5f3-8c55-4532-912d-7423066a2191",
+      "timestamp": "2026-10-17T08:23:14.409370+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0D2L6T8N4 moved from $13.63 to $13.20, one cent below its competitor."
+    },
+    {
+      "id": "b625df33-64fb-452b-a2d9-e6d369613e88",
+      "timestamp": "2026-10-17T08:20:14.314943+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0D2L6T8N4 moved from $13.29 to $13.63 as its competitor rose to $13.64."
+    },
+    {
+      "id": "37e809b0-1402-427c-ba27-b0ce06797eb3",
+      "timestamp": "2026-10-17T08:18:14.221151+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0A9H5X3J6 moved from $25.07 to $24.12, one cent below its competitor."
+    },
+    {
+      "id": "8f1239a6-2cbc-4af5-aa96-a4f817e464d1",
+      "timestamp": "2026-10-17T08:17:14.166877+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0C8Q4M2K7 moved from $33.27 to $34.27 as its competitor rose to $34.35."
+    },
+    {
+      "id": "2b7a2138-c4af-4fe7-a8de-9ca8f2c1f952",
+      "timestamp": "2026-10-17T08:16:14.117855+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0C3F7Y1V9 moved from $9.68 to $9.40, one cent below its competitor."
+    },
+    {
+      "id": "f6606c34-5ca9-409b-91b0-e5bd0dfcc2e5",
+      "timestamp": "2026-10-17T08:14:14.041449+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0D2L6T8N4 moved from $12.95 to $13.29 as its competitor rose to $13.30."
+    },
+    {
+      "id": "15556375-d3b3-4c40-8329-345d6d29ee28",
+      "timestamp": "2026-10-17T08:13:14.002827+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0C8Q4M2K7 moved from $34.33 to $33.27, one cent below its competitor."
+    },
+    {
+      "id": "bf90f73e-ea4f-4081-bb51-6c2e2f034cdb",
+      "timestamp": "2026-10-17T08:12:13.963200+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0C3F7Y1V9 moved from $9.44 to $9.68 as its competitor rose to $9.69."
+    },
+    {
+      "id": "60f56feb-b339-4708-8c8b-3fbabd10a8a0",
+      "timestamp": "2026-10-17T08:12:13.963139+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0D2L6T8N4 moved from $13.30 to $12.95, one cent below its competitor."
+    },
+    {
+      "id": "2019a5f2-1cd0-4130-bbdd-74b3a6a491be",
+      "timestamp": "2026-10-17T08:10:13.902064+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0A9H5X3J6 moved from $24.34 to $25.07 as its competitor rose to $25.08."
+    },
+    {
+      "id": "b15b5cee-616e-4293-be13-288ce8f5af41",
+      "timestamp": "2026-10-17T08:08:13.833558+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0D2L6T8N4 moved from $13.67 to $13.30, one cent below its competitor."
+    },
+    {
+      "id": "5cce47b9-b206-4815-a4eb-520521f7e34a",
+      "timestamp": "2026-10-17T08:08:13.833529+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0B7P9R3W1 moved from $23.74 to $22.91, one cent below its competitor."
+    },
+    {
+      "id": "d1a02c99-8c3d-47da-932e-b2c4713e450b",
+      "timestamp": "2026-10-17T08:08:13.833455+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0C8Q4M2K7 moved from $33.33 to $34.33 as its competitor rose to $34.43."
+    },
+    {
+      "id": "546f4891-3c8b-491d-8da9-fca7d2b738fa",
+      "timestamp": "2026-10-17T08:06:13.771975+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0C3F7Y1V9 moved from $9.70 to $9.44, one cent below its competitor."
+    },
+    {
+      "id": "35388c3c-948b-461d-9cae-a6c39ed8bf65",
+      "timestamp": "2026-10-17T08:06:13.771933+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0A9H5X3J6 moved from $25.03 to $24.34, one cent below its competitor."
+    },
+    {
+      "id": "34b8e65c-32ce-4f32-bbc6-2969210d73ba",
+      "timestamp": "2026-10-17T08:04:13.708418+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0C8Q4M2K7 moved from $34.20 to $33.33, one cent below its competitor."
+    },
+    {
+      "id": "4c567ef2-46d5-4b48-9aac-c43c2720a168",
+      "timestamp": "2026-10-17T08:03:13.677353+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0D2L6T8N4 moved from $14.04 to $13.67, one cent below its competitor."
+    },
+    {
+      "id": "619c0855-59a1-4129-93e0-fdef51a9b2ae",
+      "timestamp": "2026-10-17T07:42:37.038232+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0A9H5X3J6 moved from $25.74 to $25.03, one cent below its competitor."
+    },
+    {
+      "id": "b611b6f5-f71c-4aa6-babd-0d50de11e9ef",
+      "timestamp": "2026-10-17T07:38:36.923602+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0B7P9R3W1 moved from $23.05 to $23.74 as its competitor rose to $23.78."
+    },
+    {
+      "id": "2bc3d8e3-2b18-485b-8102-d48a71ad0323",
+      "timestamp": "2026-10-17T07:35:36.816360+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0B7P9R3W1 moved from $23.79 to $23.05, one cent below its competitor."
+    },
+    {
+      "id": "f250573a-32c7-4d06-a29d-11e51a9cdada",
+      "timestamp": "2026-10-17T07:30:36.674675+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0D2L6T8N4 moved from $13.63 to $14.04 as its competitor rose to $14.09."
+    },
+    {
+      "id": "fb107dda-d9ee-4f3f-83f4-d8dd9b5deee3",
+      "timestamp": "2026-10-17T07:27:36.583990+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0B7P9R3W1 moved from $23.10 to $23.79 as its competitor rose to $23.85."
+    },
+    {
+      "id": "0beb3548-638e-4fdc-928a-876810501edf",
+      "timestamp": "2026-10-17T07:26:36.555598+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0C8Q4M2K7 moved from $33.20 to $34.20 as its competitor rose to $34.38."
+    },
+    {
+      "id": "23bdac7e-1ea8-44c7-9b5a-cef96c371ab7",
+      "timestamp": "2026-10-17T07:22:36.432801+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0C8Q4M2K7 moved from $34.10 to $33.20, one cent below its competitor."
+    },
+    {
+      "id": "47d11273-008c-42a8-b680-caba4cbf91ce",
+      "timestamp": "2026-10-17T07:21:36.406966+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0A9H5X3J6 moved from $25.02 to $25.74 as its competitor rose to $25.75."
+    },
+    {
+      "id": "2aca23b0-fdb9-4578-be1d-9554fcd96a7d",
+      "timestamp": "2026-10-17T07:20:36.377043+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0B7P9R3W1 moved from $22.49 to $23.10 as its competitor rose to $23.11."
+    },
+    {
+      "id": "1dd9df06-eafd-439e-8ee2-a86140dbc277",
+      "timestamp": "2026-10-17T06:42:18.329741+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0A9H5X3J6 moved from $24.31 to $25.02 as its competitor rose to $25.03."
+    },
+    {
+      "id": "e31bbb29-dfba-4800-a240-5db0494084a6",
+      "timestamp": "2026-10-17T06:39:18.249746+00:00",
+      "category": "repricer",
+      "title": "Price raised toward competitor",
+      "detail": "B0D2L6T8N4 moved from $13.24 to $13.63 as its competitor rose to $13.64."
+    },
+    {
+      "id": "21c14b56-70ff-4b23-9980-75bf83bb433c",
+      "timestamp": "2026-10-17T06:33:18.033600+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0A9H5X3J6 moved from $24.99 to $24.31, one cent below its competitor."
+    },
+    {
+      "id": "6a7190e8-8692-4e39-a361-567ebf8e20c5",
+      "timestamp": "2026-10-17T06:31:57.986855+00:00",
+      "category": "ppc",
+      "title": "Negative keyword added",
+      "detail": "clip on desk light reached 18 clicks without a conversion."
+    },
+    {
+      "id": "5046bf21-c5d4-44bd-86b5-67624bd188eb",
+      "timestamp": "2026-10-17T06:31:17.967086+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0D2L6T8N4 moved from $13.61 to $13.24, one cent below its competitor."
+    },
+    {
+      "id": "3e12d835-17b8-4f8b-8457-a555708319f5",
+      "timestamp": "2026-10-17T06:30:17.932179+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0C3F7Y1V9 moved from $9.99 to $9.70, one cent below its competitor."
+    },
+    {
+      "id": "d022547c-4107-4aab-a9f8-b5cf494795d5",
+      "timestamp": "2026-10-17T06:28:17.872556+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0D2L6T8N4 moved from $13.99 to $13.61, one cent below its competitor."
+    },
+    {
+      "id": "27053f44-070f-4cb6-a68c-36c6ee7cca9b",
+      "timestamp": "2026-10-17T06:28:17.872450+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0C8Q4M2K7 moved from $34.99 to $34.10, one cent below its competitor."
+    },
+    {
       "id": "a5035091-339a-4394-bc03-085a100fe6b9",
       "timestamp": "2026-10-17T06:22:05.018050+00:00",
       "category": "ppc",
@@ -2334,5 +2668,261 @@
     }
   ],
   "execution_queue": [],
-  "tick_count": 3
+  "tick_count": 614,
+  "global_products": [
+    {
+      "asin": "B0C8Q4M2K7",
+      "name": "ArcFold Aluminum Laptop Stand",
+      "sku": "AF-LS-02",
+      "category": "Office",
+      "price": 34.27,
+      "competitor_price": 34.35,
+      "market_price": 34.5,
+      "min_floor": 27.5,
+      "max_price": 39.99,
+      "unit_cost": 15.4,
+      "stock": 619.3,
+      "daily_velocity": 17.8,
+      "lead_time_days": 34,
+      "supplier": "Shenzhen Northstar Manufacturing",
+      "po_draft_id": null
+    },
+    {
+      "asin": "B0B7P9R3W1",
+      "name": "QuietClick Wireless Mouse",
+      "sku": "QC-M-11",
+      "category": "Electronics",
+      "price": 22.91,
+      "competitor_price": 22.59,
+      "market_price": 22.99,
+      "min_floor": 17.25,
+      "max_price": 26.99,
+      "unit_cost": 11.5,
+      "stock": 379.3,
+      "daily_velocity": 14.5,
+      "lead_time_days": 28,
+      "supplier": "Ningbo Kestrel Electronics",
+      "po_draft_id": null
+    },
+    {
+      "asin": "B0D2L6T8N4",
+      "name": "TerraGrip Silicone Bottle Sleeve",
+      "sku": "TG-BS-04",
+      "category": "Home & Kitchen",
+      "price": 13.29,
+      "competitor_price": 13.47,
+      "market_price": 13.49,
+      "min_floor": 9.25,
+      "max_price": 16.99,
+      "unit_cost": 4.75,
+      "stock": 141.65,
+      "daily_velocity": 12.2,
+      "lead_time_days": 21,
+      "supplier": "Evergreen Household Goods",
+      "po_draft_id": "PO-44D068"
+    },
+    {
+      "asin": "B0A9H5X3J6",
+      "name": "Luma USB-C Desk Light",
+      "sku": "LM-DL-08",
+      "category": "Lighting",
+      "price": 25.07,
+      "competitor_price": 24.49,
+      "market_price": 24.49,
+      "min_floor": 21.0,
+      "max_price": 29.99,
+      "unit_cost": 12.8,
+      "stock": 768.95,
+      "daily_velocity": 21.9,
+      "lead_time_days": 41,
+      "supplier": "Shenzhen Northstar Manufacturing",
+      "po_draft_id": null
+    },
+    {
+      "asin": "B0C3F7Y1V9",
+      "name": "SnapDock Cable Organizer Set",
+      "sku": "SD-CO-06",
+      "category": "Office",
+      "price": 9.4,
+      "competitor_price": 9.55,
+      "market_price": 9.79,
+      "min_floor": 8.5,
+      "max_price": 11.99,
+      "unit_cost": 3.85,
+      "stock": 243.3,
+      "daily_velocity": 19.5,
+      "lead_time_days": 19,
+      "supplier": "Evergreen Household Goods",
+      "po_draft_id": "PO-67CF93"
+    }
+  ],
+  "marketplace_listings": [
+    {
+      "id": "6fdb8ad5-b4df-4833-b4b0-999354b31643",
+      "global_product_id": "B0C8Q4M2K7",
+      "sku": "AF-LS-02",
+      "platform": "Amazon US",
+      "status": "Live & In Sync",
+      "title": "ArcFold Aluminum Laptop Stand",
+      "description": "ArcFold Aluminum Laptop Stand premium listing"
+    },
+    {
+      "id": "fa6f855a-c078-4252-92ae-ee6e118ebca3",
+      "global_product_id": "B0C8Q4M2K7",
+      "sku": "AF-LS-02",
+      "platform": "Amazon UK",
+      "status": "Live & In Sync",
+      "title": "ArcFold Aluminum Laptop Stand",
+      "description": "ArcFold Aluminum Laptop Stand premium listing"
+    },
+    {
+      "id": "c2a6f1e3-8b42-4867-89e8-175512f4c303",
+      "global_product_id": "B0C8Q4M2K7",
+      "sku": "AF-LS-02",
+      "platform": "Walmart",
+      "status": "Live & In Sync",
+      "title": "ArcFold Aluminum Laptop Stand",
+      "description": "ArcFold Aluminum Laptop Stand premium listing"
+    },
+    {
+      "id": "e8e25212-193b-43fd-95df-ac8202467501",
+      "global_product_id": "B0B7P9R3W1",
+      "sku": "QC-M-11",
+      "platform": "Amazon US",
+      "status": "Live & In Sync",
+      "title": "QuietClick Wireless Mouse",
+      "description": "QuietClick Wireless Mouse premium listing"
+    },
+    {
+      "id": "702e05e9-bc9b-49e4-97c6-f6a704b99cdd",
+      "global_product_id": "B0B7P9R3W1",
+      "sku": "QC-M-11",
+      "platform": "Amazon UK",
+      "status": "Live & In Sync",
+      "title": "QuietClick Wireless Mouse",
+      "description": "QuietClick Wireless Mouse premium listing"
+    },
+    {
+      "id": "b25cdea2-f36f-454d-9fa6-a8f08bc4487f",
+      "global_product_id": "B0B7P9R3W1",
+      "sku": "QC-M-11",
+      "platform": "Walmart",
+      "status": "Live & In Sync",
+      "title": "QuietClick Wireless Mouse",
+      "description": "QuietClick Wireless Mouse premium listing"
+    },
+    {
+      "id": "b466dca2-bf5b-435c-8caa-43b19b3e7e75",
+      "global_product_id": "B0D2L6T8N4",
+      "sku": "TG-BS-04",
+      "platform": "Amazon US",
+      "status": "Live & In Sync",
+      "title": "TerraGrip Silicone Bottle Sleeve",
+      "description": "TerraGrip Silicone Bottle Sleeve premium listing"
+    },
+    {
+      "id": "7ccfea85-b952-490d-94ee-32b63ac4f894",
+      "global_product_id": "B0D2L6T8N4",
+      "sku": "TG-BS-04",
+      "platform": "Amazon UK",
+      "status": "Live & In Sync",
+      "title": "TerraGrip Silicone Bottle Sleeve",
+      "description": "TerraGrip Silicone Bottle Sleeve premium listing"
+    },
+    {
+      "id": "4d2cfbc7-69e5-42c3-8bc9-29b406a0b90b",
+      "global_product_id": "B0D2L6T8N4",
+      "sku": "TG-BS-04",
+      "platform": "Walmart",
+      "status": "Live & In Sync",
+      "title": "TerraGrip Silicone Bottle Sleeve",
+      "description": "TerraGrip Silicone Bottle Sleeve premium listing"
+    },
+    {
+      "id": "7342a4e6-313b-425e-a66e-c2a03d3d38cc",
+      "global_product_id": "B0A9H5X3J6",
+      "sku": "LM-DL-08",
+      "platform": "Amazon US",
+      "status": "Live & In Sync",
+      "title": "Luma USB-C Desk Light",
+      "description": "Luma USB-C Desk Light premium listing"
+    },
+    {
+      "id": "30fe2e18-d2bc-4628-ad50-abe4bc29ae87",
+      "global_product_id": "B0A9H5X3J6",
+      "sku": "LM-DL-08",
+      "platform": "Amazon UK",
+      "status": "Live & In Sync",
+      "title": "Luma USB-C Desk Light",
+      "description": "Luma USB-C Desk Light premium listing"
+    },
+    {
+      "id": "d3cff2fb-d97a-451e-95c1-8684a385e632",
+      "global_product_id": "B0A9H5X3J6",
+      "sku": "LM-DL-08",
+      "platform": "Walmart",
+      "status": "Live & In Sync",
+      "title": "Luma USB-C Desk Light",
+      "description": "Luma USB-C Desk Light premium listing"
+    },
+    {
+      "id": "e1c79eab-cdc8-4e78-91b4-5d4c0af64996",
+      "global_product_id": "B0C3F7Y1V9",
+      "sku": "SD-CO-06",
+      "platform": "Amazon US",
+      "status": "Live & In Sync",
+      "title": "SnapDock Cable Organizer Set",
+      "description": "SnapDock Cable Organizer Set premium listing"
+    },
+    {
+      "id": "eed6612b-7838-49a0-bebb-8abdbd702b05",
+      "global_product_id": "B0C3F7Y1V9",
+      "sku": "SD-CO-06",
+      "platform": "Amazon UK",
+      "status": "Live & In Sync",
+      "title": "SnapDock Cable Organizer Set",
+      "description": "SnapDock Cable Organizer Set premium listing"
+    },
+    {
+      "id": "d06e85a6-cf47-4028-9528-8e2ae6a78c2c",
+      "global_product_id": "B0C3F7Y1V9",
+      "sku": "SD-CO-06",
+      "platform": "Walmart",
+      "status": "Live & In Sync",
+      "title": "SnapDock Cable Organizer Set",
+      "description": "SnapDock Cable Organizer Set premium listing"
+    }
+  ],
+  "order_shipments": [
+    {
+      "tracking_number": "1Z999AA10123456784",
+      "carrier": "UPS",
+      "status": "In Transit",
+      "order_id": "ORD-001"
+    },
+    {
+      "tracking_number": "7894561230",
+      "carrier": "FedEx",
+      "status": "Label Created",
+      "order_id": "ORD-002"
+    },
+    {
+      "tracking_number": "1234567890",
+      "carrier": "DHL",
+      "status": "Out for Delivery",
+      "order_id": "ORD-003"
+    },
+    {
+      "tracking_number": "TBA123456789000",
+      "carrier": "Amazon Logistics",
+      "status": "Delivered",
+      "order_id": "ORD-004"
+    },
+    {
+      "tracking_number": "1Z999AA10987654321",
+      "carrier": "UPS",
+      "status": "In Transit",
+      "order_id": "ORD-005"
+    }
+  ]
 }

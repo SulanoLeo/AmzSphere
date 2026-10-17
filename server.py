@@ -115,6 +115,12 @@ class ProcurementLine(BaseModel):
     units: int = Field(gt=0, le=100000)
 
 
+class ProductUpdate(BaseModel):
+    asin: str = Field(min_length=1, max_length=20)
+    title: str | None = None
+    description: str | None = None
+
+
 class AgentActionRequest(BaseModel):
     action: Literal["catalog_push", "procurement_po"]
     asin: str | None = Field(default=None, min_length=1, max_length=20)
@@ -215,6 +221,54 @@ def stage_agent_action(request: AgentActionRequest) -> dict:
         }
 
     return update_database(stage)
+
+
+@app.post("/api/products/sync", status_code=202)
+async def sync_product(request: ProductUpdate) -> dict:
+    def apply_sync(state: dict) -> dict:
+        product = next((item for item in state.get("global_products", []) if item["asin"] == request.asin), None)
+        if product is None:
+            raise HTTPException(status_code=404, detail="Product not found")
+        if request.title is not None:
+            product["name"] = request.title
+        if request.description is not None:
+            product["description"] = request.description
+        for listing in state.get("marketplace_listings", []):
+            if listing.get("global_product_id") == request.asin:
+                listing["status"] = "Syncing..."
+                if request.title is not None:
+                    listing["title"] = request.title
+                if request.description is not None:
+                    listing["description"] = request.description
+        return {"asin": request.asin, "status": "Syncing..."}
+
+    result = update_database(apply_sync)
+
+    async def background_finish():
+        await asyncio.sleep(3)
+        def finish(state: dict) -> None:
+            for listing in state.get("marketplace_listings", []):
+                if listing.get("global_product_id") == request.asin:
+                    listing["status"] = "Live & In Sync"
+        update_database(finish)
+
+    asyncio.create_task(background_finish())
+    return {"success": True, "message": "Sync started", **result}
+
+
+@app.post("/api/webhooks/shipping")
+def shipping_webhook(payload: dict | None = None) -> dict:
+    import random
+    def apply(state: dict) -> dict:
+        shipments = state.get("order_shipments", [])
+        active = [s for s in shipments if s.get("status") in ("In Transit", "Label Created", "Out for Delivery")]
+        subset = random.sample(active, min(2, len(active))) if active else []
+        for s in subset:
+            s["status"] = random.choice(["Exception/Delayed", "Out for Delivery"])
+        return {"updated": [s["tracking_number"] for s in subset]}
+
+    result = update_database(apply)
+    return {"success": True, **result}
 
 
 @app.get("/")
