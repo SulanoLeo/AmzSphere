@@ -95,7 +95,7 @@ function chartPanel(title, subtitle, canvasId, key = "") {
   const showGuardrail = canvasId === "acos-chart";
   return `<section class="panel">
     <div class="panel-header"><div><h2 class="panel-title">${escapeHtml(title)}</h2><div class="panel-subtitle">${escapeHtml(subtitle)}</div></div>${key}</div>
-    <div class="panel-content"><div class="chart-area"><canvas id="${canvasId}" aria-label="${escapeHtml(title)}"></canvas></div>${showGuardrail ? '<div class="guardrail-rule"><span class="guardrail-indicator">ACTIVE</span><div><strong>Active Guardrail Rule:</strong><span>Trailing 7-Day ACoS &gt; 25% -&gt; Lower Bid Floor by 12% automatically at 00:00 UTC.</span></div></div>' : ""}</div>
+    <div class="panel-content"><div class="chart-area"><canvas id="${canvasId}" aria-label="${escapeHtml(title)}"></canvas></div>${showGuardrail ? '<div class="guardrail-rule"><span class="guardrail-indicator">ACTIVE</span><div><strong>Active Guardrail Rule:</strong><span>' + guardrailRuleText() + '</span></div></div>' : ""}</div>
   </section>`;
 }
 
@@ -141,6 +141,64 @@ const catalogProfiles = {
     optimizedBullets: ["Keep frequently used charging and computer cords organized along a desk edge.", "Compact cable clips help reduce loose cords across home-office work surfaces.", "A multi-piece organizer set supports flexible placement around desks and workstations."],
   },
 };
+
+function profileFor(product) {
+  const stored = (state.catalog_profiles || {})[product.asin] || catalogProfiles[product.asin];
+  return stored || { rank: null, gaps: [], currentTitle: product.name, currentBullets: [], optimizedTitle: product.name, optimizedBullets: [] };
+}
+
+function acosDeltaLabel() {
+  const history = state.acos_history || [];
+  if (history.length < 2) return '<span class="metric-change">—</span>';
+  const delta = history.at(-1) - history[0];
+  const improved = delta <= 0;
+  return `<span class="metric-change ${improved ? "" : "warn"}">${improved ? "↓" : "↑"} ${Math.abs(delta).toFixed(1)} pts</span>`;
+}
+
+function reviewInsight() {
+  const themes = state.review_themes || {};
+  const negative = (state.reviews || []).filter((review) => review.rating <= 2 && review.theme);
+  const counts = {};
+  negative.forEach((review) => { counts[review.theme] = (counts[review.theme] || 0) + 1; });
+  const top = Object.entries(counts).sort((a, b) => b[1] - a[1])[0];
+  if (!top || top[1] < 2) {
+    return { quote: "No recurring complaints in recent low-rated reviews.", body: "No theme appears more than once among 1–2 star reviews.", fix: "Keep monitoring new reviews." };
+  }
+  const [theme, count] = top;
+  const info = themes[theme] || {};
+  const products = [...new Set(negative.filter((review) => review.theme === theme).map((review) => review.product))];
+  return {
+    quote: `${count} customers report ${info.label || theme.replace(/_/g, " ")}.`,
+    body: `${info.summary || ""} Affects ${products.join(", ")}.`.trim(),
+    fix: info.fix || "Review the affected listings and supplier QC.",
+  };
+}
+
+function guardrailRuleText() {
+  const cfg = state.ppc_guardrail;
+  if (!cfg) return "Guardrail not configured.";
+  return escapeHtml(`Trailing ${cfg.window_days}-day ACoS > ${cfg.acos_threshold}% → lower that campaign's bid by ${cfg.bid_reduction_pct}% (minimum $${Number(cfg.min_bid).toFixed(2)}), at most once per day.`);
+}
+
+function renderCampaigns() {
+  const cfg = state.ppc_guardrail || {};
+  const windowDays = cfg.window_days || 7;
+  const rows = (state.campaigns || []).map((campaign) => {
+    const week = campaign.ad_history.slice(-windowDays);
+    const spend = week.reduce((sum, day) => sum + day.spend, 0);
+    const sales = week.reduce((sum, day) => sum + day.sales, 0);
+    const acos = sales ? (spend / sales) * 100 : 0;
+    const over = cfg.acos_threshold && acos > cfg.acos_threshold;
+    const change = (campaign.bid_changes || [])[0];
+    const status = over ? '<span class="status warning">Over limit</span>' : '<span class="status approved">Within limit</span>';
+    return `<tr><td><div class="product-name">${escapeHtml(campaign.name)}</div><div class="product-meta">${escapeHtml(campaign.sku)}</div></td>
+      <td class="number-cell">${money(spend)}</td><td class="number-cell">${money(sales)}</td>
+      <td class="number-cell">${number(acos, 1)}%</td><td class="number-cell">${money(campaign.bid_floor)}</td>
+      <td>${status}</td><td class="product-meta">${change ? `${money(change.from)} → ${money(change.to)} · ${escapeHtml(change.date)}` : "No changes"}</td></tr>`;
+  }).join("");
+  return `<section class="panel"><div class="panel-header"><div><h2 class="panel-title">Campaign guardrail</h2><div class="panel-subtitle">Trailing ${windowDays}-day performance and automatic bid changes</div></div><span class="category-pill">${(state.campaigns || []).length} campaigns</span></div>
+    <div class="table-wrap"><table><thead><tr><th>Campaign</th><th>${windowDays}d spend</th><th>${windowDays}d sales</th><th>${windowDays}d ACoS</th><th>Bid</th><th>Status</th><th>Last change</th></tr></thead><tbody>${rows || '<tr><td colspan="7"><div class="empty-state">No campaigns.</div></td></tr>'}</tbody></table></div></section>`;
+}
 
 function renderProcurementQueue() {
   const rows = state.products.map((product) => {
@@ -190,10 +248,11 @@ function renderOverview() {
   const critical = state.products.filter((product) => daysOfSupply(product) < 15).length;
   const current = currentAcos();
   const recentActivity = state.activity.slice(0, 5);
-  const reviews = state.reviews.slice(0, 5);
+  const reviews = [...state.reviews].sort((a, b) => a.rating - b.rating || b.date.localeCompare(a.date)).slice(0, 5);
+  const insight = reviewInsight();
   const body = `${heading("Operations overview", "A live read on marketplace health, automation, and inventory exposure.")}
     <div class="metrics">
-      ${metric("Portfolio ACoS", `${number(current, 1)}<span style="font:500 13px var(--font-ui)">%</span>`, '<span class="metric-change">↓ 2.8 pts</span> over 30 days', "teal", "LAST 30 DAYS")}
+      ${metric("Portfolio ACoS", `${number(current, 1)}<span style="font:500 13px var(--font-ui)">%</span>`, acosDeltaLabel() + " over 30 days", "teal", "LAST 30 DAYS")}
       ${metric("Units on hand", number(totalStock), `${state.products.length} active SKUs across the catalog`, "blue", "INVENTORY")}
       ${metric("Pending approvals", number(pending), `${money(state.orders.filter((order) => order.status === "pending").reduce((sum, order) => sum + order.amount, 0), 0)} committed spend`, "orange", "B2B WORKFLOWS")}
       ${metric("Critical stock alerts", number(critical), critical ? '<span class="metric-change warn">Action required</span> · PO draft automation on' : "All products above reorder threshold", "green", "DAYS OF SUPPLY")}
@@ -208,10 +267,10 @@ function renderOverview() {
         <div class="panel-content">${renderFeed(recentActivity, false)}</div></section>
       <section class="panel insight-panel"><div class="panel-content">
         <div class="insight-tag">AI review summary · Mock analysis</div>
-        <blockquote class="insight-quote">“3 customers report cracked or broken hinge hardware.”</blockquote>
-        <p class="insight-body">The recurring complaint points to a weak plastic hinge assembly. Two reviews mention damage on arrival despite an intact outer carton.</p>
-        <div class="recommendation"><strong>Recommended fix</strong><br />Replace the hinge connector with reinforced hardware and add a molded protective insert to the shipping carton.</div>
-        <div class="review-list">${reviews.map((review, index) => `<details data-review-index="${index}"><summary><span class="stars">★</span> &nbsp;${escapeHtml(review.product)} · ${escapeHtml(review.date)}</summary><p>${escapeHtml(review.text)}</p></details>`).join("")}</div>
+        <blockquote class="insight-quote">“${escapeHtml(insight.quote)}”</blockquote>
+        <p class="insight-body">${escapeHtml(insight.body)}</p>
+        <div class="recommendation"><strong>Recommended fix</strong><br />${escapeHtml(insight.fix)}</div>
+        <div class="review-list">${reviews.map((review, index) => `<details data-review-index="${index}"><summary><span class="stars">${"★".repeat(review.rating)}</span> &nbsp;${escapeHtml(review.product)} · ${escapeHtml(review.date)}</summary><p>${escapeHtml(review.text)}</p></details>`).join("")}</div>
       </div></section>
     </div>`;
   return body;
@@ -231,7 +290,7 @@ function renderPpc() {
   return `${heading("PPC ads engine", "Search-term harvesting and waste controls across the sponsored product funnel.", "Advertising")}
     <div class="metrics">
       ${metric("Search term spend", money(totalSpend, 0), `${number(totalClicks)} customer clicks tracked`, "orange", "MOCK CAMPAIGN DATA")}
-      ${metric("Portfolio ACoS", `${number(currentAcos(), 1)}%`, '<span class="metric-change">↓ 2.8 pts</span> month over month', "teal", "LAST 30 DAYS")}
+      ${metric("Portfolio ACoS", `${number(currentAcos(), 1)}%`, acosDeltaLabel() + " over 30 days", "teal", "LAST 30 DAYS")}
       ${metric("Exact keywords", number(qualified), "Auto-harvested · >5 conversions, <25% ACoS", "green", "TARGETED")}
       ${metric("Negative keywords", number(negatives), "Blocked after 15+ clicks without a sale", "blue", "WASTE CONTROL")}
     </div>
@@ -244,6 +303,8 @@ function renderPpc() {
         </div></div>
       </section>
     </div>
+    ${renderCampaigns()}
+    <div style="height:14px"></div>
     <section class="panel"><div class="panel-header"><div><h2 class="panel-title">Customer search terms</h2><div class="panel-subtitle">Evaluation runs automatically on each simulator tick</div></div><span class="category-pill">${state.search_terms.length} terms</span></div>
       <div class="table-wrap"><table><thead><tr><th>Search term</th><th>Clicks</th><th>Spend</th><th>Orders</th><th>ACoS</th><th>Automation status</th></tr></thead><tbody>${rows}</tbody></table></div></section>`;
 }
@@ -251,17 +312,17 @@ function renderPpc() {
 function renderCatalog() {
   if (!state.products.some((product) => product.asin === selectedCatalogAsin)) selectedCatalogAsin = state.products[0]?.asin || "";
   const selected = state.products.find((product) => product.asin === selectedCatalogAsin);
-  const profile = catalogProfiles[selectedCatalogAsin];
+  const profile = profileFor(selected);
   const rows = state.products.map((product) => {
-    const item = catalogProfiles[product.asin];
+    const item = profileFor(product);
     const sync = (state.execution_queue || []).some((job) => job.type === "catalog_push" && job.asin === product.asin && job.status === "synced");
-    return `<tr class="${product.asin === selectedCatalogAsin ? "selected-row" : ""}"><td><button type="button" class="table-select" data-catalog-select="${escapeHtml(product.asin)}">${escapeHtml(product.asin)}</button><div class="product-meta">${escapeHtml(product.sku)}</div></td><td class="number-cell">#${item.rank}</td><td><div class="gap-list">${item.gaps.map((gap) => `<span>${escapeHtml(gap)}</span>`).join("")}</div></td><td><span class="status ${sync ? "approved" : "pending"}">${sync ? "Synced" : "Staged"}</span></td></tr>`;
+    return `<tr class="${product.asin === selectedCatalogAsin ? "selected-row" : ""}"><td><button type="button" class="table-select" data-catalog-select="${escapeHtml(product.asin)}">${escapeHtml(product.asin)}</button><div class="product-meta">${escapeHtml(product.sku)}</div></td><td class="number-cell">${item.rank ? "#" + item.rank : "—"}</td><td><div class="gap-list">${item.gaps.map((gap) => `<span>${escapeHtml(gap)}</span>`).join("")}</div></td><td><span class="status ${sync ? "approved" : "pending"}">${sync ? "Synced" : "Staged"}</span></td></tr>`;
   }).join("");
   const queued = (state.execution_queue || []).some((job) => job.type === "catalog_push" && job.asin === selectedCatalogAsin && job.status === "staged");
   return `${heading("SEO & Catalog Agent", "Remap listing content against observed search demand, review keyword gaps, and stage controlled updates.", "Catalog operations")}
     <div class="catalog-controls"><label for="catalog-product">Listing</label><select id="catalog-product" data-catalog-product>${state.products.map((product) => `<option value="${escapeHtml(product.asin)}" ${product.asin === selectedCatalogAsin ? "selected" : ""}>${escapeHtml(product.name)} · ${escapeHtml(product.asin)}</option>`).join("")}</select><span class="status pending">Sandbox · staged only</span></div>
     <div class="catalog-compare">
-      <section class="panel listing-panel"><div class="panel-header"><div><h2 class="panel-title">Current live listing copy</h2><div class="panel-subtitle">Snapshot view · ${escapeHtml(selected.asin)}</div></div><span class="status pending">Current</span></div><div class="panel-content"><div class="listing-field"><span>Title</span><p>${escapeHtml(profile.currentTitle)}</p></div><div class="listing-field"><span>Key features</span><ul>${profile.currentBullets.map((bullet) => `<li>${escapeHtml(bullet)}</li>`).join("")}</ul></div><div class="listing-meta"><span>Organic rank</span><strong>#${profile.rank}</strong><span>Catalog source</span><strong>Mock snapshot</strong></div></div></section>
+      <section class="panel listing-panel"><div class="panel-header"><div><h2 class="panel-title">Current live listing copy</h2><div class="panel-subtitle">Snapshot view · ${escapeHtml(selected.asin)}</div></div><span class="status pending">Current</span></div><div class="panel-content"><div class="listing-field"><span>Title</span><p>${escapeHtml(profile.currentTitle)}</p></div><div class="listing-field"><span>Key features</span><ul>${profile.currentBullets.map((bullet) => `<li>${escapeHtml(bullet)}</li>`).join("")}</ul></div><div class="listing-meta"><span>Organic rank</span><strong>${profile.rank ? "#" + profile.rank : "—"}</strong><span>Catalog source</span><strong>Mock snapshot</strong></div></div></section>
       <section class="panel listing-panel optimized-panel"><div class="panel-header"><div><h2 class="panel-title">AI-optimized / remapped listing copy</h2><div class="panel-subtitle">Suggested draft · keyword coverage mapped</div></div><span class="status warning">Review required</span></div><div class="panel-content"><div class="listing-field"><span>Proposed title</span><p>${escapeHtml(profile.optimizedTitle)}</p></div><div class="listing-field"><span>Proposed key features</span><ul>${profile.optimizedBullets.map((bullet) => `<li>${escapeHtml(bullet)}</li>`).join("")}</ul></div><div class="listing-meta"><span>Target gaps</span><strong>${profile.gaps.length} mapped</strong><span>Sync state</span><strong>${queued ? "Staged in sandbox" : "Not submitted"}</strong></div></div></section>
     </div>
     <section class="panel"><div class="panel-header"><div><h2 class="panel-title">Organic indexing and keyword gaps</h2><div class="panel-subtitle">Ranks and gaps are illustrative until connected to approved search data</div></div><span class="category-pill">${state.products.length} ASINs</span></div><div class="table-wrap"><table><thead><tr><th>ASIN</th><th>Current organic indexing rank</th><th>Keyword gaps detected</th><th>Sync status</th></tr></thead><tbody>${rows}</tbody></table></div></section>
