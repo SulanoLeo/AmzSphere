@@ -247,7 +247,7 @@ function renderShell(view, body) {
   app.innerHTML = `<div class="layout">
     <aside class="sidebar">
       <a class="brand" href="#/overview" aria-label="AmzSphere overview">
-        <span class="brand-mark">A</span><span><span class="brand-name">AmzSphere</span><span class="brand-sub">Seller operations</span></span>
+        <span><span class="brand-name">AmzSphere</span></span>
       </a>
       <div class="nav-label">Workspace</div><nav class="nav-links" aria-label="Main navigation">${menu}</nav>
       <div class="sidebar-spacer"></div>
@@ -869,7 +869,7 @@ async function start() {
   try {
     await fetchState();
   } catch (error) {
-    app.innerHTML = `<main class="boot-screen"><div><span class="brand-mark">A</span><p>Could not connect to the AmzSphere API.</p><p>${escapeHtml(error.message)}</p></div></main>`;
+    app.innerHTML = `<main class="boot-screen"><div><p>Could not connect to the AmzSphere API.</p><p>${escapeHtml(error.message)}</p></div></main>`;
     return;
   }
   window.setInterval(async () => {
