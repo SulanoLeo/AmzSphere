@@ -4,6 +4,7 @@ const routeTitles = {
   catalog: "SEO & catalog agent",
   ppc: "PPC ads engine",
   inventory: "Inventory hub",
+  "seller-store": "Seller Store",
   repricer: "Repricer monitor",
   activity: "Automation activity logs",
   approvals: "Procurement approvals",
@@ -14,6 +15,7 @@ const navigation = [
   ["catalog", "SEO", "SEO & Catalog Agent"],
   ["ppc", "AD", "PPC Ads Engine"],
   ["inventory", "IN", "Inventory Hub"],
+  ["seller-store", "SS", "Seller Store"],
   ["repricer", "RP", "Repricer Monitor"],
   ["activity", "LG", "Automation Activity Logs"],
   ["approvals", "PO", "B2B Approvals"],
@@ -25,11 +27,14 @@ let charts = [];
 let activityFilter = "all";
 let approvalFilter = "pending";
 let selectedCatalogAsin = "";
+let sellerStoreAddAsin = "";
 let toastTimer = null;
 let renderPending = false;
+
 let autonomousBids = false;
 
 // Mock unit economics (landed cost incl. FBA fees) used for PO totals and payout margin.
+// Products that are not listed here (e.g. newly added ones) show "—" instead of a made-up number.
 const mockUnitCost = {
   B0C8Q4M2K7: 19.80,
   B0B7P9R3W1: 11.40,
@@ -40,8 +45,8 @@ const mockUnitCost = {
 const REFERRAL_FEE = 0.15;
 
 function payoutMargin(product) {
-  const cost = mockUnitCost[product.asin] ?? 0;
-  if (!product.price) return 0;
+  const cost = mockUnitCost[product.asin];
+  if (cost === undefined || !product.price) return null;
   return ((product.price * (1 - REFERRAL_FEE) - cost) / product.price) * 100;
 }
 
@@ -112,7 +117,7 @@ function chartPanel(title, subtitle, canvasId, key = "") {
   const showGuardrail = canvasId === "acos-chart";
   return `<section class="panel">
     <div class="panel-header"><div><h2 class="panel-title">${escapeHtml(title)}</h2><div class="panel-subtitle">${escapeHtml(subtitle)}</div></div>${key}</div>
-    <div class="panel-content"><div class="chart-area"><canvas id="${canvasId}" aria-label="${escapeHtml(title)}"></canvas></div>${showGuardrail ? '<div class="guardrail-rule"><span class="guardrail-indicator">ACTIVE</span><div><strong>Active Guardrail Rule:</strong><span>Trailing 7-Day ACoS &gt; 25% -&gt; Lower Bid Floor by 12% automatically at 00:00 UTC.</span></div></div>' : ""}</div>
+    <div class="panel-content"><div class="chart-area"><canvas id="${canvasId}" aria-label="${escapeHtml(title)}"></canvas></div>${showGuardrail ? '<div class="guardrail-rule"><span class="guardrail-indicator">ACTIVE</span><div><strong>Active Guardrail Rule:</strong><span>' + guardrailRuleText() + '</span></div></div>' : ""}</div>
   </section>`;
 }
 
@@ -158,6 +163,64 @@ const catalogProfiles = {
     optimizedBullets: ["Keep frequently used charging and computer cords organized along a desk edge.", "Compact cable clips help reduce loose cords across home-office work surfaces.", "A multi-piece organizer set supports flexible placement around desks and workstations."],
   },
 };
+
+function profileFor(product) {
+  const stored = (state.catalog_profiles || {})[product.asin] || catalogProfiles[product.asin];
+  return stored || { rank: null, gaps: [], currentTitle: product.name, currentBullets: [], optimizedTitle: product.name, optimizedBullets: [] };
+}
+
+function acosDeltaLabel() {
+  const history = state.acos_history || [];
+  if (history.length < 2) return '<span class="metric-change">—</span>';
+  const delta = history.at(-1) - history[0];
+  const improved = delta <= 0;
+  return `<span class="metric-change ${improved ? "" : "warn"}">${improved ? "↓" : "↑"} ${Math.abs(delta).toFixed(1)} pts</span>`;
+}
+
+function reviewInsight() {
+  const themes = state.review_themes || {};
+  const negative = (state.reviews || []).filter((review) => review.rating <= 2 && review.theme);
+  const counts = {};
+  negative.forEach((review) => { counts[review.theme] = (counts[review.theme] || 0) + 1; });
+  const top = Object.entries(counts).sort((a, b) => b[1] - a[1])[0];
+  if (!top || top[1] < 2) {
+    return { quote: "No recurring complaints in recent low-rated reviews.", body: "No theme appears more than once among 1–2 star reviews.", fix: "Keep monitoring new reviews." };
+  }
+  const [theme, count] = top;
+  const info = themes[theme] || {};
+  const products = [...new Set(negative.filter((review) => review.theme === theme).map((review) => review.product))];
+  return {
+    quote: `${count} customers report ${info.label || theme.replace(/_/g, " ")}.`,
+    body: `${info.summary || ""} Affects ${products.join(", ")}.`.trim(),
+    fix: info.fix || "Review the affected listings and supplier QC.",
+  };
+}
+
+function guardrailRuleText() {
+  const cfg = state.ppc_guardrail;
+  if (!cfg) return "Guardrail not configured.";
+  return escapeHtml(`Trailing ${cfg.window_days}-day ACoS > ${cfg.acos_threshold}% → lower that campaign's bid by ${cfg.bid_reduction_pct}% (minimum $${Number(cfg.min_bid).toFixed(2)}), at most once per day.`);
+}
+
+function renderCampaigns() {
+  const cfg = state.ppc_guardrail || {};
+  const windowDays = cfg.window_days || 7;
+  const rows = (state.campaigns || []).map((campaign) => {
+    const week = campaign.ad_history.slice(-windowDays);
+    const spend = week.reduce((sum, day) => sum + day.spend, 0);
+    const sales = week.reduce((sum, day) => sum + day.sales, 0);
+    const acos = sales ? (spend / sales) * 100 : 0;
+    const over = cfg.acos_threshold && acos > cfg.acos_threshold;
+    const change = (campaign.bid_changes || [])[0];
+    const status = over ? '<span class="status warning">Over limit</span>' : '<span class="status approved">Within limit</span>';
+    return `<tr><td><div class="product-name">${escapeHtml(campaign.name)}</div><div class="product-meta">${escapeHtml(campaign.sku)}</div></td>
+      <td class="number-cell">${money(spend)}</td><td class="number-cell">${money(sales)}</td>
+      <td class="number-cell">${number(acos, 1)}%</td><td class="number-cell">${money(campaign.bid_floor)}</td>
+      <td>${status}</td><td class="product-meta">${change ? `${money(change.from)} → ${money(change.to)} · ${escapeHtml(change.date)}` : "No changes"}</td></tr>`;
+  }).join("");
+  return `<section class="panel"><div class="panel-header"><div><h2 class="panel-title">Campaign guardrail</h2><div class="panel-subtitle">Trailing ${windowDays}-day performance and automatic bid changes</div></div><span class="category-pill">${(state.campaigns || []).length} campaigns</span></div>
+    <div class="table-wrap"><table><thead><tr><th>Campaign</th><th>${windowDays}d spend</th><th>${windowDays}d sales</th><th>${windowDays}d ACoS</th><th>Bid</th><th>Status</th><th>Last change</th></tr></thead><tbody>${rows || '<tr><td colspan="7"><div class="empty-state">No campaigns.</div></td></tr>'}</tbody></table></div></section>`;
+}
 
 function renderProcurementQueue() {
   const rows = state.products.map((product) => {
@@ -207,10 +270,11 @@ function renderOverview() {
   const critical = state.products.filter((product) => daysOfSupply(product) < 15).length;
   const current = currentAcos();
   const recentActivity = state.activity.slice(0, 5);
-  const reviews = state.reviews.slice(0, 5);
+  const reviews = [...state.reviews].sort((a, b) => a.rating - b.rating || b.date.localeCompare(a.date)).slice(0, 5);
+  const insight = reviewInsight();
   const body = `${heading("Operations overview", "A live read on marketplace health, automation, and inventory exposure.")}
     <div class="metrics">
-      ${metric("Portfolio ACoS", `${number(current, 1)}<span style="font:500 13px var(--font-ui)">%</span>`, '<span class="metric-change">↓ 2.8 pts</span> over 30 days', "teal", "LAST 30 DAYS")}
+      ${metric("Portfolio ACoS", `${number(current, 1)}<span style="font:500 13px var(--font-ui)">%</span>`, acosDeltaLabel() + " over 30 days", "teal", "LAST 30 DAYS")}
       ${metric("Units on hand", number(totalStock), `${state.products.length} active SKUs across the catalog`, "blue", "INVENTORY")}
       ${metric("Pending approvals", number(pending), `${money(state.orders.filter((order) => order.status === "pending").reduce((sum, order) => sum + order.amount, 0), 0)} committed spend`, "orange", "B2B WORKFLOWS")}
       ${metric("Critical stock alerts", number(critical), critical ? '<span class="metric-change warn">Action required</span> · PO draft automation on' : "All products above reorder threshold", "green", "DAYS OF SUPPLY")}
@@ -225,10 +289,10 @@ function renderOverview() {
         <div class="panel-content">${renderFeed(recentActivity, false)}</div></section>
       <section class="panel insight-panel"><div class="panel-content">
         <div class="insight-tag">AI review summary · Mock analysis</div>
-        <blockquote class="insight-quote">“3 customers report cracked or broken hinge hardware.”</blockquote>
-        <p class="insight-body">The recurring complaint points to a weak plastic hinge assembly. Two reviews mention damage on arrival despite an intact outer carton.</p>
-        <div class="recommendation"><strong>Recommended fix</strong><br />Replace the hinge connector with reinforced hardware and add a molded protective insert to the shipping carton.</div>
-        <div class="review-list">${reviews.map((review, index) => `<details data-review-index="${index}"><summary><span class="stars">★</span> &nbsp;${escapeHtml(review.product)} · ${escapeHtml(review.date)}</summary><p>${escapeHtml(review.text)}</p></details>`).join("")}</div>
+        <blockquote class="insight-quote">“${escapeHtml(insight.quote)}”</blockquote>
+        <p class="insight-body">${escapeHtml(insight.body)}</p>
+        <div class="recommendation"><strong>Recommended fix</strong><br />${escapeHtml(insight.fix)}</div>
+        <div class="review-list">${reviews.map((review, index) => `<details data-review-index="${index}"><summary><span class="stars">${"★".repeat(review.rating)}</span> &nbsp;${escapeHtml(review.product)} · ${escapeHtml(review.date)}</summary><p>${escapeHtml(review.text)}</p></details>`).join("")}</div>
       </div></section>
     </div>`;
   return body;
@@ -250,7 +314,7 @@ function renderPpc() {
     <div class="metrics metrics-five">
       ${metric("TACoS", "8.2%", "Total Advertising Cost of Sales · overall ad health", "green", "TOTAL ADS / TOTAL SALES")}
       ${metric("Search term spend", money(totalSpend, 0), `${number(totalClicks)} customer clicks tracked`, "orange", "MOCK CAMPAIGN DATA")}
-      ${metric("Portfolio ACoS", `${number(currentAcos(), 1)}%`, '<span class="metric-change">↓ 2.8 pts</span> month over month', "teal", "LAST 30 DAYS")}
+      ${metric("Portfolio ACoS", `${number(currentAcos(), 1)}%`, acosDeltaLabel() + " over 30 days", "teal", "LAST 30 DAYS")}
       ${metric("Exact keywords", number(qualified), "Auto-harvested · >5 conversions, <25% ACoS", "green", "TARGETED")}
       ${metric("Negative keywords", number(negatives), "Blocked after 15+ clicks without a sale", "blue", "WASTE CONTROL")}
     </div>
@@ -263,6 +327,8 @@ function renderPpc() {
         </div></div>
       </section>
     </div>
+    ${renderCampaigns()}
+    <div style="height:14px"></div>
     <section class="panel"><div class="panel-header"><div><h2 class="panel-title">Customer search terms</h2><div class="panel-subtitle">Evaluation runs automatically on each simulator tick</div></div><span class="category-pill">${state.search_terms.length} terms</span></div>
       <div class="table-wrap"><table><thead><tr><th>Search term</th><th>Clicks</th><th>Spend</th><th>Orders</th><th>ACoS</th><th>Automation status</th></tr></thead><tbody>${rows}</tbody></table></div></section>`;
 }
@@ -270,19 +336,31 @@ function renderPpc() {
 function renderCatalog() {
   if (!state.products.some((product) => product.asin === selectedCatalogAsin)) selectedCatalogAsin = state.products[0]?.asin || "";
   const selected = state.products.find((product) => product.asin === selectedCatalogAsin);
-  const profile = catalogProfiles[selectedCatalogAsin];
+  const profile = profileFor(selected);
   const rows = state.products.map((product) => {
-    const item = catalogProfiles[product.asin];
+    const item = profileFor(product);
     const sync = (state.execution_queue || []).some((job) => job.type === "catalog_push" && job.asin === product.asin && job.status === "synced");
-    return `<tr class="${product.asin === selectedCatalogAsin ? "selected-row" : ""}"><td><button type="button" class="table-select" data-catalog-select="${escapeHtml(product.asin)}">${escapeHtml(product.asin)}</button><div class="product-meta">${escapeHtml(product.sku)}</div></td><td class="number-cell">#${item.rank}</td><td><div class="gap-list">${item.gaps.map((gap) => `<span>${escapeHtml(gap)}</span>`).join("")}</div></td><td><span class="status ${sync ? "approved" : "pending"}">${sync ? "Synced" : "Staged"}</span></td></tr>`;
+    return `<tr class="${product.asin === selectedCatalogAsin ? "selected-row" : ""}"><td><button type="button" class="table-select" data-catalog-select="${escapeHtml(product.asin)}">${escapeHtml(product.asin)}</button><div class="product-meta">${escapeHtml(product.sku)}</div></td><td class="number-cell">${item.rank ? "#" + item.rank : "—"}</td><td><div class="gap-list">${item.gaps.map((gap) => `<span>${escapeHtml(gap)}</span>`).join("")}</div></td><td><span class="status ${sync ? "approved" : "pending"}">${sync ? "Synced" : "Staged"}</span></td></tr>`;
   }).join("");
   const queued = (state.execution_queue || []).some((job) => job.type === "catalog_push" && job.asin === selectedCatalogAsin && job.status === "staged");
   return `${heading("SEO & Catalog Agent", "Remap listing content against observed search demand, review keyword gaps, and stage controlled updates.", "Catalog operations")}
     <div class="catalog-controls"><label for="catalog-product">Listing</label><select id="catalog-product" data-catalog-product>${state.products.map((product) => `<option value="${escapeHtml(product.asin)}" ${product.asin === selectedCatalogAsin ? "selected" : ""}>${escapeHtml(product.name)} · ${escapeHtml(product.asin)}</option>`).join("")}</select><span class="status pending">Sandbox · staged only</span></div>
     <div class="catalog-compare">
-      <section class="panel listing-panel"><div class="panel-header"><div><h2 class="panel-title">Current live listing copy</h2><div class="panel-subtitle">Snapshot view · ${escapeHtml(selected.asin)}</div></div><span class="status pending">Current</span></div><div class="panel-content"><div class="listing-field"><span>Title</span><p>${escapeHtml(profile.currentTitle)}</p></div><div class="listing-field"><span>Key features</span><ul>${profile.currentBullets.map((bullet) => `<li>${escapeHtml(bullet)}</li>`).join("")}</ul></div><div class="listing-meta"><span>Organic rank</span><strong>#${profile.rank}</strong><span>Catalog source</span><strong>Mock snapshot</strong></div></div></section>
+      <section class="panel listing-panel"><div class="panel-header"><div><h2 class="panel-title">Current live listing copy</h2><div class="panel-subtitle">Snapshot view · ${escapeHtml(selected.asin)}</div></div><span class="status pending">Current</span></div><div class="panel-content"><div class="listing-field"><span>Title</span><p>${escapeHtml(profile.currentTitle)}</p></div><div class="listing-field"><span>Key features</span><ul>${profile.currentBullets.map((bullet) => `<li>${escapeHtml(bullet)}</li>`).join("")}</ul></div><div class="listing-meta"><span>Organic rank</span><strong>${profile.rank ? "#" + profile.rank : "—"}</strong><span>Catalog source</span><strong>Mock snapshot</strong></div></div></section>
       <section class="panel listing-panel optimized-panel"><div class="panel-header"><div><h2 class="panel-title">AI-optimized / remapped listing copy</h2><div class="panel-subtitle">Suggested draft · keyword coverage mapped</div></div><span class="status warning">Review required</span></div><div class="metric-badges"><span class="metric-badge">🔍 Search Volume: 45k/mo</span><span class="metric-badge good">🎯 Keyword Difficulty: Low</span></div><div class="panel-content"><div class="listing-field"><span>Proposed title</span><p>${escapeHtml(profile.optimizedTitle)}</p></div><div class="listing-field"><span>Proposed key features</span><ul>${profile.optimizedBullets.map((bullet) => `<li>${escapeHtml(bullet)}</li>`).join("")}</ul></div><div class="listing-meta"><span>Target gaps</span><strong>${profile.gaps.length} mapped</strong><span>Sync state</span><strong>${queued ? "Staged in sandbox" : "Not submitted"}</strong></div></div></section>
     </div>
+    <section class="panel"><div class="panel-header"><div><h2 class="panel-title">Add new product to catalog</h2><div class="panel-subtitle">Create a new catalog listing that appears across inventory, procurement, and seller store</div></div></div>
+      <div class="panel-content"><form id="add-catalog-product-form" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;align-items:end;">
+        <div><label style="display:block;margin-bottom:4px;color:var(--muted);font-size:10px;font-weight:700;text-transform:uppercase;">Product Name</label><input name="name" type="text" placeholder="e.g. Bamboo Desk Organizer" required style="width:100%;min-height:34px;padding:0 10px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink);font:inherit;font-size:11px;"></div>
+        <div><label style="display:block;margin-bottom:4px;color:var(--muted);font-size:10px;font-weight:700;text-transform:uppercase;">SKU</label><input name="sku" type="text" placeholder="e.g. BD-OG-01" required style="width:100%;min-height:34px;padding:0 10px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink);font:inherit;font-size:11px;"></div>
+        <div><label style="display:block;margin-bottom:4px;color:var(--muted);font-size:10px;font-weight:700;text-transform:uppercase;">ASIN</label><input name="asin" type="text" placeholder="e.g. B0XYZ12345" required style="width:100%;min-height:34px;padding:0 10px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink);font:inherit;font-size:11px;"></div>
+        <div><label style="display:block;margin-bottom:4px;color:var(--muted);font-size:10px;font-weight:700;text-transform:uppercase;">Category</label><input name="category" type="text" placeholder="e.g. Office" required style="width:100%;min-height:34px;padding:0 10px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink);font:inherit;font-size:11px;"></div>
+        <div><label style="display:block;margin-bottom:4px;color:var(--muted);font-size:10px;font-weight:700;text-transform:uppercase;">Price ($)</label><input name="price" type="number" step="0.01" placeholder="24.99" required style="width:100%;min-height:34px;padding:0 10px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink);font:inherit;font-size:11px;"></div>
+        <div><label style="display:block;margin-bottom:4px;color:var(--muted);font-size:10px;font-weight:700;text-transform:uppercase;">Stock Units</label><input name="stock" type="number" step="1" placeholder="500" required style="width:100%;min-height:34px;padding:0 10px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink);font:inherit;font-size:11px;"></div>
+        <div><label style="display:block;margin-bottom:4px;color:var(--muted);font-size:10px;font-weight:700;text-transform:uppercase;">Daily Velocity</label><input name="daily_velocity" type="number" step="0.1" placeholder="15" style="width:100%;min-height:34px;padding:0 10px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink);font:inherit;font-size:11px;"></div>
+        <div><label style="display:block;margin-bottom:4px;color:var(--muted);font-size:10px;font-weight:700;text-transform:uppercase;">Supplier</label><input name="supplier" type="text" placeholder="e.g. Acme Mfg" style="width:100%;min-height:34px;padding:0 10px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink);font:inherit;font-size:11px;"></div>
+        <button type="submit" class="button button-primary" style="min-height:36px;padding:0 16px;">Add Product to Catalog</button>
+      </form></div></section>
     <section class="panel"><div class="panel-header"><div><h2 class="panel-title">Organic indexing and keyword gaps</h2><div class="panel-subtitle">Ranks and gaps are illustrative until connected to approved search data</div></div><span class="category-pill">${state.products.length} ASINs</span></div><div class="table-wrap"><table><thead><tr><th>ASIN</th><th>Current organic indexing rank</th><th>Keyword gaps detected</th><th>Sync status</th></tr></thead><tbody>${rows}</tbody></table></div></section>
     <div class="catalog-action"><div><strong>Seller Central update</strong><span>Approval stages the selected draft in this sandbox; an SP-API worker is not configured.</span></div><button class="button button-primary" type="button" data-agent-action="catalog_push" data-asin="${escapeHtml(selectedCatalogAsin)}" ${queued ? "disabled" : ""}>Approve &amp; Push to Seller Central via SP-API</button></div>`;
 }
@@ -295,6 +373,8 @@ function renderHow() {
         <div class="flow-step"><span class="flow-number">02</span><div><div class="flow-title">Advance the mock market</div><div class="flow-copy">Every 10 seconds an active dashboard requests a tick. The backend checks the last update time, so simultaneous requests do not advance the same interval twice.</div></div><span class="flow-endpoint">POST /api/simulator/tick</span></div>
         <div class="flow-step"><span class="flow-number">03</span><div><div class="flow-title">Evaluate automation rules</div><div class="flow-copy">Competitor prices move, qualified search terms are classified, and unit stock burns down from configured daily velocity.</div></div><span class="flow-endpoint">MockSimulator.tick()</span></div>
         <div class="flow-step"><span class="flow-number">04</span><div><div class="flow-title">Persist and report decisions</div><div class="flow-copy">New prices, keyword actions, low-stock drafts, and activity records are saved before the dashboard refreshes.</div></div><span class="flow-endpoint">JSON locally · Supabase on Vercel</span></div>
+        <div class="flow-step"><span class="flow-number">05</span><div><div class="flow-title">Multi-channel product sync</div><div class="flow-copy">Product edits write to global_products instantly, mark marketplace listings as Syncing..., then a 3-second background timer flips them to Live & In Sync.</div></div><span class="flow-endpoint">POST /api/products/sync</span></div>
+        <div class="flow-step"><span class="flow-number">06</span><div><div class="flow-title">Logistics & delivery tracking</div><div class="flow-copy">Shipment webhooks update order_shipments and drive the step-progress bars and tracking grid in real time.</div></div><span class="flow-endpoint">POST /api/webhooks/shipping</span></div>
       </div></div>
     </section>
     <div class="section-grid equal">
@@ -328,12 +408,13 @@ function renderInventory() {
   }).join("");
   const alertStrip = lowStock.length ? `<div class="critical-strip"><span class="critical-mark">!</span><div><div class="critical-title">${lowStock.length} critical replenishment ${lowStock.length === 1 ? "alert" : "alerts"}</div><div class="critical-detail">${lowStock.map((product) => `${escapeHtml(product.name)} · ${number(daysOfSupply(product), 1)} days of supply`).join(" &nbsp; / &nbsp; ")}<br />A purchase order draft is generated automatically when coverage falls below 15 days.</div></div></div>` : "";
   const drafts = state.purchase_orders.length ? state.purchase_orders.map((po) => {
-    const unitCost = mockUnitCost[po.product_asin] ?? 0;
+    const unitCost = mockUnitCost[po.product_asin];
     const product = state.products.find((item) => item.asin === po.product_asin);
     const sku = product ? product.sku : "";
     const queued = (state.execution_queue || []).some((job) => job.type === "procurement_po" && job.sku === sku && job.status === "staged");
+    const capital = unitCost === undefined ? "Unit cost not set" : money(po.units * unitCost);
     return `<div class="po-row po-card"><div><div class="po-name">${escapeHtml(po.product_name)}</div><div class="po-meta">${escapeHtml(po.supplier)} · ${number(po.units)} units · ${escapeHtml(po.status)}</div>
-      <div class="po-total">Total Capital Required: <strong>${money(po.units * unitCost)}</strong></div></div>
+      <div class="po-total">Total Capital Required: <strong>${capital}</strong></div></div>
       <div class="po-actions"><span class="po-id">${escapeHtml(po.id)}</span>
       <button class="button ${queued ? "" : "button-primary"}" type="button" data-send-po data-sku="${escapeHtml(sku)}" data-units="${po.units}" ${queued || !sku ? "disabled" : ""}>${queued ? "In Procurement Queue" : "Send to Procurement Queue"}</button></div></div>`;
   }).join("") : '<div class="empty-state">No replenishment drafts yet.</div>';
@@ -353,16 +434,43 @@ function renderInventory() {
       <div class="table-wrap"><table><thead><tr><th>Product</th><th>Stock cover</th><th>Velocity</th><th>Risk status</th><th>PO draft</th></tr></thead><tbody>${rows}</tbody></table></div></section>`;
 }
 
+function renderSellerStore() {
+  const products = state.seller_store || [];
+  const visible = products.filter((p) => p.visible);
+  const hidden = products.filter((p) => !p.visible);
+  const catalogNotAdded = state.products.filter((p) => !products.some((s) => s.asin === p.asin));
+  const rows = products.map((product) => {
+    const tone = product.visible ? "approved" : "denied";
+    return `<tr><td><div class="product-name">${escapeHtml(product.name)}</div><div class="product-meta">${escapeHtml(product.sku)} · <span class="asin">${escapeHtml(product.asin)}</span></div></td>
+      <td class="number-cell">${number(product.price, 2)}</td><td class="number-cell">${number(product.stock, 1)} units</td>
+      <td>${escapeHtml(product.category)}</td>
+      <td>${statusPill(tone)}</td>
+      <td class="action-row"><button class="button ${product.visible ? "button-deny" : "button-approve"}" data-seller-toggle="${escapeHtml(product.id)}">${product.visible ? "Hide" : "Show"}</button></td></tr>`;
+  }).join("");
+  const addOptions = catalogNotAdded.map((p) => `<option value="${escapeHtml(p.asin)}">${escapeHtml(p.name)} (${escapeHtml(p.sku)})</option>`).join("");
+  return `${heading("Seller Store", "Products listed and visible on your seller storefront.", "Marketplace")}
+    <div class="metrics">
+      ${metric("Listed products", number(products.length), `${visible.length} visible · ${hidden.length} hidden`, "blue", "SELLER STORE")}
+      ${metric("Visible products", number(visible.length), "Live on storefront", "green", "VISIBLE")}
+      ${metric("Hidden products", number(hidden.length), hidden.length ? '<span class="metric-change warn">Not shown to shoppers</span>' : "All products visible", hidden.length ? "orange" : "green", "HIDDEN")}
+    </div>
+    <section class="panel"><div class="panel-header"><div><h2 class="panel-title">Add product to seller store</h2><div class="panel-subtitle">Select from your catalog to list on the storefront</div></div></div>
+      <div class="panel-content"><div class="catalog-controls"><label>Catalog product</label><select id="seller-store-add-select">${addOptions}</select></div><div style="margin-top:10px;"><button class="button button-primary" data-seller-add>${sellerStoreAddAsin ? "Selected: " + escapeHtml(sellerStoreAddAsin) : "Add to seller store"}</button></div></div></section>
+    <section class="panel"><div class="panel-header"><div><h2 class="panel-title">Products on seller store</h2><div class="panel-subtitle">Toggle visibility to show/hide items from shoppers</div></div></div>
+      <div class="table-wrap"><table><thead><tr><th>Product</th><th>Price</th><th>Stock</th><th>Category</th><th>Visibility</th><th>Action</th></tr></thead><tbody>${rows || '<tr><td colspan="6" class="empty-state">No products listed yet. Add products from your catalog.</td></tr>'}</tbody></table></div></section>`;
+}
+
 function renderRepricer() {
   const rows = state.products.map((product) => {
     const gap = product.price - product.competitor_price;
     const position = gap <= 0 ? '<span class="status approved">At or below market</span>' : '<span class="status warning">Price opportunity</span>';
     const margin = payoutMargin(product);
-    const marginTone = margin >= 20 ? "approved" : margin >= 10 ? "warning" : "critical";
+    const marginTone = margin === null ? "pending" : margin >= 20 ? "approved" : margin >= 10 ? "warning" : "critical";
+    const marginLabel = margin === null ? "—" : `${number(margin, 1)}%`;
     const headroom = product.price - product.min_floor;
     return `<tr><td><div class="product-name">${escapeHtml(product.name)}</div><div class="product-meta"><span class="asin">${escapeHtml(product.asin)}</span> · ${escapeHtml(product.sku)}</div></td>
       <td><div class="price">${money(product.price)}</div><div class="sub-price">Your offer</div></td>
-      <td><span class="status ${marginTone}">${number(margin, 1)}%</span></td>
+      <td><span class="status ${marginTone}">${marginLabel}</span></td>
       <td><div class="price">${money(product.competitor_price)}</div><div class="sub-price">Lowest competitor</div></td>
       <td><div class="price">${money(product.min_floor)}</div><div class="sub-price">${money(headroom)} headroom</div></td>
       <td>${position}</td></tr>`;
@@ -505,6 +613,7 @@ function render() {
     catalog: renderCatalog,
     ppc: renderPpc,
     inventory: renderInventory,
+    "seller-store": renderSellerStore,
     repricer: renderRepricer,
     activity: renderActivity,
     approvals: renderApprovals,
@@ -641,6 +750,48 @@ document.addEventListener("click", async (event) => {
     approvalFilter = approvalButton.dataset.approvalFilter;
     render();
   }
+  const sellerAddButton = event.target.closest("[data-seller-add]");
+  if (sellerAddButton) {
+    if (!sellerStoreAddAsin) {
+      showToast("Please select a product from the catalog first.", true);
+      return;
+    }
+    sellerAddButton.disabled = true;
+    try {
+      const response = await fetch("/api/seller-store/add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({ asin: sellerStoreAddAsin }),
+      });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.detail || "Could not add product to seller store");
+      await fetchState();
+      sellerStoreAddAsin = "";
+      showToast(payload.message || "Product added to seller store.");
+    } catch (error) {
+      sellerAddButton.disabled = false;
+      showToast(error.message, true);
+    }
+    return;
+  }
+  const sellerToggleButton = event.target.closest("[data-seller-toggle]");
+  if (sellerToggleButton) {
+    sellerToggleButton.disabled = true;
+    try {
+      const response = await fetch(`/api/seller-store/${sellerToggleButton.dataset.sellerToggle}/toggle-visibility`, {
+        method: "POST",
+        headers: { Accept: "application/json" },
+      });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.detail || "Could not update visibility");
+      await fetchState();
+      showToast(`Product visibility set to ${payload.product.visible ? "visible" : "hidden"} in seller store.`);
+    } catch (error) {
+      sellerToggleButton.disabled = false;
+      showToast(error.message, true);
+    }
+    return;
+  }
 });
 
 document.addEventListener("change", (event) => {
@@ -652,6 +803,48 @@ document.addEventListener("change", (event) => {
   if (event.target.matches("[data-catalog-product]")) {
     selectedCatalogAsin = event.target.value;
     render();
+  }
+  if (event.target.id === "seller-store-add-select") {
+    sellerStoreAddAsin = event.target.value;
+    render();
+  }
+});
+
+document.addEventListener("submit", async (event) => {
+  const addCatalogForm = event.target.closest("#add-catalog-product-form");
+  if (addCatalogForm) {
+    event.preventDefault();
+    const formData = new FormData(addCatalogForm);
+    const payload = {
+      name: formData.get("name"),
+      sku: formData.get("sku"),
+      asin: formData.get("asin"),
+      category: formData.get("category"),
+      price: parseFloat(formData.get("price")),
+      stock: parseFloat(formData.get("stock")),
+      daily_velocity: formData.get("daily_velocity") ? parseFloat(formData.get("daily_velocity")) : undefined,
+      supplier: formData.get("supplier") || undefined,
+    };
+    const submitBtn = addCatalogForm.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Adding...";
+    try {
+      const response = await fetch("/api/catalog-products", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.detail || "Could not add product to catalog");
+      await fetchState();
+      addCatalogForm.reset();
+      showToast(result.message || "Product added to catalog.");
+    } catch (error) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Add Product to Catalog";
+      showToast(error.message, true);
+    }
+    return;
   }
 });
 
