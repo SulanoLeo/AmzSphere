@@ -291,4 +291,24 @@ tbody tr:hover { background: #fbfcfc; }
   .flow-step { grid-template-columns: 28px minmax(0, 1fr); gap: 10px; }
   .flow-endpoint { grid-column: 2; justify-self: start; text-align: left; }
   .toast { right: 12px; bottom: 12px; }
+
+
+  .metric-badges { padding: 10px 18px 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.metric-badge { padding: 5px 10px; border: 1px solid var(--line); border-radius: 999px; background: #f4f7f9; color: var(--navy); font-size: 11px; font-weight: 600; }
+.metric-badge.good { border-color: #c4e2d4; background: var(--green-soft); color: var(--green); }
+
+.switch { display: inline-flex; align-items: center; gap: 9px; cursor: pointer; font-size: 12px; font-weight: 600; color: var(--navy); }
+.switch input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.switch-track { width: 36px; height: 20px; position: relative; border-radius: 10px; background: #c8d1d6; transition: background 140ms ease; flex: none; }
+.switch-track::after { content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: #fff; transition: transform 140ms ease; box-shadow: 0 1px 2px #0003; }
+.switch input:checked + .switch-track { background: var(--teal); }
+.switch input:checked + .switch-track::after { transform: translateX(16px); }
+.switch input:focus-visible + .switch-track { outline: 3px solid #63b6c2; outline-offset: 2px; }
+
+@media (min-width: 1151px) { .metrics.metrics-five { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+
+.po-card { align-items: flex-start; }
+.po-total { margin-top: 6px; color: var(--navy); font-size: 11px; }
+.po-actions { display: grid; justify-items: end; gap: 8px; }
+.po-actions .button { min-height: 30px; font-size: 10px; }
 }
