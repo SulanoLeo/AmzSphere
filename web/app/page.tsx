@@ -189,7 +189,7 @@ export default function DashboardPage() {
         {poMessage && <p role="status" className="border-b border-line bg-canvas px-4 py-2 text-xs">{poMessage}</p>}
         <div className="divide-y divide-line">{(data?.pending_purchase_orders || []).map((purchaseOrder) => <div key={purchaseOrder.id} className="flex flex-wrap items-center justify-between gap-3 px-4 py-3">
           <div className="min-w-[220px] flex-1"><p className="text-xs font-semibold text-indigo-950">{purchaseOrder.vendor}</p><p className="mt-1 text-[10px] text-muted">{purchaseOrder.lines.map((line) => `${line.sku} · ${line.quantity} units`).join("; ")}</p></div>
-          <strong className="text-xs tabular-nums">{purchaseOrder.currency} {(purchaseOrder.total_amount_minor / 100).toFixed(2)}</strong>
+          <strong className="text-xs tabular-nums">${purchaseOrder.currency} {(purchaseOrder.total_amount_minor / 100).toFixed(2)}</strong>
           <div className="flex items-center gap-2"><a className="inline-flex min-h-9 items-center rounded-md border border-line px-3 text-xs font-semibold hover:bg-canvas" href={`/api/purchase-orders/${encodeURIComponent(purchaseOrder.id)}/pdf`}>PO PDF</a>{isApprover ? <><Button variant="outline" onClick={() => void decidePurchaseOrder(purchaseOrder.id, "deny")}>Deny</Button><Button onClick={() => void decidePurchaseOrder(purchaseOrder.id, "approve")}>Approve</Button></> : <Badge className="bg-amber-50 text-amber-800">Approver required</Badge>}</div>
         </div>)}{!data?.pending_purchase_orders.length && <p className="px-4 py-6 text-center text-xs text-muted">No purchase orders are awaiting review.</p>}</div>
       </Card>
