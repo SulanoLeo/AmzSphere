@@ -311,4 +311,5 @@ tbody tr:hover { background: #fbfcfc; }
 .po-total { margin-top: 6px; color: var(--navy); font-size: 11px; }
 .po-actions { display: grid; justify-items: end; gap: 8px; }
 .po-actions .button { min-height: 30px; font-size: 10px; }
+
 }

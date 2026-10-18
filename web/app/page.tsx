@@ -2,12 +2,14 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { Activity, Boxes, ChartNoAxesCombined, CircleDollarSign, ClipboardCheck, FileText, PackageSearch, RefreshCw, ShieldCheck, TriangleAlert } from "lucide-react";
+import { Activity, Boxes, ChartNoAxesCombined, CircleDollarSign, ClipboardCheck, FileText, PackageSearch, RefreshCw, ShieldCheck, Store, TriangleAlert } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { BuyBoxStatus } from "@/components/product/BuyBoxStatus";
+import { useProduct } from "@/context/ProductContext";
 
 type Product = {
   asin: string;
@@ -31,7 +33,7 @@ type Dashboard = {
 type SellerOption = { id: string; merchant_id: string; marketplace_id: string; region: string };
 
 const navigation = [
-  ["Overview", "/", Activity], ["SEO & Catalog", "/catalog", PackageSearch],
+  ["Overview", "/", Activity], ["SEO & Catalog", "/catalog", PackageSearch], ["Sourcing", "/sourcing", Store],
   ["PPC Advertising", "/ppc", ChartNoAxesCombined], ["Inventory", "/inventory", Boxes],
   ["Pricing", "/repricer", CircleDollarSign], ["Activity Log", "/activity", FileText],
   ["Approvals", "/approvals", ClipboardCheck],
@@ -45,6 +47,7 @@ function Metric({ label, value, detail, icon: Icon }: { label: string; value: st
 }
 
 export default function DashboardPage() {
+  const { product } = useProduct();
   const [data, setData] = useState<Dashboard | null>(null);
   const [sellers, setSellers] = useState<SellerOption[]>([]);
   const [selectedSeller, setSelectedSeller] = useState("");
@@ -151,11 +154,12 @@ export default function DashboardPage() {
     <main className="min-w-0 px-4 py-5 md:px-8 md:py-8">
       <header className="mb-7 flex flex-wrap items-center justify-between gap-4 border-b border-line pb-5">
         <div><p className="text-[10px] font-bold uppercase tracking-widest text-teal-700">Seller operations</p><h1 className="mt-1 text-2xl font-semibold text-indigo-950">Operations overview</h1><p className="mt-1 text-sm text-muted">Inventory health and human-review work queue.</p></div>
-        <div className="flex flex-wrap items-center gap-3">{sellers.length > 1 && <select aria-label="Seller account" className="h-9 max-w-56 rounded-md border border-line bg-white px-2 text-xs" value={selectedSeller} onChange={(event) => setSelectedSeller(event.target.value)}>{sellers.map((seller) => <option key={seller.id} value={seller.id}>{seller.merchant_id} · {seller.marketplace_id}</option>)}</select>}<Badge className="bg-amber-50 text-amber-800">{data ? data.marketplace_id : "Not connected"}</Badge><Button variant="outline" onClick={() => void syncSeller()} disabled={!selectedSeller || loading}><RefreshCw size={15} />Sync seller data</Button><Button variant="outline" onClick={() => selectedSeller && void loadDashboard(selectedSeller)} disabled={!selectedSeller || loading}><RefreshCw size={15} className={loading ? "animate-spin" : ""} />Refresh</Button></div>
+        <div className="flex flex-wrap items-center gap-3">{sellers.length > 1 && <select aria-label="Seller account" className="h-9 max-w-56 rounded-md border border-line bg-white px-2 text-xs" value={selectedSeller} onChange={(event) => setSelectedSeller(event.target.value)}>{sellers.map((seller) => <option key={seller.id} value={seller.id}>{seller.merchant_id} · {seller.marketplace_id}</option>)}</select>}<Badge className="bg-amber-50 text-amber-800">{data ? data.marketplace_id : "Not connected"}</Badge><Button variant="outline" onClick={() => void syncSeller()} disabled={!selectedSeller || loading}><RefreshCw size={15} />Sync seller data</Button><Button variant="outline" onClick={() => selectedSeller && void loadDashboard(selectedSeller)} disabled={!selectedSeller || loading}><RefreshCw size={15} className={loading ? "animate-spin" : ""} />Refresh</Button><BuyBoxStatus /></div>
       </header>
 
       {syncMessage && <p role="status" className="mb-4 rounded-md border border-line bg-white px-4 py-3 text-xs">{syncMessage}</p>}
       {error && <div role="alert" className="mb-5 flex items-start gap-3 border-l-4 border-amber-500 bg-amber-50 p-4 text-sm text-amber-950"><TriangleAlert size={18} /><div><strong>Backend not ready</strong><p className="mt-1">{error}</p><a href="/api/auth/amazon/start" className="mt-2 inline-block font-semibold underline">Connect a seller account</a></div></div>}
+      {!product.hasBuyBox && <div role="alert" className="mb-6 flex items-start gap-3 border-l-4 border-red-500 bg-red-50 p-4 text-sm text-red-950"><TriangleAlert size={18} /><div><strong>Urgent: Buy Box lost</strong><p className="mt-1">A competitor has taken the Buy Box at ${(product.competitorPrice ?? product.retailPrice - 0.1).toFixed(2)}. Trigger the Smart Repricer to reclaim it.</p><Link href="/repricer"><Button variant="outline">Open Repricer</Button></Link></div></div>}
 
       <section className="mb-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <Metric label="Catalog items" value={String(data?.products.length ?? "—")} detail="Seller-linked ASINs" icon={PackageSearch} />

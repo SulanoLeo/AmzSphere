@@ -8,6 +8,7 @@ import { ArrowLeft, BadgeCheck, Bot, LoaderCircle, Search } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { StorefrontView } from "@/components/product/StorefrontView";
 
 function CatalogWorkspace() {
   const searchParams = useSearchParams();
@@ -103,6 +104,7 @@ function CatalogWorkspace() {
         <div><p className="text-[10px] font-bold uppercase tracking-wide text-muted">Suggested bullets &amp; terms</p><pre className="mt-2 overflow-auto rounded-md bg-canvas p-3 text-[10px]">{JSON.stringify({ bullets: (operationResult.suggestion as Record<string, unknown> | undefined)?.bullet_points, backend_search_terms: (operationResult.suggestion as Record<string, unknown> | undefined)?.backend_search_terms }, null, 2)}</pre></div>
         {operationStatus === "review_required" && <div className="md:col-span-2">{isApprover ? <Button onClick={() => void approveSuggestion()} disabled={busy}>Approve &amp; queue Amazon listing feed</Button> : <Badge className="bg-amber-50 text-amber-800">Approver permission required to publish</Badge>}</div>}
       </CardContent></Card>}
+      <Card className="lg:col-span-2"><CardHeader><div><h2 className="text-sm font-semibold text-indigo-950">Simulated Amazon Storefront</h2><p className="mt-1 text-xs text-muted">Live listing preview updated reactively from sourcing inputs.</p></div><Badge>Preview</Badge></CardHeader><CardContent><StorefrontView /></CardContent></Card>
     </div>
   </main>;
 }
