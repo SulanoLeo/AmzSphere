@@ -1,14 +1,21 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "functions": {
-    "server.py": {
-      "includeFiles": "mock_db.json"
+  "services": {
+    "app": {
+      "root": ".",
+      "framework": "fastapi"
+    },
+    "web": {
+      "root": "web",
+      "framework": "nextjs"
     }
   },
-  "crons": [
+  "rewrites": [
     {
-      "path": "/api/cron/simulator",
-      "schedule": "0 5 * * *"
+      "source": "/(.*)",
+      "destination": {
+        "service": "app"
+      }
     }
   ]
 }
