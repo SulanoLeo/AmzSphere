@@ -10,4 +10,4 @@ node_modules/
 .next/
 out/
 backend/var/
-*.pdf
+*.pdf*.swp
