@@ -12,3 +12,4 @@ out/
 backend/var/
 *.pdf
 *.swp
+*.tsbuildinfo
