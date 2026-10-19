@@ -1,17 +1,16 @@
 import NextAuth from "next-auth";
-import Keycloak from "next-auth/providers/keycloak";
+import Google from "next-auth/providers/google";
 
-const keycloakProvider =
-  process.env.AUTH_KEYCLOAK_ID && process.env.AUTH_KEYCLOAK_SECRET && process.env.AUTH_KEYCLOAK_ISSUER
-    ? [Keycloak({
-        clientId: process.env.AUTH_KEYCLOAK_ID,
-        clientSecret: process.env.AUTH_KEYCLOAK_SECRET,
-        issuer: process.env.AUTH_KEYCLOAK_ISSUER,
+const googleProvider =
+  process.env.AUTH_GOOGLE_ID && process.env.AUTH_GOOGLE_SECRET
+    ? [Google({
+        clientId: process.env.AUTH_GOOGLE_ID,
+        clientSecret: process.env.AUTH_GOOGLE_SECRET,
       })]
     : [];
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  providers: keycloakProvider,
+  providers: googleProvider,
   session: { strategy: "jwt", maxAge: 60 * 60 * 8 },
   pages: { signIn: "/signin" },
 });
