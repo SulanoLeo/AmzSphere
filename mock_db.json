@@ -1,6 +1,6 @@
 {
-  "last_updated": "2026-10-18T18:17:59.150620+00:00",
-  "history_end": "2026-10-18",
+  "last_updated": "2026-10-19T19:33:39.231213+00:00",
+  "history_end": "2026-10-19",
   "manager": {
     "name": "User",
     "role": "Procurement manager",
@@ -13,13 +13,13 @@
       "sku": "AF-LS-02",
       "category": "Office",
       "price": 34.9,
-      "competitor_price": 34.5,
+      "competitor_price": 34.06,
       "market_price": 34.5,
       "min_floor": 27.5,
       "max_price": 39.99,
       "unit_cost": 15.4,
-      "stock": 614.082,
-      "daily_velocity": 17.5,
+      "stock": 614.044,
+      "daily_velocity": 17.4,
       "lead_time_days": 34,
       "supplier": "Shenzhen Northstar Manufacturing",
       "po_draft_id": null
@@ -30,13 +30,13 @@
       "sku": "QC-M-11",
       "category": "Electronics",
       "price": 22.12,
-      "competitor_price": 22.13,
+      "competitor_price": 22.31,
       "market_price": 22.99,
       "min_floor": 17.25,
       "max_price": 26.99,
       "unit_cost": 11.5,
-      "stock": 373.082,
-      "daily_velocity": 14.1,
+      "stock": 373.044,
+      "daily_velocity": 14.3,
       "lead_time_days": 28,
       "supplier": "Ningbo Kestrel Electronics",
       "po_draft_id": null
@@ -47,13 +47,13 @@
       "sku": "TG-BS-04",
       "category": "Home & Kitchen",
       "price": 13.41,
-      "competitor_price": 13.62,
+      "competitor_price": 13.65,
       "market_price": 13.49,
       "min_floor": 9.25,
       "max_price": 16.99,
       "unit_cost": 4.75,
-      "stock": 138.541,
-      "daily_velocity": 12.3,
+      "stock": 138.522,
+      "daily_velocity": 12.4,
       "lead_time_days": 21,
       "supplier": "Evergreen Household Goods",
       "po_draft_id": "PO-DEC8A6"
@@ -63,14 +63,14 @@
       "name": "Luma USB-C Desk Light",
       "sku": "LM-DL-08",
       "category": "Lighting",
-      "price": 23.91,
-      "competitor_price": 24.3,
+      "price": 23.31,
+      "competitor_price": 23.32,
       "market_price": 24.49,
       "min_floor": 21.0,
       "max_price": 29.99,
       "unit_cost": 12.8,
-      "stock": 760.623,
-      "daily_velocity": 22.0,
+      "stock": 760.566,
+      "daily_velocity": 21.8,
       "lead_time_days": 41,
       "supplier": "Shenzhen Northstar Manufacturing",
       "po_draft_id": null
@@ -80,14 +80,14 @@
       "name": "SnapDock Cable Organizer Set",
       "sku": "SD-CO-06",
       "category": "Office",
-      "price": 9.9,
-      "competitor_price": 9.99,
+      "price": 9.61,
+      "competitor_price": 9.62,
       "market_price": 9.79,
       "min_floor": 8.5,
       "max_price": 11.99,
       "unit_cost": 3.85,
-      "stock": 238.082,
-      "daily_velocity": 19.4,
+      "stock": 238.044,
+      "daily_velocity": 19.3,
       "lead_time_days": 19,
       "supplier": "Evergreen Household Goods",
       "po_draft_id": "PO-7C3D86"
@@ -98,12 +98,12 @@
       "sku": "BD-OG-01",
       "category": "Office",
       "price": 24.97,
-      "competitor_price": 24.64,
+      "competitor_price": 24.88,
       "market_price": 24.99,
       "min_floor": 19.992,
       "max_price": 29.987999999999996,
       "unit_cost": 12.495,
-      "stock": 495.102,
+      "stock": 495.064,
       "daily_velocity": 15.0,
       "lead_time_days": 21,
       "supplier": "Test Supplier",
@@ -139,7 +139,7 @@
       "min_floor": 27.5,
       "max_price": 39.99,
       "unit_cost": 15.4,
-      "stock": 614.082,
+      "stock": 614.044,
       "daily_velocity": 17.7,
       "lead_time_days": 34,
       "supplier": "Shenzhen Northstar Manufacturing",
@@ -156,7 +156,7 @@
       "min_floor": 17.25,
       "max_price": 26.99,
       "unit_cost": 11.5,
-      "stock": 373.082,
+      "stock": 373.044,
       "daily_velocity": 14.1,
       "lead_time_days": 28,
       "supplier": "Ningbo Kestrel Electronics",
@@ -173,7 +173,7 @@
       "min_floor": 9.25,
       "max_price": 16.99,
       "unit_cost": 4.75,
-      "stock": 138.541,
+      "stock": 138.522,
       "daily_velocity": 12.3,
       "lead_time_days": 21,
       "supplier": "Evergreen Household Goods",
@@ -190,7 +190,7 @@
       "min_floor": 21.0,
       "max_price": 29.99,
       "unit_cost": 12.8,
-      "stock": 760.623,
+      "stock": 760.566,
       "daily_velocity": 22.2,
       "lead_time_days": 41,
       "supplier": "Shenzhen Northstar Manufacturing",
@@ -207,7 +207,7 @@
       "min_floor": 8.5,
       "max_price": 11.99,
       "unit_cost": 3.85,
-      "stock": 238.082,
+      "stock": 238.044,
       "daily_velocity": 19.6,
       "lead_time_days": 19,
       "supplier": "Evergreen Household Goods",
@@ -224,7 +224,7 @@
       "min_floor": 19.992,
       "max_price": 29.987999999999996,
       "unit_cost": 12.495,
-      "stock": 495.102,
+      "stock": 495.064,
       "daily_velocity": 15.0,
       "lead_time_days": 21,
       "supplier": "Test Supplier",
@@ -419,7 +419,6 @@
   ],
   "sales_history": {
     "AF-LS-02": [
-      22,
       15,
       16,
       18,
@@ -448,10 +447,10 @@
       17,
       18,
       20,
-      13
+      13,
+      20
     ],
     "QC-M-11": [
-      11,
       9,
       11,
       12,
@@ -480,10 +479,10 @@
       19,
       21,
       21,
-      11
+      11,
+      15
     ],
     "TG-BS-04": [
-      10,
       11,
       13,
       12,
@@ -512,10 +511,10 @@
       12,
       15,
       14,
-      12
+      12,
+      13
     ],
     "LM-DL-08": [
-      25,
       18,
       26,
       24,
@@ -544,10 +543,10 @@
       24,
       17,
       22,
-      21
+      21,
+      20
     ],
     "SD-CO-06": [
-      23,
       16,
       19,
       23,
@@ -576,7 +575,8 @@
       18,
       19,
       22,
-      14
+      14,
+      18
     ],
     "BD-OG-01": [
       15,
@@ -607,8 +607,8 @@
       15,
       15,
       15,
-      15,
-      14
+      14,
+      17
     ],
     "te": [
       0,
@@ -655,12 +655,6 @@
       "ad_share": 0.0846,
       "acos_modifier": 1.0,
       "ad_history": [
-        {
-          "spend": 16.63,
-          "sales": 65.11,
-          "clicks": 35,
-          "orders": 2
-        },
         {
           "spend": 10.44,
           "sales": 44.4,
@@ -834,27 +828,27 @@
           "sales": 38.22,
           "clicks": 17,
           "orders": 1
+        },
+        {
+          "spend": 11.45,
+          "sales": 59.05,
+          "clicks": 24,
+          "orders": 2
         }
       ],
-      "trailing_acos": 20.6
+      "trailing_acos": 20.5
     },
     {
       "id": "CMP-QC",
       "name": "QuietClick Mouse \u00b7 Auto",
       "asin": "B0B7P9R3W1",
       "sku": "QC-M-11",
-      "bid_floor": 0.39,
+      "bid_floor": 0.34,
       "avg_cpc": 0.52,
       "base_acos": 30.71,
       "ad_share": 0.0637,
-      "acos_modifier": 0.8835999999999999,
+      "acos_modifier": 0.8305839999999999,
       "ad_history": [
-        {
-          "spend": 3.27,
-          "sales": 15.75,
-          "clicks": 6,
-          "orders": 1
-        },
         {
           "spend": 2.62,
           "sales": 12.89,
@@ -1028,11 +1022,23 @@
           "sales": 15.96,
           "clicks": 8,
           "orders": 1
+        },
+        {
+          "spend": 5.66,
+          "sales": 21.14,
+          "clicks": 11,
+          "orders": 1
         }
       ],
-      "trailing_acos": 30.3,
-      "last_guardrail_date": "2026-10-18",
+      "trailing_acos": 29.8,
+      "last_guardrail_date": "2026-10-19",
       "bid_changes": [
+        {
+          "date": "2026-10-19",
+          "from": 0.39,
+          "to": 0.34,
+          "trailing_acos": 29.8
+        },
         {
           "date": "2026-10-18",
           "from": 0.44,
@@ -1058,12 +1064,6 @@
       "ad_share": 0.1005,
       "acos_modifier": 1.0,
       "ad_history": [
-        {
-          "spend": 2.48,
-          "sales": 14.07,
-          "clicks": 8,
-          "orders": 1
-        },
         {
           "spend": 2.95,
           "sales": 15.47,
@@ -1237,9 +1237,15 @@
           "sales": 16.75,
           "clicks": 12,
           "orders": 1
+        },
+        {
+          "spend": 3.65,
+          "sales": 17.52,
+          "clicks": 12,
+          "orders": 1
         }
       ],
-      "trailing_acos": 20.0
+      "trailing_acos": 19.9
     },
     {
       "id": "CMP-LM",
@@ -1252,12 +1258,6 @@
       "ad_share": 0.0495,
       "acos_modifier": 1.0,
       "ad_history": [
-        {
-          "spend": 6.86,
-          "sales": 30.96,
-          "clicks": 15,
-          "orders": 1
-        },
         {
           "spend": 4.8,
           "sales": 22.29,
@@ -1431,9 +1431,15 @@
           "sales": 25.02,
           "clicks": 11,
           "orders": 1
+        },
+        {
+          "spend": 4.59,
+          "sales": 23.67,
+          "clicks": 10,
+          "orders": 1
         }
       ],
-      "trailing_acos": 20.2
+      "trailing_acos": 20.3
     },
     {
       "id": "CMP-SD",
@@ -1446,12 +1452,6 @@
       "ad_share": 0.0357,
       "acos_modifier": 1.0,
       "ad_history": [
-        {
-          "spend": 1.88,
-          "sales": 8.19,
-          "clicks": 11,
-          "orders": 1
-        },
         {
           "spend": 1.31,
           "sales": 5.7,
@@ -1625,9 +1625,15 @@
           "sales": 5.12,
           "clicks": 7,
           "orders": 0
+        },
+        {
+          "spend": 1.66,
+          "sales": 6.36,
+          "clicks": 10,
+          "orders": 1
         }
       ],
-      "trailing_acos": 23.8
+      "trailing_acos": 24.2
     }
   ],
   "ppc_guardrail": {
@@ -1641,13 +1647,13 @@
       "term": "foldable laptop riser",
       "asin": "B0C8Q4M2K7",
       "campaign_id": "CMP-AF",
-      "impressions": 15433,
-      "clicks": 475,
-      "spend": 228.0,
+      "impressions": 15547,
+      "clicks": 481,
+      "spend": 230.88,
       "conversions": 25,
       "sales": 874.75,
       "order_value": 34.99,
-      "acos": 26.1
+      "acos": 26.4
     },
     {
       "term": "portable computer stand aluminum",
@@ -1665,25 +1671,25 @@
       "term": "ergonomic laptop holder for desk",
       "asin": "B0C8Q4M2K7",
       "campaign_id": "CMP-AF",
-      "impressions": 9555,
-      "clicks": 324,
-      "spend": 259.2,
+      "impressions": 9687,
+      "clicks": 330,
+      "spend": 264.0,
       "conversions": 12,
       "sales": 419.88,
       "order_value": 34.99,
-      "acos": 61.7
+      "acos": 62.9
     },
     {
       "term": "cheap plastic laptop stand",
       "asin": "B0C8Q4M2K7",
       "campaign_id": "CMP-AF",
-      "impressions": 7170,
-      "clicks": 269,
-      "spend": 174.85,
+      "impressions": 7270,
+      "clicks": 273,
+      "spend": 177.45,
       "conversions": 1,
       "sales": 34.99,
       "order_value": 34.99,
-      "acos": 499.7
+      "acos": 507.1
     },
     {
       "term": "laptop stand with cooling fan",
@@ -1701,13 +1707,13 @@
       "term": "adjustable laptop stand for travel",
       "asin": "B0C8Q4M2K7",
       "campaign_id": "CMP-AF",
-      "impressions": 10352,
-      "clicks": 381,
-      "spend": 186.69,
+      "impressions": 10472,
+      "clicks": 385,
+      "spend": 188.65,
       "conversions": 14,
       "sales": 489.86,
       "order_value": 34.99,
-      "acos": 38.1
+      "acos": 38.5
     },
     {
       "term": "wooden monitor shelf",
@@ -1737,13 +1743,13 @@
       "term": "ergonomic mouse for laptop",
       "asin": "B0B7P9R3W1",
       "campaign_id": "CMP-QC",
-      "impressions": 10024,
-      "clicks": 363,
-      "spend": 199.65,
+      "impressions": 10096,
+      "clicks": 367,
+      "spend": 201.85,
       "conversions": 11,
       "sales": 247.39,
       "order_value": 22.49,
-      "acos": 80.7
+      "acos": 81.6
     },
     {
       "term": "gaming mouse rgb",
@@ -1761,13 +1767,13 @@
       "term": "wireless mouse bluetooth",
       "asin": "B0B7P9R3W1",
       "campaign_id": "CMP-QC",
-      "impressions": 6194,
-      "clicks": 247,
-      "spend": 123.5,
+      "impressions": 6320,
+      "clicks": 252,
+      "spend": 126.0,
       "conversions": 5,
       "sales": 112.45,
       "order_value": 22.49,
-      "acos": 109.8
+      "acos": 112.0
     },
     {
       "term": "silicone water bottle sleeve",
@@ -1785,13 +1791,13 @@
       "term": "bottle protective cover",
       "asin": "B0D2L6T8N4",
       "campaign_id": "CMP-TG",
-      "impressions": 7897,
-      "clicks": 289,
-      "spend": 86.7,
+      "impressions": 8017,
+      "clicks": 293,
+      "spend": 87.9,
       "conversions": 15,
       "sales": 209.85,
       "order_value": 13.99,
-      "acos": 41.3
+      "acos": 41.9
     },
     {
       "term": "stanley cup boot",
@@ -1809,13 +1815,13 @@
       "term": "insulated bottle sleeve 40oz",
       "asin": "B0D2L6T8N4",
       "campaign_id": "CMP-TG",
-      "impressions": 10491,
-      "clicks": 360,
-      "spend": 118.8,
+      "impressions": 10531,
+      "clicks": 362,
+      "spend": 119.46,
       "conversions": 20,
       "sales": 279.8,
       "order_value": 13.99,
-      "acos": 42.5
+      "acos": 42.7
     },
     {
       "term": "usb c desk lamp",
@@ -1845,13 +1851,13 @@
       "term": "dimmable reading light",
       "asin": "B0A9H5X3J6",
       "campaign_id": "CMP-LM",
-      "impressions": 6706,
-      "clicks": 279,
-      "spend": 139.5,
+      "impressions": 6818,
+      "clicks": 283,
+      "spend": 141.5,
       "conversions": 4,
       "sales": 99.96,
       "order_value": 24.99,
-      "acos": 139.6
+      "acos": 141.6
     },
     {
       "term": "clip on desk light",
@@ -1869,25 +1875,25 @@
       "term": "desk cable organizer",
       "asin": "B0C3F7Y1V9",
       "campaign_id": "CMP-SD",
-      "impressions": 8267,
-      "clicks": 322,
-      "spend": 51.52,
+      "impressions": 8297,
+      "clicks": 323,
+      "spend": 51.68,
       "conversions": 15,
       "sales": 149.85,
       "order_value": 9.99,
-      "acos": 34.4
+      "acos": 34.5
     },
     {
       "term": "cord clips adhesive",
       "asin": "B0C3F7Y1V9",
       "campaign_id": "CMP-SD",
-      "impressions": 9381,
-      "clicks": 350,
-      "spend": 66.5,
+      "impressions": 9500,
+      "clicks": 355,
+      "spend": 67.45,
       "conversions": 19,
       "sales": 189.81,
       "order_value": 9.99,
-      "acos": 35.0
+      "acos": 35.5
     },
     {
       "term": "wire management box",
@@ -1905,13 +1911,13 @@
       "term": "cable ties reusable",
       "asin": "B0C3F7Y1V9",
       "campaign_id": "CMP-SD",
-      "impressions": 6939,
-      "clicks": 279,
-      "spend": 50.22,
+      "impressions": 6962,
+      "clicks": 280,
+      "spend": 50.4,
       "conversions": 4,
       "sales": 39.96,
       "order_value": 9.99,
-      "acos": 125.7
+      "acos": 126.1
     }
   ],
   "targeted_exact_keywords": [
@@ -2559,7 +2565,6 @@
     }
   },
   "acos_history": [
-    23.2,
     22.0,
     23.3,
     24.2,
@@ -2588,9 +2593,31 @@
     22.2,
     21.8,
     22.6,
-    22.0
+    22.0,
+    21.1
   ],
   "activity": [
+    {
+      "id": "fd29322e-04b2-411d-8569-b9a20248fb57",
+      "timestamp": "2026-10-19T19:33:39.230802+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0C3F7Y1V9 moved from $9.90 to $9.61, one cent below its competitor."
+    },
+    {
+      "id": "9b50cc06-feeb-4424-98b2-d2810159428f",
+      "timestamp": "2026-10-19T19:33:39.230718+00:00",
+      "category": "repricer",
+      "title": "Buy Box price matched",
+      "detail": "B0A9H5X3J6 moved from $23.91 to $23.31, one cent below its competitor."
+    },
+    {
+      "id": "317081af-582c-468e-b032-3ac406acdfcf",
+      "timestamp": "2026-10-19T19:30:39.098200+00:00",
+      "category": "ppc",
+      "title": "Bid guardrail triggered",
+      "detail": "QuietClick Mouse \u00b7 Auto trailing 7-day ACoS was 29.8% (limit 25%). Bid lowered from $0.39 to $0.34."
+    },
     {
       "id": "8f638205-6b51-4c27-98a1-6ac3726342c9",
       "timestamp": "2026-10-18T18:17:09.122876+00:00",
@@ -3409,27 +3436,6 @@
       "category": "repricer",
       "title": "Buy Box price matched",
       "detail": "B0A9H5X3J6 moved from $24.22 to $23.50, one cent below its competitor."
-    },
-    {
-      "id": "6d2bcaba-3167-40fd-8a95-54a04d61bbb1",
-      "timestamp": "2026-10-17T17:37:59.670451+00:00",
-      "category": "repricer",
-      "title": "Price raised toward competitor",
-      "detail": "B0D2L6T8N4 moved from $13.11 to $13.45 as its competitor rose to $13.46."
-    },
-    {
-      "id": "c43b49af-851e-4c62-bf6d-43f7f7e230d9",
-      "timestamp": "2026-10-17T17:35:59.599115+00:00",
-      "category": "repricer",
-      "title": "Price raised toward competitor",
-      "detail": "B0A9H5X3J6 moved from $23.59 to $24.22 as its competitor rose to $24.23."
-    },
-    {
-      "id": "1e5c265e-6585-4364-b014-a86155869174",
-      "timestamp": "2026-10-17T17:31:59.493775+00:00",
-      "category": "repricer",
-      "title": "Price raised toward competitor",
-      "detail": "B0C3F7Y1V9 moved from $9.61 to $9.90 as its competitor rose to $9.95."
     }
   ],
   "execution_queue": [],
@@ -3501,5 +3507,5 @@
       "added_at": "2026-10-17T17:53:57.740687+00:00"
     }
   ],
-  "tick_count": 2459
+  "tick_count": 2478
 }
