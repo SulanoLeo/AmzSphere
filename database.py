@@ -105,8 +105,6 @@ def get_state_store():
                 create_client(supabase_url, supabase_key),
                 ROOT / "mock_db.json",
             )
-        elif os.environ.get("VERCEL"):
-            raise RuntimeError("Configure SUPABASE_URL and SUPABASE_SECRET_KEY in Vercel.")
         else:
             _STORE = JsonStateStore(os.environ.get("MOCK_DB_PATH", ROOT / "mock_db.json"))
 

@@ -90,13 +90,13 @@ class DatabaseStoreTests(unittest.TestCase):
             with self.assertRaises(ConcurrentStateUpdate):
                 store.write({"count": 3}, 0)
 
-    def test_vercel_requires_supabase_instead_of_ephemeral_json(self):
+    def test_vercel_falls_back_to_json_store_without_supabase(self):
         original_store = database._STORE
         try:
             database._STORE = None
             with patch.dict(os.environ, {"VERCEL": "1"}, clear=True):
-                with self.assertRaisesRegex(RuntimeError, "Configure SUPABASE_URL"):
-                    database.get_state_store()
+                store = database.get_state_store()
+            self.assertIsInstance(store, database.JsonStateStore)
         finally:
             database._STORE = original_store
 
