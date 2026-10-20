@@ -4,10 +4,6 @@
     "app": {
       "root": ".",
       "framework": "fastapi"
-    },
-    "web": {
-      "root": "web",
-      "framework": "nextjs"
     }
   },
   "rewrites": [
