@@ -7,6 +7,8 @@ class CatalogOptimizeRequest(BaseModel):
     seller_id: uuid.UUID
     asin: str = Field(min_length=10, max_length=10, pattern=r"^[A-Z0-9]{10}$")
     sku: str | None = Field(default=None, min_length=1, max_length=80)
+    optimization_mode: str = Field(default="free", pattern=r"^(free|paid)$")
+    helium10_api_key: str | None = Field(default=None, min_length=1, max_length=256)
 
 
 class OperationAccepted(BaseModel):

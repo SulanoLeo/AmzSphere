@@ -9,8 +9,7 @@ from backend.app.db import SessionLocal
 from backend.app.models import AgentOperation, AmazonFeed, CatalogItem, KeywordObservation, Seller
 from backend.app.services.catalog_agent import (
     build_json_listings_feed,
-    candidate_terms,
-    fetch_serp_observations,
+    fetch_keyword_observations,
     optimize_copy,
     text_attribute,
 )
@@ -86,12 +85,15 @@ async def _optimize_listing(operation_id: str) -> dict:
             current_copy = {"title": title, "bullet_points": bullets, "attributes": attributes}
             if not title:
                 raise ValueError("SP-API listing did not include item_name for this marketplace")
-            if settings.serpapi_api_key is None:
-                raise RuntimeError("SERPAPI_API_KEY is required for rank observations")
-            observations = await fetch_serp_observations(
+            mode = operation.request_payload.get("optimization_mode", "free")
+            helium10_api_key = operation.request_payload.get("helium10_api_key")
+            if helium10_api_key is None and mode == "paid":
+                helium10_api_key = settings.helium10_api_key.get_secret_value() if settings.helium10_api_key else None
+            observations = await fetch_keyword_observations(
+                mode,
                 item.asin,
-                candidate_terms(attributes, title),
-                settings.serpapi_api_key.get_secret_value(),
+                seller.marketplace_id,
+                helium10_api_key,
             )
             session.add_all([
                 KeywordObservation(
@@ -99,9 +101,9 @@ async def _optimize_listing(operation_id: str) -> dict:
                     catalog_item_id=item.id,
                     operation_id=operation.id,
                     provider=observation["provider"],
-                    query=observation["query"],
-                    organic_rank=observation["rank"],
-                    indexed=observation["indexed"],
+                    query=observation["keyword"],
+                    organic_rank=observation.get("organic_rank"),
+                    indexed=observation.get("indexed", observation.get("organic_rank") is not None),
                 )
                 for observation in observations
             ])
@@ -110,8 +112,10 @@ async def _optimize_listing(operation_id: str) -> dict:
             suggestion = await optimize_copy(
                 current_copy,
                 observations,
+                mode,
                 settings.openai_api_key.get_secret_value(),
                 settings.openai_model,
+                helium10_api_key,
             )
             operation.result_payload = {
                 "current_copy": {"title": title, "bullet_points": bullets},
@@ -120,6 +124,9 @@ async def _optimize_listing(operation_id: str) -> dict:
                 "product_type": item.product_type,
                 "seller_sku": item.sku,
                 "marketplace_id": seller.marketplace_id,
+                "optimization_mode": mode,
+                "health_score": suggestion.get("health_score", 0),
+                "missing_high_volume_keywords": suggestion.get("missing_high_volume_keywords", []),
             }
             operation.status = "review_required"
             operation.error_code = None

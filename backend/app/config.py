@@ -28,6 +28,7 @@ class Settings(BaseSettings):
     openai_api_key: SecretStr | None = None
     openai_model: str = "gpt-4o"
     serpapi_api_key: SecretStr | None = None
+    helium10_api_key: SecretStr | None = None
     fernet_key: SecretStr | None = None
     platform_api_key: SecretStr | None = None
     oauth_redirect_uri: str = "http://localhost:8001/api/v1/auth/amazon/callback"

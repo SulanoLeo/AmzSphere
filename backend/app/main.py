@@ -207,7 +207,13 @@ async def queue_catalog_optimization(
             operation_type="catalog_optimize",
             status="queued",
             asin=item.asin,
-            request_payload={"asin": item.asin, "sku": item.sku, "marketplace_id": seller.marketplace_id},
+            request_payload={
+                "asin": item.asin,
+                "sku": item.sku,
+                "marketplace_id": seller.marketplace_id,
+                "optimization_mode": payload.optimization_mode,
+                "helium10_api_key": payload.helium10_api_key,
+            },
             idempotency_key=idempotency_key,
         )
         session.add(operation)
@@ -239,6 +245,35 @@ async def approve_catalog_operation(operation_id: uuid.UUID, x_workspace_user: s
         ))
         await session.commit()
         return {"operation_id": str(operation.id), "status": operation.status}
+
+
+@app.post("/api/v1/catalog/helium10/token", dependencies=[Depends(require_platform_key)])
+async def set_helium10_token(
+    request: Request,
+    x_workspace_user: str | None = Header(default=None),
+) -> dict:
+    workspace_user = require_workspace_user(x_workspace_user)
+    body = await request.json()
+    token = (body or {}).get("helium10_api_key")
+    if not token or not isinstance(token, str):
+        raise HTTPException(status_code=422, detail="helium10_api_key is required")
+    # Stored server-side keyed by workspace user; production should encrypt at rest.
+    await request.app.state.redis.setex(
+        f"amzsphere:helium10:token:{workspace_user}",
+        86400 * 30,
+        token,
+    )
+    return {"ok": True}
+
+
+@app.get("/api/v1/catalog/helium10/status", dependencies=[Depends(require_platform_key)])
+async def get_helium10_status(
+    request: Request,
+    x_workspace_user: str | None = Header(default=None),
+) -> dict:
+    workspace_user = require_workspace_user(x_workspace_user)
+    stored = await request.app.state.redis.get(f"amzsphere:helium10:token:{workspace_user}")
+    return {"connected": bool(stored)}
 
 
 @app.get("/api/v1/operations/{operation_id}", response_model=OperationView, dependencies=[Depends(require_platform_key)])
