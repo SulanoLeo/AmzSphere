@@ -1,8 +1,8 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { Activity, Boxes, ChartNoAxesCombined, CircleDollarSign, ClipboardCheck, FileText, PackageSearch, RefreshCw, ShieldCheck, Store, TriangleAlert } from "lucide-react";
+import { Boxes, ClipboardCheck, PackageSearch, RefreshCw, ShieldCheck, TriangleAlert } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 import { Badge } from "@/components/ui/badge";
@@ -32,14 +32,7 @@ type Dashboard = {
 
 type SellerOption = { id: string; merchant_id: string; marketplace_id: string; region: string };
 
-const navigation = [
-  ["Overview", "/", Activity], ["SEO & Catalog", "/catalog", PackageSearch], ["Sourcing", "/sourcing", Store],
-  ["PPC Advertising", "/ppc", ChartNoAxesCombined], ["Inventory", "/inventory", Boxes],
-  ["Pricing", "/repricer", CircleDollarSign], ["Activity Log", "/activity", FileText],
-  ["Approvals", "/approvals", ClipboardCheck],
-] as const;
-
-function Metric({ label, value, detail, icon: Icon }: { label: string; value: string; detail: string; icon: typeof Activity }) {
+function Metric({ label, value, detail, icon: Icon }: { label: string; value: string; detail: string; icon: React.ComponentType<any> }) {
   return <Card><CardContent className="flex min-h-32 items-start justify-between gap-3">
     <div><p className="text-xs font-semibold uppercase tracking-wide text-muted">{label}</p><p className="mt-3 text-2xl font-semibold text-indigo-950">{value}</p><p className="mt-1 text-xs text-muted">{detail}</p></div>
     <span className="grid size-9 shrink-0 place-items-center rounded-md bg-canvas text-indigo-900"><Icon size={17} /></span>
@@ -133,25 +126,8 @@ export default function DashboardPage() {
   const totalStock = (data?.products || []).reduce((total, product) => total + (product.stock ?? 0), 0);
   const chartData = (data?.products || []).map((product) => ({ sku: product.sku, velocity: product.velocity_30d }));
 
-  return <div className="min-h-screen md:grid md:grid-cols-[238px_minmax(0,1fr)]">
-    <aside className="flex flex-col bg-indigo-950 px-4 py-5 text-slate-200 md:sticky md:top-0 md:h-screen">
-      <Link href="/" className="flex items-center gap-3 px-2 pb-7">
-        <span className="grid size-9 place-items-center rounded-md bg-amber-400 font-bold text-indigo-950">A</span>
-        <span><strong className="block text-sm text-white">AmzSphere</strong><small className="text-[10px] uppercase tracking-widest text-slate-400">Operations</small></span>
-      </Link>
-      <p className="mb-2 px-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">Workspace</p>
-      <nav className="flex gap-1 overflow-x-auto md:flex-col" aria-label="Main navigation">
-        {navigation.map(([label, href, Icon], index) => <Link key={label} href={href} className={`flex min-h-10 shrink-0 items-center gap-3 rounded-md px-3 text-xs font-medium transition-colors ${index === 0 ? "bg-indigo-800 text-white" : "text-slate-300 hover:bg-indigo-900 hover:text-white"}`}>
-          <Icon size={16} aria-hidden="true" />{label}
-        </Link>)}
-      </nav>
-      <div className="mt-auto hidden border-t border-slate-700 pt-4 text-xs text-slate-400 md:block">
-        <div className="flex items-center gap-2 text-white"><span className="size-2 rounded-full bg-amber-400" />Production integration gated</div>
-        <p className="mt-2 leading-5">Writes stay disabled until SP-API is enabled and dry-run is off.</p>
-      </div>
-    </aside>
-
-    <main className="min-w-0 px-4 py-5 md:px-8 md:py-8">
+  return (
+    <main className="min-h-screen bg-canvas px-4 py-5 md:px-8 md:py-8">
       <header className="mb-7 flex flex-wrap items-center justify-between gap-4 border-b border-line pb-5">
         <div><p className="text-[10px] font-bold uppercase tracking-widest text-teal-700">Seller operations</p><h1 className="mt-1 text-2xl font-semibold text-indigo-950">Operations overview</h1><p className="mt-1 text-sm text-muted">Inventory health and human-review work queue.</p></div>
         <div className="flex flex-wrap items-center gap-3">{sellers.length > 1 && <select aria-label="Seller account" className="h-9 max-w-56 rounded-md border border-line bg-white px-2 text-xs" value={selectedSeller} onChange={(event) => setSelectedSeller(event.target.value)}>{sellers.map((seller) => <option key={seller.id} value={seller.id}>{seller.merchant_id} · {seller.marketplace_id}</option>)}</select>}<Badge className="bg-amber-50 text-amber-800">{data ? data.marketplace_id : "Not connected"}</Badge><Button variant="outline" onClick={() => void syncSeller()} disabled={!selectedSeller || loading}><RefreshCw size={15} />Sync seller data</Button><Button variant="outline" onClick={() => selectedSeller && void loadDashboard(selectedSeller)} disabled={!selectedSeller || loading}><RefreshCw size={15} className={loading ? "animate-spin" : ""} />Refresh</Button><BuyBoxStatus /></div>
@@ -195,5 +171,5 @@ export default function DashboardPage() {
       </Card>
       <p className="text-right text-[10px] text-muted">{totalStock ? `${totalStock.toLocaleString()} units represented` : "No seller data loaded"} · API credentials remain server-side</p>
     </main>
-  </div>;
+  );
 }
