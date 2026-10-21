@@ -256,9 +256,13 @@ class MockSimulator:
         for product in state["products"]:
             sold_since_last_tick = product["daily_velocity"] * TICK_SECONDS / 86_400
             product["stock"] = round(max(0, product["stock"] - sold_since_last_tick), 3)
+            product["sellable_units"] = product["stock"]
+            product["days_of_supply"] = round(product["stock"] / max(product["daily_velocity"], 0.1), 1)
         # Keep global_products synchronized with products
         for p, gp in zip(state.get("products", []), state.get("global_products", [])):
             gp["stock"] = p["stock"]
+            gp["sellable_units"] = p["stock"]
+            gp["days_of_supply"] = p["days_of_supply"]
 
     def _draft_purchase_orders(self, state):
         for product in state["products"]:

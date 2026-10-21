@@ -239,7 +239,7 @@ function renderProcurementQueue() {
 }
 
 function renderShell(view, body) {
-  const pendingApprovals = state.orders.filter((order) => order.status === "pending").length;
+  const pendingApprovals = state.orders.filter((order) => order.status === "pending").length + (state.product_revisions || []).filter((revision) => revision.status === "pending_approval").length;
   const menu = navigation.map(([key, code, label]) => `<a class="nav-link ${view === key ? "active" : ""}" href="/${key}" ${view === key ? 'aria-current="page"' : ""}>
     <span class="nav-code">${code}</span><span>${label}</span>${key === "approvals" && pendingApprovals ? `<span class="nav-count">${pendingApprovals}</span>` : ""}
   </a>`).join("");
@@ -260,25 +260,44 @@ function renderShell(view, body) {
       </header>
       <main class="main">${body}<div class="footer-note">Sandbox data · Decisions are simulated and never sent to Amazon</div></main>
     </div>
-  </div><div id="toast-root" aria-live="polite"></div>`;
+  </div><div id="toast-root" aria-live="polite"></div>${renderOptimizeDrawer()}${renderAddProductModal()}`;
   mountCharts(view);
 }
 
 function renderOverview() {
+  const summary = productCache.summary || {};
+  const sync = summary.sync || {};
+  const syncLabel = syncAgeBadge(summary);
+  const syncOk = sync.status === "completed";
   const totalStock = state.products.reduce((sum, product) => sum + product.stock, 0);
-  const pending = state.orders.filter((order) => order.status === "pending").length;
+  const pendingRevisions = (state.product_revisions || []).filter((revision) => revision.status === "pending_approval").length;
   const critical = state.products.filter((product) => daysOfSupply(product) < 15).length;
+  const needsOptimization = summary.needs_optimization ?? state.products.filter((product) => product.opt_status === "needs_optimization").length;
   const current = currentAcos();
   const recentActivity = state.activity.slice(0, 5);
   const reviews = [...state.reviews].sort((a, b) => a.rating - b.rating || b.date.localeCompare(a.date)).slice(0, 5);
   const insight = reviewInsight();
-  const body = `${heading("Operations overview", "A live read on marketplace health, automation, and inventory exposure.")}
-    <div class="metrics">
-      ${metric("Portfolio ACoS", `${number(current, 1)}<span style="font:500 13px var(--font-ui)">%</span>`, acosDeltaLabel() + " over 30 days", "teal", "LAST 30 DAYS")}
-      ${metric("Units on hand", number(totalStock), `${state.products.length} active SKUs across the catalog`, "blue", "INVENTORY")}
-      ${metric("Pending approvals", number(pending), `${money(state.orders.filter((order) => order.status === "pending").reduce((sum, order) => sum + order.amount, 0), 0)} committed spend`, "orange", "B2B WORKFLOWS")}
-      ${metric("Critical stock alerts", number(critical), critical ? '<span class="metric-change warn">Action required</span> · PO draft automation on' : "All products above reorder threshold", "green", "DAYS OF SUPPLY")}
+  const top10 = summary.top_10 || [];
+  const body = `${heading("Operations overview", "A live read on marketplace health, optimization exposure, and inventory exposure.")}
+    <div class="sync-bar">
+      <span class="sync-badge ${syncOk ? "good" : "warn"}" title="${escapeHtml(JSON.stringify(sync || {}))}">${escapeHtml(syncLabel)}</span>
+      <button type="button" class="button" data-action="sync-seller">${syncOk ? "Resync seller data" : "Sync seller data"}</button>
+      <button type="button" class="button button-outline" data-action="refresh-overview">Refresh</button>
     </div>
+    <div class="metrics">
+      ${metric("Catalog items", number(summary.catalog_items ?? state.products.length), "Seller-linked ASINs · one shared product record each", "blue", "CATALOG")}
+      ${metric("Sellable units", number(Math.round(summary.sellable_units ?? totalStock)), "Latest inventory snapshots across all marketplaces", "teal", "INVENTORY")}
+      ${metric("Needs optimization", number(needsOptimization), summary.needs_optimization !== undefined ? "Products below a 70 optimization score" : "Listings missing copy quality rules", "orange", "OPTIMIZATION")}
+      ${metric("Reorder flags", number(summary.reorder_flags ?? critical), critical ? "Below 15 days of supply" : "All products above reorder threshold", "warn", "DAYS OF SUPPLY")}
+      ${metric("Pending approvals", number(pendingRevisions), pendingRevisions ? "Listing revisions awaiting your decision" : "No revisions awaiting review", "teal", "APPROVALS")}
+    </div>
+    <section class="panel"><div class="panel-header"><div><h2 class="panel-title">Optimization priority list</h2><div class="panel-subtitle">Ranked by (100 − score) × recent sales volume. Open the optimize drawer to draft changes.</div></div></div>
+    <div class="table-wrap"><table><thead><tr><th>SKU</th><th>ASIN</th><th>Product</th><th>Score</th><th>Status</th><th>Impact</th><th>Issues</th><th>Action</th></tr></thead><tbody>
+      ${top10.map((product) => {
+        const issues = Array.isArray(product.opt_issues) ? product.opt_issues : [];
+        return `<tr><td class="sku-cell">${escapeHtml(product.sku || "—")}</td><td class="sku-cell">${escapeHtml(product.asin || "—")}</td><td>${escapeHtml(product.name || product.title || "—")}</td><td class="number-cell score-cell"><strong>${number(product.opt_score)}</strong></td><td><span class="status ${statusClass(product.opt_status)}">${escapeHtml(product.opt_status || "—")}</span></td><td class="number-cell">${number(Math.round(product.impact))}</td><td class="issue-cell">${issues.map((issue) => `<span class="issue-tag">${escapeHtml(issue)}</span>`).join("") || '<span class="issue-tag muted">—</span>'}</td><td><button type="button" class="button button-outline button-sm" data-optimize="${escapeHtml(product.id)}">Optimize</button></td></tr>`;
+      }).join("") || `<tr><td class="empty-cell" colSpan="8">${productCache.error ? escapeHtml(productCache.error) : "No products need optimization right now."}</td></tr>`}
+    </tbody></table></div></section>
     <div class="section-grid">
       ${chartPanel("Advertising efficiency", "Portfolio ACoS · 30-day trend", "acos-chart", '<span class="chart-key"><span class="key-item"><span class="key-dot"></span>ACoS</span></span>')}
       ${chartPanel("Procurement mix", "Open and approved workflow value", "spend-chart")}
@@ -297,6 +316,12 @@ function renderOverview() {
     </div>`;
   return body;
 }
+
+function statusClass(optStatus) {
+  const map = { needs_optimization: "warn", draft_ready: "pending", pending_approval: "pending", approved: "approved", published: "approved", optimized: "good" };
+  return map[optStatus] || "";
+}
+
 
 function renderPpc() {
   const totalSpend = state.search_terms.reduce((sum, term) => sum + term.spend, 0);
@@ -334,35 +359,160 @@ function renderPpc() {
 }
 
 function renderCatalog() {
-  if (!state.products.some((product) => product.asin === selectedCatalogAsin)) selectedCatalogAsin = state.products[0]?.asin || "";
-  const selected = state.products.find((product) => product.asin === selectedCatalogAsin);
-  const profile = profileFor(selected);
-  const rows = state.products.map((product) => {
-    const item = profileFor(product);
-    const sync = (state.execution_queue || []).some((job) => job.type === "catalog_push" && job.asin === product.asin && job.status === "synced");
-    return `<tr class="${product.asin === selectedCatalogAsin ? "selected-row" : ""}"><td><button type="button" class="table-select" data-catalog-select="${escapeHtml(product.asin)}">${escapeHtml(product.asin)}</button><div class="product-meta">${escapeHtml(product.sku)}</div></td><td class="number-cell">${item.rank ? "#" + item.rank : "—"}</td><td><div class="gap-list">${item.gaps.map((gap) => `<span>${escapeHtml(gap)}</span>`).join("")}</div></td><td><span class="status ${sync ? "approved" : "pending"}">${sync ? "Synced" : "Staged"}</span></td></tr>`;
+  const products = state.products || [];
+  const syncBadge = (p) => {
+    const synced = (state.marketplace_listings || []).some(
+      (listing) => listing.global_product_id === p.asin && /live/i.test(listing.status || ""));
+    return `<span class="status ${synced ? "good" : "pending"}">${synced ? "Synced" : "Not synced"}</span>`;
+  };
+  const filtered = products.filter((product) => {
+    if (catalogFilter.opt_status && product.opt_status !== catalogFilter.opt_status) return false;
+    if (catalogFilter.low_stock && (product.days_of_supply ?? 999) >= 15) return false;
+    if (catalogFilter.suppressed) {
+      const suppressed = product.suppressed || (state.marketplace_listings || []).some(
+        (listing) => listing.global_product_id === product.asin && /suppressed/i.test(listing.status || ""));
+      if (!suppressed) return false;
+    }
+    if (catalogFilter.search) {
+      const needle = catalogFilter.search.casefold();
+      return [product.name, product.title, product.asin, product.sku, product.category].some((value) => String(value || "").casefold().includes(needle));
+    }
+    return true;
+  });
+  let sorted = [...filtered];
+  if (catalogFilter.sort) {
+    const reverse = catalogFilter.sort.startsWith("-");
+    const key = catalogFilter.sort.replace(/^-/, "");
+    sorted.sort((a, b) => {
+      const av = a[key]; const bv = b[key];
+      if (av == null && bv == null) return 0;
+      if (av == null) return reverse ? -1 : 1;
+      if (bv == null) return reverse ? 1 : -1;
+      const cmp = String(av).casefold().localeCompare(String(bv).casefold());
+      return reverse ? -cmp : cmp;
+    });
+  }
+  const page = Math.max(1, catalogFilter.page || 1);
+  const pageSize = Math.max(1, Math.min(200, catalogFilter.page_size || 200));
+  const total = sorted.length;
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  const paged = sorted.slice((page - 1) * pageSize, page * pageSize);
+  const allSelected = viewState.selectedIds.length && viewState.selectedIds.every((id) => filtered.some((p) => p.id === id));
+  const rows = paged.map((product) => {
+    const selected = viewState.selectedIds.includes(product.id);
+    const issues = Array.isArray(product.opt_issues) ? product.opt_issues : [];
+    return `<tr class="${selected ? "selected-row" : ""}"><td><input type="checkbox" class="row-select" data-row-id="${escapeHtml(product.id)}" ${selected ? "checked" : ""} /></td>
+      <td class="sku-cell">${escapeHtml(product.asin)}</td><td class="sku-cell">${escapeHtml(product.sku)}</td>
+      <td>${escapeHtml(product.title || product.name || "—")}</td><td>${escapeHtml(product.category || "—")}</td>
+      <td><span class="status ${statusClass(product.opt_status)}">${escapeHtml(product.opt_status || "—")}</span></td>
+      <td class="number-cell score-cell">${number(product.opt_score ?? 0)}</td>
+      <td class="issue-cell">${issues.map((issue) => `<span class="issue-tag muted">${escapeHtml(issue)}</span>`).join("") || '<span class="issue-tag muted">—</span>'}</td>
+      <td class="number-cell">${number(product.stock ?? 0)}</td><td class="number-cell">${number(product.days_of_supply ?? 0)}</td>
+      <td class="number-cell">${money(product.price ?? 0)}</td>
+      <td><button type="button" class="button button-outline button-sm" data-optimize="${escapeHtml(product.id)}">Optimize</button>
+          <button type="button" class="button button-outline button-sm" data-view="${escapeHtml(product.id)}">View</button></td></tr>`;
   }).join("");
-  const queued = (state.execution_queue || []).some((job) => job.type === "catalog_push" && job.asin === selectedCatalogAsin && job.status === "staged");
-  return `${heading("SEO & Catalog Agent", "Remap listing content against observed search demand, review keyword gaps, and stage controlled updates.", "Catalog operations")}
-    <div class="catalog-controls"><label for="catalog-product">Listing</label><select id="catalog-product" data-catalog-product>${state.products.map((product) => `<option value="${escapeHtml(product.asin)}" ${product.asin === selectedCatalogAsin ? "selected" : ""}>${escapeHtml(product.name)} · ${escapeHtml(product.asin)}</option>`).join("")}</select><span class="status pending">Sandbox · staged only</span></div>
-    <div class="catalog-compare">
-      <section class="panel listing-panel"><div class="panel-header"><div><h2 class="panel-title">Current live listing copy</h2><div class="panel-subtitle">Snapshot view · ${escapeHtml(selected.asin)}</div></div><span class="status pending">Current</span></div><div class="panel-content"><div class="listing-field"><span>Title</span><p>${escapeHtml(profile.currentTitle)}</p></div><div class="listing-field"><span>Key features</span><ul>${profile.currentBullets.map((bullet) => `<li>${escapeHtml(bullet)}</li>`).join("")}</ul></div><div class="listing-meta"><span>Organic rank</span><strong>${profile.rank ? "#" + profile.rank : "—"}</strong><span>Catalog source</span><strong>Mock snapshot</strong></div></div></section>
-      <section class="panel listing-panel optimized-panel"><div class="panel-header"><div><h2 class="panel-title">AI-optimized / remapped listing copy</h2><div class="panel-subtitle">Suggested draft · keyword coverage mapped</div></div><span class="status warning">Review required</span></div><div class="metric-badges"><span class="metric-badge">🔍 Search Volume: 45k/mo</span><span class="metric-badge good">🎯 Keyword Difficulty: Low</span></div><div class="panel-content"><div class="listing-field"><span>Proposed title</span><p>${escapeHtml(profile.optimizedTitle)}</p></div><div class="listing-field"><span>Proposed key features</span><ul>${profile.optimizedBullets.map((bullet) => `<li>${escapeHtml(bullet)}</li>`).join("")}</ul></div><div class="listing-meta"><span>Target gaps</span><strong>${profile.gaps.length} mapped</strong><span>Sync state</span><strong>${queued ? "Staged in sandbox" : "Not submitted"}</strong></div></div></section>
+  const chips = [
+    { label: "Needs optimization", value: "needs_optimization" },
+    { label: "Low stock (< 15d)", value: "low_stock" },
+    { label: "Suppressed", value: "suppressed" },
+  ].map((chip) => {
+    const active = (chip.value === "low_stock" ? catalogFilter.low_stock : chip.value === "suppressed" ? catalogFilter.suppressed : catalogFilter.opt_status === chip.value);
+    return `<button type="button" class="chip ${active ? "chip-active" : ""}" data-filter="${chip.value === "low_stock" ? "low_stock" : chip.value === "suppressed" ? "suppressed" : "opt_status"}}" data-filter-value="${chip.value === "low_stock" ? "true" : chip.value === "suppressed" ? "true" : chip.value}">${escapeHtml(chip.label)}</button>`;
+  }).join("");
+  return `${heading("SEO & Catalog", "One shared product record for the catalog: scores, filters, row actions, and bulk optimization.", "Catalog operations")}
+    <div class="catalog-toolbar">
+      <div class="toolbar-search"><span>Filter</span>${chips}<label style="margin-left:8px;display:inline-flex;align-items:center;gap:6px;"><span style="font:600 10px var(--font-ui);color:var(--muted);text-transform:uppercase;letter-spacing:.06em;">Search</span><input id="catalog-search" value="${escapeHtml(catalogFilter.search)}" placeholder="SKU, ASIN, title, category" style="min-height:30px;padding:0 10px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink);font:inherit;font-size:11px;"></label></div>
+      <div class="toolbar-actions">
+        <label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;"><input type="checkbox" data-select-all ${allSelected ? "checked" : ""} /> <span style="font:600 10px var(--font-ui);color:var(--muted);text-transform:uppercase;">Select all on page</span></label>
+        <button type="button" class="button button-outline" data-action="bulk-optimize" ${!viewState.selectedIds.length ? "disabled" : ""}>Optimize selected (${viewState.selectedIds.length})</button>
+        <button type="button" class="button button-primary" data-action="add-product">Add product</button>
+      </div>
     </div>
-    <section class="panel"><div class="panel-header"><div><h2 class="panel-title">Add new product to catalog</h2><div class="panel-subtitle">Create a new catalog listing that appears across inventory, procurement, and seller store</div></div></div>
-      <div class="panel-content"><form id="add-catalog-product-form" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;align-items:end;">
-        <div><label style="display:block;margin-bottom:4px;color:var(--muted);font-size:10px;font-weight:700;text-transform:uppercase;">Product Name</label><input name="name" type="text" placeholder="e.g. Bamboo Desk Organizer" required style="width:100%;min-height:34px;padding:0 10px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink);font:inherit;font-size:11px;"></div>
-        <div><label style="display:block;margin-bottom:4px;color:var(--muted);font-size:10px;font-weight:700;text-transform:uppercase;">SKU</label><input name="sku" type="text" placeholder="e.g. BD-OG-01" required style="width:100%;min-height:34px;padding:0 10px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink);font:inherit;font-size:11px;"></div>
-        <div><label style="display:block;margin-bottom:4px;color:var(--muted);font-size:10px;font-weight:700;text-transform:uppercase;">ASIN</label><input name="asin" type="text" placeholder="e.g. B0XYZ12345" required style="width:100%;min-height:34px;padding:0 10px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink);font:inherit;font-size:11px;"></div>
-        <div><label style="display:block;margin-bottom:4px;color:var(--muted);font-size:10px;font-weight:700;text-transform:uppercase;">Category</label><input name="category" type="text" placeholder="e.g. Office" required style="width:100%;min-height:34px;padding:0 10px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink);font:inherit;font-size:11px;"></div>
-        <div><label style="display:block;margin-bottom:4px;color:var(--muted);font-size:10px;font-weight:700;text-transform:uppercase;">Price ($)</label><input name="price" type="number" step="0.01" placeholder="24.99" required style="width:100%;min-height:34px;padding:0 10px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink);font:inherit;font-size:11px;"></div>
-        <div><label style="display:block;margin-bottom:4px;color:var(--muted);font-size:10px;font-weight:700;text-transform:uppercase;">Stock Units</label><input name="stock" type="number" step="1" placeholder="500" required style="width:100%;min-height:34px;padding:0 10px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink);font:inherit;font-size:11px;"></div>
-        <div><label style="display:block;margin-bottom:4px;color:var(--muted);font-size:10px;font-weight:700;text-transform:uppercase;">Daily Velocity</label><input name="daily_velocity" type="number" step="0.1" placeholder="15" style="width:100%;min-height:34px;padding:0 10px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink);font:inherit;font-size:11px;"></div>
-        <div><label style="display:block;margin-bottom:4px;color:var(--muted);font-size:10px;font-weight:700;text-transform:uppercase;">Supplier</label><input name="supplier" type="text" placeholder="e.g. Acme Mfg" style="width:100%;min-height:34px;padding:0 10px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink);font:inherit;font-size:11px;"></div>
-        <button type="submit" class="button button-primary" style="min-height:36px;padding:0 16px;">Add Product to Catalog</button>
-      </form></div></section>
-    <section class="panel"><div class="panel-header"><div><h2 class="panel-title">Organic indexing and keyword gaps</h2><div class="panel-subtitle">Ranks and gaps are illustrative until connected to approved search data</div></div><span class="category-pill">${state.products.length} ASINs</span></div><div class="table-wrap"><table><thead><tr><th>ASIN</th><th>Current organic indexing rank</th><th>Keyword gaps detected</th><th>Sync status</th></tr></thead><tbody>${rows}</tbody></table></div></section>
-    <div class="catalog-action"><div><strong>Seller Central update</strong><span>Approval stages the selected draft in this sandbox; an SP-API worker is not configured.</span></div><button class="button button-primary" type="button" data-agent-action="catalog_push" data-asin="${escapeHtml(selectedCatalogAsin)}" ${queued ? "disabled" : ""}>Approve &amp; Push to Seller Central via SP-API</button></div>`;
+    <div class="table-wrap"><table><thead><tr><th style="width:34px"></th><th>ASIN</th><th>SKU</th><th>Title</th><th>Category</th><th>Status</th><th>Score</th><th>Issues</th><th>Stock</th><th>Days of supply</th><th>Price</th><th style="width:170px">Actions</th></tr></thead><tbody>
+      ${rows || `<tr><td class="empty-cell" colSpan="12">${productCache.error ? escapeHtml(productCache.error) : "No products match the current filters."}</td></tr>`}
+    </tbody></table></div>
+    <div class="table-pagination">${paginationControls(page, totalPages, (nextPage) => { catalogFilter.page = nextPage; render(); })}
+      <span class="pagination-caption">${number(total)} products · page ${number(page)} of ${number(totalPages)}</span>
+    </div>`;
+}
+
+function paginationControls(page, totalPages, onChange) {
+  if (totalPages <= 1) return "";
+  const buttons = [];
+  for (let p = Math.max(1, page - 2); p <= Math.min(totalPages, page + 2); p++) buttons.push(`<button type="button" class="page-button ${p === page ? "page-active" : ""}" data-page="${p}">${p}</button>`);
+  return `<div class="pagination" role="navigation">${buttons.map((button, index) => index ? button : `<button type="button" class="page-button page-ellipsis" ${page <= 2 ? "disabled" : ""} data-page="${page - 1}">…</button>`).join("")}${page >= totalPages - 1 ? "" : `<button type="button" class="page-button page-ellipsis" ${page >= totalPages ? "disabled" : ""} data-page="${page + 1}">…</button>`}</div>`;
+}
+
+
+function renderOptimizeDrawer() {
+  if (!viewState.drawerId) return "";
+  const product = productById(viewState.drawerId);
+  if (!product) return "";
+  const issues = Array.isArray(product.opt_issues) ? product.opt_issues : [];
+  const bulletsValue = Array.isArray(product.bullets) ? product.bullets.join("\n") : String(product.bullets || "");
+  const keywordsValue = Array.isArray(product.backend_keywords) ? product.backend_keywords.join(", ") : String(product.backend_keywords || "");
+  return `<div class="drawer-backdrop" data-action="close-drawer"></div>
+    <div class="drawer" data-drawer>
+      <div class="drawer-header"><div><span class="drawer-title">${viewState.drawerMode === "view" ? "View listing" : "Optimize listing"}</span><span class="drawer-sub">${escapeHtml(product.sku)} · ${escapeHtml(product.asin)}</span></div><button type="button" class="button button-outline button-sm" data-action="close-drawer">Close</button></div>
+      <div class="drawer-body">
+        <div class="compare-grid">
+          <div class="compare-side"><div class="compare-head">Current · score ${number(product.opt_score ?? 0)}</div>
+            <div class="compare-field"><span>Title</span><div class="field-value">${escapeHtml(product.title || product.name || "—")}</div></div>
+            <div class="compare-field"><span>Bullets</span><ul class="field-list">${(product.bullets || []).map((bullet) => `<li>${escapeHtml(bullet)}</li>`).join("")}</ul></div>
+            <div class="compare-field"><span>Backend keywords</span><div class="field-value">${escapeHtml((product.backend_keywords || []).join(", "))}</div></div>
+            <div class="compare-field"><span>Description</span><div class="field-value">${escapeHtml(product.description || "—")}</div></div>
+            <div class="compare-field"><span>Images</span><div class="field-value">${number(product.images?.length ?? 0)} main</div></div>
+            ${issues.map((issue) => `<div class="compare-field issue"><span>Issue</span><span class="issue-tag muted">${escapeHtml(issue)}</span></div>`).join("")}
+          </div>
+          <div class="compare-side"><div class="compare-head">Suggested · editable before approval</div>
+            <form id="optimize-form" data-product-id="${escapeHtml(product.id)}">
+              <div class="compare-field"><span>Title</span><textarea name="title" required style="width:100%;min-height:44px;padding:0 10px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink);font:inherit;font-size:11px;">${escapeHtml(product.title || product.name || "")}</textarea></div>
+              <div class="compare-field"><span>Bullets (one per line)</span><textarea name="bullets" required style="width:100%;min-height:88px;padding:0 10px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink);font:inherit;font-size:11px;">${escapeHtml(bulletsValue)}</textarea></div>
+              <div class="compare-field"><span>Backend keywords (comma-separated)</span><input name="backend_keywords" value="${escapeHtml(keywordsValue)}" style="width:100%;min-height:30px;padding:0 10px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink);font:inherit;font-size:11px;"></div>
+              <div class="compare-field"><span>Description</span><textarea name="description" style="width:100%;min-height:66px;padding:0 10px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink);font:inherit;font-size:11px;">${escapeHtml(product.description || "")}</textarea></div>
+              <div class="compare-actions">
+                ${viewState.drawerMode === "view" ? `<button type="button" class="button button-outline" data-action="close-drawer">Close</button>` : `
+                  <button type="button" class="button button-outline" data-action="close-drawer">Cancel</button>
+                  <button type="button" class="button" data-save-draft="${escapeHtml(product.id)}">Save draft</button>
+                  <button type="button" class="button button-primary" data-send-approval="${escapeHtml(product.id)}">Send to approval</button>`}
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderAddProductModal() {
+  if (!viewState.addModal) return "";
+  return `<div class="drawer-backdrop" data-action="close-add-modal"></div>
+    <div class="drawer" style="width:min(720px,92vw);max-height:92vh;display:flex;flex-direction:column" data-add-modal>
+      <div class="drawer-header"><div><span class="drawer-title">Add product</span><span class="drawer-sub">Import from Amazon or create manually</span></div><button type="button" class="button button-outline button-sm" data-action="close-add-modal">Close</button></div>
+      <div class="drawer-body" style="flex:1;overflow:auto;padding:16px 20px 20px;">
+        <div class="tabs"><button type="button" class="tab ${viewState.addTab === "import" ? "tab-active" : ""}" data-add-tab="import">Import from Amazon</button><button type="button" class="tab ${viewState.addTab === "manual" ? "tab-active" : ""}" data-add-tab="manual">Create manually</button></div>
+        <div class="tab-panel ${viewState.addTab === "import" ? "" : "hidden"}" id="add-tab-import">
+          <p class="hint">Look up a product in the mock Amazon catalog by ASIN or SKU. Re-importing is idempotent: mock sync upserts by ASIN + marketplace.</p>
+          <form id="add-import-form" style="display:flex;gap:8px;align-items:end;margin-top:10px;">
+            <input name="ref" type="text" placeholder="ASIN or SKU" required style="flex:1;min-height:34px;padding:0 10px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink);font:inherit;font-size:11px;">
+            <button type="submit" class="button button-primary" style="min-height:36px;">Import</button>
+          </form>
+        </div>
+        <div class="tab-panel ${viewState.addTab === "manual" ? "" : "hidden"}" id="add-tab-manual">
+          <form id="add-manual-form" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:10px;">
+            <div><label class="form-label">Product name</label><input name="add-name" type="text" placeholder="e.g. Bamboo Desk Organizer" required style="width:100%;min-height:30px;padding:0 10px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink);font:inherit;font-size:11px;"></div>
+            <div><label class="form-label">SKU</label><input name="add-sku" type="text" placeholder="e.g. BD-OG-01" required style="width:100%;min-height:30px;padding:0 10px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink);font:inherit;font-size:11px;"></div>
+            <div><label class="form-label">ASIN</label><input name="add-asin" type="text" placeholder="e.g. B0XYZ12345" required style="width:100%;min-height:30px;padding:0 10px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink);font:inherit;font-size:11px;"></div>
+            <div><label class="form-label">Listing title</label><input name="add-title" type="text" placeholder="Defaults to product name" style="width:100%;min-height:30px;padding:0 10px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink);font:inherit;font-size:11px;"></div>
+            <div><label class="form-label">Category</label><input name="add-category" type="text" placeholder="e.g. Office" style="width:100%;min-height:30px;padding:0 10px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink);font:inherit;font-size:11px;"></div>
+            <div><label class="form-label">Price ($)</label><input name="add-price" type="number" step="0.01" placeholder="24.99" style="width:100%;min-height:30px;padding:0 10px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink);font:inherit;font-size:11px;"></div>
+            <div><label class="form-label">Stock units</label><input name="add-stock" type="number" step="1" placeholder="500" style="width:100%;min-height:30px;padding:0 10px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink);font:inherit;font-size:11px;"></div>
+            <div><label class="form-label">Daily velocity</label><input name="add-velocity" type="number" step="0.1" placeholder="15" style="width:100%;min-height:30px;padding:0 10px;border:1px solid var(--line);border-radius:4px;background:#fff;color:var(--ink);font:inherit;font-size:11px;"></div>
+            <div style="grid-column:1/-1;display:flex;gap:8px;"><button type="button" class="button button-outline" data-action="close-add-modal">Cancel</button><button type="submit" form="add-manual-form" class="button button-primary" style="min-height:36px;">Create product</button></div>
+          </form>
+        </div>
+      </div>
+    </div>`;
 }
 
 function renderHow() {
@@ -403,7 +553,9 @@ function renderInventory() {
     const fill = Math.min(100, (days / 45) * 100);
     return `<tr><td><div class="product-name">${escapeHtml(product.name)}</div><div class="product-meta">${escapeHtml(product.sku)} · <span class="asin">${escapeHtml(product.asin)}</span></div></td>
       <td><div class="stock-cell"><div class="stock-number"><span>${number(product.stock, 1)} units</span><span>${number(days, 1)}d</span></div><div class="stock-track"><div class="stock-fill ${tone}" style="width:${fill}%"></div></div></div></td>
-      <td class="number-cell">${number(product.daily_velocity)} / day</td><td>${statusPill(label.toLowerCase() === "healthy" ? "approved" : label.toLowerCase() === "watch" ? "warning" : "critical")}</td>
+      <td class="number-cell">${number(product.daily_velocity)} / day</td>
+      <td class="number-cell score-cell">${number(product.opt_score ?? 0)} <span class="status-mini ${statusClass(product.opt_status)}">${escapeHtml(product.opt_status || "—")}</span></td>
+      <td>${statusPill(label.toLowerCase() === "healthy" ? "approved" : label.toLowerCase() === "watch" ? "warning" : "critical")}</td>
       <td>${product.po_draft_id ? `<span class="order-id">${escapeHtml(product.po_draft_id)}</span>` : '<span class="product-meta">No draft</span>'}</td></tr>`;
   }).join("");
   const alertStrip = lowStock.length ? `<div class="critical-strip"><span class="critical-mark">!</span><div><div class="critical-title">${lowStock.length} critical replenishment ${lowStock.length === 1 ? "alert" : "alerts"}</div><div class="critical-detail">${lowStock.map((product) => `${escapeHtml(product.name)} · ${number(daysOfSupply(product), 1)} days of supply`).join(" &nbsp; / &nbsp; ")}<br />A purchase order draft is generated automatically when coverage falls below 15 days.</div></div></div>` : "";
@@ -431,7 +583,7 @@ function renderInventory() {
       <section class="panel"><div class="panel-header"><div><h2 class="panel-title">Purchase order drafts</h2><div class="panel-subtitle">Created automatically below 15 days of supply</div></div><span class="category-pill">${state.purchase_orders.length} drafts</span></div><div class="panel-content"><div class="po-list">${drafts}</div></div></section>
     </div>
     <section class="panel"><div class="panel-header"><div><h2 class="panel-title">Inventory by product</h2><div class="panel-subtitle">Days of supply = on-hand stock ÷ daily sales velocity</div></div></div>
-      <div class="table-wrap"><table><thead><tr><th>Product</th><th>Stock cover</th><th>Velocity</th><th>Risk status</th><th>PO draft</th></tr></thead><tbody>${rows}</tbody></table></div></section>`;
+      <div class="table-wrap"><table><thead><tr><th>Product</th><th>Stock cover</th><th>Velocity</th><th style="width:140px">Optimization</th><th>Risk status</th><th>PO draft</th></tr></thead><tbody>${rows}</tbody></table></div></section>`;
 }
 
 function renderSellerStore() {
@@ -498,30 +650,41 @@ function renderFeed(items, showCategory = true) {
 
 function renderActivity() {
   const items = activityFilter === "all" ? state.activity : state.activity.filter((item) => item.category === activityFilter);
-  const filters = ["all", "repricer", "ppc", "inventory", "procurement"].map((filter) => `<button class="filter-button ${activityFilter === filter ? "active" : ""}" type="button" data-activity-filter="${filter}">${filter === "all" ? "All events" : filter}</button>`).join("");
+  const filters = ["all", "repricer", "ppc", "inventory", "procurement", "catalog", "approval", "sync"].map((filter) => `<button class="filter-button ${activityFilter === filter ? "active" : ""}" type="button" data-activity-filter="${filter}">${filter === "all" ? "All events" : filter.charAt(0).toUpperCase() + filter.slice(1)}</button>`).join("");
   return `${heading("Automation activity logs", "A timestamped record of every simulated pricing, advertising, and inventory decision.", "System audit")}
     <section class="panel"><div class="toolbar"><div class="table-count">${number(items.length)} events · newest first</div><div class="filter-group" role="group" aria-label="Filter activity">${filters}</div></div><div class="panel-content">${renderFeed(items, true)}</div></section>`;
 }
 
 function renderApprovals() {
+  const revisions = (state.product_revisions || []).filter((revision) => revision.status === "pending_approval");
   const orders = state.orders.filter((order) => approvalFilter === "all" || order.status === approvalFilter);
-  const pendingSpend = state.orders.filter((order) => order.status === "pending").reduce((sum, order) => sum + order.amount, 0);
   const filters = ["pending", "approved", "denied", "all"].map((filter) => `<button class="filter-button ${approvalFilter === filter ? "active" : ""}" type="button" data-approval-filter="${filter}">${filter.charAt(0).toUpperCase() + filter.slice(1)}</button>`).join("");
-  const rows = orders.map((order) => `<tr><td><span class="order-id">${escapeHtml(order.id)}</span><div class="product-meta">${escapeHtml(order.product_name)}</div></td>
+  const orderRows = orders.map((order) => `<tr><td><span class="order-id">${escapeHtml(order.id)}</span><div class="product-meta">${escapeHtml(order.product_name)}</div></td>
     <td><div class="product-name">${escapeHtml(order.supplier)}</div><div class="product-meta">${escapeHtml(order.category)}</div></td>
     <td class="number-cell">${number(order.units)} units</td><td class="price">${money(order.amount)}</td>
     <td><div>${statusPill(order.status)}</div><div class="product-meta">${escapeHtml(order.reason)}</div></td>
     <td>${order.status === "pending" ? `<div class="action-row"><button class="button button-approve" type="button" data-decision="approve" data-order-id="${escapeHtml(order.id)}">Approve</button><button class="button button-deny" type="button" data-decision="deny" data-order-id="${escapeHtml(order.id)}">Deny</button></div>` : `<span class="product-meta">${escapeHtml(order.reviewed_by || "Reviewed")}</span>`}</td></tr>`).join("");
-  return `${heading("Procurement approvals", "Review enterprise purchasing workflows before they are committed.", "Administration")}
+  const revisionRows = revisions.map((revision) => {
+    const product = (state.products || []).find((item) => item.id === revision.product_id);
+    const changeRows = Object.entries(revision.field_changes || {}).map(([field, change]) => `<tr><td class="diff-label">${escapeHtml(field)}</td><td class="diff-before">${Array.isArray(change.before) ? change.before.join(" | ") : change.before === "" ? "—" : escapeHtml(String(change.before))}</td><td class="diff-arrow">→</td><td class="diff-after">${Array.isArray(change.after) ? change.after.join(" | ") : change.after === "" ? "—" : escapeHtml(String(change.after))}</td></tr>`).join("");
+    return `<tr><td><div class="product-name">${escapeHtml(product ? (product.title || product.name) : "—")}</div><div class="product-meta">${escapeHtml(product ? product.sku : "—")} · ${escapeHtml(product ? product.asin : "—")}</div></td>
+      <td class="revision-meta">${changeRows || '<span class="product-meta">No field changes</span>'}</td>
+      <td class="number-cell">${activityTime(revision.created_at)}</td>
+      <td class="action-row"><button class="button button-approve" type="button" data-approve-rev="${escapeHtml(revision.id)}">Approve</button><button class="button button-deny" type="button" data-reject-rev="${escapeHtml(revision.id)}">Reject</button></td></tr>`;
+  }).join("");
+  return `${heading("Listing approvals", "Review optimization drafts before they are applied to the shared product record and republished to the mock Amazon catalog.", "Administration")}
     <div class="metrics">
-      ${metric("Awaiting decision", number(state.orders.filter((order) => order.status === "pending").length), "Approval required before purchase", "orange", "PENDING")}
-      ${metric("Pending commitment", money(pendingSpend, 0), "Total value awaiting manager review", "teal", "USD")}
+      ${metric("Awaiting decision", number(revisions.length), "Revisions require an approver before publishing", "orange", "PENDING")}
+      ${metric("Approved drafts", number((state.product_revisions || []).filter((revision) => revision.status === "approved").length), "Approved revisions are published to mock Amazon", "green", "PUBLISHED")}
+      ${metric("Rejected drafts", number((state.product_revisions || []).filter((revision) => revision.status === "rejected").length), "Rejected drafts return the product to needs optimization", "orange", "REJECTED")}
       ${metric("Reviewed by", escapeHtml(state.manager.name), escapeHtml(state.manager.role), "blue", "MANAGER PROFILE")}
-      ${metric("Approved workflows", number(state.orders.filter((order) => order.status === "approved").length), "Decisions are recorded in activity logs", "green", "LIFETIME")}
     </div>
-    <section class="panel"><div class="toolbar"><div class="table-count">${number(orders.length)} workflows shown · ${escapeHtml(state.manager.name)} is the active approver</div><div class="filter-group" role="group" aria-label="Filter purchase workflows">${filters}</div></div>
-      <div class="table-wrap"><table><thead><tr><th>Workflow</th><th>Supplier</th><th>Quantity</th><th>Amount</th><th>Status / reason</th><th>Manager action</th></tr></thead><tbody>${rows || '<tr><td colspan="6"><div class="empty-state">No workflows in this view.</div></td></tr>'}</tbody></table></div></section>`;
+    <section class="panel"><div class="panel-header"><div><h2 class="panel-title">Pending revisions</h2><div class="panel-subtitle">Before/after diff per listing field · approving writes to the product and its marketplace listings</div></div></div>
+      <div class="table-wrap"><table><thead><tr><th>Product</th><th>Field changes (before → after)</th><th>Submitted</th><th>Manager action</th></tr></thead><tbody>${revisionRows || '<tr><td colspan="4"><div class="empty-state">No listing revisions are awaiting approval.</div></td></tr>'}</tbody></table></div></section>
+    <section class="panel"><div class="toolbar"><div class="table-count">${number(orders.length)} purchase workflows shown · ${escapeHtml(state.manager.name)} is the active approver</div><div class="filter-group" role="group" aria-label="Filter purchase workflows">${filters}</div></div>
+      <div class="table-wrap"><table><thead><tr><th>Workflow</th><th>Supplier</th><th>Quantity</th><th>Amount</th><th>Status / reason</th><th>Manager action</th></tr></thead><tbody>${orderRows || '<tr><td colspan="6"><div class="empty-state">No workflows in this view.</div></td></tr>'}</tbody></table></div></section>`;
 }
+
 
 function makeLabels(count) {
   return Array.from({ length: count }, (_, index) => {
@@ -632,6 +795,168 @@ async function fetchState(forceRender = true) {
   state = await response.json();
   if (forceRender) render();
 }
+
+// ------------------------------------------------------------------ shared products data layer
+// Single ["products"] query-key family. Every page reads the same product records
+// (state.products, refreshed from /api/state) and every mutation calls
+// invalidateProducts() so all pages refresh without a manual reload.
+const productCache = {
+  data: null,
+  summary: null,
+  error: null,
+  loading: false,
+};
+const viewState = {
+  drawerId: null,
+  drawerMode: "optimize",
+  addModal: false,
+  addTab: "import",
+  selectedIds: [],
+};
+const catalogFilter = {
+  opt_status: "", low_stock: false, suppressed: false,
+  search: "", sort: "", page: 1, page_size: 200,
+};
+
+async function fetchJson(url, init = {}) {
+  const headers = { Accept: "application/json", ...init.headers };
+  if (init.body && !(init.body instanceof FormData)) headers["Content-Type"] = "application/json";
+  const response = await fetch(url, { ...init, headers });
+  const contentType = response.headers.get("content-type") || "";
+  let payload;
+  if (contentType.includes("application/json")) {
+    try { payload = await response.json(); } catch { payload = null; }
+  } else {
+    const text = await response.text();
+    throw new Error(`Server returned ${response.status} ${response.statusText}${text ? ` · ${text.slice(0, 120)}` : ""}`);
+  }
+  if (!response.ok) throw new Error((payload && payload.detail) || `Request failed (${response.status})`);
+  return payload;
+}
+
+async function loadProducts() {
+  productCache.loading = true;
+  try {
+    const [list, summary] = await Promise.all([
+      fetchJson("/api/products?page_size=200"),
+      fetchJson("/api/overview/summary"),
+    ]);
+    productCache.data = list.products || [];
+    productCache.summary = summary || {};
+    productCache.error = null;
+  } catch (error) {
+    productCache.error = error.message;
+    productCache.data = productCache.data || [];
+    productCache.summary = productCache.summary || {};
+  } finally {
+    productCache.loading = false;
+  }
+}
+
+async function invalidateProducts() {
+  await Promise.all([fetchState(false), loadProducts()]);
+  render();
+}
+
+function productById(id) {
+  return (productCache.data || []).find((product) => product.id === id) ||
+    (state.products || []).find((product) => product.id === id);
+}
+
+async function addProductManually(form) {
+  const body = {
+    name: form.elements.namedItem("add-name").value.trim(),
+    sku: form.elements.namedItem("add-sku").value.trim(),
+    asin: form.elements.namedItem("add-asin").value.trim(),
+    title: form.elements.namedItem("add-title").value.trim() || undefined,
+    category: form.elements.namedItem("add-category").value.trim() || undefined,
+    price: form.elements.namedItem("add-price").value || undefined,
+    stock: form.elements.namedItem("add-stock").value || undefined,
+    daily_velocity: form.elements.namedItem("add-velocity").value || undefined,
+  };
+  const product = await fetchJson("/api/products", { method: "POST", body: JSON.stringify(body) });
+  viewState.addModal = false;
+  form.reset();
+  showToast(`Product added · ${product.product.asin}`);
+  await invalidateProducts();
+  return product;
+}
+
+async function importFromAmazon(ref) {
+  const product = await fetchJson("/api/products/import", {
+    method: "POST",
+    body: JSON.stringify({ asin: ref }),
+  });
+  viewState.addModal = false;
+  showToast(`Imported · ${product.product.asin}`);
+  await invalidateProducts();
+  return product;
+}
+
+async function patchProduct(id, body) {
+  await fetchJson(`/api/products/${encodeURIComponent(id)}`, { method: "PATCH", body: JSON.stringify(body) });
+  await invalidateProducts();
+}
+
+async function optimizeProduct(id, suggested, saveDraft) {
+  const result = await fetchJson(`/api/products/${encodeURIComponent(id)}/optimize`, {
+    method: "POST",
+    body: JSON.stringify({ suggested, save_draft: !!saveDraft }),
+  });
+  viewState.drawerId = null;
+  showToast(saveDraft ? "Draft saved" : "Optimization sent to approval");
+  await invalidateProducts();
+  return result;
+}
+
+async function submitOptimize(productId, saveDraft) {
+  const form = document.getElementById("optimize-form");
+  if (!form) return;
+  const formData = new FormData(form);
+  const bullets = formData.get("bullets").split("\n").map((line) => line.trim()).filter((line) => line.length);
+  const keywords = formData.get("backend_keywords").split(",").map((keyword) => keyword.trim()).filter((keyword) => keyword.length);
+  const suggested = {
+    title: formData.get("title"),
+    bullets,
+    backend_keywords: keywords,
+    description: formData.get("description"),
+  };
+  await optimizeProduct(productId, suggested, saveDraft);
+}
+
+async function optimizeBulkSelected() {
+  const ids = viewState.selectedIds;
+  if (!ids.length) return;
+  const result = await fetchJson("/api/products/optimize-bulk", {
+    method: "POST",
+    body: JSON.stringify({ product_ids: ids }),
+  });
+  viewState.selectedIds = [];
+  showToast(`Bulk optimization · ${result.count} draft(s) sent to approval`);
+  await invalidateProducts();
+  return result;
+}
+
+async function decideRevision(revisionId, action) {
+  await fetchJson(`/api/approvals/${encodeURIComponent(revisionId)}/${action}`, { method: "POST", body: JSON.stringify({}) });
+  await invalidateProducts();
+}
+
+async function syncSellerData() {
+  await fetchJson("/api/sync", { method: "POST", body: JSON.stringify({}) });
+  showToast("Mock Amazon sync started");
+  await invalidateProducts();
+}
+
+function syncAgeBadge(summary) {
+  const sync = summary && summary.sync;
+  if (!sync || sync.status !== "completed") return "Not connected";
+  const completed = sync.completed_at || sync.started_at;
+  if (!completed) return "Synced";
+  const minutes = Math.round((Date.now() - new Date(completed).getTime()) / 60000);
+  return `Synced ${minutes} min ago`;
+}
+
 
 function showToast(message, isError = false) {
   const root = document.querySelector("#toast-root");
@@ -792,6 +1117,114 @@ document.addEventListener("click", async (event) => {
     }
     return;
   }
+
+  const optimizeButton = event.target.closest("[data-optimize]");
+  if (optimizeButton) {
+    event.preventDefault();
+    viewState.drawerId = optimizeButton.dataset.optimize;
+    viewState.drawerMode = "optimize";
+    render();
+    return;
+  }
+  const viewButton = event.target.closest("[data-view]");
+  if (viewButton) {
+    event.preventDefault();
+    viewState.drawerId = viewButton.dataset.view;
+    viewState.drawerMode = "view";
+    render();
+    return;
+  }
+  if (event.target.matches("[data-save-draft]")) {
+    event.preventDefault();
+    await submitOptimize(event.target.dataset.saveDraft, true);
+    return;
+  }
+  if (event.target.matches("[data-send-approval]")) {
+    event.preventDefault();
+    await submitOptimize(event.target.dataset.sendApproval, false);
+    return;
+  }
+  if (event.target.matches("[data-action='close-drawer'], [data-action='close-add-modal']")) {
+    event.preventDefault();
+    viewState.drawerId = null;
+    viewState.addModal = false;
+    render();
+    return;
+  }
+  if (event.target.matches("[data-add-tab]")) {
+    event.preventDefault();
+    viewState.addTab = event.target.dataset.addTab;
+    render();
+    return;
+  }
+  if (event.target.matches("[data-action='sync-seller']")) {
+    event.preventDefault();
+    await syncSellerData();
+    return;
+  }
+  if (event.target.matches("[data-action='refresh-overview']")) {
+    event.preventDefault();
+    await invalidateProducts();
+    return;
+  }
+  if (event.target.matches("[data-action='bulk-optimize']")) {
+    event.preventDefault();
+    await optimizeBulkSelected();
+    return;
+  }
+  if (event.target.matches("[data-action='add-product']")) {
+    event.preventDefault();
+    viewState.addModal = true;
+    viewState.addTab = "import";
+    render();
+    return;
+  }
+  if (event.target.matches(".row-select")) {
+    const id = event.target.dataset.rowId;
+    if (event.target.checked) {
+      if (!viewState.selectedIds.includes(id)) viewState.selectedIds.push(id);
+    } else {
+      viewState.selectedIds = viewState.selectedIds.filter((selected) => selected !== id);
+    }
+    render();
+    return;
+  }
+  if (event.target.matches("[data-select-all]")) {
+    const pageIds = (document.querySelectorAll(".row-select:checked") ? [] : []);
+    const visibleIds = Array.from(document.querySelectorAll(".row-select")).map((checkbox) => checkbox.dataset.rowId);
+    if (event.target.checked) {
+      viewState.selectedIds = [...new Set([...viewState.selectedIds, ...visibleIds])];
+    } else {
+      viewState.selectedIds = viewState.selectedIds.filter((id) => !visibleIds.includes(id));
+    }
+    render();
+    return;
+  }
+  if (event.target.matches("[data-filter]")) {
+    const key = event.target.dataset.filter;
+    const value = event.target.dataset.filterValue;
+    if (key === "low_stock") catalogFilter.low_stock = value === "true";
+    else if (key === "suppressed") catalogFilter.suppressed = value === "true";
+    else { catalogFilter.opt_status = value; }
+    catalogFilter.page = 1;
+    render();
+    return;
+  }
+  if (event.target.matches("[data-page]")) {
+    catalogFilter.page = Number(event.target.dataset.page);
+    render();
+    return;
+  }
+  if (event.target.matches("[data-approve-rev]")) {
+    event.preventDefault();
+    await decideRevision(event.target.dataset.approveRev, "approve");
+    return;
+  }
+  if (event.target.matches("[data-reject-rev]")) {
+    event.preventDefault();
+    await decideRevision(event.target.dataset.rejectRev, "reject");
+    return;
+  }
   const navLink = event.target.closest("a[href]");
   if (navLink) {
     const href = navLink.getAttribute("href");
@@ -816,6 +1249,11 @@ document.addEventListener("change", (event) => {
   }
   if (event.target.id === "seller-store-add-select") {
     sellerStoreAddAsin = event.target.value;
+    render();
+  }
+  if (event.target.id === "catalog-search") {
+    catalogFilter.search = event.target.value;
+    catalogFilter.page = 1;
     render();
   }
 });
@@ -856,6 +1294,30 @@ document.addEventListener("submit", async (event) => {
     }
     return;
   }
+  const importForm = event.target.closest("#add-import-form");
+  if (importForm) {
+    event.preventDefault();
+    const ref = importForm.elements.namedItem("ref").value.trim();
+    if (!ref) return;
+    const submitBtn = importForm.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Importing...";
+    try {
+      await importFromAmazon(ref);
+      importForm.reset();
+    } catch (error) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Import";
+      showToast(error.message, true);
+    }
+    return;
+  }
+  const manualForm = event.target.closest("#add-manual-form");
+  if (manualForm) {
+    event.preventDefault();
+    await addProductManually(manualForm);
+    return;
+  }
 });
 
 window.addEventListener("popstate", render);
@@ -877,6 +1339,7 @@ document.addEventListener("pointerout", (event) => {
 async function start() {
   try {
     await fetchState();
+    await loadProducts();
   } catch (error) {
     app.innerHTML = `<main class="boot-screen"><div><p>Could not connect to the AmzSphere API.</p><p>${escapeHtml(error.message)}</p></div></main>`;
     return;
@@ -889,6 +1352,7 @@ async function start() {
       state = await response.json();
       if (state.last_updated !== previousUpdate) {
         renderPending = true;
+        await loadProducts();
         if (!hasFocusedControl()) render();
       }
     } catch (error) {
