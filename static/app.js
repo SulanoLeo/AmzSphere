@@ -68,7 +68,7 @@ function escapeHtml(value) {
 }
 
 function currentView() {
-  const view = window.location.hash.replace(/^#\/?/, "");
+  const view = window.location.pathname.replace(/^\/+/, "");
   return Object.hasOwn(routeTitles, view) ? view : "overview";
 }
 
@@ -240,13 +240,13 @@ function renderProcurementQueue() {
 
 function renderShell(view, body) {
   const pendingApprovals = state.orders.filter((order) => order.status === "pending").length;
-  const menu = navigation.map(([key, code, label]) => `<a class="nav-link ${view === key ? "active" : ""}" href="#/${key}" ${view === key ? 'aria-current="page"' : ""}>
+  const menu = navigation.map(([key, code, label]) => `<a class="nav-link ${view === key ? "active" : ""}" href="/${key}" ${view === key ? 'aria-current="page"' : ""}>
     <span class="nav-code">${code}</span><span>${label}</span>${key === "approvals" && pendingApprovals ? `<span class="nav-count">${pendingApprovals}</span>` : ""}
   </a>`).join("");
   const manager = state.manager;
   app.innerHTML = `<div class="layout">
     <aside class="sidebar">
-      <a class="brand" href="#/overview" aria-label="AmzSphere overview">
+      <a class="brand" href="/" aria-label="AmzSphere home">
         <span><span class="brand-name">AmzSphere</span></span>
       </a>
       <div class="nav-label">Workspace</div><nav class="nav-links" aria-label="Main navigation">${menu}</nav>
@@ -285,7 +285,7 @@ function renderOverview() {
     </div>
     ${renderProcurementQueue()}
     <div class="section-grid">
-      <section class="panel"><div class="panel-header"><div><h2 class="panel-title">Automation activity</h2><div class="panel-subtitle">Latest decisions from the background engine</div></div><a class="button" href="#/activity">View all</a></div>
+      <section class="panel"><div class="panel-header"><div><h2 class="panel-title">Automation activity</h2><div class="panel-subtitle">Latest decisions from the background engine</div></div><a class="button" href="/activity">View all</a></div>
         <div class="panel-content">${renderFeed(recentActivity, false)}</div></section>
       <section class="panel insight-panel"><div class="panel-content">
         <div class="insight-tag">AI review summary · Mock analysis</div>
@@ -378,10 +378,10 @@ function renderHow() {
       </div></div>
     </section>
     <div class="section-grid equal">
-      <section class="panel"><div class="panel-header"><div><h2 class="panel-title">Repricer rules</h2><div class="panel-subtitle">Competition updates each simulator tick</div></div><a class="button" href="#/repricer">Open monitor</a></div><div class="panel-content"><div class="rule-equation">Competitor − $0.01</div><p class="flow-copy">When a competitor is below your offer and above your minimum floor, the offer moves one cent below the competitor. It never prices below the floor. Competitor movement is randomized by $0.10–$1.50.</p></div></section>
-      <section class="panel"><div class="panel-header"><div><h2 class="panel-title">PPC keyword rules</h2><div class="panel-subtitle">Customer search-term pool</div></div><a class="button" href="#/ppc">Open PPC engine</a></div><div class="panel-content"><div class="rule-line"><span class="status approved">Promote</span><span>&gt;5 conversions and &lt;25% ACoS adds an exact target.</span></div><div class="rule-line"><span class="status denied">Exclude</span><span>&gt;15 clicks and 0 conversions adds a negative.</span></div></div></section>
-      <section class="panel"><div class="panel-header"><div><h2 class="panel-title">Inventory rules</h2><div class="panel-subtitle">Velocity converts to a 10-second stock decrement</div></div><a class="button" href="#/inventory">Open inventory</a></div><div class="panel-content"><div class="rule-equation">Units ÷ units per day = days of supply</div><p class="flow-copy">Below 15 days of supply, the dashboard raises a critical alert and creates one draft PO per product. It does not send an order to a supplier.</p></div></section>
-      <section class="panel"><div class="panel-header"><div><h2 class="panel-title">Procurement decisions</h2><div class="panel-subtitle">Manager actions update workflow status</div></div><a class="button" href="#/approvals">Review approvals</a></div><div class="panel-content"><div class="rule-equation">Pending → Approved or Denied</div><p class="flow-copy">A decision records the mock manager and timestamp, then writes an audit event. No real purchase or payment is initiated.</p></div></section>
+      <section class="panel"><div class="panel-header"><div><h2 class="panel-title">Repricer rules</h2><div class="panel-subtitle">Competition updates each simulator tick</div></div><a class="button" href="/repricer">Open monitor</a></div><div class="panel-content"><div class="rule-equation">Competitor − $0.01</div><p class="flow-copy">When a competitor is below your offer and above your minimum floor, the offer moves one cent below the competitor. It never prices below the floor. Competitor movement is randomized by $0.10–$1.50.</p></div></section>
+      <section class="panel"><div class="panel-header"><div><h2 class="panel-title">PPC keyword rules</h2><div class="panel-subtitle">Customer search-term pool</div></div><a class="button" href="/ppc">Open PPC engine</a></div><div class="panel-content"><div class="rule-line"><span class="status approved">Promote</span><span>&gt;5 conversions and &lt;25% ACoS adds an exact target.</span></div><div class="rule-line"><span class="status denied">Exclude</span><span>&gt;15 clicks and 0 conversions adds a negative.</span></div></div></section>
+      <section class="panel"><div class="panel-header"><div><h2 class="panel-title">Inventory rules</h2><div class="panel-subtitle">Velocity converts to a 10-second stock decrement</div></div><a class="button" href="/inventory">Open inventory</a></div><div class="panel-content"><div class="rule-equation">Units ÷ units per day = days of supply</div><p class="flow-copy">Below 15 days of supply, the dashboard raises a critical alert and creates one draft PO per product. It does not send an order to a supplier.</p></div></section>
+      <section class="panel"><div class="panel-header"><div><h2 class="panel-title">Procurement decisions</h2><div class="panel-subtitle">Manager actions update workflow status</div></div><a class="button" href="/approvals">Review approvals</a></div><div class="panel-content"><div class="rule-equation">Pending → Approved or Denied</div><p class="flow-copy">A decision records the mock manager and timestamp, then writes an audit event. No real purchase or payment is initiated.</p></div></section>
     </div>
     <div class="section-grid equal">
       <section class="panel"><div class="panel-header"><div><h2 class="panel-title">Where state lives</h2><div class="panel-subtitle">Selected by environment and deployment</div></div><span class="status approved">Current mode · mock</span></div><div class="panel-content"><div class="feed-list">
@@ -792,6 +792,16 @@ document.addEventListener("click", async (event) => {
     }
     return;
   }
+  const navLink = event.target.closest("a[href]");
+  if (navLink) {
+    const href = navLink.getAttribute("href");
+    if (href && !href.startsWith("http") && !href.startsWith("#") && !href.startsWith("mailto:") && !href.startsWith("tel:") && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) {
+      event.preventDefault();
+      window.history.pushState({}, "", href);
+      render();
+      return;
+    }
+  }
 });
 
 document.addEventListener("change", (event) => {
@@ -848,7 +858,7 @@ document.addEventListener("submit", async (event) => {
   }
 });
 
-window.addEventListener("hashchange", render);
+window.addEventListener("popstate", render);
 document.addEventListener("focusout", () => {
   window.setTimeout(() => {
     if (renderPending && !hasFocusedControl()) render();
@@ -865,7 +875,6 @@ document.addEventListener("pointerout", (event) => {
 }, true);
 
 async function start() {
-  if (!window.location.hash) window.location.hash = "#/overview";
   try {
     await fetchState();
   } catch (error) {

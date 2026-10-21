@@ -75,11 +75,11 @@ class DashboardHandler(BaseHTTPRequestHandler):
             self.send_json(200, {"products": state.get("seller_store", [])})
             return
 
-        relative_path = "index.html" if path == "/" else path.removeprefix("/static/")
+        if path.startswith("/static/"):
+            relative_path = path.removeprefix("/static/")
+        else:
+            relative_path = "index.html"
         file_path = (STATIC_DIR / relative_path).resolve()
-        if path != "/" and not path.startswith("/static/"):
-            self.send_error(404)
-            return
         if STATIC_DIR not in file_path.parents or not file_path.is_file():
             self.send_error(404)
             return
