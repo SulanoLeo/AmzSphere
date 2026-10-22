@@ -429,7 +429,7 @@ function renderCatalog() {
         <button type="button" class="button button-primary" data-action="add-product">Add product</button>
       </div>
     </div>
-    <div class="table-wrap"><table><thead><tr><th style="width:34px"></th><th>ASIN</th><th>SKU</th><th>Title</th><th>Category</th><th>Status</th><th>Score</th><th>Issues</th><th>Stock</th><th>Days of supply</th><th>Price</th><th style="width:170px">Actions</th></tr></thead><tbody>
+    <div class="table-wrap"><table><thead><tr><th style="width:34px"></th><th>ASIN</th><th>SKU</th><th style="min-width:220px">Title</th><th>Category</th><th>Status</th><th>Score</th><th>Issues</th><th>Stock</th><th>Days of supply</th><th>Price</th><th style="width:170px">Actions</th></tr></thead><tbody>
       ${rows || `<tr><td class="empty-cell" colSpan="12">${productCache.error ? escapeHtml(productCache.error) : "No products match the current filters."}</td></tr>`}
     </tbody></table></div>
     <div class="table-pagination">${paginationControls(page, totalPages, (nextPage) => { catalogFilter.page = nextPage; render(); })}
