@@ -1531,6 +1531,162 @@
         "Description is shorter than 50 characters."
       ],
       "opt_status": "needs_optimization"
+    },
+    {
+      "id": "cc4184577d294dada8dea4acff56d1b6",
+      "asin": "B0TMPROD01",
+      "sku": "TMP-MSE-01",
+      "marketplace_id": "ATVPDKIKX0DER",
+      "source": "manual",
+      "name": "VertiClick Wireless Ergonomic Mouse",
+      "title": "VertiClick Wireless Ergonomic Mouse - Vertical Design for Comfort and Wrist Support",
+      "category": "Electronics",
+      "price": 49.99,
+      "bullets": [
+        "Vertical ergonomic design reduces wrist strain during long work sessions.",
+        "Wireless 2.4GHz connection with USB nano receiver for clutter-free desks.",
+        "Adjustable DPI settings for precise cursor control.",
+        "Contoured shape supports right-handed users in a natural handshake position.",
+        "Long battery life with auto sleep mode to conserve power."
+      ],
+      "description": "A vertical wireless ergonomic mouse designed to reduce wrist strain and promote a natural handshake position during extended computer use.",
+      "backend_keywords": [
+        "ergonomic mouse",
+        "vertical mouse",
+        "wireless mouse",
+        "wrist support"
+      ],
+      "images": [
+        "/mock/images/TMP-MSE-01/1.jpg",
+        "/mock/images/TMP-MSE-01/2.jpg",
+        "/mock/images/TMP-MSE-01/3.jpg"
+      ],
+      "sellable_units": 240,
+      "stock": 240,
+      "days_of_supply": 30.0,
+      "daily_velocity": 8.0,
+      "competitor_price": 49.5,
+      "market_price": 48.5,
+      "min_floor": 39.99,
+      "max_price": 59.99,
+      "unit_cost": 22.0,
+      "lead_time_days": 14,
+      "supplier": "Shenzhen Peripheral Works",
+      "po_draft_id": null,
+      "suppressed": false,
+      "last_synced_at": "2026-10-22T05:19:21.512571+00:00",
+      "sync_status": "synced",
+      "last_optimized_at": null,
+      "opt_score": 0,
+      "opt_issues": [
+        "missing backend keywords",
+        "thin description"
+      ],
+      "opt_status": "needs_optimization"
+    },
+    {
+      "id": "dfd20542204b4216afda13ac82fa1174",
+      "asin": "B0TMPROD02",
+      "sku": "TMP-BOT-02",
+      "marketplace_id": "ATVPDKIKX0DER",
+      "source": "manual",
+      "name": "ThermoFlask Stainless Steel Water Bottle",
+      "title": "ThermoFlask Stainless Steel Water Bottle - Vacuum Insulated 32oz for Cold and Hot Drinks",
+      "category": "Home & Kitchen",
+      "price": 24.99,
+      "bullets": [
+        "Double-wall vacuum insulation keeps drinks cold for 24 hours or hot for 12 hours.",
+        "Food-grade 18/8 stainless steel body resists rust and does not retain flavors.",
+        "Leak-proof lid with carry loop for gym, office, and travel use.",
+        "Wide mouth opening for easy filling, pouring, and cleaning.",
+        "BPA-free and sweat-free exterior prevents condensation on bags and desks."
+      ],
+      "description": "A vacuum-insulated stainless steel water bottle that keeps beverages cold for 24 hours and hot for 12 hours, ideal for daily hydration.",
+      "backend_keywords": [
+        "water bottle",
+        "insulated bottle",
+        "stainless steel bottle",
+        "vacuum flask"
+      ],
+      "images": [
+        "/mock/images/TMP-BOT-02/1.jpg",
+        "/mock/images/TMP-BOT-02/2.jpg",
+        "/mock/images/TMP-BOT-02/3.jpg"
+      ],
+      "sellable_units": 500,
+      "stock": 500,
+      "days_of_supply": 25.0,
+      "daily_velocity": 20.0,
+      "competitor_price": 24.5,
+      "market_price": 23.9,
+      "min_floor": 19.99,
+      "max_price": 29.99,
+      "unit_cost": 9.5,
+      "lead_time_days": 21,
+      "supplier": "Guangzhou Drinkware Co.",
+      "po_draft_id": null,
+      "suppressed": false,
+      "last_synced_at": "2026-10-22T05:19:21.512571+00:00",
+      "sync_status": "synced",
+      "last_optimized_at": null,
+      "opt_score": 0,
+      "opt_issues": [
+        "weak title",
+        "missing keywords"
+      ],
+      "opt_status": "needs_optimization"
+    },
+    {
+      "id": "15cd53937e744fa084cbbc9262849ccb",
+      "asin": "B0TMPROD03",
+      "sku": "TMP-LMP-03",
+      "marketplace_id": "ATVPDKIKX0DER",
+      "source": "manual",
+      "name": "LumiDesk LED Desk Lamp",
+      "title": "LumiDesk LED Desk Lamp - Dimmable Touch Control Eye-Care Reading Lamp",
+      "category": "Lighting",
+      "price": 39.99,
+      "bullets": [
+        "Dimmable LED brightness with touch control for reading, work, and bedside use.",
+        "Eye-care flicker-free light reduces eye strain during long study sessions.",
+        "Adjustable gooseneck arm directs light exactly where it is needed.",
+        "Built-in USB charging port for phones and devices.",
+        "Compact base saves desk space in home offices and dorm rooms."
+      ],
+      "description": "A dimmable LED desk lamp with touch control, flicker-free eye-care lighting, and a built-in USB charging port.",
+      "backend_keywords": [
+        "led desk lamp",
+        "dimmable lamp",
+        "reading lamp",
+        "eye care lamp"
+      ],
+      "images": [
+        "/mock/images/TMP-LMP-03/1.jpg",
+        "/mock/images/TMP-LMP-03/2.jpg",
+        "/mock/images/TMP-LMP-03/3.jpg"
+      ],
+      "sellable_units": 180,
+      "stock": 180,
+      "days_of_supply": 15.0,
+      "daily_velocity": 12.0,
+      "competitor_price": 39.5,
+      "market_price": 38.9,
+      "min_floor": 31.99,
+      "max_price": 44.99,
+      "unit_cost": 16.0,
+      "lead_time_days": 18,
+      "supplier": "Hangzhou Lighting Mfg.",
+      "po_draft_id": null,
+      "suppressed": false,
+      "last_synced_at": "2026-10-22T05:19:21.512571+00:00",
+      "sync_status": "synced",
+      "last_optimized_at": null,
+      "opt_score": 0,
+      "opt_issues": [
+        "short bullets",
+        "low opt score"
+      ],
+      "opt_status": "needs_optimization"
     }
   ],
   "global_products": [
@@ -3056,6 +3212,162 @@
         "Only 2 bullet points; at least 5 are recommended.",
         "Only 3 main images; at least 7 are recommended.",
         "Description is shorter than 50 characters."
+      ],
+      "opt_status": "needs_optimization"
+    },
+    {
+      "id": "cc4184577d294dada8dea4acff56d1b6",
+      "asin": "B0TMPROD01",
+      "sku": "TMP-MSE-01",
+      "marketplace_id": "ATVPDKIKX0DER",
+      "source": "manual",
+      "name": "VertiClick Wireless Ergonomic Mouse",
+      "title": "VertiClick Wireless Ergonomic Mouse - Vertical Design for Comfort and Wrist Support",
+      "category": "Electronics",
+      "price": 49.99,
+      "bullets": [
+        "Vertical ergonomic design reduces wrist strain during long work sessions.",
+        "Wireless 2.4GHz connection with USB nano receiver for clutter-free desks.",
+        "Adjustable DPI settings for precise cursor control.",
+        "Contoured shape supports right-handed users in a natural handshake position.",
+        "Long battery life with auto sleep mode to conserve power."
+      ],
+      "description": "A vertical wireless ergonomic mouse designed to reduce wrist strain and promote a natural handshake position during extended computer use.",
+      "backend_keywords": [
+        "ergonomic mouse",
+        "vertical mouse",
+        "wireless mouse",
+        "wrist support"
+      ],
+      "images": [
+        "/mock/images/TMP-MSE-01/1.jpg",
+        "/mock/images/TMP-MSE-01/2.jpg",
+        "/mock/images/TMP-MSE-01/3.jpg"
+      ],
+      "sellable_units": 240,
+      "stock": 240,
+      "days_of_supply": 30.0,
+      "daily_velocity": 8.0,
+      "competitor_price": 49.5,
+      "market_price": 48.5,
+      "min_floor": 39.99,
+      "max_price": 59.99,
+      "unit_cost": 22.0,
+      "lead_time_days": 14,
+      "supplier": "Shenzhen Peripheral Works",
+      "po_draft_id": null,
+      "suppressed": false,
+      "last_synced_at": "2026-10-22T05:19:21.512571+00:00",
+      "sync_status": "synced",
+      "last_optimized_at": null,
+      "opt_score": 0,
+      "opt_issues": [
+        "missing backend keywords",
+        "thin description"
+      ],
+      "opt_status": "needs_optimization"
+    },
+    {
+      "id": "dfd20542204b4216afda13ac82fa1174",
+      "asin": "B0TMPROD02",
+      "sku": "TMP-BOT-02",
+      "marketplace_id": "ATVPDKIKX0DER",
+      "source": "manual",
+      "name": "ThermoFlask Stainless Steel Water Bottle",
+      "title": "ThermoFlask Stainless Steel Water Bottle - Vacuum Insulated 32oz for Cold and Hot Drinks",
+      "category": "Home & Kitchen",
+      "price": 24.99,
+      "bullets": [
+        "Double-wall vacuum insulation keeps drinks cold for 24 hours or hot for 12 hours.",
+        "Food-grade 18/8 stainless steel body resists rust and does not retain flavors.",
+        "Leak-proof lid with carry loop for gym, office, and travel use.",
+        "Wide mouth opening for easy filling, pouring, and cleaning.",
+        "BPA-free and sweat-free exterior prevents condensation on bags and desks."
+      ],
+      "description": "A vacuum-insulated stainless steel water bottle that keeps beverages cold for 24 hours and hot for 12 hours, ideal for daily hydration.",
+      "backend_keywords": [
+        "water bottle",
+        "insulated bottle",
+        "stainless steel bottle",
+        "vacuum flask"
+      ],
+      "images": [
+        "/mock/images/TMP-BOT-02/1.jpg",
+        "/mock/images/TMP-BOT-02/2.jpg",
+        "/mock/images/TMP-BOT-02/3.jpg"
+      ],
+      "sellable_units": 500,
+      "stock": 500,
+      "days_of_supply": 25.0,
+      "daily_velocity": 20.0,
+      "competitor_price": 24.5,
+      "market_price": 23.9,
+      "min_floor": 19.99,
+      "max_price": 29.99,
+      "unit_cost": 9.5,
+      "lead_time_days": 21,
+      "supplier": "Guangzhou Drinkware Co.",
+      "po_draft_id": null,
+      "suppressed": false,
+      "last_synced_at": "2026-10-22T05:19:21.512571+00:00",
+      "sync_status": "synced",
+      "last_optimized_at": null,
+      "opt_score": 0,
+      "opt_issues": [
+        "weak title",
+        "missing keywords"
+      ],
+      "opt_status": "needs_optimization"
+    },
+    {
+      "id": "15cd53937e744fa084cbbc9262849ccb",
+      "asin": "B0TMPROD03",
+      "sku": "TMP-LMP-03",
+      "marketplace_id": "ATVPDKIKX0DER",
+      "source": "manual",
+      "name": "LumiDesk LED Desk Lamp",
+      "title": "LumiDesk LED Desk Lamp - Dimmable Touch Control Eye-Care Reading Lamp",
+      "category": "Lighting",
+      "price": 39.99,
+      "bullets": [
+        "Dimmable LED brightness with touch control for reading, work, and bedside use.",
+        "Eye-care flicker-free light reduces eye strain during long study sessions.",
+        "Adjustable gooseneck arm directs light exactly where it is needed.",
+        "Built-in USB charging port for phones and devices.",
+        "Compact base saves desk space in home offices and dorm rooms."
+      ],
+      "description": "A dimmable LED desk lamp with touch control, flicker-free eye-care lighting, and a built-in USB charging port.",
+      "backend_keywords": [
+        "led desk lamp",
+        "dimmable lamp",
+        "reading lamp",
+        "eye care lamp"
+      ],
+      "images": [
+        "/mock/images/TMP-LMP-03/1.jpg",
+        "/mock/images/TMP-LMP-03/2.jpg",
+        "/mock/images/TMP-LMP-03/3.jpg"
+      ],
+      "sellable_units": 180,
+      "stock": 180,
+      "days_of_supply": 15.0,
+      "daily_velocity": 12.0,
+      "competitor_price": 39.5,
+      "market_price": 38.9,
+      "min_floor": 31.99,
+      "max_price": 44.99,
+      "unit_cost": 16.0,
+      "lead_time_days": 18,
+      "supplier": "Hangzhou Lighting Mfg.",
+      "po_draft_id": null,
+      "suppressed": false,
+      "last_synced_at": "2026-10-22T05:19:21.512571+00:00",
+      "sync_status": "synced",
+      "last_optimized_at": null,
+      "opt_score": 0,
+      "opt_issues": [
+        "short bullets",
+        "low opt score"
       ],
       "opt_status": "needs_optimization"
     }
