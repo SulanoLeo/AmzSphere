@@ -101,7 +101,7 @@ function CatalogWorkspace() {
 
   return <main className="min-h-screen bg-canvas px-4 py-6 md:px-10 md:py-10">
     <Link href="/" className="mb-7 inline-flex items-center gap-2 text-xs font-semibold text-muted hover:text-ink"><ArrowLeft size={15} />Operations overview</Link>
-    <header className="mb-7"><p className="text-[10px] font-bold uppercase tracking-widest text-teal-700">Catalog operations</p><h1 className="mt-1 text-2xl font-semibold text-indigo-950">SEO & Catalog Agent</h1><p className="mt-2 text-sm text-muted">Queue real seller listing data for keyword analysis and a structured copy proposal.</p></header>
+    <header className="mb-7"><p className="text-[10px] font-bold uppercase tracking-widest text-teal-700">Catalog operations</p><h1 className="mt-1 text-2xl font-semibold text-indigo-950">SEO & Catalog</h1><p className="mt-2 text-sm text-muted">One shared product record for the catalog: status badges, opt_score, filters, row actions, and bulk optimization. Every page reflects the update.</p></header>
 
     {/* Hybrid data sourcing controls */}
     <Card className="mb-4"><CardHeader className="pb-2"><div className="flex items-center justify-between gap-2">
@@ -160,6 +160,23 @@ function CatalogWorkspace() {
         {operationStatus === "review_required" && <div className="md:col-span-2">{isApprover ? <Button onClick={() => void approveSuggestion()} disabled={busy}>Approve &amp; queue Amazon listing feed</Button> : <Badge className="bg-amber-50 text-amber-800">Approver permission required to publish</Badge>}</div>}
       </CardContent></Card>}
       <Card className="lg:col-span-2"><CardHeader><div><h2 className="text-sm font-semibold text-indigo-950">Simulated Amazon Storefront</h2><p className="mt-1 text-xs text-muted">Live listing preview updated reactively from sourcing inputs.</p></div><Badge>Preview</Badge></CardHeader><CardContent><StorefrontView /></CardContent></Card>
+
+      {/* Shared product table — mirrors the mock catalog table. Populates from the same
+          product records once connected; opt_status and opt_score are computed by scoring. */}
+      <Card className="mt-6 lg:col-span-2"><CardHeader><div><h2 className="text-sm font-semibold text-indigo-950">Shared product table</h2><p className="mt-1 text-xs text-muted">One product record read by catalog, inventory, pricing, and approvals.</p></div></CardHeader><CardContent>
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <span className="text-[10px] font-bold uppercase tracking-wide text-muted">Filters</span>
+          <Badge className="bg-amber-50 text-amber-800">Needs optimization</Badge>
+          <Badge className="bg-orange-50 text-orange-800">Low stock</Badge>
+          <Badge className="bg-red-50 text-red-800">Suppressed</Badge>
+        </div>
+        <div className="overflow-x-auto"><table className="w-full text-left text-xs"><thead className="bg-canvas text-[10px] uppercase tracking-wide text-muted"><tr><th className="px-4 py-3">ASIN</th><th className="px-4 py-3">SKU</th><th className="px-4 py-3">Title</th><th className="px-4 py-3 tabular-nums">Score</th><th className="px-4 py-3">Status</th><th className="px-4 py-3 tabular-nums">Stock</th><th className="px-4 py-3 tabular-nums">Days supply</th><th className="px-4 py-3">Action</th></tr></thead>
+          <tbody>
+            <tr className="border-t border-line"><td className="px-4 py-3 tabular-nums text-[10px] text-muted">—</td><td className="px-4 py-3">—</td><td className="px-4 py-3">No products connected yet</td><td className="px-4 py-3 tabular-nums">—</td><td className="px-4 py-3"><Badge>—</Badge></td><td className="px-4 py-3 tabular-nums">—</td><td className="px-4 py-3 tabular-nums">—</td><td className="px-4 py-3"><span className="text-[10px] text-muted">Connect a seller account to load products</span></td></tr>
+          </tbody>
+        </table></div>
+        <p className="mt-2 text-[10px] text-muted">Row actions: Optimize (opens side-by-side current vs suggested copy) · View. Bulk select with "Optimize selected". Add product opens Import from Amazon (ASIN/SKU) or Create manually.</p>
+      </CardContent></Card>
     </div>
   </main>;
 }

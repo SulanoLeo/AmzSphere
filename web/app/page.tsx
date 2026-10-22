@@ -21,6 +21,9 @@ type Product = {
   velocity_90d: number;
   days_supply: number | null;
   reorder_flag: boolean;
+  opt_score: number | null;
+  opt_status: string | null;
+  needs_optimization: boolean;
 };
 
 type Dashboard = {
@@ -28,6 +31,20 @@ type Dashboard = {
   marketplace_id: string;
   products: Product[];
   pending_purchase_orders: Array<{ id: string; vendor: string; status: string; currency: string; total_amount_minor: number; lines: Array<{ sku: string; asin: string; quantity: number }> }>;
+  sync_status: string | null;
+  last_synced_at: string | null;
+  needs_optimization_count: number;
+  top_10_by_impact: Array<{
+    asin: string;
+    sku: string;
+    name: string;
+    opt_score: number;
+    opt_status: string;
+    impact: number;
+    days_of_supply: number | null;
+    sellable_units: number;
+    opt_issues: string[];
+  }>;
 };
 
 type SellerOption = { id: string; merchant_id: string; marketplace_id: string; region: string };
@@ -130,19 +147,33 @@ export default function DashboardPage() {
     <main className="min-h-screen bg-canvas px-4 py-5 md:px-8 md:py-8">
       <header className="mb-7 flex flex-wrap items-center justify-between gap-4 border-b border-line pb-5">
         <div><p className="text-[10px] font-bold uppercase tracking-widest text-teal-700">Seller operations</p><h1 className="mt-1 text-2xl font-semibold text-indigo-950">Operations overview</h1><p className="mt-1 text-sm text-muted">Inventory health and human-review work queue.</p></div>
-        <div className="flex flex-wrap items-center gap-3">{sellers.length > 1 && <select aria-label="Seller account" className="h-9 max-w-56 rounded-md border border-line bg-white px-2 text-xs" value={selectedSeller} onChange={(event) => setSelectedSeller(event.target.value)}>{sellers.map((seller) => <option key={seller.id} value={seller.id}>{seller.merchant_id} · {seller.marketplace_id}</option>)}</select>}<Badge className="bg-amber-50 text-amber-800">{data ? data.marketplace_id : "Not connected"}</Badge><Button variant="outline" onClick={() => void syncSeller()} disabled={!selectedSeller || loading}><RefreshCw size={15} />Sync seller data</Button><Button variant="outline" onClick={() => selectedSeller && void loadDashboard(selectedSeller)} disabled={!selectedSeller || loading}><RefreshCw size={15} className={loading ? "animate-spin" : ""} />Refresh</Button><BuyBoxStatus /></div>
+        <div className="flex flex-wrap items-center gap-3">{sellers.length > 1 && <select aria-label="Seller account" className="h-9 max-w-56 rounded-md border border-line bg-white px-2 text-xs" value={selectedSeller} onChange={(event) => setSelectedSeller(event.target.value)}>{sellers.map((seller) => <option key={seller.id} value={seller.id}>{seller.merchant_id} · {seller.marketplace_id}</option>)}</select>}<Badge className={data?.sync_status === "completed" ? "bg-teal-50 text-teal-800" : "bg-amber-50 text-amber-800"}>
+          {data?.sync_status === "completed" ? `Synced · ${data?.last_synced_at ? new Date(data.last_synced_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : ""}` : "Not connected"}
+        </Badge><Button variant="outline" onClick={() => void syncSeller()} disabled={!selectedSeller || loading}><RefreshCw size={15} />Sync seller data</Button><Button variant="outline" onClick={() => selectedSeller && void loadDashboard(selectedSeller)} disabled={!selectedSeller || loading}><RefreshCw size={15} className={loading ? "animate-spin" : ""} />Refresh</Button><BuyBoxStatus /></div>
       </header>
 
       {syncMessage && <p role="status" className="mb-4 rounded-md border border-line bg-white px-4 py-3 text-xs">{syncMessage}</p>}
       {error && <div role="alert" className="mb-5 flex items-start gap-3 border-l-4 border-amber-500 bg-amber-50 p-4 text-sm text-amber-950"><TriangleAlert size={18} /><div><strong>Backend not ready</strong><p className="mt-1">{error}</p><a href="/api/auth/amazon/start" className="mt-2 inline-block font-semibold underline">Connect a seller account</a></div></div>}
       {!product.hasBuyBox && <div role="alert" className="mb-6 flex items-start gap-3 border-l-4 border-red-500 bg-red-50 p-4 text-sm text-red-950"><TriangleAlert size={18} /><div><strong>Urgent: Buy Box lost</strong><p className="mt-1">A competitor has taken the Buy Box at ${(product.competitorPrice ?? product.retailPrice - 0.1).toFixed(2)}. Trigger the Smart Repricer to reclaim it.</p><Link href="/repricer"><Button variant="outline">Open Repricer</Button></Link></div></div>}
 
-      <section className="mb-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        <Metric label="Catalog items" value={String(data?.products.length ?? "—")} detail="Seller-linked ASINs" icon={PackageSearch} />
-        <Metric label="Sellable units" value={data ? data.products.reduce((total, item) => total + (item.stock ?? 0), 0).toLocaleString() : "—"} detail="Latest inventory snapshots" icon={Boxes} />
-        <Metric label="Reorder flags" value={data ? String(reorderRows.length) : "—"} detail="Below 30 days of supply" icon={TriangleAlert} />
+      <section className="mb-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
+        <Metric label="Catalog items" value={String(data?.products.length ?? "—")} detail="Seller-linked ASINs · one shared product record each" icon={PackageSearch} />
+        <Metric label="Sellable units" value={data ? data.products.reduce((total, item) => total + (item.stock ?? 0), 0).toLocaleString() : "—"} detail="Latest inventory snapshots across marketplaces" icon={Boxes} />
+        <Metric label="Needs optimization" value={data ? String(data.needs_optimization_count) : "—"} detail="Products below a 70 optimization score" icon={TriangleAlert} />
+        <Metric label="Reorder flags" value={data ? String(reorderRows.length) : "—"} detail="Below 15 days of supply" icon={TriangleAlert} />
         <Metric label="Pending POs" value={String(data?.pending_purchase_orders.length ?? "—")} detail="Human review required" icon={ClipboardCheck} />
       </section>
+
+      {data?.top_10_by_impact?.length && (
+        <Card className="mb-5"><CardHeader><div><h2 className="text-sm font-semibold text-indigo-950">Optimization priority list</h2><p className="mt-1 text-xs text-muted">Ranked by (100 − opt_score) × recent sales volume. Open the catalog to optimize.</p></div></CardHeader><CardContent>
+          <div className="overflow-x-auto"><table className="w-full text-left text-xs"><thead className="bg-canvas text-[10px] uppercase tracking-wide text-muted"><tr><th className="px-4 py-3">SKU</th><th className="px-4 py-3">ASIN</th><th className="px-4 py-3">Product</th><th className="px-4 py-3 tabular-nums">Score</th><th className="px-4 py-3">Status</th><th className="px-4 py-3 tabular-nums">Impact</th><th className="px-4 py-3 tabular-nums">Days supply</th><th className="px-4 py-3">Issues</th></tr></thead>
+            <tbody>{data.top_10_by_impact.map((item) => (
+              <tr key={item.asin} className="border-t border-line"><td className="px-4 py-3 font-semibold">{item.sku}</td><td className="px-4 py-3 tabular-nums text-[10px] text-muted">{item.asin}</td><td className="px-4 py-3">{item.name}</td><td className="px-4 py-3 tabular-nums font-semibold">{item.opt_score}</td><td className="px-4 py-3"><Badge className={item.opt_status === "needs_optimization" ? "bg-amber-50 text-amber-800" : "bg-teal-50 text-teal-800"}>{item.opt_status}</Badge></td><td className="px-4 py-3 tabular-nums">{Math.round(item.impact)}</td><td className="px-4 py-3 tabular-nums">{item.days_of_supply ?? "—"}</td><td className="px-4 py-3 text-[10px] text-muted">{item.opt_issues.join(" · ") || "—"}</td></tr>
+            ))}</tbody>
+          </table></div>
+          <p className="mt-2 text-xs text-muted">Open <Link href="/catalog" className="font-semibold underline">SEO & Catalog</Link> to run the full optimize → approval → publish flow on any product above.</p>
+        </CardContent></Card>
+      )}
 
       <section className="mb-5 grid gap-4 xl:grid-cols-[minmax(0,1.5fr)_minmax(280px,.8fr)]">
         <Card><CardHeader><div><h2 className="text-sm font-semibold text-indigo-950">30-day unit velocity</h2><p className="mt-1 text-xs text-muted">Calculated from ingested daily sales records</p></div><Badge><ShieldCheck size={12} className="mr-1" />Rate-limited</Badge></CardHeader><CardContent><div className="h-64 w-full">
