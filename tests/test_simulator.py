@@ -176,6 +176,13 @@ class HistoryAndInventoryTests(unittest.TestCase):
         self.assertIn("last_updated", self.state)
         self.assertTrue(all(p["stock"] >= 0 for p in self.state["products"]))
 
+    def test_tick_count_increments_each_call(self):
+        random.seed(5)
+        starting_count = self.state.get("tick_count", 0)
+        for _ in range(50):
+            self.engine.tick(self.state)
+        self.assertEqual(self.state["tick_count"], starting_count + 50)
+
 
 class SeedDataConsistencyTests(unittest.TestCase):
     """Invariants that must hold for the committed mock_db.json, even after simulation."""
