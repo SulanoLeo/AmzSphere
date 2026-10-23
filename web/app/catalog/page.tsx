@@ -161,18 +161,20 @@ function CatalogWorkspace() {
       </CardContent></Card>}
       <Card className="lg:col-span-2"><CardHeader><div><h2 className="text-sm font-semibold text-indigo-950">Simulated Amazon Storefront</h2><p className="mt-1 text-xs text-muted">Live listing preview updated reactively from sourcing inputs.</p></div><Badge>Preview</Badge></CardHeader><CardContent><StorefrontView /></CardContent></Card>
 
-      {/* Shared product table — mirrors the mock catalog table. Populates from the same
+      {/* Shared product table — mirrors the mock catalog table design. Populates from the same
           product records once connected; opt_status and opt_score are computed by scoring. */}
       <Card className="mt-6 lg:col-span-2"><CardHeader><div><h2 className="text-sm font-semibold text-indigo-950">Shared product table</h2><p className="mt-1 text-xs text-muted">One product record read by catalog, inventory, pricing, and approvals.</p></div></CardHeader><CardContent>
         <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
           <span className="text-[10px] font-bold uppercase tracking-wide text-muted">Filters</span>
-          <Badge className="bg-amber-50 text-amber-800">Needs optimization</Badge>
-          <Badge className="bg-orange-50 text-orange-800">Low stock</Badge>
-          <Badge className="bg-red-50 text-red-800">Suppressed</Badge>
+          <div className="flex items-center gap-1 border border-line rounded-md bg-canvas p-1 text-xs">
+            <button className="px-2 py-1 rounded-md text-[10px] font-semibold bg-amber-50 text-amber-800 border-amber-200">Needs optimization</button>
+            <button className="px-2 py-1 rounded-md text-[10px] font-semibold bg-orange-50 text-orange-800 border-orange-200">{'Low stock (< 15d)'}</button>
+            <button className="px-2 py-1 rounded-md text-[10px] font-semibold bg-red-50 text-red-800 border-red-200">Suppressed</button>
+          </div>
         </div>
-        <div className="overflow-x-auto"><table className="w-full text-left text-xs"><thead className="bg-canvas text-[10px] uppercase tracking-wide text-muted"><tr><th className="px-4 py-3">ASIN</th><th className="px-4 py-3">SKU</th><th className="px-4 py-3">Title</th><th className="px-4 py-3 tabular-nums">Score</th><th className="px-4 py-3">Status</th><th className="px-4 py-3 tabular-nums">Stock</th><th className="px-4 py-3 tabular-nums">Days supply</th><th className="px-4 py-3">Action</th></tr></thead>
+        <div className="overflow-x-auto"><table className="w-full text-left text-xs"><thead className="bg-canvas text-[10px] uppercase tracking-wide text-muted"><tr><th style={{width:34}}></th><th className="px-4 py-3">ASIN</th><th className="px-4 py-3">SKU</th><th style={{minWidth:220}} className="px-4 py-3">Title</th><th className="px-4 py-3">Category</th><th className="px-4 py-3">Status</th><th className="px-4 py-3 tabular-nums">Score</th><th style={{width:300}} className="px-4 py-3">Issues</th><th className="px-4 py-3 tabular-nums">Stock</th><th className="px-4 py-3 tabular-nums">Days of supply</th><th className="px-4 py-3 tabular-nums">Price</th><th style={{width:170}} className="px-4 py-3">Actions</th></tr></thead>
           <tbody>
-            <tr className="border-t border-line"><td className="px-4 py-3 tabular-nums text-[10px] text-muted">—</td><td className="px-4 py-3">—</td><td className="px-4 py-3">No products connected yet</td><td className="px-4 py-3 tabular-nums">—</td><td className="px-4 py-3"><Badge>—</Badge></td><td className="px-4 py-3 tabular-nums">—</td><td className="px-4 py-3 tabular-nums">—</td><td className="px-4 py-3"><span className="text-[10px] text-muted">Connect a seller account to load products</span></td></tr>
+            <tr className="border-t border-line"><td className="px-4 py-3 tabular-nums text-[10px] text-muted">—</td><td className="px-4 py-3">—</td><td className="px-4 py-3">—</td><td className="px-4 py-3">No products connected yet</td><td className="px-4 py-3">—</td><td className="px-4 py-3"><span className="status pending">—</span></td><td className="px-4 py-3 tabular-nums">—</td><td className="px-4 py-3"><span className="issue-tag muted">—</span></td><td className="px-4 py-3 tabular-nums">—</td><td className="px-4 py-3 tabular-nums">—</td><td className="px-4 py-3 tabular-nums">—</td><td className="px-4 py-3"><span className="text-[10px] text-muted">Connect a seller account to load products</span></td></tr>
           </tbody>
         </table></div>
         <p className="mt-2 text-[10px] text-muted">Row actions: Optimize (opens side-by-side current vs suggested copy) · View. Bulk select with "Optimize selected". Add product opens Import from Amazon (ASIN/SKU) or Create manually.</p>
