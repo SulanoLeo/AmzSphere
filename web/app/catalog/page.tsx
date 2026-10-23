@@ -25,6 +25,10 @@ function CatalogWorkspace() {
   const [isApprover, setIsApprover] = useState(false);
   const [optimizationMode, setOptimizationMode] = useState<"free" | "paid">("free");
   const [helium10Token, setHelium10Token] = useState("");
+  const [drawerId, setDrawerId] = useState("");
+  const [drawerMode, setDrawerMode] = useState<"view" | "optimize">("optimize");
+  const [addModal, setAddModal] = useState(false);
+  const [addTab, setAddTab] = useState<"import" | "manual">("import");
 
   useEffect(() => {
     let active = true;
@@ -164,13 +168,14 @@ function CatalogWorkspace() {
       {/* Shared product table — mirrors the mock catalog table design. Populates from the same
           product records once connected; opt_status and opt_score are computed by scoring. */}
       <Card className="mt-6 lg:col-span-2"><CardHeader><div><h2 className="text-sm font-semibold text-indigo-950">Shared product table</h2><p className="mt-1 text-xs text-muted">One product record read by catalog, inventory, pricing, and approvals.</p></div></CardHeader><CardContent>
-        <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
           <span className="text-[10px] font-bold uppercase tracking-wide text-muted">Filters</span>
           <div className="flex items-center gap-1 border border-line rounded-md bg-canvas p-1 text-xs">
             <button className="px-2 py-1 rounded-md text-[10px] font-semibold bg-amber-50 text-amber-800 border-amber-200">Needs optimization</button>
             <button className="px-2 py-1 rounded-md text-[10px] font-semibold bg-orange-50 text-orange-800 border-orange-200">{'Low stock (< 15d)'}</button>
             <button className="px-2 py-1 rounded-md text-[10px] font-semibold bg-red-50 text-red-800 border-red-200">Suppressed</button>
           </div>
+          <button className="button button-primary button-sm" type="button" onClick={() => { setAddTab("import"); setAddModal(true); }}>Add product</button>
         </div>
         <div className="overflow-x-auto"><table className="w-full text-left text-xs"><thead className="bg-canvas text-[10px] uppercase tracking-wide text-muted"><tr><th style={{width:34}}></th><th className="px-4 py-3">ASIN</th><th className="px-4 py-3">SKU</th><th style={{minWidth:220}} className="px-4 py-3">Title</th><th className="px-4 py-3">Category</th><th className="px-4 py-3">Status</th><th className="px-4 py-3 tabular-nums">Score</th><th style={{width:300}} className="px-4 py-3">Issues</th><th className="px-4 py-3 tabular-nums">Stock</th><th className="px-4 py-3 tabular-nums">Days of supply</th><th className="px-4 py-3 tabular-nums">Price</th><th style={{width:170}} className="px-4 py-3">Actions</th></tr></thead>
           <tbody>
@@ -179,6 +184,79 @@ function CatalogWorkspace() {
         </table></div>
         <p className="mt-2 text-[10px] text-muted">Row actions: Optimize (opens side-by-side current vs suggested copy) · View. Bulk select with "Optimize selected". Add product opens Import from Amazon (ASIN/SKU) or Create manually.</p>
       </CardContent></Card>
+
+      {drawerId && (
+        <>
+          <div className="drawer-backdrop" onClick={() => setDrawerId("")}></div>
+          <div className="drawer" data-drawer>
+            <div className="drawer-header"><div><span className="drawer-title">{drawerMode === "view" ? "View listing" : "Optimize listing"}</span><span className="drawer-sub">{drawerId} · {drawerId}</span></div><button className="button button-outline button-sm" type="button" onClick={() => setDrawerId("")}>Close</button></div>
+            <div className="drawer-body">
+              <div className="compare-grid">
+                <div className="compare-side"><div className="compare-head">Current · score —</div>
+                  <div className="compare-field"><span>Title</span><div className="field-value">—</div></div>
+                  <div className="compare-field"><span>Bullets</span><ul className="field-list"><li>—</li></ul></div>
+                  <div className="compare-field"><span>Backend keywords</span><div className="field-value">—</div></div>
+                  <div className="compare-field"><span>Description</span><div className="field-value">—</div></div>
+                  <div className="compare-field"><span>Images</span><div className="field-value">0 main</div></div>
+                </div>
+                <div className="compare-side"><div className="compare-head">Suggested · editable before approval</div>
+                  <form className="optimize-form" data-product-id={drawerId}>
+                    <div className="compare-field"><span>Title</span><textarea name="title" required style={{width:"100%",minHeight:44,padding:"0 10px",border:"1px solid #e3e9ec",borderRadius:4,background:"#fff",color:"#202d38",font:"inherit",fontSize:11}}>{""}</textarea></div>
+                    <div className="compare-field"><span>Bullets (one per line)</span><textarea name="bullets" required style={{width:"100%",minHeight:88,padding:"0 10px",border:"1px solid #e3e9ec",borderRadius:4,background:"#fff",color:"#202d38",font:"inherit",fontSize:11}}>{""}</textarea></div>
+                    <div className="compare-field"><span>Backend keywords (comma-separated)</span><input name="backend_keywords" value="" style={{width:"100%",minHeight:30,padding:"0 10px",border:"1px solid #e3e9ec",borderRadius:4,background:"#fff",color:"#202d38",font:"inherit",fontSize:11}}/></div>
+                    <div className="compare-field"><span>Description</span><textarea name="description" style={{width:"100%",minHeight:66,padding:"0 10px",border:"1px solid #e3e9ec",borderRadius:4,background:"#fff",color:"#202d38",font:"inherit",fontSize:11}}>{""}</textarea></div>
+                    <div className="compare-actions">
+                      {drawerMode === "view" ? <button className="button button-outline" type="button" onClick={() => setDrawerId("")}>Close</button> : <>
+                        <button className="button button-outline" type="button" onClick={() => setDrawerId("")}>Cancel</button>
+                        <button className="button button-outline" type="button">Save draft</button>
+                        <button className="button button-primary" type="button">Send to approval</button>
+                      </>}
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+      {addModal && (
+        <>
+          <div className="drawer-backdrop" onClick={() => setAddModal(false)}></div>
+          <div className="drawer" style={{width:"min(720px,92vw)",maxHeight:"92vh",display:"flex",flexDirection:"column"}} data-add-modal>
+            <div className="drawer-header"><div><span className="drawer-title">Add product</span><span className="drawer-sub">Import from Amazon or create manually</span></div><button className="button button-outline button-sm" type="button" onClick={() => setAddModal(false)}>Close</button></div>
+            <div className="drawer-body" style={{flex:1,overflow:"auto",padding:"16px 20px 20px"}}>
+              <div className="tabs">
+                <button className={`tab ${addTab === "import" ? "tab-active" : ""}`} type="button" onClick={() => setAddTab("import")}>Import from Amazon</button>
+                <button className={`tab ${addTab === "manual" ? "tab-active" : ""}`} type="button" onClick={() => setAddTab("manual")}>Create manually</button>
+              </div>
+              {addTab === "import" && (
+                <div className="tab-panel" id="add-tab-import">
+                  <p className="hint">Look up a product by ASIN or SKU. Re-importing upserts by ASIN + marketplace.</p>
+                  <form id="add-import-form" style={{display:"flex",gap:8,alignItems:"end",marginTop:10}}>
+                    <input name="ref" type="text" placeholder="ASIN or SKU" required style={{flex:1,minHeight:34,padding:"0 10px",border:"1px solid #e3e9ec",borderRadius:4,background:"#fff",color:"#202d38",font:"inherit",fontSize:11}}/>
+                    <button type="submit" className="button button-primary" style={{minHeight:36}}>Import</button>
+                  </form>
+                </div>
+              )}
+              {addTab === "manual" && (
+                <div className="tab-panel" id="add-tab-manual">
+                  <form id="add-manual-form" style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",gap:12,marginTop:10}}>
+                    <div><label className="form-label">Product name</label><input name="add-name" type="text" placeholder="e.g. Bamboo Desk Organizer" required style={{width:"100%",minHeight:30,padding:"0 10px",border:"1px solid #e3e9ec",borderRadius:4,background:"#fff",color:"#202d38",font:"inherit",fontSize:11}}/></div>
+                    <div><label className="form-label">SKU</label><input name="add-sku" type="text" placeholder="e.g. BD-OG-01" required style={{width:"100%",minHeight:30,padding:"0 10px",border:"1px solid #e3e9ec",borderRadius:4,background:"#fff",color:"#202d38",font:"inherit",fontSize:11}}/></div>
+                    <div><label className="form-label">ASIN</label><input name="add-asin" type="text" placeholder="e.g. B0XYZ12345" required style={{width:"100%",minHeight:30,padding:"0 10px",border:"1px solid #e3e9ec",borderRadius:4,background:"#fff",color:"#202d38",font:"inherit",fontSize:11}}/></div>
+                    <div><label className="form-label">Listing title</label><input name="add-title" type="text" placeholder="Defaults to product name" style={{width:"100%",minHeight:30,padding:"0 10px",border:"1px solid #e3e9ec",borderRadius:4,background:"#fff",color:"#202d38",font:"inherit",fontSize:11}}/></div>
+                    <div><label className="form-label">Category</label><input name="add-category" type="text" placeholder="e.g. Office" style={{width:"100%",minHeight:30,padding:"0 10px",border:"1px solid #e3e9ec",borderRadius:4,background:"#fff",color:"#202d38",font:"inherit",fontSize:11}}/></div>
+                    <div><label className="form-label">Price ($)</label><input name="add-price" type="number" step="0.01" placeholder="24.99" style={{width:"100%",minHeight:30,padding:"0 10px",border:"1px solid #e3e9ec",borderRadius:4,background:"#fff",color:"#202d38",font:"inherit",fontSize:11}}/></div>
+                    <div><label className="form-label">Stock units</label><input name="add-stock" type="number" step="1" placeholder="500" style={{width:"100%",minHeight:30,padding:"0 10px",border:"1px solid #e3e9ec",borderRadius:4,background:"#fff",color:"#202d38",font:"inherit",fontSize:11}}/></div>
+                    <div><label className="form-label">Daily velocity</label><input name="add-velocity" type="number" step="0.1" placeholder="15" style={{width:"100%",minHeight:30,padding:"0 10px",border:"1px solid #e3e9ec",borderRadius:4,background:"#fff",color:"#202d38",font:"inherit",fontSize:11}}/></div>
+                    <div style={{gridColumn:"1/-1",display:"flex",gap:8}}><button className="button button-outline" type="button" onClick={() => setAddModal(false)}>Cancel</button><button type="submit" form="add-manual-form" className="button button-primary" style={{minHeight:36}}>Create product</button></div>
+                  </form>
+                </div>
+              )}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   </main>;
 }
