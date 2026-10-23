@@ -2,17 +2,18 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ChevronLeft, Activity, Boxes, ChartNoAxesCombined, CircleDollarSign, ClipboardCheck, FileText, PackageSearch, Store, TriangleAlert, ShieldCheck } from "lucide-react";
+import { ChevronLeft, Activity, PackageSearch, ChartNoAxesCombined, Boxes, Store, CircleDollarSign, FileText, ClipboardCheck, HelpCircle } from "lucide-react";
 
 const navigation = [
   { label: "Overview", href: "/", Icon: Activity },
   { label: "SEO & Catalog", href: "/catalog", Icon: PackageSearch },
-  { label: "Sourcing", href: "/sourcing", Icon: Store },
-  { label: "PPC Advertising", href: "/ppc", Icon: ChartNoAxesCombined },
-  { label: "Inventory", href: "/inventory", Icon: Boxes },
-  { label: "Pricing", href: "/repricer", Icon: CircleDollarSign },
-  { label: "Activity Log", href: "/activity", Icon: FileText },
-  { label: "Approvals", href: "/approvals", Icon: ClipboardCheck },
+  { label: "PPC Ads Engine", href: "/ppc", Icon: ChartNoAxesCombined },
+  { label: "Inventory Hub", href: "/inventory", Icon: Boxes },
+  { label: "Seller Store", href: "/seller-store", Icon: Store },
+  { label: "Repricer Monitor", href: "/repricer", Icon: CircleDollarSign },
+  { label: "Automation Activity Logs", href: "/activity", Icon: FileText },
+  { label: "B2B Approvals", href: "/approvals", Icon: ClipboardCheck },
+  { label: "How It Works", href: "/how", Icon: HelpCircle },
 ] as const;
 
 export function Sidebar() {
