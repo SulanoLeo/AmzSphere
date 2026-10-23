@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { Boxes, ClipboardCheck, PackageSearch, RefreshCw, ShieldCheck, TriangleAlert } from "lucide-react";
+import { PackageSearch, RefreshCw, ShieldCheck, TriangleAlert } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 import { Badge } from "@/components/ui/badge";
@@ -49,11 +49,15 @@ type Dashboard = {
 
 type SellerOption = { id: string; merchant_id: string; marketplace_id: string; region: string };
 
-function Metric({ label, value, detail, icon: Icon }: { label: string; value: string; detail: string; icon: React.ComponentType<any> }) {
-  return <Card><CardContent className="flex min-h-32 items-start justify-between gap-3">
-    <div><p className="text-xs font-semibold uppercase tracking-wide text-muted">{label}</p><p className="mt-3 text-2xl font-semibold text-indigo-950">{value}</p><p className="mt-1 text-xs text-muted">{detail}</p></div>
-    <span className="grid size-9 shrink-0 place-items-center rounded-md bg-canvas text-indigo-900"><Icon size={17} /></span>
-  </CardContent></Card>;
+function Metric({ label, value, detail, accent, tag }: { label: string; value: string; detail: string; accent: string; tag?: string }) {
+  return (
+    <section className={`metric ${accent === "green" || accent === "teal" || accent === "blue" || accent === "warn" ? "" : ""}`}>
+      <div className="metric-label"><span>{label}</span>{tag && <span className="mini-tag">{tag}</span>}</div>
+      <div className="metric-value">{value}</div>
+      <div className="metric-foot">{detail}</div>
+      <div className={`metric-accent ${accent}`}></div>
+    </section>
+  );
 }
 
 export default function DashboardPage() {
@@ -156,34 +160,47 @@ export default function DashboardPage() {
       {error && <div role="alert" className="mb-5 flex items-start gap-3 border-l-4 border-amber-500 bg-amber-50 p-4 text-sm text-amber-950"><TriangleAlert size={18} /><div><strong>Backend not ready</strong><p className="mt-1">{error}</p><a href="/api/auth/amazon/start" className="mt-2 inline-block font-semibold underline">Connect a seller account</a></div></div>}
       {!product.hasBuyBox && <div role="alert" className="mb-6 flex items-start gap-3 border-l-4 border-red-500 bg-red-50 p-4 text-sm text-red-950"><TriangleAlert size={18} /><div><strong>Urgent: Buy Box lost</strong><p className="mt-1">A competitor has taken the Buy Box at ${(product.competitorPrice ?? product.retailPrice - 0.1).toFixed(2)}. Trigger the Smart Repricer to reclaim it.</p><Link href="/repricer"><Button variant="outline">Open Repricer</Button></Link></div></div>}
 
-      <section className="mb-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
-        <Metric label="Catalog items" value={String(data?.products.length ?? "—")} detail="Seller-linked ASINs · one shared product record each" icon={PackageSearch} />
-        <Metric label="Sellable units" value={data ? data.products.reduce((total, item) => total + (item.stock ?? 0), 0).toLocaleString() : "—"} detail="Latest inventory snapshots across marketplaces" icon={Boxes} />
-        <Metric label="Needs optimization" value={data ? String(data.needs_optimization_count) : "—"} detail="Products below a 70 optimization score" icon={TriangleAlert} />
-        <Metric label="Reorder flags" value={data ? String(reorderRows.length) : "—"} detail="Below 15 days of supply" icon={TriangleAlert} />
-        <Metric label="Pending POs" value={String(data?.pending_purchase_orders.length ?? "—")} detail="Human review required" icon={ClipboardCheck} />
-      </section>
+      <div className="sync-bar">
+        <span className="sync-badge good">Mock engine live</span>
+        <button className="button" onClick={() => selectedSeller && void loadDashboard(selectedSeller)} disabled={!selectedSeller || loading}>Sync seller data</button>
+        <button className="button button-outline" onClick={() => selectedSeller && void loadDashboard(selectedSeller)} disabled={!selectedSeller || loading}>Refresh</button>
+      </div>
+      <div className="metrics metrics-five">
+        <Metric label="Catalog items" value={String(data?.products.length ?? "—")} detail="Seller-linked ASINs · one shared product record each" accent="blue" tag="CATALOG" />
+        <Metric label="Sellable units" value={data ? data.products.reduce((total, item) => total + (item.stock ?? 0), 0).toLocaleString() : "—"} detail="Latest inventory snapshots across all marketplaces" accent="teal" tag="INVENTORY" />
+        <Metric label="Needs optimization" value={data ? String(data.needs_optimization_count) : "—"} detail="Products below a 70 optimization score" accent="orange" tag="OPTIMIZATION" />
+        <Metric label="Reorder flags" value={data ? String(reorderRows.length) : "—"} detail="Below 15 days of supply" accent="warn" tag="DAYS OF SUPPLY" />
+        <Metric label="Pending approvals" value={String(data?.pending_purchase_orders.length ?? "—")} detail="Revisions awaiting your decision" accent="teal" tag="APPROVALS" />
+      </div>
 
       {data?.top_10_by_impact?.length && (
-        <Card className="mb-5"><CardHeader><div><h2 className="text-sm font-semibold text-indigo-950">Optimization priority list</h2><p className="mt-1 text-xs text-muted">Ranked by (100 − opt_score) × recent sales volume. Open the catalog to optimize.</p></div></CardHeader><CardContent>
-          <div className="overflow-x-auto"><table className="w-full text-left text-xs"><thead className="bg-canvas text-[10px] uppercase tracking-wide text-muted"><tr><th className="px-4 py-3">SKU</th><th className="px-4 py-3">ASIN</th><th className="px-4 py-3">Product</th><th className="px-4 py-3 tabular-nums">Score</th><th className="px-4 py-3">Status</th><th className="px-4 py-3 tabular-nums">Impact</th><th className="px-4 py-3 tabular-nums">Days supply</th><th className="px-4 py-3">Issues</th></tr></thead>
-            <tbody>{data.top_10_by_impact.map((item) => (
-              <tr key={item.asin} className="border-t border-line"><td className="px-4 py-3 font-semibold">{item.sku}</td><td className="px-4 py-3 tabular-nums text-[10px] text-muted">{item.asin}</td><td className="px-4 py-3">{item.name}</td><td className="px-4 py-3 tabular-nums font-semibold">{item.opt_score}</td><td className="px-4 py-3"><Badge className={item.opt_status === "needs_optimization" ? "bg-amber-50 text-amber-800" : "bg-teal-50 text-teal-800"}>{item.opt_status}</Badge></td><td className="px-4 py-3 tabular-nums">{Math.round(item.impact)}</td><td className="px-4 py-3 tabular-nums">{item.days_of_supply ?? "—"}</td><td className="px-4 py-3 text-[10px] text-muted">{item.opt_issues.join(" · ") || "—"}</td></tr>
-            ))}</tbody>
+        <Card className="mb-5"><CardHeader><div><h2 className="text-sm font-semibold text-indigo-950">Optimization priority list</h2><p className="mt-1 text-xs text-muted">Ranked by (100 − score) × recent sales volume. Open the catalog to optimize.</p></div></CardHeader><CardContent>
+          <div className="table-wrap"><table className="mock-table"><thead><tr><th>SKU</th><th>ASIN</th><th>Product</th><th className="tabular-nums">Score</th><th>Status</th><th className="tabular-nums">Impact</th><th>Issues</th><th>Action</th></tr></thead>
+            <tbody>{data.top_10_by_impact.map((item) => {
+              const issues = item.opt_issues || [];
+              return (
+                <tr key={item.asin} className="border-t border-line"><td className="sku-cell">{item.sku}</td><td className="sku-cell tabular-nums text-[10px] text-muted">{item.asin}</td><td>{item.name}</td><td className="tabular-nums font-semibold">{item.opt_score}</td><td><span className={item.opt_status === "needs_optimization" ? "status warn" : item.opt_status === "draft_ready" || item.opt_status === "pending_approval" ? "status pending" : item.opt_status === "optimized" ? "status good" : "status"}>{item.opt_status || "—"}</span></td><td className="tabular-nums">{Math.round(item.impact)}</td><td className="issue-cell">{issues.length ? issues.map((issue) => <span className="issue-tag" key={issue}>{issue}</span>) : <span className="issue-tag muted">—</span>}</td><td><button className="button button-outline button-sm" onClick={() => {}}>Optimize</button></td></tr>
+              );
+            })}</tbody>
           </table></div>
           <p className="mt-2 text-xs text-muted">Open <Link href="/catalog" className="font-semibold underline">SEO & Catalog</Link> to run the full optimize → approval → publish flow on any product above.</p>
         </CardContent></Card>
       )}
 
-      <section className="mb-5 grid gap-4 xl:grid-cols-[minmax(0,1.5fr)_minmax(280px,.8fr)]">
-        <Card><CardHeader><div><h2 className="text-sm font-semibold text-indigo-950">30-day unit velocity</h2><p className="mt-1 text-xs text-muted">Calculated from ingested daily sales records</p></div><Badge><ShieldCheck size={12} className="mr-1" />Rate-limited</Badge></CardHeader><CardContent><div className="h-64 w-full">
-          {chartData.length ? <ResponsiveContainer width="100%" height="100%"><BarChart data={chartData} margin={{ top: 12, right: 12, bottom: 4, left: -16 }}><CartesianGrid vertical={false} stroke="#e7ebf0" /><XAxis dataKey="sku" tickLine={false} axisLine={false} tick={{ fontSize: 10 }} /><YAxis tickLine={false} axisLine={false} tick={{ fontSize: 10 }} /><Tooltip /><Bar dataKey="velocity" name="Units/day" fill="#007185" radius={[3, 3, 0, 0]} /></BarChart></ResponsiveContainer> : <div className="grid h-full place-items-center text-sm text-muted">No inventory history ingested yet.</div>}
-        </div></CardContent></Card>
-        <Card><CardHeader><div><h2 className="text-sm font-semibold text-indigo-950">Execution guard</h2><p className="mt-1 text-xs text-muted">Control plane status</p></div></CardHeader><CardContent className="space-y-4 text-xs">
-          <div className="flex items-start gap-3"><span className="mt-1 size-2 rounded-full bg-teal-700" /><div><strong>Redis/Celery queue</strong><p className="mt-1 text-muted">Tasks are dispatched from the PostgreSQL outbox.</p></div></div>
-          <div className="flex items-start gap-3"><span className="mt-1 size-2 rounded-full bg-amber-500" /><div><strong>Amazon write mode</strong><p className="mt-1 text-muted">Requires server-side enablement and human approval.</p></div></div>
-          <Link href={selectedSeller ? `/catalog?seller_id=${encodeURIComponent(selectedSeller)}` : "/catalog"} className="inline-flex items-center gap-2 pt-2 font-semibold text-teal-700 hover:underline"><PackageSearch size={15} />Open SEO workspace</Link>
-        </CardContent></Card>
+      <section className="section-grid mb-5">
+        <div className="panel">
+          <div className="panel-header"><div><h2 className="panel-title">30-day unit velocity</h2><div className="panel-subtitle">Calculated from ingested daily sales records</div></div><span className="category-pill">Rate-limited</span></div>
+          <div className="panel-content"><div className="h-64 w-full">
+            {chartData.length ? <ResponsiveContainer width="100%" height="100%"><BarChart data={chartData} margin={{ top: 12, right: 12, bottom: 4, left: -16 }}><CartesianGrid vertical={false} stroke="#e7ebf0" /><XAxis dataKey="sku" tickLine={false} axisLine={false} tick={{ fontSize: 10 }} /><YAxis tickLine={false} axisLine={false} tick={{ fontSize: 10 }} /><Tooltip /><Bar dataKey="velocity" name="Units/day" fill="#007185" radius={[3, 3, 0, 0]} /></BarChart></ResponsiveContainer> : <div className="grid h-full place-items-center text-sm text-muted">No inventory history ingested yet.</div>}
+          </div></div>
+        </div>
+        <div className="panel">
+          <div className="panel-header"><div><h2 className="panel-title">Execution guard</h2><div className="panel-subtitle">Control plane status</div></div></div>
+          <div className="panel-content space-y-4 text-xs">
+            <div className="flex items-start gap-3"><span className="mt-1 size-2 rounded-full bg-teal-700" /><div><strong>Redis/Celery queue</strong><p className="mt-1 text-muted">Tasks are dispatched from the PostgreSQL outbox.</p></div></div>
+            <div className="flex items-start gap-3"><span className="mt-1 size-2 rounded-full bg-amber-500" /><div><strong>Amazon write mode</strong><p className="mt-1 text-muted">Requires server-side enablement and human approval.</p></div></div>
+            <Link href={selectedSeller ? `/catalog?seller_id=${encodeURIComponent(selectedSeller)}` : "/catalog"} className="inline-flex items-center gap-2 pt-2 font-semibold text-teal-700 hover:underline"><PackageSearch size={15} />Open SEO workspace</Link>
+          </div></div>
       </section>
 
       <Card className="mb-5"><CardHeader><div><h2 className="text-sm font-semibold text-indigo-950">Autonomous procurement queue</h2><p className="mt-1 text-xs text-muted">Trailing 7/30/90-day velocity · replenishment proposals require review</p></div><Button variant="outline" disabled={!selectedSeller || loading} onClick={async () => { await fetch(`/api/inventory/scan`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ seller_id: selectedSeller }) }); if (selectedSeller) await loadDashboard(selectedSeller); }}>Run inventory scan</Button></CardHeader>
