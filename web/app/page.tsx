@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { PackageSearch, RefreshCw, ShieldCheck, TriangleAlert } from "lucide-react";
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, Line, LineChart, Pie, PieChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -66,11 +66,36 @@ const mockDashboard: Dashboard = {
   last_synced_at: new Date().toISOString(),
   needs_optimization_count: 3,
   top_10_by_impact: [
-    { asin: "B0D2L6T8N4", sku: "TG-BS-04", name: "TerraGrip Silicone Bottle Sleeve", opt_score: 20, opt_status: "needs_optimization", impact: 86, days_of_supply: 29.5, sellable_units: 560, opt_issues: ["Title does not contain any of the backend keywords.", "Only 4 bullet points; at least 5 are recommended."] },
+    { asin: "B0D2L6T8N4", sku: "TG-BS-04", name: "TerraGrip Silicone Bottle Sleeve", opt_score: 20, opt_status: "needs_optimization", impact: 86, days_of_supply: 29.5, sellable_units: 560, opt_issues: ["Title does not contain any of the back-end keywords.", "Only 4 bullet points; at least 5 are recommended."] },
     { asin: "B0B7P9R3W1", sku: "QC-M-11", name: "QuietClick Wireless Mouse", opt_score: 65, opt_status: "needs_optimization", impact: 35, days_of_supply: 7.4, sellable_units: 230, opt_issues: ["Title is shorter than 80 characters.", "Only 4 bullet points; at least 5 are recommended."] },
     { asin: "B0C3F7Y1V9", sku: "SD-CO-09", name: "SnapDock Cable Organizer Set", opt_score: 44, opt_status: "needs_optimization", impact: 28, days_of_supply: 17.3, sellable_units: 190, opt_issues: ["Only 4 bullet points; at least 5 are recommended."] },
   ],
 };
+
+const acosHistory = [
+  { day: "Sep 24", acos: 23.4 },
+  { day: "Sep 26", acos: 21.8 },
+  { day: "Sep 28", acos: 24.1 },
+  { day: "Sep 30", acos: 22.0 },
+  { day: "Oct 2", acos: 22.5 },
+  { day: "Oct 4", acos: 21.2 },
+  { day: "Oct 6", acos: 22.8 },
+  { day: "Oct 8", acos: 23.6 },
+  { day: "Oct 10", acos: 22.2 },
+  { day: "Oct 12", acos: 24.0 },
+  { day: "Oct 14", acos: 22.4 },
+  { day: "Oct 16", acos: 21.9 },
+  { day: "Oct 18", acos: 22.6 },
+  { day: "Oct 20", acos: 20.8 },
+  { day: "Oct 22", acos: 22.1 },
+];
+
+const procurementMix = [
+  { category: "Office", value: 45 },
+  { category: "Electronics", value: 28 },
+  { category: "Lighting", value: 15 },
+  { category: "Home & Kitchen", value: 12 },
+];
 
 function Metric({ label, value, detail, accent, tag }: { label: string; value: string; detail: string; accent: string; tag?: string }) {
   return (
@@ -237,6 +262,21 @@ export default function DashboardPage() {
             <div className="flex items-start gap-3"><span className="mt-1 size-2 rounded-full bg-amber-500" /><div><strong>Amazon write mode</strong><p className="mt-1 text-muted">Requires server-side enablement and human approval.</p></div></div>
             <Link href={selectedSeller ? `/catalog?seller_id=${encodeURIComponent(selectedSeller)}` : "/catalog"} className="inline-flex items-center gap-2 pt-2 font-semibold text-teal-700 hover:underline"><PackageSearch size={15} />Open SEO workspace</Link>
           </div></div>
+      </section>
+
+      <section className="section-grid mb-5">
+        <div className="panel">
+          <div className="panel-header"><div><h2 className="panel-title">Advertising efficiency</h2><div className="panel-subtitle">Portfolio ACoS · 30-day trend</div></div><span className="category-pill">ACoS</span></div>
+          <div className="panel-content"><div className="h-64 w-full">
+            <ResponsiveContainer width="100%" height="100%"><LineChart data={acosHistory} margin={{ top: 12, right: 12, bottom: 4, left: -16 }}><CartesianGrid vertical={false} stroke="#e7ebf0" /><XAxis dataKey="day" tickLine={false} axisLine={false} tick={{ fontSize: 10 }} /><YAxis tickLine={false} axisLine={false} tick={{ fontSize: 10 }} domain={["auto", "auto"]} /><Tooltip /><Line dataKey="acos" stroke="#007185" strokeWidth={2} dot={false} /></LineChart></ResponsiveContainer>
+          </div></div>
+        </div>
+        <div className="panel">
+          <div className="panel-header"><div><h2 className="panel-title">Procurement mix</h2><div className="panel-subtitle">Open and approved workflow value</div></div><span className="category-pill">Open + approved</span></div>
+          <div className="panel-content"><div className="grid h-full place-items-center">
+            <ResponsiveContainer width={220} height={220}><PieChart><Pie data={procurementMix} dataKey="value" nameKey="category" cx="110" cy="110" outerRadius={70} fill="#8884d8" label><Tooltip /></Pie><Tooltip /></PieChart></ResponsiveContainer>
+          </div></div>
+        </div>
       </section>
 
       <Card className="mb-5"><CardHeader><div><h2 className="text-sm font-semibold text-indigo-950">Autonomous procurement queue</h2><p className="mt-1 text-xs text-muted">Trailing 7/30/90-day velocity · replenishment proposals require review</p></div><Button variant="outline" disabled={!selectedSeller || loading} onClick={async () => { await fetch(`/api/inventory/scan`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ seller_id: selectedSeller }) }); if (selectedSeller) await loadDashboard(selectedSeller); }}>Run inventory scan</Button></CardHeader>
