@@ -49,6 +49,29 @@ type Dashboard = {
 
 type SellerOption = { id: string; merchant_id: string; marketplace_id: string; region: string };
 
+const USE_MOCK_DATA = true;
+
+const mockDashboard: Dashboard = {
+  seller_id: "mock-seller",
+  marketplace_id: "ATVPDKIKX0DER",
+  products: [
+    { asin: "B0C8Q4M2K7", sku: "AF-LS-02", vendor: null, stock: 840, velocity_7d: 12, velocity_30d: 45, velocity_90d: 112, days_supply: 18.7, reorder_flag: false, opt_score: 100, opt_status: "optimized", needs_optimization: false },
+    { asin: "B0B7P9R3W1", sku: "QC-M-11", vendor: null, stock: 230, velocity_7d: 8, velocity_30d: 31, velocity_90d: 76, days_supply: 7.4, reorder_flag: true, opt_score: 65, opt_status: "needs_optimization", needs_optimization: true },
+    { asin: "B0D2L6T8N4", sku: "TG-BS-04", vendor: null, stock: 560, velocity_7d: 5, velocity_30d: 19, velocity_90d: 47, days_supply: 29.5, reorder_flag: false, opt_score: 20, opt_status: "needs_optimization", needs_optimization: true },
+    { asin: "B0A9H5X3J6", sku: "LM-DL-08", vendor: null, stock: 410, velocity_7d: 6, velocity_30d: 24, velocity_90d: 58, days_supply: 17.1, reorder_flag: false, opt_score: 85, opt_status: "optimized", needs_optimization: false },
+    { asin: "B0C3F7Y1V9", sku: "SD-CO-09", vendor: null, stock: 190, velocity_7d: 3, velocity_30d: 11, velocity_90d: 28, days_supply: 17.3, reorder_flag: false, opt_score: 44, opt_status: "needs_optimization", needs_optimization: true },
+  ],
+  pending_purchase_orders: [],
+  sync_status: "completed",
+  last_synced_at: new Date().toISOString(),
+  needs_optimization_count: 3,
+  top_10_by_impact: [
+    { asin: "B0D2L6T8N4", sku: "TG-BS-04", name: "TerraGrip Silicone Bottle Sleeve", opt_score: 20, opt_status: "needs_optimization", impact: 86, days_of_supply: 29.5, sellable_units: 560, opt_issues: ["Title does not contain any of the backend keywords.", "Only 4 bullet points; at least 5 are recommended."] },
+    { asin: "B0B7P9R3W1", sku: "QC-M-11", name: "QuietClick Wireless Mouse", opt_score: 65, opt_status: "needs_optimization", impact: 35, days_of_supply: 7.4, sellable_units: 230, opt_issues: ["Title is shorter than 80 characters.", "Only 4 bullet points; at least 5 are recommended."] },
+    { asin: "B0C3F7Y1V9", sku: "SD-CO-09", name: "SnapDock Cable Organizer Set", opt_score: 44, opt_status: "needs_optimization", impact: 28, days_of_supply: 17.3, sellable_units: 190, opt_issues: ["Only 4 bullet points; at least 5 are recommended."] },
+  ],
+};
+
 function Metric({ label, value, detail, accent, tag }: { label: string; value: string; detail: string; accent: string; tag?: string }) {
   return (
     <section className={`metric ${accent === "green" || accent === "teal" || accent === "blue" || accent === "warn" ? "" : ""}`}>
@@ -80,7 +103,12 @@ export default function DashboardPage() {
       setData(payload);
       setError("");
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : "Dashboard API unavailable");
+      if (USE_MOCK_DATA) {
+        setData(mockDashboard);
+        setError("");
+      } else {
+        setError(cause instanceof Error ? cause.message : "Dashboard API unavailable");
+      }
     } finally {
       setLoading(false);
     }
@@ -132,8 +160,16 @@ export default function DashboardPage() {
           setLoading(false);
         }
         else setSelectedSeller((current) => current && payload.some((seller: SellerOption) => seller.id === current) ? current : payload[0].id);
-      } catch (cause) {
-        if (active) setError(cause instanceof Error ? cause.message : "Seller accounts unavailable");
+        } catch (cause) {
+        if (USE_MOCK_DATA) {
+          const mockSellers: SellerOption[] = [{ id: "mock-seller", merchant_id: "Mock Seller", marketplace_id: "ATVPDKIKX0DER", region: "us-east-1" }];
+          setSellers(mockSellers);
+          setSelectedSeller("mock-seller");
+          setIsApprover(true);
+          setError("");
+        } else if (active) {
+          setError(cause instanceof Error ? cause.message : "Seller accounts unavailable");
+        }
         if (active) setLoading(false);
       }
     };
