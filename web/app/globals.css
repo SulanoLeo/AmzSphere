@@ -204,3 +204,23 @@ a { color: inherit; text-decoration: none; }
 .sync-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 10px; border: 1px solid var(--mock-line); background: #fff; color: var(--mock-ink); font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
 .sync-badge.good { border-color: #c4e2d4; background: var(--mock-green-soft); color: var(--mock-green); }
 .sync-badge.warn { border-color: #f3d9b6; background: #fff7ec; color: #b45309; }
+
+/* Activity feed */
+.toolbar { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; align-items: center; margin-bottom: 10px; }
+.table-count { font-size: 11px; color: var(--mock-quiet); font-weight: 600; }
+.filter-group { display: flex; flex-wrap: wrap; gap: 6px; }
+.filter-button { min-height: 28px; padding: 0 10px; border: 1px solid var(--mock-line); border-radius: 4px; background: #fff; color: var(--mock-ink); font-size: 11px; font-weight: 600; cursor: pointer; }
+.filter-button.active { border-color: var(--mock-teal); background: var(--mock-teal-soft); color: var(--mock-teal); }
+.feed-wrap { border-top: 1px solid var(--mock-line); }
+.timeline { display: flex; flex-direction: column; gap: 10px; }
+.feed-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; border: 1px solid var(--mock-line); border-radius: 4px; background: #fbfcfc; }
+.feed-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--mock-teal); flex: none; margin-top: 4px; box-shadow: 0 0 0 2px #fff; }
+.feed-item .feed-dot.repricer { background: var(--mock-orange); }
+.feed-item .feed-dot.ppc { background: var(--mock-blue); }
+.feed-item .feed-dot.inventory { background: var(--mock-green); }
+.feed-item .feed-dot.procurement { background: #8b5cf6; }
+.feed-item .feed-dot.catalog { background: var(--mock-blue); }
+.feed-item .feed-dot.approval { background: #b45309; }
+.feed-item .feed-dot.sync { background: var(--mock-quiet); }
+.feed-title { font: 600 11px var(--font-ui); color: var(--mock-navy); margin-bottom: 2px; }
+.feed-detail { font-size: 10px; color: var(--mock-muted); line-height: 1.5; }
