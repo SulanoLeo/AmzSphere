@@ -1,146 +1,102 @@
-"use client";
+"use strict";
 
-import Link from "next/link";
-import { ArrowLeft, BadgeCheck, ShieldCheck, TriangleAlert } from "lucide-react";
-
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { useProduct } from "@/context/ProductContext";
-import { MetricsPanel } from "@/components/product/MetricsPanel";
-import { BuyBoxStatus } from "@/components/product/BuyBoxStatus";
-
+/* Repricer Monitor — mirrors the mock /repricer view. */
 export default function RepricerPage() {
-  const { product, metrics, simulateHijackerAttack, triggerSmartRepricer } = useProduct();
-
-  const chartData = [
-    { name: "Our price", value: product.retailPrice, fill: "#007185" },
-    { name: "Competitor", value: product.competitorPrice ?? product.retailPrice, fill: "#f59e0b" },
-  ];
-
-  const repriceTarget = product.competitorPrice !== null ? product.competitorPrice - 0.1 : null;
+  const products: Array<{ asin: string; sku: string; name: string; price: number; competitor_price: number; min_floor: number }> = [];
+  const last_updated = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
 
   return (
     <main className="min-h-screen bg-canvas px-4 py-6 md:px-10 md:py-10">
-      <Link href="/" className="mb-7 inline-flex items-center gap-2 text-xs font-semibold text-muted hover:text-ink">
-        <ArrowLeft size={15} />Operations overview
-      </Link>
-      <header className="mb-7 max-w-3xl">
-        <p className="text-[10px] font-bold uppercase tracking-widest text-teal-700">Brand Health</p>
-        <h1 className="mt-1 text-2xl font-semibold text-indigo-950">Smart Repricer & Buy Box Protection</h1>
-        <p className="mt-2 text-sm text-muted">Simulate listing hijacking and reclaim the Buy Box with automated repricing.</p>
-      </header>
-
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(300px,0.8fr)]">
-        <div className="space-y-6">
-          <Card>
-            <CardHeader>
-              <div>
-                <h2 className="text-sm font-semibold text-indigo-950">Buy Box health</h2>
-                <p className="mt-1 text-xs text-muted">Current Buy Box ownership and competitor tracking</p>
-              </div>
-              <BuyBoxStatus />
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-muted">Our retail price</span>
-                <strong className="tabular-nums">${product.retailPrice.toFixed(2)}</strong>
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-muted">Competitor price</span>
-                <strong className="tabular-nums">
-                  {product.competitorPrice !== null ? `$${product.competitorPrice.toFixed(2)}` : "No competitor tracked"}
-                </strong>
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-muted">Unit profit</span>
-                <strong className="tabular-nums">${metrics.unitProfit.toFixed(2)}</strong>
-              </div>
-              <div className="flex items-center gap-3 pt-2">
-                <Button variant="outline" onClick={simulateHijackerAttack} disabled={!product.hasBuyBox}>
-                  <TriangleAlert size={15} />Simulate Hijacker Attack
-                </Button>
-                <Button onClick={triggerSmartRepricer} disabled={product.hasBuyBox}>
-                  <ShieldCheck size={15} />Trigger Smart Repricer
-                </Button>
-              </div>
-              {!product.hasBuyBox && product.competitorPrice !== null && (
-                <p className="text-xs text-red-800">
-                  Competitor priced at ${product.competitorPrice.toFixed(2)}. Smart Repricer sets our price to
-                  ${repriceTarget!.toFixed(2)} to reclaim the Buy Box.
-                </p>
-              )}
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <div>
-                <h2 className="text-sm font-semibold text-indigo-950">Profit impact</h2>
-                <p className="mt-1 text-xs text-muted">Reactive repricing effect on unit and daily profit</p>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="h-64 w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={chartData} margin={{ top: 12, right: 12, bottom: 4, left: -16 }}>
-                    <CartesianGrid vertical={false} stroke="#e7ebf0" />
-                    <XAxis dataKey="name" tickLine={false} axisLine={false} tick={{ fontSize: 10 }} />
-                    <YAxis tickLine={false} axisLine={false} tick={{ fontSize: 10 }} />
-                    <Tooltip />
-                    <Bar dataKey="value" name="Price ($)" radius={[3, 3, 0, 0]} />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-              <div className="mt-4 grid grid-cols-2 gap-3 text-xs">
-                <div className="rounded-md bg-canvas p-3">
-                  <p className="text-muted">Daily profit</p>
-                  <p className="mt-1 text-lg font-semibold text-indigo-950">${metrics.dailyProfit.toFixed(2)}</p>
-                </div>
-                <div className="rounded-md bg-canvas p-3">
-                  <p className="text-muted">Days of stock</p>
-                  <p className="mt-1 text-lg font-semibold text-indigo-950">
-                    {metrics.daysOfStockRemaining === Infinity ? "N/A" : metrics.daysOfStockRemaining}
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+      <section className="panel mb-5">
+        <div className="panel-header">
+          <div>
+            <h2 className="panel-title">Repricer monitor</h2>
+            <div className="panel-subtitle">Competitive offers refresh every 10 seconds with a protected minimum margin floor.</div>
+          </div>
+          <span className="category-pill">Pricing intelligence</span>
         </div>
-        <Card>
-          <CardHeader>
-            <div>
-              <h2 className="text-sm font-semibold text-indigo-950">Protection status</h2>
-              <p className="mt-1 text-xs text-muted">Hijack simulation state</p>
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-3 text-xs">
-            <div className="flex items-start gap-3">
-              <span className={`mt-1 size-2 rounded-full ${product.hasBuyBox ? "bg-teal-700" : "bg-red-500"}`} />
+        <div className="panel-content">
+          <div className="metrics metrics-five">
+            <Metric label="Offers monitored" value={String(products.length)} detail="Competitor prices fluctuate each cycle" accent="teal" tag="ACTIVE RULES" />
+            <Metric label="Floor protection" value="100%" detail="No price can be set below your configured floor" accent="green" tag="GUARDRAIL" />
+            <Metric label="Matched offers" value={String(products.filter((p) => p.price <= p.competitor_price).length)} detail="Priced at or below current competition" accent="orange" tag="BUY BOX POSITION" />
+            <Metric label="Last market update" value={last_updated} detail="Competitor movement · $0.10–$1.50" accent="blue" tag="10-SECOND LOOP" />
+          </div>
+
+          <section className="panel mb-5">
+            <div className="panel-header">
               <div>
-                <strong>Buy Box</strong>
-                <p className="mt-1 text-muted">
-                  {product.hasBuyBox ? "We own the Buy Box." : "Competitor has taken the Buy Box."}
-                </p>
+                <h2 className="panel-title">Live offer monitor</h2>
+                <div className="panel-subtitle">Price moves only when a competitor is below your offer and above your floor</div>
+              </div>
+              <span className="category-pill">Floor protected</span>
+            </div>
+            <div className="panel-content">
+              <div className="table-wrap">
+                <table className="mock-table">
+                  <thead>
+                    <tr>
+                      <th>Product</th>
+                      <th className="tabular-nums">Your price</th>
+                      <th className="tabular-nums">Live payout margin %</th>
+                      <th className="tabular-nums">Competitor</th>
+                      <th className="tabular-nums">Min floor</th>
+                      <th>Position</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {products.length ? products.map((product) => {
+                      const gap = product.price - product.competitor_price;
+                      const position = gap <= 0 ? <span className="status good">At or below market</span> : <span className="status warn">Price opportunity</span>;
+                      const margin = payoutMargin(product);
+                      const marginTone = margin === null ? "pending" : margin >= 20 ? "good" : margin >= 10 ? "warn" : "critical";
+                      const marginLabel = margin === null ? "—" : `${margin.toFixed(1)}%`;
+                      const headroom = product.price - product.min_floor;
+                      return (
+                        <tr key={product.asin} className="border-t border-line">
+                          <td><div className="product-name">{product.name}</div><div className="product-meta"><span className="asin">{product.asin}</span> · {product.sku}</div></td>
+                          <td><div className="price">${product.price}</div><div className="sub-price">Your offer</div></td>
+                          <td><span className={`status ${marginTone}`}>{marginLabel}</span></td>
+                          <td><div className="price">${product.competitor_price}</div><div className="sub-price">Lowest competitor</div></td>
+                          <td><div className="price">${product.min_floor}</div><div className="sub-price">${headroom} headroom</div></td>
+                          <td>{position}</td>
+                        </tr>
+                      );
+                    }) : <tr><td colSpan={6} className="empty-cell" style={{padding:18}}>No offers monitored yet.</td></tr>}
+                  </tbody>
+                </table>
               </div>
             </div>
-            <div className="flex items-start gap-3">
-              <span className="mt-1 size-2 rounded-full bg-amber-500" />
+          </section>
+
+          <section className="panel">
+            <div className="panel-header">
               <div>
-                <strong>Smart Repricer</strong>
-                <p className="mt-1 text-muted">Automatically undercuts competitor by $0.10 to reclaim the Buy Box.</p>
+                <h2 className="panel-title">Repricing guardrail</h2>
+                <div className="panel-subtitle">One-cent Buy Box strategy with minimum price protection</div>
               </div>
             </div>
-            <div className="flex items-start gap-3">
-              <span className="mt-1 size-2 rounded-full bg-teal-700" />
-              <div>
-                <strong>Profit safety</strong>
-                <p className="mt-1 text-muted">Repricing only triggers when competitor price is tracked.</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+            <div className="panel-content"><div className="note">
+              When the lowest competitor falls below your offer but remains above your configured minimum floor, the simulator reprices to one cent below that offer. If the competitor breaches the floor, your offer is held. All changes are recorded in the activity log.
+            </div></div>
+          </section>
+        </div>
+      </section>
     </main>
   );
+}
+
+function Metric({ label, value, detail, accent, tag }: { label: string; value: string; detail: string; accent: string; tag?: string }) {
+  return (
+    <section className={`metric ${accent === "green" || accent === "teal" || accent === "blue" || accent === "warn" ? "" : ""}`}>
+      <div className="metric-label"><span>{label}</span>{tag && <span className="mini-tag">{tag}</span>}</div>
+      <div className="metric-value">{value}</div>
+      <div className="metric-foot">{detail}</div>
+      <div className={`metric-accent ${accent}`}></div>
+    </section>
+  );
+}
+
+function payoutMargin(product: { price: number; min_floor?: number }): number | null {
+  return null;
 }
