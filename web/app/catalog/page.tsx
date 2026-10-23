@@ -30,6 +30,13 @@ function CatalogWorkspace() {
   const [addModal, setAddModal] = useState(false);
   const [addTab, setAddTab] = useState<"import" | "manual">("import");
 
+  const mockProducts = [
+    { asin: "B0C8Q4M2K7", sku: "AF-LS-02", title: "ArcFold Aluminum Laptop Stand for Desk, Adjustable Portable Computer Riser for Home Office", category: "Office", opt_status: "optimized", opt_score: 100, opt_issues: [], stock: "—", days_of_supply: "—", price: "—" },
+    { asin: "B0B7P9R3W1", sku: "QC-M-11", title: "QuietClick Wireless Mouse for Laptop and Desktop with Quiet Click Buttons", category: "Electronics", opt_status: "needs_optimization", opt_score: 65, opt_issues: ["Title is shorter than 80 characters.", "Only 4 bullet points; at least 5 are recommended."], stock: "—", days_of_supply: "—", price: "—" },
+    { asin: "B0D2L6T8N4", sku: "TG-BS-04", title: "Reusable Silicone Water Bottle Sleeve, Protective Non-Slip Cover with Easy-Clean Grip", category: "Home & Kitchen", opt_status: "needs_optimization", opt_score: 20, opt_issues: ["Title does not contain any of the back-end keywords.", "Only 4 bullet points; at least 5 are recommended.", "Only 6 main images; at least 7 are recommended."], stock: "—", days_of_supply: "—", price: "—" },
+    { asin: "B0A9H5X3J6", sku: "LM-DL-08", title: "USB-C LED Desk Lamp for Home Office, Adjustable Compact Task Light for Work and Study", category: "Lighting", opt_status: "optimized", opt_score: 85, opt_issues: ["Only 4 bullet points; at least 5 are recommended."], stock: "—", days_of_supply: "—", price: "—" },
+  ];
+
   useEffect(() => {
     let active = true;
     void fetch("/api/access", { cache: "no-store" }).then((response) => response.json()).then((payload) => {
@@ -179,7 +186,25 @@ function CatalogWorkspace() {
         </div>
         <div className="overflow-x-auto"><table className="w-full text-left text-xs"><thead className="bg-canvas text-[10px] uppercase tracking-wide text-muted"><tr><th style={{width:34}}></th><th className="px-4 py-3">ASIN</th><th className="px-4 py-3">SKU</th><th style={{minWidth:220}} className="px-4 py-3">Title</th><th className="px-4 py-3">Category</th><th className="px-4 py-3">Status</th><th className="px-4 py-3 tabular-nums">Score</th><th style={{width:300}} className="px-4 py-3">Issues</th><th className="px-4 py-3 tabular-nums">Stock</th><th className="px-4 py-3 tabular-nums">Days of supply</th><th className="px-4 py-3 tabular-nums">Price</th><th style={{width:170}} className="px-4 py-3">Actions</th></tr></thead>
           <tbody>
-            <tr className="border-t border-line"><td className="px-4 py-3 tabular-nums text-[10px] text-muted">—</td><td className="px-4 py-3">—</td><td className="px-4 py-3">—</td><td className="px-4 py-3">No products connected yet</td><td className="px-4 py-3">—</td><td className="px-4 py-3"><span className="status pending">—</span></td><td className="px-4 py-3 tabular-nums">—</td><td className="px-4 py-3"><span className="issue-tag muted">—</span></td><td className="px-4 py-3 tabular-nums">—</td><td className="px-4 py-3 tabular-nums">—</td><td className="px-4 py-3 tabular-nums">—</td><td className="px-4 py-3"><span className="text-[10px] text-muted">Connect a seller account to load products</span></td></tr>
+            {mockProducts.map((product) => {
+              const statusClass = product.opt_status === "optimized" ? "status good" : "status warn";
+              return (
+                <tr key={product.asin} className="border-t border-line">
+                  <td className="px-4 py-3 tabular-nums text-[10px] text-muted">☐</td>
+                  <td className="px-4 py-3">{product.asin}</td>
+                  <td className="px-4 py-3">{product.sku}</td>
+                  <td className="px-4 py-3">{product.title}</td>
+                  <td className="px-4 py-3">{product.category}</td>
+                  <td className="px-4 py-3"><span className={statusClass}>{product.opt_status}</span></td>
+                  <td className="px-4 py-3 tabular-nums">{product.opt_score}</td>
+                  <td className="px-4 py-3 issue-cell">{product.opt_issues.length ? product.opt_issues.map((issue) => <span className="issue-tag" key={issue}>{issue}</span>) : <span className="issue-tag muted">—</span>}</td>
+                  <td className="px-4 py-3 tabular-nums">{product.stock}</td>
+                  <td className="px-4 py-3 tabular-nums">{product.days_of_supply}</td>
+                  <td className="px-4 py-3 tabular-nums">{product.price}</td>
+                  <td className="px-4 py-3"><button className="button button-outline button-sm" type="button" onClick={() => { setDrawerId(product.asin); setDrawerMode("optimize"); }}>Optimize</button></td>
+                </tr>
+              );
+            })}
           </tbody>
         </table></div>
         <p className="mt-2 text-[10px] text-muted">Row actions: Optimize (opens side-by-side current vs suggested copy) · View. Bulk select with "Optimize selected". Add product opens Import from Amazon (ASIN/SKU) or Create manually.</p>
