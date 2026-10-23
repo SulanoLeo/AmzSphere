@@ -184,6 +184,17 @@ a { color: inherit; text-decoration: none; }
 .flow-copy { margin: 0; color: var(--mock-muted); font-size: 11px; line-height: 1.65; }
 .flow-endpoint { justify-self: end; color: var(--mock-teal); font: 500 10px var(--font-ui); text-align: right; }
 
+/* Rule lines (model / enum panels) */
+.rule-line { display: flex; gap: 10px; font-size: 11px; color: var(--mock-ink); margin: 6px 0; }
+.rule-line span:first-child { min-width: 150px; }
+
+/* Insight panel */
+.insight-tag { font-size: 9px; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase; color: var(--mock-quiet); margin-bottom: 8px; display: block; }
+.insight-quote { margin: 8px 0; font-size: 13px; color: var(--mock-navy); font-style: italic; border-left: 3px solid var(--mock-teal); padding-left: 12px; }
+.insight-body { font-size: 11px; color: var(--mock-muted); line-height: 1.7; margin-bottom: 10px; }
+.recommendation { border: 1px solid #f0d39a; border-left: 3px solid #bd7d16; border-radius: 4px; background: #fff9ed; padding: 10px 12px; font-size: 11px; color: var(--mock-ink); line-height: 1.6; }
+.recommendation strong { color: #80530a; }
+
 /* Guardrail */
 .guardrail-rule { padding: 11px 12px; margin-top: 12px; display: flex; align-items: flex-start; gap: 10px; border: 1px solid #f0d39a; border-left: 3px solid #bd7d16; border-radius: 4px; background: #fff9ed; }
 .guardrail-indicator { padding: 4px 6px; flex: none; border-radius: 3px; background: #f7e7c5; color: #80530a; font-size: 8px; font-weight: 800; letter-spacing: .5px; }
