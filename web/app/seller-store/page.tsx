@@ -1,19 +1,69 @@
 "use client";
 
-"use strict";
+import { useEffect, useState } from "react";
+import { ClientProductProvider } from "@/lib/provider/client";
+import type { SellerStoreItem } from "@/lib/provider/types";
 
-import { useState } from "react";
+function Metric({ label, value, detail, accent, tag }: { label: string; value: string; detail: string; accent: string; tag?: string }) {
+  return (
+    <section className={`metric ${accent === "green" || accent === "teal" || accent === "blue" || accent === "warn" ? "" : ""}`}>
+      <div className="metric-label"><span>{label}</span>{tag && <span className="mini-tag">{tag}</span>}</div>
+      <div className="metric-value">{value}</div>
+      <div className="metric-foot">{detail}</div>
+      <div className={`metric-accent ${accent}`}></div>
+    </section>
+  );
+}
 
-/* Seller Store — mirrors the mock /seller-store view. */
 export default function SellerStorePage() {
-  const sellerStore: Array<{ id: string; name: string; sku: string; asin: string; price: number; stock: number; category: string; visible: boolean }> = [];
-  const catalogNotAdded: Array<{ asin: string; name: string; sku: string }> = [];
+  const provider = new ClientProductProvider();
+  const [sellerStore, setSellerStore] = useState<SellerStoreItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [sellerStoreAddAsin, setSellerStoreAddAsin] = useState("");
+
+  useEffect(() => {
+    let active = true;
+    const loadSellerStore = async () => {
+      setLoading(true);
+      try {
+        const items = await provider.getSellerStore();
+        if (active) setSellerStore(items);
+      } catch (cause) {
+        if (active) setError(cause instanceof Error ? cause.message : "Failed to load seller store");
+      } finally {
+        if (active) setLoading(false);
+      }
+    };
+    void loadSellerStore();
+    return () => { active = false; };
+  }, [provider]);
 
   const products = sellerStore;
   const visible = products.filter((p) => p.visible);
   const hidden = products.filter((p) => !p.visible);
-  const addOptions = catalogNotAdded.map((p) => `<option value="${escapeHtml(p.asin)}">${escapeHtml(p.name)} (${escapeHtml(p.sku)})</option>`).join("");
+
+  async function toggleVisibility(id: string, visible: boolean) {
+    try {
+      await provider.toggleSellerStoreVisibility(id, visible);
+      const items = await provider.getSellerStore();
+      setSellerStore(items);
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "Failed to update visibility");
+    }
+  }
+
+  async function addToStore() {
+    if (!sellerStoreAddAsin) return;
+    try {
+      await provider.addToSellerStore(sellerStoreAddAsin);
+      setSellerStoreAddAsin("");
+      const items = await provider.getSellerStore();
+      setSellerStore(items);
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "Failed to add product to seller store");
+    }
+  }
 
   return (
     <main className="min-h-screen bg-canvas px-4 py-6 md:px-10 md:py-10">
@@ -26,6 +76,7 @@ export default function SellerStorePage() {
           <span className="category-pill">Marketplace</span>
         </div>
         <div className="panel-content">
+          {error && <div role="alert" className="mb-4 flex items-start gap-3 border-l-4 border-amber-500 bg-amber-50 p-4 text-sm text-amber-950">{error}</div>}
           <div className="metrics metrics-five">
             <Metric label="Listed products" value={String(products.length)} detail={`${visible.length} visible · ${hidden.length} hidden`} accent="blue" tag="SELLER STORE" />
             <Metric label="Visible products" value={String(visible.length)} detail="Live on storefront" accent="green" tag="VISIBLE" />
@@ -41,13 +92,11 @@ export default function SellerStorePage() {
             </div>
             <div className="panel-content">
               <div className="catalog-controls">
-                <label className="form-label">Catalog product</label>
+                <label className="form-label">Catalog product (ASIN)</label>
                 <div style={{position:"relative",width:"100%",maxWidth:420}}>
-                  <select id="seller-store-add-select" className="w-full h-32 rounded-md border border-line px-3 font-normal outline-none focus:border-teal-700 bg-white" value={sellerStoreAddAsin} onChange={(e)=>setSellerStoreAddAsin(e.target.value)}>
-                    {catalogNotAdded.map((p) => (<option key={p.asin} value={p.asin}>{p.name} ({p.sku})</option>))}
-                  </select>
+                  <input id="seller-store-add-input" className="w-full h-10 rounded-md border border-line px-3 font-normal outline-none focus:border-teal-700 bg-white" value={sellerStoreAddAsin} onChange={(e)=>setSellerStoreAddAsin(e.target.value)} placeholder="B0XXXXXXXX" />
                 </div>
-                <div style={{marginTop:10}}><button className="button button-primary" type="button" disabled={!sellerStoreAddAsin}>{sellerStoreAddAsin ? `Selected: ${sellerStoreAddAsin}` : "Add to seller store"}</button></div>
+                <div style={{marginTop:10}}><button className="button button-primary" type="button" disabled={!sellerStoreAddAsin || loading} onClick={() => void addToStore()}>{sellerStoreAddAsin ? `Add ${sellerStoreAddAsin}` : "Add to seller store"}</button></div>
               </div>
             </div>
           </section>
@@ -73,7 +122,7 @@ export default function SellerStorePage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {products.length ? products.map((product) => (
+                    {loading ? <tr><td colSpan={6} className="text-center text-xs text-muted py-4">Loading seller store…</td></tr> : products.length ? products.map((product) => (
                       <tr key={product.id} className="border-t border-line">
                         <td>
                           <div className="product-name">{product.name}</div>
@@ -83,7 +132,7 @@ export default function SellerStorePage() {
                         <td className="tabular-nums">{product.stock.toFixed(1)} units</td>
                         <td className="product-meta">{product.category}</td>
                         <td>{product.visible ? <span className="status good">Visible</span> : <span className="status warn">Hidden</span>}</td>
-                        <td className="action-row"><button className={`button ${product.visible ? "button-deny" : "button-approve"}`} type="button" data-seller-toggle={product.id}>{product.visible ? "Hide" : "Show"}</button></td>
+                        <td className="action-row"><button className={`button ${product.visible ? "button-deny" : "button-approve"}`} type="button" onClick={() => void toggleVisibility(product.id, !product.visible)}>{product.visible ? "Hide" : "Show"}</button></td>
                       </tr>
                     )) : <tr><td colSpan={6} className="empty-cell" style={{padding:18}}>No products listed yet. Add products from your catalog.</td></tr>}
                   </tbody>
@@ -96,16 +145,3 @@ export default function SellerStorePage() {
     </main>
   );
 }
-
-function Metric({ label, value, detail, accent, tag }: { label: string; value: string; detail: string; accent: string; tag?: string }) {
-  return (
-    <section className={`metric ${accent === "green" || accent === "teal" || accent === "blue" || accent === "warn" ? "" : ""}`}>
-      <div className="metric-label"><span>{label}</span>{tag && <span className="mini-tag">{tag}</span>}</div>
-      <div className="metric-value">{value}</div>
-      <div className="metric-foot">{detail}</div>
-      <div className={`metric-accent ${accent}`}></div>
-    </section>
-  );
-}
-
-function escapeHtml(text: string) { return text.replace(/[&<>"']/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" })[c] || c); }

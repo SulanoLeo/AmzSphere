@@ -1,8 +1,43 @@
-"use strict";
+"use client";
 
-/* Repricer Monitor — mirrors the mock /repricer view. */
+import { useEffect, useState } from "react";
+import { ClientProductProvider } from "@/lib/provider/client";
+import type { Product } from "@/lib/provider/types";
+
+function Metric({ label, value, detail, accent, tag }: { label: string; value: string; detail: string; accent: string; tag?: string }) {
+  return (
+    <section className={`metric ${accent === "green" || accent === "teal" || accent === "blue" || accent === "warn" ? "" : ""}`}>
+      <div className="metric-label"><span>{label}</span>{tag && <span className="mini-tag">{tag}</span>}</div>
+      <div className="metric-value">{value}</div>
+      <div className="metric-foot">{detail}</div>
+      <div className={`metric-accent ${accent}`}></div>
+    </section>
+  );
+}
+
 export default function RepricerPage() {
-  const products: Array<{ asin: string; sku: string; name: string; price: number; competitor_price: number; min_floor: number }> = [];
+  const provider = new ClientProductProvider();
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let active = true;
+    const loadProducts = async () => {
+      setLoading(true);
+      try {
+        const payload = await provider.getProducts();
+        if (active) setProducts(payload.products);
+      } catch (cause) {
+        if (active) setError(cause instanceof Error ? cause.message : "Failed to load repricer data");
+      } finally {
+        if (active) setLoading(false);
+      }
+    };
+    void loadProducts();
+    return () => { active = false; };
+  }, [provider]);
+
   const last_updated = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
 
   return (
@@ -16,6 +51,7 @@ export default function RepricerPage() {
           <span className="category-pill">Pricing intelligence</span>
         </div>
         <div className="panel-content">
+          {error && <div role="alert" className="mb-4 flex items-start gap-3 border-l-4 border-amber-500 bg-amber-50 p-4 text-sm text-amber-950">{error}</div>}
           <div className="metrics metrics-five">
             <Metric label="Offers monitored" value={String(products.length)} detail="Competitor prices fluctuate each cycle" accent="teal" tag="ACTIVE RULES" />
             <Metric label="Floor protection" value="100%" detail="No price can be set below your configured floor" accent="green" tag="GUARDRAIL" />
@@ -45,20 +81,17 @@ export default function RepricerPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {products.length ? products.map((product) => {
+                    {loading ? <tr><td colSpan={6} className="empty-cell" style={{padding:18}}>Loading offers…</td></tr> : products.length ? products.map((product) => {
                       const gap = product.price - product.competitor_price;
                       const position = gap <= 0 ? <span className="status good">At or below market</span> : <span className="status warn">Price opportunity</span>;
-                      const margin = payoutMargin(product);
-                      const marginTone = margin === null ? "pending" : margin >= 20 ? "good" : margin >= 10 ? "warn" : "critical";
-                      const marginLabel = margin === null ? "—" : `${margin.toFixed(1)}%`;
                       const headroom = product.price - product.min_floor;
                       return (
                         <tr key={product.asin} className="border-t border-line">
                           <td><div className="product-name">{product.name}</div><div className="product-meta"><span className="asin">{product.asin}</span> · {product.sku}</div></td>
-                          <td><div className="price">${product.price}</div><div className="sub-price">Your offer</div></td>
-                          <td><span className={`status ${marginTone}`}>{marginLabel}</span></td>
-                          <td><div className="price">${product.competitor_price}</div><div className="sub-price">Lowest competitor</div></td>
-                          <td><div className="price">${product.min_floor}</div><div className="sub-price">${headroom} headroom</div></td>
+                          <td><div className="price">${product.price.toFixed(2)}</div><div className="sub-price">Your offer</div></td>
+                          <td><span className="status pending">—</span></td>
+                          <td><div className="price">${product.competitor_price.toFixed(2)}</div><div className="sub-price">Lowest competitor</div></td>
+                          <td><div className="price">${product.min_floor.toFixed(2)}</div><div className="sub-price">${headroom.toFixed(2)} headroom</div></td>
                           <td>{position}</td>
                         </tr>
                       );
@@ -84,19 +117,4 @@ export default function RepricerPage() {
       </section>
     </main>
   );
-}
-
-function Metric({ label, value, detail, accent, tag }: { label: string; value: string; detail: string; accent: string; tag?: string }) {
-  return (
-    <section className={`metric ${accent === "green" || accent === "teal" || accent === "blue" || accent === "warn" ? "" : ""}`}>
-      <div className="metric-label"><span>{label}</span>{tag && <span className="mini-tag">{tag}</span>}</div>
-      <div className="metric-value">{value}</div>
-      <div className="metric-foot">{detail}</div>
-      <div className={`metric-accent ${accent}`}></div>
-    </section>
-  );
-}
-
-function payoutMargin(product: { price: number; min_floor?: number }): number | null {
-  return null;
 }

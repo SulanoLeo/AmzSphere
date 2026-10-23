@@ -1,21 +1,69 @@
-"use strict";
+"use client";
 
-/* PPC Ads Engine — mirrors the mock /ppc view. */
+import { useEffect, useState } from "react";
+import { ClientProductProvider } from "@/lib/provider/client";
+
+function Metric({ label, value, detail, accent, tag }: { label: string; value: string; detail: string; accent: string; tag?: string }) {
+  return (
+    <section className={`metric ${accent === "green" || accent === "teal" || accent === "blue" || accent === "warn" ? "" : ""}`}>
+      <div className="metric-label"><span>{label}</span>{tag && <span className="mini-tag">{tag}</span>}</div>
+      <div className="metric-value">{value}</div>
+      <div className="metric-foot">{detail}</div>
+      <div className={`metric-accent ${accent}`}></div>
+    </section>
+  );
+}
+
 export default function PpcPage() {
+  const provider = new ClientProductProvider();
+  const [data, setData] = useState<{ campaigns: any[]; search_terms: any[]; targeted_exact_keywords: any[]; negative_keywords: any[] } | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let active = true;
+    const loadPpc = async () => {
+      setLoading(true);
+      try {
+        const payload = await provider.getPpcData();
+        if (active) setData(payload);
+      } catch (cause) {
+        if (active) setError(cause instanceof Error ? cause.message : "Failed to load PPC data");
+      } finally {
+        if (active) setLoading(false);
+      }
+    };
+    void loadPpc();
+    return () => { active = false; };
+  }, [provider]);
+
   const autonomousBids = true;
-  const search_terms: Array<{ term: string; clicks: number; spend: number; conversions: number; acos: number }> = [];
-  const targeted_exact_keywords: Array<{ term: string }> = [];
-  const negative_keywords: Array<{ term: string }> = [];
-  const campaigns: Array<{ name: string; sku: string; ad_history: Array<{ spend: number; sales: number }>; bid_changes: Array<{ from: number; to: number; date: string }>; bid_floor: number }> = [];
+  const search_terms = data?.search_terms || [];
+  const targeted_exact_keywords = data?.targeted_exact_keywords || [];
+  const negative_keywords = data?.negative_keywords || [];
+  const campaigns = data?.campaigns || [];
   const totalSpend = search_terms.reduce((sum, t) => sum + t.spend, 0);
   const totalClicks = search_terms.reduce((sum, t) => sum + t.clicks, 0);
   const qualified = targeted_exact_keywords.length;
   const negatives = negative_keywords.length;
-  const currentAcos = () => 8.2;
+  const currentAcos = () => {
+    const spend = campaigns.reduce((s: number, c: any) => {
+      const week = (c.ad_history || []).slice(-7);
+      return s + week.reduce((sum: number, d: any) => sum + d.spend, 0);
+    }, 0);
+    const sales = campaigns.reduce((s: number, c: any) => {
+      const week = (c.ad_history || []).slice(-7);
+      return s + week.reduce((sum: number, d: any) => sum + d.sales, 0);
+    }, 0);
+    return sales ? (spend / sales) * 100 : 8.2;
+  };
+
+  const exactTerms = new Set(targeted_exact_keywords.map((k) => k.term));
+  const negativeTerms = new Set(negative_keywords.map((k) => k.term));
 
   const rows = search_terms.map((term) => {
-    const exact = targeted_exact_keywords.some((item) => item.term === term.term);
-    const negative = negative_keywords.some((item) => item.term === term.term);
+    const exact = exactTerms.has(term.term);
+    const negative = negativeTerms.has(term.term);
     const automation = exact ? "Exact target" : negative ? "Negative" : "Monitoring";
     const tone = exact ? "good" : negative ? "denied" : "pending";
     return (
@@ -47,8 +95,9 @@ export default function PpcPage() {
           </div>
         </div>
         <div className="panel-content">
+          {error && <div role="alert" className="mb-4 flex items-start gap-3 border-l-4 border-amber-500 bg-amber-50 p-4 text-sm text-amber-950">{error}</div>}
           <div className="metrics metrics-five">
-            <Metric label="TACoS" value="8.2%" detail="Total Advertising Cost of Sales · overall ad health" accent="green" tag="TOTAL ADS / TOTAL SALES" />
+            <Metric label="TACoS" value={`${currentAcos().toFixed(1)}%`} detail="Total Advertising Cost of Sales · overall ad health" accent="green" tag="TOTAL ADS / TOTAL SALES" />
             <Metric label="Search term spend" value={`$${totalSpend.toFixed(0)}`} detail={`${totalClicks} customer clicks tracked`} accent="orange" tag="MOCK CAMPAIGN DATA" />
             <Metric label="Portfolio ACoS" value={`${currentAcos().toFixed(1)}%`} detail={`0.0 pts over 30 days`} accent="teal" tag="LAST 30 DAYS" />
             <Metric label="Exact keywords" value={String(qualified)} detail="Auto-harvested · >5 conversions, <25% ACoS" accent="green" tag="TARGETED" />
@@ -95,10 +144,10 @@ export default function PpcPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {campaigns.length ? campaigns.map((c) => {
-                      const week = c.ad_history.slice(-7);
-                      const spend = week.reduce((sum, day) => sum + day.spend, 0);
-                      const sales = week.reduce((sum, day) => sum + day.sales, 0);
+                    {loading ? <tr><td colSpan={7} className="empty-cell" style={{padding:18}}>Loading campaigns…</td></tr> : campaigns.length ? campaigns.map((c: any) => {
+                      const week = (c.ad_history || []).slice(-7);
+                      const spend = week.reduce((sum: number, day: any) => sum + day.spend, 0);
+                      const sales = week.reduce((sum: number, day: any) => sum + day.sales, 0);
                       const acos = sales ? (spend / sales) * 100 : 0;
                       const over = acos > 25;
                       const change = (c.bid_changes || [])[0];
@@ -149,16 +198,5 @@ export default function PpcPage() {
         </div>
       </section>
     </main>
-  );
-}
-
-function Metric({ label, value, detail, accent, tag }: { label: string; value: string; detail: string; accent: string; tag?: string }) {
-  return (
-    <section className={`metric ${accent === "green" || accent === "teal" || accent === "blue" || accent === "warn" ? "" : ""}`}>
-      <div className="metric-label"><span>{label}</span>{tag && <span className="mini-tag">{tag}</span>}</div>
-      <div className="metric-value">{value}</div>
-      <div className="metric-foot">{detail}</div>
-      <div className={`metric-accent ${accent}`}></div>
-    </section>
   );
 }

@@ -4,14 +4,6 @@
     "web": {
       "root": "web",
       "framework": "nextjs"
-    },
-    "api": {
-      "root": "backend",
-      "framework": "fastapi"
     }
-  },
-  "rewrites": [
-    { "source": "/api/(.*)", "destination": { "service": "api" } },
-    { "source": "/(.*)", "destination": { "service": "web" } }
-  ]
+  }
 }

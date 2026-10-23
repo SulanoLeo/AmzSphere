@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 
 export function requireSameOrigin(request: Request) {
+  if (process.env.AMZ_DATA_MODE === "mock") return null;
   const origin = request.headers.get("origin");
   if (!origin) return NextResponse.json({ detail: "Origin header is required." }, { status: 403 });
   try {
@@ -16,6 +17,10 @@ export function requireSameOrigin(request: Request) {
 }
 
 export async function requireAllowedUser(requiredRole?: "approver") {
+  if (process.env.AMZ_DATA_MODE === "mock") {
+    return { email: "mock@amzsphere.local", isApprover: true };
+  }
+
   const session = await auth();
   const email = session?.user?.email?.trim().toLowerCase();
   if (!email) return { response: NextResponse.json({ detail: "Authentication required" }, { status: 401 }) };

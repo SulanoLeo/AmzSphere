@@ -1,14 +1,46 @@
-"use strict";
+"use client";
 
-/* Inventory hub — mirrors the mock /inventory view.
-   Stock cover, sales velocity, and purchase-order drafts. */
+import { useEffect, useState } from "react";
+import { ClientProductProvider } from "@/lib/provider/client";
+import type { Product } from "@/lib/provider/types";
+
+function Metric({ label, value, detail, accent, tag }: { label: string; value: string; detail: string; accent: string; tag?: string }) {
+  return (
+    <section className={`metric ${accent === "green" || accent === "teal" || accent === "blue" || accent === "warn" ? "" : ""}`}>
+      <div className="metric-label"><span>{label}</span>{tag && <span className="mini-tag">{tag}</span>}</div>
+      <div className="metric-value">{value}</div>
+      <div className="metric-foot">{detail}</div>
+      <div className={`metric-accent ${accent}`}></div>
+    </section>
+  );
+}
+
 export default function InventoryPage() {
-  const products: Array<{ asin: string; sku: string; name: string; stock: number; daily_velocity: number; opt_score?: number; opt_status?: string; po_draft_id?: string }> = [];
-  const purchaseOrders: Array<{ id: string; product_asin: string; product_name: string; supplier: string; units: number; status: string }> = [];
+  const provider = new ClientProductProvider();
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let active = true;
+    const loadProducts = async () => {
+      setLoading(true);
+      try {
+        const payload = await provider.getProducts();
+        if (active) setProducts(payload.products);
+      } catch (cause) {
+        if (active) setError(cause instanceof Error ? cause.message : "Failed to load inventory");
+      } finally {
+        if (active) setLoading(false);
+      }
+    };
+    void loadProducts();
+    return () => { active = false; };
+  }, [provider]);
+
   const lowStock = products.filter((p) => (p.stock / Math.max(p.daily_velocity || 1, 1)) < 15);
   const totalStock = products.reduce((sum, p) => sum + p.stock, 0);
   const totalVelocity = products.reduce((sum, p) => sum + p.daily_velocity, 0);
-  const mockUnitCost: Record<string, number> = {};
 
   return (
     <main className="min-h-screen bg-canvas px-4 py-6 md:px-10 md:py-10">
@@ -18,8 +50,10 @@ export default function InventoryPage() {
             <h2 className="panel-title">Inventory hub</h2>
             <div className="panel-subtitle">Stock cover, sales velocity, and purchase-order drafts in one place.</div>
           </div>
+          <span className="category-pill">Marketplace</span>
         </div>
         <div className="panel-content">
+          {error && <div role="alert" className="mb-4 flex items-start gap-3 border-l-4 border-amber-500 bg-amber-50 p-4 text-sm text-amber-950">{error}</div>}
           {lowStock.length && (
             <div className="critical-strip">
               <span className="critical-mark">!</span>
@@ -35,7 +69,7 @@ export default function InventoryPage() {
             <Metric label="Units on hand" value={String(totalStock)} detail={`${products.length} active catalog products`} accent="blue" tag="SELLABLE STOCK" />
             <Metric label="Daily sales velocity" value={String(totalVelocity)} detail="Units sold per day across the portfolio" accent="teal" tag="30-DAY AVERAGE" />
             <Metric label="Critical products" value={String(lowStock.length)} detail={lowStock.length ? "Below 15 days of supply" : "No immediate replenishment risk"} accent="orange" tag="AUTO-ALERT" />
-            <Metric label="PO drafts" value={String(purchaseOrders.length)} detail="Generated from inventory coverage rules" accent="green" tag="PROCUREMENT" />
+            <Metric label="PO drafts" value={String(0)} detail="Generated from inventory coverage rules" accent="green" tag="PROCUREMENT" />
           </div>
 
           <section className="section-grid mb-5">
@@ -57,31 +91,10 @@ export default function InventoryPage() {
                   <h2 className="panel-title">Purchase order drafts</h2>
                   <div className="panel-subtitle">Created automatically below 15 days of supply</div>
                 </div>
-                <span className="category-pill">{purchaseOrders.length} drafts</span>
+                <span className="category-pill">{0} drafts</span>
               </div>
               <div className="panel-content"><div className="po-list">
-                {purchaseOrders.length ? purchaseOrders.map((po) => {
-                  const unitCost = mockUnitCost[po.product_asin];
-                  const capital = unitCost === undefined ? "Unit cost not set" : `$${(po.units * unitCost).toFixed(2)}`;
-                  const product = products.find((item) => item.asin === po.product_asin);
-                  const sku = product ? product.sku : "";
-                  const queued = false;
-                  return (
-                    <div key={po.id} className="po-row po-card">
-                      <div>
-                        <div className="po-name">{po.product_name}</div>
-                        <div className="po-meta">{po.supplier} · {po.units} units · {po.status}</div>
-                        <div className="po-total">Total Capital Required: <strong>{capital}</strong></div>
-                      </div>
-                      <div className="po-actions">
-                        <span className="po-id">{po.id}</span>
-                        <button className={`button ${queued ? "" : "button-primary"}`} type="button" data-send-po disabled={queued || !sku}>
-                          {queued ? "In Procurement Queue" : "Send to Procurement Queue"}
-                        </button>
-                      </div>
-                    </div>
-                  );
-                }) : <div className="empty-state">No replenishment drafts yet.</div>}
+                <div className="empty-state">No replenishment drafts yet.</div>
               </div></div>
             </div>
           </section>
@@ -107,7 +120,7 @@ export default function InventoryPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {products.length ? products.map((product) => {
+                    {loading ? <tr><td colSpan={6} className="text-center text-xs text-muted py-4">Loading inventory…</td></tr> : products.length ? products.map((product) => {
                       const days = product.stock / Math.max(product.daily_velocity || 1, 1);
                       const fill = Math.min(100, (days / 45) * 100);
                       const tone = days < 15 ? "warn" : days < 30 ? "pending" : "good";
@@ -138,16 +151,5 @@ export default function InventoryPage() {
         </div>
       </section>
     </main>
-  );
-}
-
-function Metric({ label, value, detail, accent, tag }: { label: string; value: string; detail: string; accent: string; tag?: string }) {
-  return (
-    <section className={`metric ${accent === "green" || accent === "teal" || accent === "blue" || accent === "warn" ? "" : ""}`}>
-      <div className="metric-label"><span>{label}</span>{tag && <span className="mini-tag">{tag}</span>}</div>
-      <div className="metric-value">{value}</div>
-      <div className="metric-foot">{detail}</div>
-      <div className={`metric-accent ${accent}`}></div>
-    </section>
   );
 }

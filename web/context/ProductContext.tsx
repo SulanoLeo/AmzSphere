@@ -1,6 +1,8 @@
 "use client";
 
-import { createContext, useCallback, useContext, useMemo, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { ClientProductProvider } from "@/lib/provider/client";
+import type { Product } from "@/lib/provider/types";
 
 export interface ProductRecord {
   sku: string;
@@ -34,6 +36,34 @@ export interface ProductContextValue {
   triggerSmartRepricer: () => void;
   setHasBuyBox: (value: boolean) => void;
   loadFromDashboard: (record: Partial<ProductRecord>) => void;
+}
+
+function productToRecord(p: Product): ProductRecord {
+  return {
+    sku: p.sku,
+    asin: p.asin,
+    supplierName: p.supplier,
+    factoryUnitCost: Number(p.unit_cost),
+    shippingCostPerUnit: Number(p.unit_cost) * 0.15,
+    retailPrice: Number(p.price),
+    salesVelocity: Number(p.daily_velocity),
+    currentStock: Number(p.stock),
+    dailyPpcAdSpend: 12.0,
+    hasBuyBox: !p.suppressed,
+    competitorPrice: Number(p.competitor_price) || null,
+  };
+}
+
+function recordToPatch(rec: ProductRecord): Partial<Product> {
+  return {
+    supplier: rec.supplierName,
+    unit_cost: rec.factoryUnitCost,
+    price: rec.retailPrice,
+    daily_velocity: rec.salesVelocity,
+    stock: rec.currentStock,
+    competitor_price: rec.competitorPrice ?? undefined,
+    suppressed: !rec.hasBuyBox,
+  };
 }
 
 const DEFAULT_PRODUCT: ProductRecord = {
@@ -75,9 +105,25 @@ function computeMetrics(p: ProductRecord): DerivedMetrics {
   };
 }
 
+const SOURCING_ASIN = "B0C9W7XNQ3";
+
 export function ProductProvider({ children }: { children: React.ReactNode }) {
+  const provider = new ClientProductProvider();
   const [product, setProduct] = useState<ProductRecord>(DEFAULT_PRODUCT);
   const metrics = useMemo(() => computeMetrics(product), [product]);
+  const [initialized, setInitialized] = useState(false);
+
+  useEffect(() => {
+    if (initialized) return;
+    let active = true;
+    const load = async () => {
+      const p = await provider.getProduct(SOURCING_ASIN);
+      if (active && p) setProduct(productToRecord(p));
+      setInitialized(true);
+    };
+    void load();
+    return () => { active = false; };
+  }, [provider, initialized]);
 
   const updateSourcing = useCallback(
     (patch: Partial<Omit<ProductRecord, "sku" | "asin">>) => {
@@ -86,9 +132,13 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
     []
   );
 
-  const pushChangesSync = useCallback(() => {
-    // State is already reactive; this hook is the sync entry point for future backend POST.
-  }, []);
+  const pushChangesSync = useCallback(async () => {
+    try {
+      await provider.updateProduct(SOURCING_ASIN, recordToPatch(product));
+    } catch {
+      // Provider write failure is non-fatal for the mock UI; state remains reactive locally.
+    }
+  }, [product, provider]);
 
   const simulateHijackerAttack = useCallback(() => {
     setProduct((prev) => ({

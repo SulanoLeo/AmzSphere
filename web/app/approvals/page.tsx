@@ -1,10 +1,65 @@
-"use strict";
+"use client";
 
-/* Listing approvals — mirrors the mock /approvals view.
-   Pending revisions (before/after diff + approve/reject) and purchase workflows. */
+import { useEffect, useState } from "react";
+import { ClientProductProvider } from "@/lib/provider/client";
+import type { ProductRevision, Order } from "@/lib/provider/types";
+
+function Metric({ label, value, detail, accent, tag }: { label: string; value: string; detail: string; accent: string; tag?: string }) {
+  return (
+    <section className={`metric ${accent === "green" || accent === "teal" || accent === "blue" || accent === "warn" ? "" : ""}`}>
+      <div className="metric-label"><span>{label}</span>{tag && <span className="mini-tag">{tag}</span>}</div>
+      <div className="metric-value">{value}</div>
+      <div className="metric-foot">{detail}</div>
+      <div className={`metric-accent ${accent}`}></div>
+    </section>
+  );
+}
+
 export default function ApprovalsPage() {
-  const revisions: Array<{ id: string; product_id: string; field_changes: Record<string, { before: unknown; after: unknown }>; created_at: string }> = [];
-  const orders: Array<{ id: string; product_name: string; supplier: string; category: string; units: number; amount: number; status: string; reason: string; reviewed_by?: string }> = [];
+  const provider = new ClientProductProvider();
+  const [revisions, setRevisions] = useState<ProductRevision[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [isApprover, setIsApprover] = useState(true);
+
+  useEffect(() => {
+    let active = true;
+    const loadData = async () => {
+      setLoading(true);
+      try {
+        const [revs, ords] = await Promise.all([provider.getProductRevisions(), provider.getOrders()]);
+        if (active) { setRevisions(revs); setOrders(ords); }
+      } catch (cause) {
+        if (active) setError(cause instanceof Error ? cause.message : "Failed to load approvals data");
+      } finally {
+        if (active) setLoading(false);
+      }
+    };
+    void loadData();
+    return () => { active = false; };
+  }, [provider]);
+
+  async function decideRevision(id: string, action: "approve" | "reject") {
+    try {
+      await provider.decideRevision(id, action);
+      const payload = await provider.getProductRevisions();
+      setRevisions(payload);
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "Revision decision failed");
+    }
+  }
+
+  async function decidePurchaseOrder(id: string, action: "approve" | "deny") {
+    try {
+      await provider.decidePurchaseOrder(id, action);
+      const payload = await provider.getOrders();
+      setOrders(payload);
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "Purchase-order decision failed");
+    }
+  }
+
   const approvalFilter = "all";
 
   return (
@@ -18,10 +73,11 @@ export default function ApprovalsPage() {
           <span className="category-pill">Administration</span>
         </div>
         <div className="panel-content">
+          {error && <div role="alert" className="mb-4 flex items-start gap-3 border-l-4 border-amber-500 bg-amber-50 p-4 text-sm text-amber-950">{error}</div>}
           <div className="metrics metrics-five">
             <Metric label="Awaiting decision" value={String(revisions.length)} detail="Revisions require an approver before publishing" accent="orange" tag="PENDING" />
-            <Metric label="Approved drafts" value={String(revisions.filter((r) => false).length)} detail="Approved revisions are published to mock Amazon" accent="teal" tag="PUBLISHED" />
-            <Metric label="Rejected drafts" value={String(revisions.filter((r) => false).length)} detail="Rejected drafts return the product to needs optimization" accent="orange" tag="REJECTED" />
+            <Metric label="Approved drafts" value={String(revisions.filter((r) => r.status === "approved").length)} detail="Approved revisions are published to mock Amazon" accent="teal" tag="PUBLISHED" />
+            <Metric label="Rejected drafts" value={String(revisions.filter((r) => r.status === "rejected").length)} detail="Rejected drafts return the product to needs optimization" accent="orange" tag="REJECTED" />
             <Metric label="Reviewed by" value="Manager" detail="Active approver" accent="blue" tag="MANAGER PROFILE" />
           </div>
 
@@ -44,7 +100,7 @@ export default function ApprovalsPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {revisions.length ? revisions.map((revision) => {
+                    {loading ? <tr><td colSpan={4} className="empty-cell" style={{padding: 18}}>Loading revisions…</td></tr> : revisions.length ? revisions.map((revision) => {
                       const changeRows = Object.entries(revision.field_changes || {}).map(([field, change]) => (
                         <tr key={field} className="border-t border-line">
                           <td className="diff-label">{field}</td>
@@ -55,12 +111,16 @@ export default function ApprovalsPage() {
                       ));
                       return (
                         <tr key={revision.id} className="border-t border-line">
-                          <td>{revision.id}</td>
+                          <td>{revision.asin || revision.product_id}</td>
                           <td>{changeRows || <span className="product-meta">No field changes</span>}</td>
                           <td className="tabular-nums">{revision.created_at}</td>
                           <td className="action-row">
-                            <button className="button button-approve button-sm" type="button" onClick={() => {}} data-approve-rev={revision.id}>Approve</button>
-                            <button className="button button-deny button-sm" type="button" onClick={() => {}} data-reject-rev={revision.id}>Reject</button>
+                            {revision.status === "pending_approval" ? (
+                              <>
+                                <button className="button button-approve button-sm" type="button" onClick={() => void decideRevision(revision.id, "approve")}>Approve</button>
+                                <button className="button button-deny button-sm" type="button" onClick={() => void decideRevision(revision.id, "reject")}>Reject</button>
+                              </>
+                            ) : <span className="product-meta">{revision.status}</span>}
                           </td>
                         </tr>
                       );
@@ -106,21 +166,21 @@ export default function ApprovalsPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {orders.length ? orders.map((order) => (
+                    {loading ? <tr><td colSpan={6} className="empty-cell" style={{padding: 18}}>Loading workflows…</td></tr> : orders.length ? orders.map((order) => (
                       <tr key={order.id} className="border-t border-line">
                         <td><span className="order-id">{order.id}</span><div className="product-meta">{order.product_name}</div></td>
-                        <td><div className="product-name">{order.supplier}</div><div className="product-meta">{order.category}</div></td>
+                        <td><div className="product-name">{order.supplier}</div><div className="product-meta"></div></td>
                         <td className="tabular-nums">{order.units} units</td>
                         <td className="price tabular-nums">${order.amount.toFixed(2)}</td>
                         <td>
                           <div className="status-pill">{order.status}</div>
-                          <div className="product-meta">{order.reason}</div>
+                          <div className="product-meta">{order.reviewed_by ? `Reviewed by ${order.reviewed_by}` : "Pending"}</div>
                         </td>
                         <td className="action-row">
                           {order.status === "pending" ? (
                             <>
-                              <button className="button button-approve button-sm" type="button" onClick={() => {}} data-decision="approve" data-order-id={order.id}>Approve</button>
-                              <button className="button button-deny button-sm" type="button" onClick={() => {}} data-decision="deny" data-order-id={order.id}>Deny</button>
+                              <button className="button button-approve button-sm" type="button" onClick={() => void decidePurchaseOrder(order.id, "approve")}>Approve</button>
+                              <button className="button button-deny button-sm" type="button" onClick={() => void decidePurchaseOrder(order.id, "deny")}>Deny</button>
                             </>
                           ) : (
                             <span className="product-meta">{order.reviewed_by || "Reviewed"}</span>
@@ -138,16 +198,5 @@ export default function ApprovalsPage() {
         </div>
       </section>
     </main>
-  );
-}
-
-function Metric({ label, value, detail, accent, tag }: { label: string; value: string; detail: string; accent: string; tag?: string }) {
-  return (
-    <section className={`metric ${accent === "green" || accent === "teal" || accent === "blue" || accent === "warn" ? "" : ""}`}>
-      <div className="metric-label"><span>{label}</span>{tag && <span className="mini-tag">{tag}</span>}</div>
-      <div className="metric-value">{value}</div>
-      <div className="metric-foot">{detail}</div>
-      <div className={`metric-accent ${accent}`}></div>
-    </section>
   );
 }

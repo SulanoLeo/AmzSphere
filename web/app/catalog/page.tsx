@@ -11,10 +11,15 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { StorefrontView } from "@/components/product/StorefrontView";
 import { ApiIntegrationStatus } from "@/components/ApiIntegrationStatus";
 import { HealthScoreBar } from "@/components/HealthScoreBar";
+import { ClientProductProvider } from "@/lib/provider/client";
+import type { Dashboard, Product } from "@/lib/provider/types";
 
 function CatalogWorkspace() {
   const searchParams = useSearchParams();
   const sellerId = searchParams.get("seller_id") || "";
+  const provider = new ClientProductProvider();
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
   const [asin, setAsin] = useState("");
   const [sku, setSku] = useState("");
   const [operation, setOperation] = useState("");
@@ -30,13 +35,6 @@ function CatalogWorkspace() {
   const [addModal, setAddModal] = useState(false);
   const [addTab, setAddTab] = useState<"import" | "manual">("import");
 
-  const mockProducts = [
-    { asin: "B0C8Q4M2K7", sku: "AF-LS-02", title: "ArcFold Aluminum Laptop Stand for Desk, Adjustable Portable Computer Riser for Home Office", category: "Office", opt_status: "optimized", opt_score: 100, opt_issues: [], stock: "—", days_of_supply: "—", price: "—" },
-    { asin: "B0B7P9R3W1", sku: "QC-M-11", title: "QuietClick Wireless Mouse for Laptop and Desktop with Quiet Click Buttons", category: "Electronics", opt_status: "needs_optimization", opt_score: 65, opt_issues: ["Title is shorter than 80 characters.", "Only 4 bullet points; at least 5 are recommended."], stock: "—", days_of_supply: "—", price: "—" },
-    { asin: "B0D2L6T8N4", sku: "TG-BS-04", title: "Reusable Silicone Water Bottle Sleeve, Protective Non-Slip Cover with Easy-Clean Grip", category: "Home & Kitchen", opt_status: "needs_optimization", opt_score: 20, opt_issues: ["Title does not contain any of the back-end keywords.", "Only 4 bullet points; at least 5 are recommended.", "Only 6 main images; at least 7 are recommended."], stock: "—", days_of_supply: "—", price: "—" },
-    { asin: "B0A9H5X3J6", sku: "LM-DL-08", title: "USB-C LED Desk Lamp for Home Office, Adjustable Compact Task Light for Work and Study", category: "Lighting", opt_status: "optimized", opt_score: 85, opt_issues: ["Only 4 bullet points; at least 5 are recommended."], stock: "—", days_of_supply: "—", price: "—" },
-  ];
-
   useEffect(() => {
     let active = true;
     void fetch("/api/access", { cache: "no-store" }).then((response) => response.json()).then((payload) => {
@@ -44,6 +42,23 @@ function CatalogWorkspace() {
     }).catch(() => undefined);
     return () => { active = false; };
   }, []);
+
+  useEffect(() => {
+    let active = true;
+    const loadProducts = async () => {
+      setLoading(true);
+      try {
+        const payload = await provider.getProducts();
+        if (active) setProducts(payload.products);
+      } catch {
+        if (active) setProducts([]);
+      } finally {
+        if (active) setLoading(false);
+      }
+    };
+    void loadProducts();
+    return () => { active = false; };
+  }, [provider]);
 
   useEffect(() => {
     if (!operation || ["review_required", "failed", "succeeded", "needs_review"].includes(operationStatus)) return;
@@ -103,6 +118,83 @@ function CatalogWorkspace() {
       setMessage(cause instanceof Error ? cause.message : "Request failed");
     } finally {
       setBusy(false);
+    }
+  }
+
+  async function handleAddProduct(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    const name = String(formData.get("add-name") || "").trim();
+    const newSku = String(formData.get("add-sku") || "").trim();
+    const newAsin = String(formData.get("add-asin") || "").trim();
+    const title = String(formData.get("add-title") || "").trim() || name;
+    const category = String(formData.get("add-category") || "").trim() || "General";
+    const price = Number(formData.get("add-price")) || 0;
+    const stock = Number(formData.get("add-stock")) || 0;
+    const velocity = Number(formData.get("add-velocity")) || 0;
+
+    if (!name || !newSku || !newAsin) {
+      setMessage("Name, SKU, and ASIN are required.");
+      return;
+    }
+
+    try {
+      setBusy(true);
+      await provider.addProduct({
+        asin: newAsin,
+        sku: newSku,
+        marketplace_id: "ATVPDKIKX0DER",
+        source: "manual",
+        name,
+        title,
+        category,
+        price,
+        bullets: [],
+        description: "",
+        backend_keywords: [],
+        images: [],
+        sellable_units: stock,
+        stock,
+        days_of_supply: Math.round(stock / Math.max(velocity || 1, 0.1)) || 0,
+        daily_velocity: velocity,
+        competitor_price: price,
+        market_price: price,
+        min_floor: Math.round(price * 0.8),
+        max_price: Math.round(price * 1.2),
+        unit_cost: Math.round(price * 0.5),
+        lead_time_days: 21,
+        supplier: "Manual entry",
+        po_draft_id: null,
+        suppressed: false,
+        last_synced_at: null,
+        sync_status: "synced",
+        last_optimized_at: null,
+        opt_score: 0,
+        opt_issues: [],
+        opt_status: "needs_optimization",
+      });
+      setAddModal(false);
+      setMessage("Product added.");
+      const payload = await provider.getProducts();
+      setProducts(payload.products);
+    } catch (cause) {
+      setMessage(cause instanceof Error ? cause.message : "Failed to add product");
+    } finally {
+      setBusy(false);
+      form.reset();
+    }
+  }
+
+  async function sendToApproval(productId: string) {
+    try {
+      await provider.updateProduct(productId, { opt_status: "pending_approval" });
+      setDrawerId("");
+      const payload = await provider.getProducts();
+      setProducts(payload.products);
+      setMessage("Sent to approval.");
+    } catch (cause) {
+      setMessage(cause instanceof Error ? cause.message : "Failed to send to approval");
     }
   }
 
@@ -172,10 +264,10 @@ function CatalogWorkspace() {
       </CardContent></Card>}
       <Card className="lg:col-span-2"><CardHeader><div><h2 className="text-sm font-semibold text-indigo-950">Simulated Amazon Storefront</h2><p className="mt-1 text-xs text-muted">Live listing preview updated reactively from sourcing inputs.</p></div><Badge>Preview</Badge></CardHeader><CardContent><StorefrontView /></CardContent></Card>
 
-      {/* Shared product table — mirrors the mock catalog table design. Populates from the same
-          product records once connected; opt_status and opt_score are computed by scoring. */}
+      {/* Shared product table — mirrors the mock catalog table design. Populates from provider data;
+          opt_status and opt_score are computed by scoring. */}
       <Card className="mt-6 lg:col-span-2"><CardHeader><div><h2 className="text-sm font-semibold text-indigo-950">Shared product table</h2><p className="mt-1 text-xs text-muted">One product record read by catalog, inventory, pricing, and approvals.</p></div></CardHeader><CardContent>
-          <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
           <span className="text-[10px] font-bold uppercase tracking-wide text-muted">Filters</span>
           <div className="flex items-center gap-1 border border-line rounded-md bg-canvas p-1 text-xs">
             <button className="px-2 py-1 rounded-md text-[10px] font-semibold bg-amber-50 text-amber-800 border-amber-200">Needs optimization</button>
@@ -186,7 +278,7 @@ function CatalogWorkspace() {
         </div>
         <div className="overflow-x-auto"><table className="w-full text-left text-xs"><thead className="bg-canvas text-[10px] uppercase tracking-wide text-muted"><tr><th style={{width:34}}></th><th className="px-4 py-3">ASIN</th><th className="px-4 py-3">SKU</th><th style={{minWidth:220}} className="px-4 py-3">Title</th><th className="px-4 py-3">Category</th><th className="px-4 py-3">Status</th><th className="px-4 py-3 tabular-nums">Score</th><th style={{width:300}} className="px-4 py-3">Issues</th><th className="px-4 py-3 tabular-nums">Stock</th><th className="px-4 py-3 tabular-nums">Days of supply</th><th className="px-4 py-3 tabular-nums">Price</th><th style={{width:170}} className="px-4 py-3">Actions</th></tr></thead>
           <tbody>
-            {mockProducts.map((product) => {
+            {loading ? <tr><td colSpan={12} className="text-center text-xs text-muted py-4">Loading products…</td></tr> : products.length ? products.map((product) => {
               const statusClass = product.opt_status === "optimized" ? "status good" : "status warn";
               return (
                 <tr key={product.asin} className="border-t border-line">
@@ -200,11 +292,11 @@ function CatalogWorkspace() {
                   <td className="px-4 py-3 issue-cell">{product.opt_issues.length ? product.opt_issues.map((issue) => <span className="issue-tag" key={issue}>{issue}</span>) : <span className="issue-tag muted">—</span>}</td>
                   <td className="px-4 py-3 tabular-nums">{product.stock}</td>
                   <td className="px-4 py-3 tabular-nums">{product.days_of_supply}</td>
-                  <td className="px-4 py-3 tabular-nums">{product.price}</td>
-                  <td className="px-4 py-3"><button className="button button-outline button-sm" type="button" onClick={() => { setDrawerId(product.asin); setDrawerMode("optimize"); }}>Optimize</button></td>
+                  <td className="px-4 py-3 tabular-nums">${product.price.toFixed(2)}</td>
+                  <td className="px-4 py-3"><button className="button button-outline button-sm" type="button" onClick={() => { setDrawerId(product.id); setDrawerMode("optimize"); }}>Optimize</button></td>
                 </tr>
               );
-            })}
+            }) : <tr><td colSpan={12} className="text-center text-xs text-muted py-4">No products in catalog.</td></tr>}
           </tbody>
         </table></div>
         <p className="mt-2 text-[10px] text-muted">Row actions: Optimize (opens side-by-side current vs suggested copy) · View. Bulk select with "Optimize selected". Add product opens Import from Amazon (ASIN/SKU) or Create manually.</p>
@@ -234,7 +326,7 @@ function CatalogWorkspace() {
                       {drawerMode === "view" ? <button className="button button-outline" type="button" onClick={() => setDrawerId("")}>Close</button> : <>
                         <button className="button button-outline" type="button" onClick={() => setDrawerId("")}>Cancel</button>
                         <button className="button button-outline" type="button">Save draft</button>
-                        <button className="button button-primary" type="button">Send to approval</button>
+                        <button className="button button-primary" type="button" onClick={() => void sendToApproval(drawerId)}>Send to approval</button>
                       </>}
                     </div>
                   </form>
@@ -265,7 +357,7 @@ function CatalogWorkspace() {
               )}
               {addTab === "manual" && (
                 <div className="tab-panel" id="add-tab-manual">
-                  <form id="add-manual-form" style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",gap:12,marginTop:10}}>
+                  <form id="add-manual-form" style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",gap:12,marginTop:10}} onSubmit={handleAddProduct}>
                     <div><label className="form-label">Product name</label><input name="add-name" type="text" placeholder="e.g. Bamboo Desk Organizer" required style={{width:"100%",minHeight:30,padding:"0 10px",border:"1px solid #e3e9ec",borderRadius:4,background:"#fff",color:"#202d38",font:"inherit",fontSize:11}}/></div>
                     <div><label className="form-label">SKU</label><input name="add-sku" type="text" placeholder="e.g. BD-OG-01" required style={{width:"100%",minHeight:30,padding:"0 10px",border:"1px solid #e3e9ec",borderRadius:4,background:"#fff",color:"#202d38",font:"inherit",fontSize:11}}/></div>
                     <div><label className="form-label">ASIN</label><input name="add-asin" type="text" placeholder="e.g. B0XYZ12345" required style={{width:"100%",minHeight:30,padding:"0 10px",border:"1px solid #e3e9ec",borderRadius:4,background:"#fff",color:"#202d38",font:"inherit",fontSize:11}}/></div>
