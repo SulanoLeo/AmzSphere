@@ -199,6 +199,18 @@ a { color: inherit; text-decoration: none; }
 .guardrail-rule { padding: 11px 12px; margin-top: 12px; display: flex; align-items: flex-start; gap: 10px; border: 1px solid #f0d39a; border-left: 3px solid #bd7d16; border-radius: 4px; background: #fff9ed; }
 .guardrail-indicator { padding: 4px 6px; flex: none; border-radius: 3px; background: #f7e7c5; color: #80530a; font-size: 8px; font-weight: 800; letter-spacing: .5px; }
 
+/* Approvals tables */
+.order-id { font: 600 10px var(--font-ui); color: var(--mock-navy); white-space: nowrap; }
+.product-name { color: var(--mock-navy); font-size: 11px; font-weight: 600; white-space: nowrap; }
+.product-meta { font-size: 10px; color: var(--mock-muted); }
+.status-pill { display: inline-flex; align-items: center; gap: 5px; border-radius: 3px; background: #eef2f6; color: #536579; font-size: 9px; font-weight: 700; white-space: nowrap; text-transform: uppercase; padding: 3px 6px; }
+.diff-label { font-size: 10px; font-weight: 700; color: var(--mock-quiet); }
+.diff-before { color: #9a6200; }
+.diff-arrow { color: var(--mock-quiet); font-weight: 700; }
+.diff-after { color: #18765f; font-weight: 700; }
+.empty-cell { text-align: center; color: var(--mock-muted); font-size: 12px; }
+
+
 /* Sync bar */
 .sync-bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 6px 0 14px; padding-bottom: 10px; border-bottom: 1px solid var(--mock-line); }
 .sync-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 10px; border: 1px solid var(--mock-line); background: #fff; color: var(--mock-ink); font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
