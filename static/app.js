@@ -284,7 +284,7 @@ function renderOverview() {
       <button type="button" class="button" data-action="sync-seller">${syncOk ? "Resync seller data" : "Sync seller data"}</button>
       <button type="button" class="button button-outline" data-action="refresh-overview">Refresh</button>
     </div>
-    <div class="metrics">
+    <div class="metrics metrics-five">
       ${metric("Catalog items", number(summary.catalog_items ?? state.products.length), "Seller-linked ASINs · one shared product record each", "blue", "CATALOG")}
       ${metric("Sellable units", number(Math.round(summary.sellable_units ?? totalStock)), "Latest inventory snapshots across all marketplaces", "teal", "INVENTORY")}
       ${metric("Needs optimization", number(needsOptimization), summary.needs_optimization !== undefined ? "Products below a 70 optimization score" : "Listings missing copy quality rules", "orange", "OPTIMIZATION")}
