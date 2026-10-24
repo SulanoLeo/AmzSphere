@@ -42,6 +42,14 @@ from backend.app.services.listing_health import (
     parse_listing_item_status_change,
     validate_amazon_signature,
 )
+from backend.app.routers.listings import router as listings_router
+from backend.app.routers.procurement import router as procurement_router
+from backend.app.routers.procurement_pdf import router as procurement_pdf_router
+from backend.app.routers.procurement_pdf_preview import (
+    router as procurement_pdf_preview_router,
+)
+from backend.app.routers.telemetry import router as telemetry_router
+from backend.app.tasks.amazon_writes import router as amazon_writes_router
 
 
 settings = get_settings()
@@ -57,6 +65,13 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="AmzSphere Operations API", version="1.0.0", lifespan=lifespan)
+
+app.include_router(listings_router)
+app.include_router(procurement_router)
+app.include_router(procurement_pdf_router)
+app.include_router(procurement_pdf_preview_router)
+app.include_router(amazon_writes_router)
+app.include_router(telemetry_router)
 
 
 @app.middleware("http")

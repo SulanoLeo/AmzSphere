@@ -3,7 +3,7 @@ create table if not exists sellers (
     tenant_id varchar(128) not null,
     merchant_id varchar(64) not null,
     marketplace_id varchar(32) not null,
-    region varchar(8) not null,
+    region varchar(32) not null,
     endpoint varchar(255) not null,
     lwa_refresh_token_encrypted text not null,
     created_at timestamptz not null default now(),

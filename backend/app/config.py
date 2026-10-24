@@ -41,6 +41,19 @@ class Settings(BaseSettings):
     sp_api_user_agent: str = "AmzSphere/1.0 (Language=Python/3.13; Platform=Linux)"
     sp_api_max_retries: int = 5
     seller_sync_interval_seconds: int = 900
+    sp_api_listings_api_version: str = "2021-08-01"
+    amazon_write_outbox_batch_limit: int = 50
+    amazon_write_outbox_max_attempts: int = 10
+    amazon_write_outbox_base_backoff_seconds: int = 60
+    amazon_write_outbox_max_backoff_seconds: int = 3600
+    sp_api_access_token: SecretStr | None = None
+    aws_access_key_id: SecretStr | None = None
+    aws_secret_access_key: SecretStr | None = None
+    admin_webhook_secret: SecretStr | None = None
+    celery_listing_health_queue: str = "amzsphere.listing_health"
+    celery_listing_health_interval_seconds: int = 60
+    celery_task_acks_late: bool = True
+    celery_worker_prefetch_multiplier: int = 1
 
     @property
     def celery_broker(self) -> str:

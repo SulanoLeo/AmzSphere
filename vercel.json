@@ -1,0 +1,45 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "version": 2,
+  "routes": [
+    {
+      "src": "/api/v1/(.*)",
+      "dest": "/api/index.py",
+      "methods": ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization, x-admin-secret, x-workspace-user, x-amz-sns-message-signature, Idempotency-Key"
+      }
+    },
+    {
+      "src": "/(.*)",
+      "dest": "web"
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/v1/amazon-writes/execute",
+      "schedule": "* * * * *",
+      "description": "Flush the Amazon SP-API write outbox every minute. Requires x-admin-secret header for authorization.",
+      "payload": {}
+    },
+    {
+      "path": "/api/v1/procurement/pdf/compile-batch",
+      "schedule": "*/5 * * * *",
+      "description": "Compile pending B2B vendor purchase order PDF drafts every five minutes. Requires x-admin-secret header for authorization.",
+      "payload": {}
+    }
+  ],
+  "env": {
+    "ADMIN_WEBHOOK_SECRET": "@amzsphere-admin-webhook-secret",
+    "DATABASE_URL": "@amzsphere-database-url",
+    "REDIS_URL": "@amzsphere-redis-url",
+    "CELERY_BROKER_URL": "@amzsphere-celery-broker-url",
+    "SP_API_ENDPOINT": "@amzsphere-sp-api-endpoint",
+    "SP_API_AWS_REGION": "@amzsphere-sp-api-aws-region",
+    "AWS_ACCESS_KEY_ID": "@amzsphere-aws-access-key-id",
+    "AWS_SECRET_ACCESS_KEY": "@amzsphere-aws-secret-access-key",
+    "SP_API_ACCESS_TOKEN": "@amzsphere-sp-api-access-token"
+  }
+}

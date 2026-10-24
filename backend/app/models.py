@@ -30,7 +30,7 @@ class Seller(Base):
     tenant_id: Mapped[str] = mapped_column(String(128), nullable=False, index=True)
     merchant_id: Mapped[str] = mapped_column(String(64), nullable=False)
     marketplace_id: Mapped[str] = mapped_column(String(32), nullable=False)
-    region: Mapped[str] = mapped_column(String(8), nullable=False)
+    region: Mapped[str] = mapped_column(String(32), nullable=False)
     endpoint: Mapped[str] = mapped_column(String(255), nullable=False)
     lwa_refresh_token_encrypted: Mapped[str] = mapped_column(Text, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
@@ -203,6 +203,38 @@ class AmazonFeed(Base):
     __table_args__ = (UniqueConstraint("operation_id"),)
 
 
+class PendingPDFGeneration(Base):
+    __tablename__ = "pending_pdf_generations"
+
+    id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, default=uuid.uuid4)
+    purchase_order_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("purchase_orders.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    vendor_id: Mapped[uuid.UUID | None] = mapped_column(
+        ForeignKey("vendors.id", ondelete="CASCADE"), nullable=True, index=True
+    )
+    batch_token: Mapped[str] = mapped_column(String(128), nullable=False, index=True)
+    execution_strategy: Mapped[str] = mapped_column(String(64), nullable=False)
+    payload: Mapped[dict] = mapped_column(JSONB, nullable=False, default=dict)
+    status: Mapped[str] = mapped_column(String(24), nullable=False, default="pending")
+    pdf_data: Mapped[bytes | None] = mapped_column(LargeBinary, nullable=True)
+    error_details: Mapped[str | None] = mapped_column(Text, nullable=True)
+    completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+
+    purchase_order: Mapped[PurchaseOrder] = relationship()
+    vendor: Mapped["Vendor | None"] = relationship()
+
+    __table_args__ = (
+        Index("ix_pending_pdf_batch_status", "batch_token", "status"),
+        Index("ix_pending_pdf_vendor", "vendor_id", "status"),
+    )
+
+
 class ListingHealthEvent(Base):
     __tablename__ = "listing_health_events"
 
@@ -227,4 +259,36 @@ class ListingHealthEvent(Base):
     __table_args__ = (
         Index("ix_listing_health_review_queue", "status", "received_at"),
         Index("ix_listing_health_item", "asin", "marketplace_id"),
+    )
+
+
+class AmazonWriteOutbox(Base):
+    __tablename__ = "amazon_write_outbox"
+
+    id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, default=uuid.uuid4)
+    event_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("listing_health_events.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    action_type: Mapped[str] = mapped_column(String(64), nullable=False)
+    payload: Mapped[dict] = mapped_column(JSONB, nullable=False, default=dict)
+    routing_target: Mapped[str] = mapped_column(
+        String(128), nullable=False, default="amzsphere.catalog_writes"
+    )
+    status: Mapped[str] = mapped_column(String(24), nullable=False, default="pending")
+    attempt_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    available_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    published_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    last_error: Mapped[str | None] = mapped_column(String(160))
+
+    event: Mapped[ListingHealthEvent] = relationship()
+
+    __table_args__ = (
+        Index("ix_amazon_write_outbox_pending", "status", "available_at", "created_at"),
     )
