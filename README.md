@@ -67,6 +67,25 @@ Native Next.js route handlers under `web/app/api/`:
 - `POST /api/listings/remediations/approve` — mock listing remediation
 - `POST /api/procurement/bulk-approve` — mock bulk PO approval
 - `GET /api/procurement/pdf/preview/[id]`, `POST /api/procurement/pdf/[id]/dispatch` — mock PO PDF
+- `GET /api/seo-tools` — paginated, filterable, searchable Amazon SEO tool catalog
+- `GET /api/seo-tools/[id]` — single tool detail
+- `PATCH /api/seo-tools/[id]`, `DELETE /api/seo-tools/[id]`, `POST /api/seo-tools` — admin tool CRUD (mock)
+- `GET /api/seo-tools/selection`, `POST /api/seo-tools/selection` — selection save/get (mock; persisted client-side in localStorage)
+
+## SEO Tool Selector (`/seo-tools`)
+
+Browse, filter, compare, and save Amazon SEO tools (listing optimization, keyword research, PPC, rank tracking, review management, competitor analysis).
+
+**Features:**
+- Tool cards with logo, category, pricing model (free / freemium / paid), starting price, rating, and supported marketplaces.
+- Text search, category/pricing/marketplace/rating/price filters, and sorting (relevance, rating, price, name).
+- "My Amazon SEO Stack" panel: select/deselect multiple tools, view estimated total monthly cost, and clear the stack.
+- Side-by-side comparison of 2–4 selected tools (features, price, marketplaces).
+- Selection persisted in `localStorage` (no login/database required).
+
+**Data:** 12 sample tools are seeded in `web/lib/seo-tools.ts` (marked sample data). Admin add/edit/disable endpoints exist as mock route handlers; edits live in memory only unless wired to a real store.
+
+**Stack:** Pure-frontend Next.js + Tailwind. No database, backend service, or hard-coded secrets.
 
 ## Deploy to Vercel
 
