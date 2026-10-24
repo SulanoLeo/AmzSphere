@@ -94,7 +94,7 @@ h1 { margin-bottom: 5px; color: var(--navy); font: 600 25px var(--font-ui); }
 .metric-accent.teal { background: var(--teal); }
 .metric-accent.green { background: #5ea787; }
 .metric-accent.blue { background: #718ab7; }
-.section-grid { margin-bottom: 10px; margin-top: 10px; display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(280px, .9fr); gap: 16px; }
+.section-grid { margin-bottom: 18px; margin-top: 18px; display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(280px, .9fr); gap: 16px; }
 .section-grid.equal { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .panel { min-width: 0; border: 1px solid var(--line); border-radius: 5px; background: var(--paper); }
 .panel-header { min-height: 62px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px; border-bottom: 1px solid #edf0f2; }
