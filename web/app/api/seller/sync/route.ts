@@ -80,7 +80,7 @@ export async function POST(request: Request) {
     synced += 1;
   }
 
-  state.sync_state = {
+  (state.sync_state as any) = {
     status: "completed",
     operation_id: operationId,
     started_at: started,

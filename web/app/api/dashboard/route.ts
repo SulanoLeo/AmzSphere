@@ -59,7 +59,7 @@ export async function GET(request: Request) {
     };
   });
 
-  const syncState = state.sync_state || { status: "not_synced" };
+  const syncState = (state.sync_state || { status: "not_synced" }) as any;
   const pendingPurchaseOrders = (state.purchase_orders || [])
     .filter((po: any) => po.status === "draft" || po.status === "pending")
     .map((po: any) => ({
