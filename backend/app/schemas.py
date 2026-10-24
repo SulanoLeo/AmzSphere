@@ -35,3 +35,10 @@ class AmazonOAuthStart(BaseModel):
 class PurchaseOrderDecision(BaseModel):
     action: str = Field(pattern=r"^(approve|deny)$")
     reviewer_id: str = Field(min_length=1, max_length=128)
+
+
+class WebhookAccepted(BaseModel):
+    accepted: bool
+    notification_id: str
+    event_id: str | None = None
+    reason: str | None = None

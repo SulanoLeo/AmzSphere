@@ -31,6 +31,7 @@ class Settings(BaseSettings):
     helium10_api_key: SecretStr | None = None
     fernet_key: SecretStr | None = None
     platform_api_key: SecretStr | None = None
+    amazon_notifications_secret: SecretStr | None = None
     oauth_redirect_uri: str = "http://localhost:8001/api/v1/auth/amazon/callback"
     web_app_url: str = "http://localhost:3000"
     oauth_state_ttl_seconds: int = 600

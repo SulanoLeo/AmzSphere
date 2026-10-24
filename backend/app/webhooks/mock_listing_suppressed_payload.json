@@ -1,0 +1,28 @@
+{
+  "notificationId": "amzn1.spNotifications.notification.8f3c2a1b-4d5e-4f6a-8b9c-0d1e2f3a4b5c",
+  "notificationType": "LISTING_ITEM_STATUS_CHANGE",
+  "payload": {
+    "sellerId": "A1EXAMPLESELLERID",
+    "marketplaceId": "ATVPDKIKX0DER",
+    "marketplaceIds": ["ATVPDKIKX0DER"],
+    "notifications": [
+      {
+        "asin": "B07XYZ1234",
+        "sku": "PROD-SKU-001",
+        "status": "NOT_BUYABLE",
+        "itemStatusChange": {
+          "previousStatus": "BUYABLE",
+          "itemStatus": "NOT_BUYABLE"
+        },
+        "issues": [
+          {
+            "errorCode": "PriceTooHigh",
+            "errorMessage": "The listed price is significantly higher than recent market prices for this item. The listing has been suppressed from search results.",
+            "severity": "ERROR",
+            "attributeName": "price"
+          }
+        ]
+      }
+    ]
+  }
+}

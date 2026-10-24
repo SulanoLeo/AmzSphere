@@ -16,16 +16,32 @@ from sqlalchemy.orm import selectinload
 
 from backend.app.config import get_settings
 from backend.app.db import SessionLocal, engine
-from backend.app.models import AgentOperation, CatalogItem, InventorySnapshot, OutboxEvent, PurchaseOrder, SalesDaily, Seller, Vendor
+from backend.app.models import (
+    AgentOperation,
+    CatalogItem,
+    InventorySnapshot,
+    ListingHealthEvent,
+    OutboxEvent,
+    PurchaseOrder,
+    SalesDaily,
+    Seller,
+    Vendor,
+)
 from backend.app.schemas import (
     AmazonOAuthStart,
     CatalogOptimizeRequest,
     OperationAccepted,
     OperationView,
     PurchaseOrderDecision,
+    WebhookAccepted,
 )
 from backend.app.services.encryption import encrypt_refresh_token
 from backend.app.services.inventory import latest_inventory_for_items, sales_windows_for_items, velocity_summary
+from backend.app.services.listing_health import (
+    ListingHealthParseError,
+    parse_listing_item_status_change,
+    validate_amazon_signature,
+)
 
 
 settings = get_settings()
@@ -77,6 +93,83 @@ def assert_seller_tenant(seller: Seller | None, workspace_user: str) -> Seller:
 @app.get("/api/health")
 async def health() -> dict:
     return {"ok": True, "mode": "production" if settings.sp_api_enabled else "disabled"}
+
+
+@app.post(
+    "/api/v1/webhooks/amazon-notifications",
+    status_code=202,
+    response_model=WebhookAccepted,
+)
+async def amazon_notifications_webhook(
+    request: Request,
+    x_amz_sns_message_signature: str | None = Header(default=None, alias="x-amz-sns-message-signature"),
+    x_workspace_user: str | None = Header(default=None),
+) -> WebhookAccepted:
+    """Ingest Amazon SP-API notifications and stage listing-health events.
+
+    The endpoint validates the request signature placeholder, parses
+    LISTING_ITEM_STATUS_CHANGE payloads, deduplicates by notification id, and
+    writes a pending_review listing_health_events record. Heavy remediation
+    logic is deferred to consumers of the staging table.
+    """
+    workspace_user = require_workspace_user(x_workspace_user)
+    body = await request.body()
+
+    settings = get_settings()
+    notification_secret = settings.amazon_notifications_secret.get_secret_value() if settings.amazon_notifications_secret else None
+    if not validate_amazon_signature(body=body, signature=x_amz_sns_message_signature, secret=notification_secret):
+        raise HTTPException(status_code=401, detail="Invalid Amazon notification signature")
+
+    try:
+        envelope = json.loads(body)
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=400, detail="Invalid JSON body")
+
+    try:
+        event = parse_listing_item_status_change(envelope)
+    except ListingHealthParseError as error:
+        raise HTTPException(status_code=422, detail=str(error))
+
+    async with SessionLocal() as session:
+        seller = await session.scalar(select(Seller).where(Seller.tenant_id == workspace_user))
+        if seller is None:
+            raise HTTPException(status_code=404, detail="Seller not found for workspace user")
+
+        existing = await session.scalar(
+            select(ListingHealthEvent).where(ListingHealthEvent.notification_id == event.notification_id)
+        )
+        if existing is not None:
+            return WebhookAccepted(
+                accepted=True,
+                notification_id=event.notification_id,
+                event_id=str(existing.id),
+                reason="duplicate",
+            )
+
+        record = ListingHealthEvent(
+            seller_id=seller.id,
+            notification_id=event.notification_id,
+            notification_type=event.notification_type,
+            asin=event.asin,
+            sku=event.sku,
+            marketplace_id=event.marketplace_id,
+            listing_status=event.listing_status,
+            status="pending_review",
+            error_codes=event.error_codes,
+            error_messages=event.error_messages,
+            is_suppressed=event.is_suppressed,
+            raw_payload=event.raw_payload,
+        )
+        session.add(record)
+        await session.flush()
+        event_id = str(record.id)
+        await session.commit()
+
+    return WebhookAccepted(
+        accepted=True,
+        notification_id=event.notification_id,
+        event_id=event_id,
+    )
 
 
 @app.get("/api/v1/sellers", dependencies=[Depends(require_platform_key)])

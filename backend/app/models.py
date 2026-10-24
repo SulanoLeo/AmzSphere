@@ -201,3 +201,30 @@ class AmazonFeed(Base):
     completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
     __table_args__ = (UniqueConstraint("operation_id"),)
+
+
+class ListingHealthEvent(Base):
+    __tablename__ = "listing_health_events"
+
+    id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, default=uuid.uuid4)
+    seller_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("sellers.id", ondelete="CASCADE"), nullable=False)
+    notification_id: Mapped[str] = mapped_column(String(128), nullable=False, unique=True, index=True)
+    notification_type: Mapped[str] = mapped_column(String(80), nullable=False)
+    asin: Mapped[str] = mapped_column(String(10), nullable=False, index=True)
+    sku: Mapped[str] = mapped_column(String(80), nullable=False)
+    marketplace_id: Mapped[str] = mapped_column(String(32), nullable=False)
+    listing_status: Mapped[str] = mapped_column(String(32), nullable=False)
+    status: Mapped[str] = mapped_column(String(24), nullable=False, default="pending_review")
+    error_codes: Mapped[list[str]] = mapped_column(JSONB, nullable=False, default=list)
+    error_messages: Mapped[list[str]] = mapped_column(JSONB, nullable=False, default=list)
+    is_suppressed: Mapped[bool] = mapped_column(nullable=False, default=False)
+    raw_payload: Mapped[dict] = mapped_column(JSONB, nullable=False, default=dict)
+    received_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    processed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+    seller: Mapped[Seller] = relationship()
+
+    __table_args__ = (
+        Index("ix_listing_health_review_queue", "status", "received_at"),
+        Index("ix_listing_health_item", "asin", "marketplace_id"),
+    )
