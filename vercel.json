@@ -3,7 +3,7 @@
   "version": 2,
   "routes": [
     {
-      "src": "/api/v1/(.*)",
+      "src": "/api/(health|v1/.*)",
       "dest": "/api/index.py",
       "methods": ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
       "headers": {
@@ -20,26 +20,11 @@
   "crons": [
     {
       "path": "/api/v1/amazon-writes/execute",
-      "schedule": "0 0 * * *",
-      "description": "Flush the Amazon SP-API write outbox once daily (midnight UTC). Vercel Hobby plan limits cron jobs to once per day. Requires x-admin-secret header for authorization.",
-      "payload": {}
+      "schedule": "0 0 * * *"
     },
     {
       "path": "/api/v1/procurement/pdf/compile-batch",
-      "schedule": "0 1 * * *",
-      "description": "Compile pending B2B vendor purchase order PDF drafts once daily (01:00 UTC). Vercel Hobby plan limits cron jobs to once per day. Requires x-admin-secret header for authorization.",
-      "payload": {}
+      "schedule": "0 1 * * *"
     }
-  ],
-  "env": {
-    "ADMIN_WEBHOOK_SECRET": "@amzsphere-admin-webhook-secret",
-    "DATABASE_URL": "@amzsphere-database-url",
-    "REDIS_URL": "@amzsphere-redis-url",
-    "CELERY_BROKER_URL": "@amzsphere-celery-broker-url",
-    "SP_API_ENDPOINT": "@amzsphere-sp-api-endpoint",
-    "SP_API_AWS_REGION": "@amzsphere-sp-api-aws-region",
-    "AWS_ACCESS_KEY_ID": "@amzsphere-aws-access-key-id",
-    "AWS_SECRET_ACCESS_KEY": "@amzsphere-aws-secret-access-key",
-    "SP_API_ACCESS_TOKEN": "@amzsphere-sp-api-access-token"
-  }
+  ]
 }

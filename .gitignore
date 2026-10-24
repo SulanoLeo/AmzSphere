@@ -13,3 +13,5 @@ backend/var/
 *.pdf
 *.swp
 *.tsbuildinfo
+.vercel
+.env*
