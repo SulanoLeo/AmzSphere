@@ -76,3 +76,12 @@ Native Next.js route handlers under `web/app/api/`:
 4. Deploy. The app is fully static/client-rendered with dynamic API routes; no `vercel.json` rewrites or cron jobs are needed.
 
 No Supabase, PostgreSQL, or Python runtime is provisioned.
+
+## Tech stack guardrail
+
+AmzSphere is a **pure-frontend Next.js (App Router, TypeScript, React 19) + Tailwind CSS** application. To avoid confusion and stack drift:
+
+- **Allowed:** Next.js App Router, Tailwind CSS, native Next.js API Routes (`web/app/api/`), and mock data driven by `mock_db.json` via `web/lib/mock-state.ts`. All logic must live under `web/`.
+- **Forbidden:** Python/FastAPI (`backend/`, `server.py`, `local_server.py`, `requirements.txt`, `compose.yaml`), PostgreSQL/Redis/Supabase, `vercel.json` microservice rewrites/crons, and `app/api/v1/` PostgreSQL-backed routes.
+
+If a proposed change requires a live backend service, a database, or any Python code, it is out of scope unless this guardrail is explicitly revised and approved.

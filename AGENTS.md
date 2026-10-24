@@ -52,3 +52,22 @@ web/
 ```
 
 No Python, PostgreSQL, Redis, or Supabase is required to run or deploy.
+
+## Tech stack guardrail
+
+AmzSphere is a **pure-frontend Next.js + Tailwind CSS application**. To avoid confusion and drift, the following rules are enforced for all future work:
+
+**Allowed stack:**
+- Next.js 15 (App Router, TypeScript, React 19) under `web/`
+- Tailwind CSS for styling under `web/`
+- Native Next.js API Routes under `web/app/api/` backed by `mock_db.json` via `web/lib/mock-state.ts`
+- Mock-only business logic (scoring, simulator, provider) under `web/lib/`
+
+**Forbidden (do not reintroduce):**
+- Python / FastAPI / `server.py`, `local_server.py`, `database.py`, `scoring.py`, `simulator.py`
+- `backend/`, `requirements.txt`, `compose.yaml`, `.venv`, `supabase/`
+- PostgreSQL, Redis, or any live database (`lib/db.ts`, `pg`, `asyncpg`)
+- `vercel.json` microservice rewrites, crons, or backend env vars (SP-API, DATABASE_URL, REDIS_URL, etc.)
+- `app/api/v1/` PostgreSQL-backed routes
+
+Before starting any feature, confirm the change touches only `web/` and uses the allowed stack. If a change would require Python, a database, or a live backend service, it is out of scope for this repository unless the stack guardrail is explicitly revised and approved.
