@@ -20,14 +20,14 @@
   "crons": [
     {
       "path": "/api/v1/amazon-writes/execute",
-      "schedule": "* * * * *",
-      "description": "Flush the Amazon SP-API write outbox every minute. Requires x-admin-secret header for authorization.",
+      "schedule": "0 0 * * *",
+      "description": "Flush the Amazon SP-API write outbox once daily (midnight UTC). Vercel Hobby plan limits cron jobs to once per day. Requires x-admin-secret header for authorization.",
       "payload": {}
     },
     {
       "path": "/api/v1/procurement/pdf/compile-batch",
-      "schedule": "*/5 * * * *",
-      "description": "Compile pending B2B vendor purchase order PDF drafts every five minutes. Requires x-admin-secret header for authorization.",
+      "schedule": "0 1 * * *",
+      "description": "Compile pending B2B vendor purchase order PDF drafts once daily (01:00 UTC). Vercel Hobby plan limits cron jobs to once per day. Requires x-admin-secret header for authorization.",
       "payload": {}
     }
   ],
