@@ -44,8 +44,8 @@ export function PDFPreviewModal({
   const [dispatchError, setDispatchError] = useState<string | null>(null);
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
-  const previewUrl = `${API_BASE_URL}/api/v1/procurement/pdf/preview/${encodeURIComponent(generationId)}`;
-  const dispatchUrl = `${API_BASE_URL}/api/v1/procurement/pdf/${encodeURIComponent(generationId)}/dispatch`;
+  const previewUrl = `${API_BASE_URL}/api/procurement/pdf/preview/${encodeURIComponent(generationId)}`;
+  const dispatchUrl = `${API_BASE_URL}/api/procurement/pdf/${encodeURIComponent(generationId)}/dispatch`;
 
   const handleDownload = useCallback(async () => {
     setIsDownloading(true);

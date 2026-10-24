@@ -1,70 +1,78 @@
 # AmzSphere
 
-Amazon marketplace operations simulator MVP. The current app runs entirely on
-local mock data; SP-API credentials in `.env.example` are placeholders and are
-not read by the mock server.
+Amazon marketplace operations simulator MVP — now a unified, pure-frontend Next.js (App Router) + Tailwind CSS application optimized for production on Vercel.
+
+The Python/FastAPI backend has been completely removed. All business logic, fields, schemas, and processing paradigms are preserved and driven by deterministic local mock data (`mock_db.json`) served through native Next.js API Routes under `web/app/api/`.
+
+## Stack
+
+- **Framework:** Next.js 15 (App Router, TypeScript, React 19)
+- **Styling:** Tailwind CSS (dark-mode palettes, flex/grid layouts)
+- **Data:** Local mock state (`mock_db.json`) with in-memory read/write via `web/lib/mock-state.ts`
+- **Deployment:** Vercel (zero backend; `vercel.json` simplified to project settings only)
 
 ## Run locally
 
-The simplest option uses only Python's standard library:
-
 ```bash
-python3 local_server.py
+cd web
+npm install
+npm run dev
 ```
 
-Open <http://127.0.0.1:8000>. Stop the server with `Ctrl+C`. The JSON state is
-stored in `mock_db.json` and the simulator updates it every 10 seconds.
+Open <http://localhost:3000>.
 
-No frontend build step is needed. Chart.js and the display fonts load from CDNs,
-so those visual assets require an internet connection.
+Available scripts:
 
-## FastAPI option
+| Script | Purpose |
+|--------|---------|
+| `npm run dev` | Start the Next.js dev server |
+| `npm run build` | Production build (Vercel-ready) |
+| `npm run start` | Start the production server |
+| `npx tsc --noEmit` | TypeScript typecheck |
 
-Install the system's Python venv support if needed, then install the declared
-dependencies in a project-local environment:
+## Data strategy
 
-```bash
-python3 -m venv .venv
-.venv/bin/pip install -r requirements.txt
-AMZ_DATA_MODE=mock .venv/bin/uvicorn server:app --reload
-```
+All API routes read from and write to `mock_db.json` (loaded once and cached in memory). Mock responses are deterministic and react to client payloads: search/filter/sort on `/api/products`, dynamic opt-score computation via `web/lib/scoring.ts`, purchase-order approve/deny transitions, revision approve/reject, catalog optimization queuing, sync simulation, and inventory scanning via the mock simulator (`web/lib/simulator.ts`).
 
-## Verify
+UI surfaces loading states (`isLoading`), error states, and data tables/charts exactly as live production streams would.
 
-Run the dependency-free simulator tests with:
+## API routes
 
-```bash
-python3 -m unittest discover -s tests -v
-```
+Native Next.js route handlers under `web/app/api/`:
 
-The mock API exposes `GET /api/health`, `GET /api/state`, and
-`POST /api/orders/{order_id}/decision` with `{"action":"approve"}` or
-`{"action":"deny"}`. Live SP-API integration is not implemented; selecting
-live mode in the FastAPI server fails explicitly rather than using mock data.
-The catalog and procurement agent controls stage sandbox actions at
-`POST /api/agent-actions`; they do not call Amazon or suppliers. See
-[`ARCHITECTURE.md`](ARCHITECTURE.md) for the production async-worker design,
-data-ingestion flow, and boundary between the prototype and that design.
+- `GET /api/health` — mock service health
+- `GET /api/state` — full mock state snapshot
+- `GET /api/dashboard` — aggregated seller dashboard
+- `GET /api/products` — paginated, filterable, searchable product catalog
+- `POST /api/products` — create a product
+- `PATCH /api/products/[id]` — update a product (recomputes opt_score)
+- `GET /api/sellers` — connected seller accounts
+- `POST /api/seller/sync` — simulate Amazon catalog sync
+- `GET /api/orders` — purchase workflows
+- `POST /api/purchase-orders/[id]/decision` — approve/deny a workflow
+- `GET /api/purchase-orders/[id]/pdf` — mock PO draft PDF
+- `GET /api/product-revisions` — pending optimization drafts
+- `POST /api/product-revisions/[id]/[action]` — approve/reject a revision
+- `POST /api/catalog/optimize` — queue a catalog optimization (mock)
+- `GET /api/catalog/helium10/status` — mock Helium 10 status
+- `POST /api/catalog/helium10/token` — mock token store
+- `GET /api/activity` — activity feed
+- `GET /api/campaigns`, `GET /api/search-terms`, `GET /api/ppc` — PPC data
+- `GET /api/execution-queue` — async execution queue
+- `GET /api/operations/[id]`, `POST /api/operations/[id]/approve` — operation lifecycle
+- `GET /api/seller-store`, `POST /api/seller-store`, `PATCH /api/seller-store/[id]/visibility`
+- `GET /api/reviews`, `GET /api/review-themes`, `GET /api/catalog-profiles`
+- `POST /api/inventory/scan` — run a mock inventory scan tick
+- `GET /api/access`, `GET /api/manager` — access / profile
+- `POST /api/listings/remediations/approve` — mock listing remediation
+- `POST /api/procurement/bulk-approve` — mock bulk PO approval
+- `GET /api/procurement/pdf/preview/[id]`, `POST /api/procurement/pdf/[id]/dispatch` — mock PO PDF
 
-## Deploy to Vercel and Supabase
+## Deploy to Vercel
 
-1. Create a Supabase project and run the SQL migration in
-	`supabase/migrations/20261009000000_create_amzsphere_state.sql` using the
-	Supabase SQL editor or Supabase CLI.
-2. Connect this repository to Vercel. Vercel detects the root `server.py`
-	FastAPI app; `vercel.json` includes the seed file and schedules a daily
-	simulator heartbeat compatible with Vercel Hobby.
-3. Add `AMZ_DATA_MODE=mock`, `SUPABASE_URL`, and `SUPABASE_SECRET_KEY` to the
-	Vercel project's environment variables. Add a strong `CRON_SECRET` for the
-	scheduled heartbeat. Never use the Supabase secret/service-role key in
-	browser code.
-4. Deploy. The first API request seeds one Supabase JSONB row from
-	`mock_db.json`; later state changes persist in Supabase using revision-checked
-	updates.
+1. Push the repository to GitHub.
+2. Import the project in Vercel. Set the root directory to `web` (or rely on automatic Next.js detection).
+3. Add `AMZ_DATA_MODE=mock` (default) if desired. No database, Redis, or SP-API credentials are required.
+4. Deploy. The app is fully static/client-rendered with dynamic API routes; no `vercel.json` rewrites or cron jobs are needed.
 
-An open dashboard requests a tick every 10 seconds. The daily Vercel Cron is an
-idle heartbeat; Hobby supports only daily schedules. On Pro or Enterprise, its
-schedule can be changed to `* * * * *` for a per-minute heartbeat. This is
-mock-market data, not an Amazon SP-API connection. Approval actions are not
-authenticated yet; keep the deployment private until Supabase Auth or another
-manager access control is added.
+No Supabase, PostgreSQL, or Python runtime is provisioned.

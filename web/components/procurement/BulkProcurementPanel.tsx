@@ -100,7 +100,7 @@ export function BulkProcurementPanel({ orders }: BulkProcurementPanelProps) {
       };
 
       const result = await json<BulkProcurementApprovalResponse>(
-        `${API_BASE_URL}/api/v1/procurement/bulk-approve`,
+        `${API_BASE_URL}/api/procurement/bulk-approve`,
         {
           method: "POST",
           body: JSON.stringify(payload),

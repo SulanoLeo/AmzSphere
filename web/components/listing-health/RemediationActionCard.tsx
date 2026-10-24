@@ -171,7 +171,7 @@ export function RemediationActionCard({
         payload.proposed_title = formValues.title.trim() || undefined;
       }
 
-      const response = await fetch("/api/v1/listings/remediations/approve", {
+      const response = await fetch("/api/listings/remediations/approve", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

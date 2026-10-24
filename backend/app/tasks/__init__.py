@@ -1,1 +1,0 @@
-"""Celery tasks executed by isolated worker processes."""

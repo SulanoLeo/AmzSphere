@@ -1,49 +1,8 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "services": {
-    "web": {
-      "root": "web",
-      "framework": "nextjs"
+  "build": {
+    "env": {
+      "AMZ_DATA_MODE": "mock"
     }
-  },
-  "crons": [
-    {
-      "path": "/api/v1/amazon-writes/execute",
-      "schedule": "0 0 * * *",
-      "description": "Flush the Amazon SP-API write outbox once daily (midnight UTC). Vercel Hobby plan limits cron jobs to once per day. Requires x-admin-secret header for authorization.",
-      "payload": {}
-    },
-    {
-      "path": "/api/v1/procurement/pdf/compile-batch",
-      "schedule": "0 1 * * *",
-      "description": "Compile pending B2B vendor purchase order PDF drafts once daily (01:00 UTC). Vercel Hobby plan limits cron jobs to once per day. Requires x-admin-secret header for authorization.",
-      "payload": {}
-    }
-  ],
-  "env": {
-    "ADMIN_WEBHOOK_SECRET": "@amzsphere-admin-webhook-secret",
-    "DATABASE_URL": "@amzsphere-database-url",
-    "REDIS_URL": "@amzsphere-redis-url",
-    "SP_API_ENDPOINT": "@amzsphere-sp-api-endpoint",
-    "SP_API_AWS_REGION": "@amzsphere-sp-api-aws-region",
-    "AWS_ACCESS_KEY_ID": "@amzsphere-aws-access-key-id",
-    "AWS_SECRET_ACCESS_KEY": "@amzsphere-aws-secret-access-key",
-    "SP_API_ACCESS_TOKEN": "@amzsphere-sp-api-access-token",
-    "PLATFORM_API_KEY": "@amzsphere-platform-api-key",
-    "SP_API_ENABLED": "@amzsphere-sp-api-enabled",
-    "SP_API_DRY_RUN": "@amzsphere-sp-api-dry-run",
-    "SP_API_MARKETPLACE_ID": "@amzsphere-sp-api-marketplace-id",
-    "SP_API_LISTINGS_API_VERSION": "@amzsphere-sp-api-listings-api-version",
-    "SP_API_APPLICATION_ID": "@amzsphere-sp-api-application-id",
-    "LWA_CLIENT_ID": "@amzsphere-lwa-client-id",
-    "LWA_CLIENT_SECRET": "@amzsphere-lwa-client-secret",
-    "WEB_APP_URL": "@amzsphere-web-app-url",
-    "OAUTH_REDIRECT_URI": "@amzsphere-oauth-redirect-uri",
-    "OAUTH_STATE_TTL_SECONDS": "@amzsphere-oauth-state-ttl-seconds",
-    "AMAZON_WRITE_OUTBOX_BATCH_LIMIT": "@amzsphere-amazon-write-outbox-batch-limit",
-    "AMAZON_WRITE_OUTBOX_MAX_ATTEMPTS": "@amzsphere-amazon-write-outbox-max-attempts",
-    "AMAZON_WRITE_OUTBOX_BASE_BACKOFF_SECONDS": "@amzsphere-amazon-write-outbox-base-backoff-seconds",
-    "AMAZON_WRITE_OUTBOX_MAX_BACKOFF_SECONDS": "@amzsphere-amazon-write-outbox-max-backoff-seconds",
-    "DATABASE_URL_SSL": "@amzsphere-database-url-ssl"
   }
 }

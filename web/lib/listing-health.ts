@@ -1,3 +1,5 @@
+import { readMockState } from "./mock-state";
+
 export interface ListingHealthSummary {
   total_pending_count: number;
   total_processed_count: number;
@@ -33,44 +35,68 @@ export interface ListingHealthFilters {
   marketplace_id?: string | null;
 }
 
-const API_BASE_URL = (() => {
-  const configured = process.env.NEXT_PUBLIC_API_BASE_URL;
-  return configured ? configured.replace(/\/+$/, "") : "";
-})();
-
-function buildUrl(path: string, params: Record<string, string | number | boolean | null | undefined>): string {
-  const url = new URL(`${API_BASE_URL}${path}`, window.location.origin);
-  Object.entries(params).forEach(([key, value]) => {
-    if (value === null || value === undefined || value === "") return;
-    url.searchParams.append(key, String(value));
-  });
-  return url.toString();
-}
-
-async function json<T>(input: RequestInfo | URL, init?: RequestInit): Promise<T> {
-  const res = await fetch(input, { cache: "no-store", headers: { "Content-Type": "application/json" }, ...init });
-  if (!res.ok) {
-    const body = await res.json().catch(() => ({ detail: res.statusText }));
-    throw new Error((body as { detail?: string }).detail || `Request failed with status ${res.status}`);
+function buildAlerts(state: any, filters: ListingHealthFilters = {}): ListingHealthAlertItem[] {
+  const products: any[] = (state.products || []).slice();
+  const listings: any[] = (state.marketplace_listings || []).slice();
+  const byAsin = new Map<string, any>();
+  for (const listing of listings) {
+    byAsin.set(String(listing.global_product_id || listing.asin), listing);
   }
-  return res.json();
+
+  const alerts: ListingHealthAlertItem[] = [];
+  for (const product of products) {
+    const asin = String(product.asin);
+    const listing = byAsin.get(asin);
+    const suppressed = Boolean(product.suppressed) || Boolean(listing && String(listing.status || "").toLowerCase() === "suppressed");
+    if (filters.is_suppressed !== undefined && filters.is_suppressed !== null && suppressed !== filters.is_suppressed) continue;
+    if (filters.marketplace_id && listing && String(listing.marketplace_id) !== String(filters.marketplace_id)) continue;
+    if (!suppressed) continue;
+    alerts.push({
+      id: `alert-${asin}`,
+      notification_id: `notif-${asin}`,
+      notification_type: "listing_suppression",
+      seller_id: "mock-seller",
+      asin,
+      sku: product.sku,
+      marketplace_id: listing ? String(listing.marketplace_id) : "ATVPDKIKX0DER",
+      listing_status: listing ? String(listing.status || "suppressed") : "suppressed",
+      status: "pending",
+      is_suppressed: true,
+      error_codes: listing?.error_codes || ["SUPPRESSED_LISTING"],
+      error_messages: listing?.error_messages || ["Listing is suppressed on Amazon."],
+      processed_at: null,
+      received_at: product.last_synced_at || new Date().toISOString(),
+    });
+  }
+  return alerts;
 }
 
 export async function fetchListingHealthSummary(): Promise<ListingHealthSummary> {
-  return json<ListingHealthSummary>(buildUrl("/api/v1/listings/health-summary", {}));
+  const state = readMockState();
+  const products: any[] = (state.products || []).slice();
+  const listings: any[] = (state.marketplace_listings || []).slice();
+  let suppressed = 0;
+  for (const product of products) {
+    const listing = listings.find((l) => String(l.global_product_id || l.asin) === String(product.asin));
+    if (Boolean(product.suppressed) || Boolean(listing && String(listing.status || "").toLowerCase() === "suppressed")) {
+      suppressed += 1;
+    }
+  }
+  return {
+    total_pending_count: products.filter((p) => String(p.opt_status || "").toLowerCase() === "pending_approval").length,
+    total_processed_count: products.filter((p) => String(p.opt_status || "").toLowerCase() === "optimized").length,
+    total_failed_count: products.filter((p) => String(p.opt_status || "").toLowerCase() === "rejected").length,
+    total_suppressed_count: suppressed,
+    total_critical_count: products.filter((p) => Number(p.days_of_supply || 0) > 0 && Number(p.days_of_supply) < 7).length,
+  };
 }
 
 export async function fetchListingAlerts(
-  page: number,
-  limit: number,
+  _page: number,
+  _limit: number,
   filters: ListingHealthFilters = {},
 ): Promise<ListingHealthAlertsPage> {
-  return json<ListingHealthAlertsPage>(
-    buildUrl("/api/v1/listings/alerts", {
-      page,
-      limit,
-      is_suppressed: filters.is_suppressed ?? null,
-      marketplace_id: filters.marketplace_id ?? null,
-    }),
-  );
+  const state = readMockState();
+  const items = buildAlerts(state, filters);
+  return { items, total: items.length };
 }
