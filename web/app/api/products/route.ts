@@ -2,15 +2,27 @@ import { NextResponse } from "next/server";
 import { requireAllowedUser } from "@/lib/require-user";
 import { readMockState, writeMockState } from "@/lib/mock-state";
 import { computeOptScore } from "@/lib/scoring";
+import { productCreateSchema, productPatchSchema } from "@/lib/validation";
 
 export const dynamic = "force-dynamic";
 
 const US_MARKETPLACE_ID = "ATVPDKIKX0DER";
+const DEFAULT_SELLER_ID = "mock-seller";
 const PAGE_SIZE_DEFAULT = 50;
+
+function resolveSellerId(request: Request): string {
+  try {
+    const url = new URL(request.url);
+    const q = url.searchParams.get("seller_id");
+    if (q) return q;
+  } catch {}
+  return DEFAULT_SELLER_ID;
+}
 
 function productDefaults(product: any): any {
   product.id = product.id ?? crypto.randomUUID();
   product.marketplace_id = product.marketplace_id ?? US_MARKETPLACE_ID;
+  product.seller_id = product.seller_id ?? DEFAULT_SELLER_ID;
   product.source = product.source ?? "amazon_sync";
   product.title = product.title ?? product.name ?? "";
   product.bullets = product.bullets ?? [];
@@ -31,6 +43,7 @@ function normalizeState(state: any): any {
   state.product_revisions = state.product_revisions || [];
   state.amazon_catalog = state.amazon_catalog || [];
   state.sync_state = state.sync_state || { status: "not_synced" };
+  state.audit_logs = state.audit_logs || [];
   return state;
 }
 
@@ -58,6 +71,9 @@ function sortKey(key: string) {
 }
 
 export async function GET(request: Request) {
+  const user = await requireAllowedUser();
+  if ("response" in user) return user.response;
+  const sellerId = resolveSellerId(request);
   const state = normalizeState(readMockState());
   const { searchParams } = new URL(request.url);
 
@@ -72,7 +88,8 @@ export async function GET(request: Request) {
     Math.min(100, parseInt(searchParams.get("page_size") || String(PAGE_SIZE_DEFAULT), 10) || PAGE_SIZE_DEFAULT),
   );
 
-  let products = [...(state.products || [])];
+  let products = (state.products || [])
+    .filter((p: any) => String(p.seller_id || DEFAULT_SELLER_ID) === sellerId);
 
   if (optStatus) {
     products = products.filter((p: any) => p.opt_status === optStatus);
@@ -123,45 +140,51 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   const user = await requireAllowedUser();
   if ("response" in user) return user.response;
-  const state = readMockState();
+  const sellerId = resolveSellerId(request);
   const body = (await request.json()) as Partial<Record<string, any>>;
-  const asin = body.asin;
-  if (!asin || !/^[A-Z0-9]{10}$/.test(asin)) {
-    return NextResponse.json({ detail: "Provide a valid 10-character ASIN." }, { status: 422 });
+  const parsed = productCreateSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json({ detail: parsed.error.flatten().fieldErrors }, { status: 422 });
   }
-  const existing = (state.products || []).find((p: any) => p.asin === asin);
+  const data = parsed.data;
+  const asin = data.asin;
+  const state = normalizeState(readMockState());
+  const existing = (state.products || []).find((p: any) => p.asin === asin && String(p.seller_id || DEFAULT_SELLER_ID) === sellerId);
   if (existing) {
     return NextResponse.json({ detail: `Product already exists: ${asin}` }, { status: 409 });
   }
   const newProduct: any = {
     id: crypto.randomUUID(),
     asin,
-    sku: body.sku || asin,
-    marketplace_id: body.marketplace_id || US_MARKETPLACE_ID,
-    source: body.source ?? "manual",
-    name: body.name || "",
-    title: body.title || body.name || "",
-    category: body.category || "General",
-    price: Number(body.price) || 0,
-    bullets: body.bullets || [],
-    description: body.description || "",
-    backend_keywords: body.backend_keywords || [],
-    images: body.images || [],
-    sellable_units: Number(body.sellable_units) || Number(body.stock) || 0,
-    stock: Number(body.stock) || 0,
-    days_of_supply: Number(body.days_of_supply) || 0,
-    daily_velocity: Number(body.daily_velocity) || 0,
-    competitor_price: Number(body.competitor_price) || 0,
-    market_price: Number(body.market_price) || 0,
-    min_floor: Number(body.min_floor) || 0,
-    max_price: Number(body.max_price) || 0,
-    unit_cost: Number(body.unit_cost) || 0,
-    lead_time_days: Number(body.lead_time_days) || 21,
-    supplier: body.supplier || "",
-    po_draft_id: body.po_draft_id ?? null,
-    suppressed: Boolean(body.suppressed),
-    last_synced_at: body.last_synced_at || null,
-    sync_status: body.sync_status || "synced",
+    sku: data.sku,
+    marketplace_id: data.marketplace_id,
+    seller_id: sellerId,
+    source: data.source,
+    name: data.name,
+    title: data.title,
+    category: data.category,
+    price: data.price,
+    bullets: data.bullets,
+    description: data.description,
+    backend_keywords: data.backend_keywords,
+    images: data.images,
+    sellable_units: data.stock,
+    stock: data.stock,
+    days_of_supply: Math.round(data.stock / Math.max(data.daily_velocity || 0.1, 0.1)) || 0,
+    daily_velocity: data.daily_velocity,
+    competitor_price: data.competitor_price,
+    market_price: data.market_price,
+    min_floor: data.min_floor,
+    max_price: data.max_price,
+    unit_cost: data.unit_cost,
+    lead_time_days: data.lead_time_days,
+    supplier: data.supplier,
+    parent_asin: data.parent_asin || null,
+    variation_theme: data.variation_theme || null,
+    po_draft_id: null,
+    suppressed: false,
+    last_synced_at: null,
+    sync_status: "synced",
     last_optimized_at: null,
     opt_score: 0,
     opt_issues: [],

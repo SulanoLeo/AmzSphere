@@ -9,7 +9,9 @@ export async function GET() {
   return NextResponse.json({
     ok: true,
     source: "mock",
-    message: "SP-API authorization is simulated. Connect a seller account in mock mode to begin.",
+    message:
+      "SP-API authorization is simulated. Real Login with Amazon (LWA) authorization requires configured seller-scoped credentials and is disabled by default.",
     authorization_url: null,
+    lwa_configured: false,
   });
 }

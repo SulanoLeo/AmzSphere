@@ -1,19 +1,25 @@
 import { NextResponse } from "next/server";
 import { requireAllowedUser } from "@/lib/require-user";
 import { readMockState, writeMockState } from "@/lib/mock-state";
+import { catalogOptimizeSchema } from "@/lib/validation";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
   const user = await requireAllowedUser();
   if ("response" in user) return user.response;
-  const { asin, seller_id: sellerId, sku, optimization_mode: optimizationMode = "free", helium10_api_key: helium10ApiKey } = (await request.json()) as {
+  const body = (await request.json()) as {
     asin?: string;
     seller_id?: string;
     sku?: string;
     optimization_mode?: "free" | "paid";
     helium10_api_key?: string;
   };
+  const parsed = catalogOptimizeSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json({ detail: parsed.error.flatten().fieldErrors }, { status: 422 });
+  }
+  const { asin, seller_id: sellerId, sku, optimization_mode: optimizationMode, helium10_api_key: helium10ApiKey } = parsed.data;
   if (!sellerId) {
     return NextResponse.json({ detail: "Select a seller." }, { status: 400 });
   }

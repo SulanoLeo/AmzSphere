@@ -1,6 +1,24 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --mock-navy: #252e52;
+  --mock-navy-soft: #35416e;
+  --mock-orange: #ff9900;
+  --mock-orange-soft: #fff3df;
+  --mock-teal: #007185;
+  --mock-teal-soft: #e6f3f3;
+  --mock-ink: #202d38;
+  --mock-muted: #6f7c87;
+  --mock-quiet: #94a0a9;
+  --mock-line: #e3e9ec;
+  --mock-paper: #ffffff;
+  --mock-canvas: #f2f4f7;
+  --mock-green: #18765f;
+  --mock-green-soft: #e7f4ee;
+  --mock-red: #b9433c;
+  --mock-red-soft: #fff0ed;
+  --mock-blue: #446eaa;
+}
 
 :root {
   color-scheme: light;
@@ -229,7 +247,6 @@ a { color: inherit; text-decoration: none; }
 .stock-fill.good { background: var(--mock-green); }
 .asin { color: var(--mock-quiet); font-size: 10px; }
 .status-mini { padding: 2px 6px; border-radius: 3px; font-size: 9px; font-weight: 700; white-space: nowrap; text-transform: uppercase; }
-
 
 /* Sync bar */
 .sync-bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 6px 0 14px; padding-bottom: 10px; border-bottom: 1px solid var(--mock-line); }
