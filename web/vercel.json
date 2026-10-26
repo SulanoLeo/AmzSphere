@@ -1,0 +1,14 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "build": {
+    "env": {
+      "AMZ_DATA_MODE": "mock"
+    }
+  },
+  "functions": {
+    "web/app/api/**/*.ts": {
+      "runtime": "nodejs@22.x"
+    }
+  },
+  "regions": ["iad1"]
+}
