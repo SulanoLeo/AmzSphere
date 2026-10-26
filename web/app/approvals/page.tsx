@@ -6,7 +6,7 @@ import type { ProductRevision, Order } from "@/lib/provider/types";
 
 function Metric({ label, value, detail, accent, tag }: { label: string; value: string; detail: string; accent: string; tag?: string }) {
   return (
-    <section className={`metric ${accent === "green" || accent === "teal" || accent === "blue" || accent === "warn" ? "" : ""}`}>
+    <section className={`metric`} data-accent={accent}>
       <div className="metric-label"><span>{label}</span>{tag && <span className="mini-tag">{tag}</span>}</div>
       <div className="metric-value">{value}</div>
       <div className="metric-foot">{detail}</div>
@@ -151,47 +151,47 @@ export default function ApprovalsPage() {
                   </button>
                 ))}
               </div>
-            </div>
-            <div className="panel-content">
-              <div className="table-wrap">
-                <table className="mock-table">
-                  <thead>
-                    <tr>
-                      <th>Workflow</th>
-                      <th>Supplier</th>
-                      <th className="tabular-nums">Quantity</th>
-                      <th className="tabular-nums">Amount</th>
-                      <th>Status / reason</th>
-                      <th>Manager action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {loading ? <tr><td colSpan={6} className="empty-cell" style={{padding: 18}}>Loading workflows…</td></tr> : orders.length ? orders.map((order) => (
-                      <tr key={order.id} className="border-t border-line">
-                        <td><span className="order-id">{order.id}</span><div className="product-meta">{order.product_name}</div></td>
-                        <td><div className="product-name">{order.supplier}</div><div className="product-meta"></div></td>
-                        <td className="tabular-nums">{order.units} units</td>
-                        <td className="price tabular-nums">${order.amount.toFixed(2)}</td>
-                        <td>
-                          <div className="status-pill">{order.status}</div>
-                          <div className="product-meta">{order.reviewed_by ? `Reviewed by ${order.reviewed_by}` : "Pending"}</div>
-                        </td>
-                        <td className="action-row">
-                          {order.status === "pending" ? (
-                            <>
-                              <button className="button button-approve button-sm" type="button" onClick={() => void decidePurchaseOrder(order.id, "approve")}>Approve</button>
-                              <button className="button button-deny button-sm" type="button" onClick={() => void decidePurchaseOrder(order.id, "deny")}>Deny</button>
-                            </>
-                          ) : (
-                            <span className="product-meta">{order.reviewed_by || "Reviewed"}</span>
-                          )}
-                        </td>
+              <div className="panel-content">
+                <div className="table-wrap">
+                  <table className="mock-table">
+                    <thead>
+                      <tr>
+                        <th>Workflow</th>
+                        <th>Supplier</th>
+                        <th className="tabular-nums">Quantity</th>
+                        <th className="tabular-nums">Amount</th>
+                        <th>Status / reason</th>
+                        <th>Manager action</th>
                       </tr>
-                    )) : (
-                      <tr><td colSpan={6} className="empty-cell" style={{padding: 18}}>No workflows in this view.</td></tr>
-                    )}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {loading ? <tr><td colSpan={6} className="empty-cell" style={{padding: 18}}>Loading workflows…</td></tr> : orders.length ? orders.map((order) => (
+                        <tr key={order.id} className="border-t border-line">
+                          <td><span className="order-id">{order.id}</span><div className="product-meta">{order.product_name}</div></td>
+                          <td><div className="product-name">{order.supplier}</div><div className="product-meta"></div></td>
+                          <td className="tabular-nums">{order.units} units</td>
+                          <td className="price tabular-nums">${order.amount.toFixed(2)}</td>
+                          <td>
+                            <div className="status-pill">{order.status}</div>
+                            <div className="product-meta">{order.reviewed_by ? `Reviewed by ${order.reviewed_by}` : "Pending"}</div>
+                          </td>
+                          <td className="action-row">
+                            {order.status === "pending" ? (
+                              <>
+                                <button className="button button-approve button-sm" type="button" onClick={() => void decidePurchaseOrder(order.id, "approve")}>Approve</button>
+                                <button className="button button-deny button-sm" type="button" onClick={() => void decidePurchaseOrder(order.id, "deny")}>Deny</button>
+                              </>
+                            ) : (
+                              <span className="product-meta">{order.reviewed_by || "Reviewed"}</span>
+                            )}
+                          </td>
+                        </tr>
+                      )) : (
+                        <tr><td colSpan={6} className="empty-cell" style={{padding: 18}}>No workflows in this view.</td></tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </section>

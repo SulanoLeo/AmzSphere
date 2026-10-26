@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={"darkMode":"class","theme":{"extend":{"colors":{"background":"#f8f9ff","surface-container-high":"#dce9ff","tertiary-container":"#885500","surface-variant":"#d3e4fe","error-container":"#ffdad6","on-tertiary-fixed-variant":"#653e00","on-primary-fixed-variant":"#3323cc","surface-card":"#FFFFFF","surface-dim":"#cbdbf5","status-rose":"#F43F5E","primary-fixed":"#e2dfff","workspace-bg":"#F8FAFC","sidebar-card":"#111827","on-tertiary-container":"#ffd4a4","status-amber":"#F59E0B","on-surface":"#0b1c30","sidebar-border":"#1F2937","on-background":"#0b1c30","inverse-primary":"#c3c0ff","metric-line":"#0E7490","on-secondary":"#ffffff","on-primary":"#ffffff","on-secondary-fixed":"#00201d","on-primary-fixed":"#0f0069","outline-variant":"#c7c4d8","sidebar-surface":"#0B0F19","on-secondary-container":"#006f67","inverse-surface":"#213145","sidebar-active":"#4338CA","secondary-fixed":"#9cf2e8","on-secondary-fixed-variant":"#00504a","outline":"#777587","primary":"#3525cd","surface-tint":"#4d44e3","surface-container":"#e5eeff","surface-border":"#E2E8F0","status-emerald":"#10B981","inverse-on-surface":"#eaf1ff","on-error-container":"#93000a","secondary-container":"#99efe5","primary-fixed-dim":"#c3c0ff","on-tertiary-fixed":"#2a1700","on-primary-container":"#dad7ff","surface-container-lowest":"#ffffff","tertiary-fixed-dim":"#ffb95f","surface-bright":"#f8f9ff","on-tertiary":"#ffffff","secondary-fixed-dim":"#80d5cb","error":"#ba1a1a","on-surface-variant":"#464555","surface-container-low":"#eff4ff","primary-container":"#4f46e5","surface-container-highest":"#d3e4fe","surface":"#f8f9ff","status-indigo":"#6366F1","on-error":"#ffffff","tertiary":"#684000","secondary":"#006a63","tertiary-fixed":"#ffddb8"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"margin-desktop":"1.75rem","gutter":"1rem","gutter-desktop":"1.25rem","space-2xs":"0.125rem","space-lg":"1rem","space-xs":"0.25rem","margin":"1rem","space-sm":"0.5rem","space-2xl":"2rem","space-md":"0.75rem","space-xl":"1.5rem"},"fontFamily":{"headline-md":["Plus Jakarta Sans"],"label-lg":["Inter"],"label-md":["Inter"],"headline-xl":["Plus Jakarta Sans"],"body-sm":["Inter"],"label-sm":["Inter"],"mono-code-sm":["JetBrains Mono"],"headline-sm":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"],"body-md":["Inter"],"mono-metric-md":["JetBrains Mono"],"headline-xl-mobile":["Plus Jakarta Sans"],"mono-metric-lg":["JetBrains Mono"],"body-lg":["Inter"]},"fontSize":{"headline-md":["18px",{"lineHeight":"26px","letterSpacing":"-0.015em","fontWeight":"600"}],"label-lg":["13px",{"lineHeight":"18px","fontWeight":"600"}],"label-md":["11px",{"lineHeight":"16px","letterSpacing":"0.04em","fontWeight":"600"}],"headline-xl":["30px",{"lineHeight":"38px","letterSpacing":"-0.025em","fontWeight":"700"}],"body-sm":["12px",{"lineHeight":"18px","fontWeight":"400"}],"label-sm":["10px",{"lineHeight":"14px","letterSpacing":"0.05em","fontWeight":"700"}],"mono-code-sm":["11px",{"lineHeight":"16px","fontWeight":"500"}],"headline-sm":["15px",{"lineHeight":"22px","letterSpacing":"-0.01em","fontWeight":"600"}],"headline-lg":["22px",{"lineHeight":"30px","letterSpacing":"-0.02em","fontWeight":"600"}],"body-md":["13px",{"lineHeight":"20px","fontWeight":"400"}],"mono-metric-md":["14px",{"lineHeight":"20px","fontWeight":"500"}],"headline-xl-mobile":["24px",{"lineHeight":"32px","letterSpacing":"-0.02em","fontWeight":"700"}],"mono-metric-lg":["24px",{"lineHeight":"30px","letterSpacing":"-0.02em","fontWeight":"600"}],"body-lg":["15px",{"lineHeight":"24px","fontWeight":"400"}]}}}};</script></head><body class="bg-workspace-bg font-body-md text-on-surface antialiased"><input class="peer hidden" id="mobile-nav-toggle" type="checkbox"/><aside class="fixed top-0 bottom-0 left-0 z-50 w-64 bg-sidebar-surface text-slate-300 flex flex-col justify-between transition-transform duration-300 ease-in-out -translate-x-full lg:translate-x-0 shadow-[0_1px_8px_rgba(0,0,0,0.12)]"><div class="flex flex-col h-full overflow-hidden"><div class="h-14 px-space-md flex items-center justify-between bg-sidebar-surface/90"><div class="flex items-center gap-space-sm"><div class="w-8 h-8 rounded-xl bg-primary flex items-center justify-center text-on-primary shadow-sm"><span class="material-symbols-outlined text-[18px]">hub</span></div><div class="flex flex-col"><div class="flex items-center gap-space-xs"><span class="font-headline-sm text-headline-sm text-white tracking-tight">AmzSphere</span><span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-status-emerald opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-status-emerald"></span></span></div><span class="font-label-sm text-label-sm text-slate-400 uppercase tracking-widest">OPERATIONS</span></div></div><label class="lg:hidden cursor-pointer text-slate-400 hover:text-white p-space-xs rounded-lg hover:bg-sidebar-card" for="mobile-nav-toggle"><span class="material-symbols-outlined text-[20px]">close</span></label></div><div class="px-space-md py-space-xs"><div class="h-[1px] w-full bg-sidebar-border"></div></div><div class="flex-1 overflow-y-auto px-space-sm py-space-xs"><div class="px-space-sm pb-space-xs font-mono-code-sm text-mono-code-sm uppercase tracking-wider text-slate-400">Control Plane</div><nav class="flex flex-col gap-space-2xs" data-active-classes="bg-sidebar-active text-white font-semibold shadow-sm"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-slate-300 hover:bg-sidebar-card hover:text-white transition-all text-body-md font-body-md" data-path="overview" href="#"><span>Overview</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-slate-300 hover:bg-sidebar-card hover:text-white transition-all text-body-md font-body-md" data-path="seo-catalog" href="#"><span>SEO &amp; Catalog</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-slate-300 hover:bg-sidebar-card hover:text-white transition-all text-body-md font-body-md" data-path="ppc-ads-engine" href="#"><span>PPC Ads Engine</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-slate-300 hover:bg-sidebar-card hover:text-white transition-all text-body-md font-body-md" data-path="inventory-hub" href="#"><span>Inventory Hub</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-slate-300 hover:bg-sidebar-card hover:text-white transition-all text-body-md font-body-md" data-path="seller-store" href="#"><span>Seller Store</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-slate-300 hover:bg-sidebar-card hover:text-white transition-all text-body-md font-body-md" data-path="repricer-monitor" href="#"><span>Repricer Monitor</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-slate-300 hover:bg-sidebar-card hover:text-white transition-all text-body-md font-body-md" data-path="automation-activity-logs" href="#"><span>Automation Activity Logs</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-slate-300 hover:bg-sidebar-card hover:text-white transition-all text-body-md font-body-md" data-path="b2b-approvals" href="#"><span>B2B Approvals</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-slate-300 hover:bg-sidebar-card hover:text-white transition-all text-body-md font-body-md" data-path="how-it-works" href="#"><span>How It Works</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-slate-300 hover:bg-sidebar-card hover:text-white transition-all text-body-md font-body-md" data-path="seo-tool-selector" href="#"><span>SEO Tool Selector</span></a></nav></div><div class="p-space-sm bg-sidebar-surface flex flex-col gap-space-xs"><div class="bg-sidebar-card rounded-xl p-space-sm flex flex-col gap-space-xs"><div class="flex items-center justify-between"><span class="font-label-sm text-label-sm text-status-amber uppercase font-semibold">SP-API Status</span><span class="px-space-xs py-space-2xs rounded-full bg-status-amber/10 text-status-amber font-mono-code-sm text-mono-code-sm">Dry-Run</span></div><div class="flex items-start gap-space-xs text-slate-400"><span class="material-symbols-outlined text-[14px] text-status-amber mt-0.5">lock</span><span class="font-label-sm text-label-sm leading-tight text-slate-300">Production integration gated. Writes stay disabled until SP-API is enabled and dry-run is off.</span></div></div><div class="bg-sidebar-card rounded-xl p-space-xs flex items-center justify-between gap-space-xs"><div class="flex items-center gap-space-xs overflow-hidden"><div class="w-7 h-7 rounded-lg bg-surface-container-high flex items-center justify-center text-primary font-mono-code-sm text-mono-code-sm font-semibold">AS</div><div class="flex flex-col truncate"><span class="font-label-md text-label-md text-white truncate">AmzSphere Alpha</span><span class="font-label-sm text-label-sm text-slate-400 truncate">Merchant: A21V09X</span></div></div><button class="text-slate-400 hover:text-white p-space-2xs rounded hover:bg-sidebar-border transition-colors" type="button"><span class="material-symbols-outlined text-[18px]">unfold_more</span></button></div></div></div></aside><label class="fixed inset-0 bg-inverse-surface/60 backdrop-blur-sm z-40 lg:hidden hidden peer-checked:block" for="mobile-nav-toggle"></label><div class="lg:pl-64 flex flex-col min-h-screen"><header class="fixed top-0 right-0 left-0 lg:left-64 h-14 z-30 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="w-full h-full px-space-md lg:px-margin-desktop flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-sm overflow-hidden"><label class="lg:hidden p-space-xs rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface cursor-pointer flex items-center" for="mobile-nav-toggle"><span class="material-symbols-outlined text-[20px]">menu</span></label><div class="flex items-center gap-space-xs truncate"><span class="material-symbols-outlined text-[18px] text-on-surface-variant">store</span><span class="font-label-lg text-label-lg text-on-surface font-semibold truncate">Seller Operations</span><span class="text-outline-variant font-label-md text-label-md">/</span><span class="font-label-md text-label-md text-on-surface-variant hidden sm:inline truncate">Control Suite</span></div><div class="hidden md:flex items-center gap-space-xs px-space-sm py-0.5 rounded-full bg-status-emerald/10 text-on-surface font-label-sm text-label-sm"><span class="w-1.5 h-1.5 rounded-full bg-status-emerald"></span><span>Mock engine live</span></div><div class="hidden xl:flex items-center gap-space-2xs px-space-sm py-0.5 rounded-full bg-surface-container-high text-primary font-label-sm text-label-sm"><span class="material-symbols-outlined text-[14px]">verified</span><span>Buy Box owned: 94.2%</span></div></div><div class="flex items-center gap-space-xs lg:gap-space-sm flex-shrink-0"><div class="relative hidden md:block w-44 lg:w-56"><span class="material-symbols-outlined absolute left-space-sm top-1/2 -translate-y-1/2 text-[16px] text-outline">search</span><input class="w-full h-8 pl-8 pr-space-sm rounded-lg bg-surface-container-lowest font-body-sm text-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary shadow-sm" placeholder="Search ASIN, SKU..." type="text"/></div><div class="relative hidden sm:block"><select class="h-8 pl-space-sm pr-7 rounded-lg bg-surface-container-lowest font-label-sm text-label-sm text-on-surface shadow-sm focus:outline-none focus:ring-2 focus:ring-primary appearance-none cursor-pointer"><option value="US">US (Amazon.com)</option><option value="CA">CA (Amazon.ca)</option><option value="UK">UK (Amazon.co.uk)</option><option value="EU">EU (Multi-Region)</option></select><span class="material-symbols-outlined absolute right-space-xs top-1/2 -translate-y-1/2 text-[16px] text-outline pointer-events-none">expand_more</span></div><button class="h-8 px-space-sm rounded-lg bg-surface-container-lowest hover:bg-surface-container-high text-on-surface font-label-sm text-label-sm flex items-center gap-space-xs shadow-sm transition-colors" title="Refresh live state" type="button"><span class="material-symbols-outlined text-[16px] text-on-surface-variant">sync</span><span class="hidden lg:inline">Refresh</span></button><button class="h-8 px-space-sm rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-sm text-label-sm flex items-center gap-space-xs shadow-sm transition-colors" type="button"><span class="material-symbols-outlined text-[16px]">cloud_sync</span><span class="hidden sm:inline">Sync seller data</span></button><button class="w-8 h-8 rounded-lg bg-surface-container-lowest hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface flex items-center justify-center relative shadow-sm transition-colors" type="button"><span class="material-symbols-outlined text-[18px]">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-status-rose"></span></button><div class="flex items-center gap-space-xs pl-space-2xs"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center cursor-pointer shadow-sm"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></div></header><main class="w-full pt-14 flex-1 bg-workspace-bg"><div class="flex flex-col w-full">
+<div class="w-full px-space-md lg:px-margin-desktop py-space-xl flex flex-col gap-space-xl">
+<!-- Top Meta & Controls Header -->
+<div class="flex flex-col xl:flex-row xl:items-center justify-between gap-space-lg">
+<div class="flex flex-col gap-space-2xs">
+<div class="flex items-center gap-space-xs font-label-sm text-label-sm text-on-surface-variant">
+<span>Seller Operations</span>
+<span>/</span>
+<span>Product Catalog</span>
+<span>/</span>
+<span class="text-primary font-semibold">SEO &amp; Catalog</span>
+</div>
+<div class="flex flex-wrap items-center gap-space-md mt-0.5">
+<h1 class="font-headline-xl text-headline-xl text-on-surface tracking-tight">SEO &amp; Catalog Optimizer</h1>
+<div class="flex items-center gap-space-xs px-space-sm py-0.5 rounded-full bg-status-emerald/10 text-status-emerald font-mono-code-sm text-mono-code-sm font-semibold">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-status-emerald opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-status-emerald"></span>
+</span>
+<span>Catalog Sync: Live SP-API (v2024-09)</span>
+</div>
+<span class="hidden sm:inline-flex items-center px-space-sm py-0.5 rounded-full bg-surface-container-high text-on-primary-fixed-variant font-label-sm text-label-sm font-semibold">
+            Algorithmic Listing Health Sentinel
+          </span>
+</div>
+</div>
+<!-- Action Group -->
+<div class="flex flex-wrap items-center gap-space-xs sm:gap-space-sm">
+<div class="inline-flex rounded-lg bg-surface-container p-0.5 shadow-sm">
+<button class="px-space-sm py-1 rounded-md text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm transition-colors" type="button">All Marketplaces</button>
+<button class="px-space-sm py-1 rounded-md bg-surface-container-lowest text-primary font-label-sm text-label-sm font-semibold shadow-xs" type="button">US (.com)</button>
+<button class="px-space-sm py-1 rounded-md text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm transition-colors" type="button">Prime Eligible</button>
+</div>
+<button class="h-9 px-space-md rounded-lg bg-surface-card hover:bg-surface-container text-on-surface font-label-sm text-label-sm flex items-center gap-space-xs shadow-sm transition-colors" type="button">
+<span class="material-symbols-outlined text-[17px] text-on-surface-variant">download</span>
+<span>Export Report</span>
+</button>
+<button class="h-9 px-space-md rounded-lg bg-surface-card hover:bg-surface-container text-primary font-label-sm text-label-sm flex items-center gap-space-xs shadow-sm transition-colors font-semibold" type="button">
+<span class="material-symbols-outlined text-[17px] text-primary">auto_awesome</span>
+<span>Generate AI Rewrites</span>
+</button>
+<button class="h-9 px-space-md rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-sm text-label-sm flex items-center gap-space-xs shadow-sm transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]">play_arrow</span>
+<span class="font-semibold">+ Run Bulk Audit</span>
+</button>
+</div>
+</div>
+<!-- 5-Column Executive KPI Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-gutter-desktop">
+<!-- KPI 1 -->
+<div class="bg-surface-card rounded-xl p-space-lg flex flex-col justify-between shadow-sm relative overflow-hidden group hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between">
+<span class="font-mono-code-sm text-mono-code-sm uppercase text-on-surface-variant font-semibold">Catalog Health Index</span>
+<span class="material-symbols-outlined text-[18px] text-primary">fact_check</span>
+</div>
+<div class="my-space-sm">
+<div class="font-mono-metric-lg text-mono-metric-lg text-on-surface font-bold tracking-tight">84.2<span class="text-body-md font-body-md text-on-surface-variant font-normal"> / 100</span></div>
+<div class="flex items-center gap-space-2xs mt-1 text-status-emerald font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[15px]">trending_up</span>
+<span>+3.8 pts vs last crawl</span>
+</div>
+</div>
+<div class="pt-space-xs text-on-surface-variant font-body-sm text-body-sm flex items-center justify-between">
+<span>Coverage</span>
+<span class="font-mono-code-sm text-mono-code-sm font-medium text-on-surface">1,428 ASINs</span>
+</div>
+<div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary to-status-emerald"></div>
+</div>
+<!-- KPI 2 -->
+<div class="bg-surface-card rounded-xl p-space-lg flex flex-col justify-between shadow-sm relative overflow-hidden group hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between">
+<span class="font-mono-code-sm text-mono-code-sm uppercase text-on-surface-variant font-semibold">Critical SEO Deficits</span>
+<span class="px-space-xs py-0.5 rounded-full bg-status-amber/15 text-status-amber font-mono-code-sm text-mono-code-sm font-bold">Needs Fix</span>
+</div>
+<div class="my-space-sm">
+<div class="font-mono-metric-lg text-mono-metric-lg text-status-amber font-bold tracking-tight">34 <span class="text-headline-sm font-headline-sm font-medium text-on-surface">SKUs</span></div>
+<div class="flex items-center gap-space-2xs mt-1 text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[14px] text-status-amber">warning</span>
+<span class="truncate">Title &lt;150c or backend gap</span>
+</div>
+</div>
+<div class="pt-space-xs text-on-surface-variant font-body-sm text-body-sm flex items-center justify-between">
+<span>Priority</span>
+<span class="font-label-sm text-label-sm font-semibold text-status-amber">Immediate remediation</span>
+</div>
+<div class="absolute bottom-0 left-0 right-0 h-1 bg-status-amber"></div>
+</div>
+<!-- KPI 3 -->
+<div class="bg-surface-card rounded-xl p-space-lg flex flex-col justify-between shadow-sm relative overflow-hidden group hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between">
+<span class="font-mono-code-sm text-mono-code-sm uppercase text-on-surface-variant font-semibold">Indexation Rate</span>
+<span class="material-symbols-outlined text-[18px] text-status-emerald">search_check</span>
+</div>
+<div class="my-space-sm">
+<div class="font-mono-metric-lg text-mono-metric-lg text-on-surface font-bold tracking-tight">94.6%</div>
+<div class="flex items-center gap-space-2xs mt-1 text-status-emerald font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[15px]">arrow_upward</span>
+<span>+1.2% organic coverage</span>
+</div>
+</div>
+<div class="pt-space-xs text-on-surface-variant font-body-sm text-body-sm flex items-center justify-between">
+<span>Target Keywords</span>
+<span class="font-mono-code-sm text-mono-code-sm font-medium text-on-surface">Top 500 Seed</span>
+</div>
+<div class="absolute bottom-0 left-0 right-0 h-1 bg-status-emerald"></div>
+</div>
+<!-- KPI 4 -->
+<div class="bg-surface-card rounded-xl p-space-lg flex flex-col justify-between shadow-sm relative overflow-hidden group hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between">
+<span class="font-mono-code-sm text-mono-code-sm uppercase text-on-surface-variant font-semibold">A+ / Brand Story</span>
+<span class="material-symbols-outlined text-[18px] text-status-indigo">auto_stories</span>
+</div>
+<div class="my-space-sm">
+<div class="font-mono-metric-lg text-mono-metric-lg text-on-surface font-bold tracking-tight">91.8%</div>
+<div class="flex items-center gap-space-2xs mt-1 text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[14px] text-primary">info</span>
+<span class="truncate">118 ASINs lack Module 4+</span>
+</div>
+</div>
+<div class="pt-space-xs text-on-surface-variant font-body-sm text-body-sm flex items-center justify-between">
+<span>Conversion Lift</span>
+<span class="font-label-sm text-label-sm font-semibold text-primary">+14.2% est.</span>
+</div>
+<div class="absolute bottom-0 left-0 right-0 h-1 bg-primary"></div>
+</div>
+<!-- KPI 5 -->
+<div class="bg-surface-card rounded-xl p-space-lg flex flex-col justify-between shadow-sm relative overflow-hidden group hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between">
+<span class="font-mono-code-sm text-mono-code-sm uppercase text-status-rose font-semibold">Suppressed / At-Risk</span>
+<span class="px-space-xs py-0.5 rounded-full bg-status-rose/15 text-status-rose font-mono-code-sm text-mono-code-sm font-bold">Urgent</span>
+</div>
+<div class="my-space-sm">
+<div class="font-mono-metric-lg text-mono-metric-lg text-status-rose font-bold tracking-tight">2 <span class="text-headline-sm font-headline-sm font-medium text-on-surface">ASINs</span></div>
+<div class="flex items-center gap-space-2xs mt-1 text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[14px] text-status-rose">error</span>
+<span class="truncate">1 img policy, 1 search</span>
+</div>
+</div>
+<div class="pt-space-xs text-on-surface-variant font-body-sm text-body-sm flex items-center justify-between">
+<span>Lost Daily GMV</span>
+<span class="font-mono-code-sm text-mono-code-sm font-semibold text-status-rose">-$640/day</span>
+</div>
+<div class="absolute bottom-0 left-0 right-0 h-1 bg-status-rose"></div>
+</div>
+</div>
+<!-- Analytics & Diagnostic Section (65% / 35%) -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-gutter-desktop">
+<!-- Left Panel: Optimization & Velocity Chart (65%) -->
+<div class="xl:col-span-8 bg-surface-card rounded-xl p-space-lg sm:p-space-xl flex flex-col justify-between shadow-sm">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-md pb-space-md">
+<div class="flex flex-col">
+<h2 class="font-headline-md text-headline-md text-on-surface font-semibold">Listing Optimization &amp; Search Frequency Rank Velocity</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Distribution of listing scores across active ASINs and organic rank trajectory</p>
+</div>
+<div class="flex items-center bg-surface-container rounded-lg p-0.5 self-start sm:self-auto">
+<button class="px-space-sm py-1 rounded font-label-sm text-label-sm bg-surface-container-lowest text-primary font-semibold shadow-xs" type="button">Quality Tiers</button>
+<button class="px-space-sm py-1 rounded font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface" type="button">Rank Velocity</button>
+<button class="px-space-sm py-1 rounded font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface" type="button">Search Terms</button>
+</div>
+</div>
+<!-- Grade Distribution Bar & Stats -->
+<div class="my-space-md flex flex-col gap-space-md">
+<div class="flex items-center justify-between font-label-sm text-label-sm text-on-surface-variant">
+<span>Catalog Score Spectrum (1,428 Tracked Child Listings)</span>
+<span class="font-mono-code-sm text-mono-code-sm text-on-surface font-semibold">Average: 84.2 LQS</span>
+</div>
+<!-- Multi-tier Bar -->
+<div class="h-3.5 w-full rounded-full bg-surface-container flex overflow-hidden p-0.5 gap-0.5">
+<div class="bg-status-emerald rounded-l-full h-full" style="width: 56.8%" title="Grade A: 812 ASINs (56.8%)"></div>
+<div class="bg-primary h-full" style="width: 30.9%" title="Grade B: 442 ASINs (30.9%)"></div>
+<div class="bg-status-amber h-full" style="width: 9.8%" title="Grade C: 140 ASINs (9.8%)"></div>
+<div class="bg-status-rose rounded-r-full h-full" style="width: 2.5%" title="Grade D/F: 34 ASINs (2.4%)"></div>
+</div>
+<!-- Grade Badges Grid -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-space-sm pt-space-xs">
+<div class="bg-surface-container-low p-space-sm rounded-lg flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="w-2.5 h-2.5 rounded-full bg-status-emerald"></span>
+<span class="font-label-sm text-label-sm font-semibold text-on-surface">Grade A (90-100)</span>
+</div>
+<div class="mt-1 flex items-baseline justify-between">
+<span class="font-mono-metric-md text-mono-metric-md text-on-surface font-bold">812</span>
+<span class="font-mono-code-sm text-mono-code-sm text-status-emerald font-semibold">56.8%</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-space-sm rounded-lg flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="w-2.5 h-2.5 rounded-full bg-primary"></span>
+<span class="font-label-sm text-label-sm font-semibold text-on-surface">Grade B (75-89)</span>
+</div>
+<div class="mt-1 flex items-baseline justify-between">
+<span class="font-mono-metric-md text-mono-metric-md text-on-surface font-bold">442</span>
+<span class="font-mono-code-sm text-mono-code-sm text-primary font-semibold">30.9%</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-space-sm rounded-lg flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="w-2.5 h-2.5 rounded-full bg-status-amber"></span>
+<span class="font-label-sm text-label-sm font-semibold text-on-surface">Grade C (60-74)</span>
+</div>
+<div class="mt-1 flex items-line justify-between">
+<span class="font-mono-metric-md text-mono-metric-md text-on-surface font-bold">140</span>
+<span class="font-mono-code-sm text-mono-code-sm text-status-amber font-semibold">9.8%</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-space-sm rounded-lg flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="w-2.5 h-2.5 rounded-full bg-status-rose"></span>
+<span class="font-label-sm text-label-sm font-semibold text-on-surface">Grade D/F (&lt;60)</span>
+</div>
+<div class="mt-1 flex items-baseline justify-between">
+<span class="font-mono-metric-md text-mono-metric-md text-status-rose font-bold">34</span>
+<span class="font-mono-code-sm text-mono-code-sm text-status-rose font-semibold">2.4%</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Inline Rank Sparkline Visualization -->
+<div class="bg-surface-container-low rounded-xl p-space-md my-space-sm flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-[18px] text-primary">query_stats</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold uppercase">Average Organic Rank (Primary Seed Targets • 30D Trend)</span>
+</div>
+<div class="flex items-center gap-space-md font-mono-code-sm text-mono-code-sm">
+<span class="text-on-surface-variant">Day 1: <strong class="text-on-surface font-semibold">#18.4</strong></span>
+<span class="material-symbols-outlined text-[14px] text-status-emerald">arrow_forward</span>
+<span class="text-status-emerald">Today: <strong class="font-bold">#9.2</strong></span>
+</div>
+</div>
+<!-- Lightweight SVG Curve -->
+<div class="w-full h-16 relative">
+<svg class="w-full h-full text-primary" fill="none" preserveaspectratio="none" viewbox="0 0 600 64">
+<defs>
+<lineargradient id="rankGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#4f46e5" stop-opacity="0.25"></stop>
+<stop offset="100%" stop-color="#4f46e5" stop-opacity="0.0"></stop>
+</lineargradient>
+</defs>
+<path d="M0,52 C50,50 80,48 130,42 C180,36 210,38 270,30 C320,24 370,22 430,16 C490,12 540,9 600,6 L600,64 L0,64 Z" fill="url(#rankGradient)"></path>
+<path d="M0,52 C50,50 80,48 130,42 C180,36 210,38 270,30 C320,24 370,22 430,16 C490,12 540,9 600,6" stroke="#4f46e5" stroke-linecap="round" stroke-width="2.5"></path>
+<circle cx="0" cy="52" fill="#4f46e5" r="3.5"></circle>
+<circle cx="270" cy="30" fill="#4f46e5" r="3"></circle>
+<circle cx="600" cy="6" fill="#10B981" r="4"></circle>
+</svg>
+</div>
+</div>
+<!-- Copilot Action Banner -->
+<div class="mt-space-sm bg-surface-container rounded-lg p-space-md flex flex-col sm:flex-row sm:items-center justify-between gap-space-md">
+<div class="flex items-start gap-space-sm">
+<div class="w-7 h-7 rounded-lg bg-primary flex items-center justify-center text-on-primary flex-shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[16px]">smart_toy</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-primary font-bold uppercase tracking-wider">AI Copilot Recommendation</span>
+<p class="font-body-sm text-body-sm text-on-surface">18 high-volume search queries detected with zero organic indexation across your Electronics category.</p>
+</div>
+</div>
+<button class="h-8 px-space-md rounded bg-primary hover:bg-primary-container text-on-primary font-label-sm text-label-sm font-semibold flex items-center gap-space-xs self-start sm:self-auto flex-shrink-0 shadow-sm transition-all" type="button">
+<span>Auto-Inject to Backend Terms</span>
+<span class="material-symbols-outlined text-[14px]">bolt</span>
+</button>
+</div>
+</div>
+<!-- Right Panel: Compliance Scorecard & Toggles (35%) -->
+<div class="xl:col-span-4 bg-surface-card rounded-xl p-space-lg sm:p-space-xl flex flex-col justify-between shadow-sm">
+<div>
+<div class="flex items-center justify-between pb-space-sm">
+<h2 class="font-headline-md text-headline-md text-on-surface font-semibold">SP-API Compliance</h2>
+<span class="px-space-xs py-0.5 rounded bg-status-emerald/10 text-status-emerald font-mono-code-sm text-mono-code-sm font-semibold">93.6% Valid</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Listing standards enforced via automated Amazon Brand Registry rulebook</p>
+<!-- Scorecard Progress Items -->
+<div class="flex flex-col gap-space-md mt-space-md">
+<!-- Item 1 -->
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between font-label-sm text-label-sm">
+<span class="text-on-surface font-medium truncate">Title Compliance (150-200 Chars)</span>
+<span class="font-mono-code-sm text-mono-code-sm text-on-surface font-bold">96%</span>
+</div>
+<div class="w-full h-1.5 rounded-full bg-surface-container overflow-hidden">
+<div class="bg-status-emerald h-full rounded-full" style="width: 96%"></div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between font-label-sm text-label-sm">
+<span class="text-on-surface font-medium truncate">Bullet Points (5 Distinct USPs + Hooks)</span>
+<span class="font-mono-code-sm text-mono-code-sm text-primary font-bold">88%</span>
+</div>
+<div class="w-full h-1.5 rounded-full bg-surface-container overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 88%"></div>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between font-label-sm text-label-sm">
+<span class="text-on-surface font-medium truncate">High-Res Main Image (1600x1600 White)</span>
+<span class="font-mono-code-sm text-mono-code-sm text-status-emerald font-bold">99%</span>
+</div>
+<div class="w-full h-1.5 rounded-full bg-surface-container overflow-hidden">
+<div class="bg-status-emerald h-full rounded-full" style="width: 99%"></div>
+</div>
+</div>
+<!-- Item 4 -->
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between font-label-sm text-label-sm">
+<span class="text-on-surface font-medium truncate">Backend Search Terms (&lt;249 bytes)</span>
+<span class="font-mono-code-sm text-mono-code-sm text-status-emerald font-bold">92%</span>
+</div>
+<div class="w-full h-1.5 rounded-full bg-surface-container overflow-hidden">
+<div class="bg-status-emerald h-full rounded-full" style="width: 92%"></div>
+</div>
+</div>
+<!-- Item 5 -->
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between font-label-sm text-label-sm">
+<span class="text-on-surface font-medium truncate">A+ Content &amp; Brand Story Applied</span>
+<span class="font-mono-code-sm text-mono-code-sm text-status-indigo font-bold">91%</span>
+</div>
+<div class="w-full h-1.5 rounded-full bg-surface-container overflow-hidden">
+<div class="bg-status-indigo h-full rounded-full" style="width: 91%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Automation Toggles Box -->
+<div class="bg-surface-container-low rounded-lg p-space-md flex flex-col gap-space-md mt-space-lg">
+<span class="font-label-md text-label-md text-on-surface-variant font-semibold uppercase tracking-wider">Automated Safeguards</span>
+<div class="flex items-center justify-between">
+<div class="flex flex-col pr-space-sm">
+<span class="font-label-sm text-label-sm text-on-surface font-semibold">Auto-sync Brand Registry</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Pushes canonical updates within 15 min</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer flex-shrink-0">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-9 h-5 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex flex-col pr-space-sm">
+<span class="font-label-sm text-label-sm text-on-surface font-semibold">AI Auto-Draft on Suppression</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Generates policy-cleared copy</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer flex-shrink-0">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-9 h-5 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Enterprise Data Table: Catalog Listing Health & SEO Matrix -->
+<div class="bg-surface-card rounded-xl shadow-sm flex flex-col overflow-hidden">
+<!-- Table Filter Bar -->
+<div class="p-space-lg flex flex-col lg:flex-row lg:items-center justify-between gap-space-md bg-surface-card">
+<div class="flex flex-wrap items-center gap-space-sm flex-1">
+<div class="relative w-full sm:w-72">
+<span class="material-symbols-outlined absolute left- space-sm top-1/2 -translate-y-1/2 text-[16px] text-outline ml-2">search</span>
+<input class="w-full h-9 pl-9 pr-space-sm rounded-lg bg-surface-container-low font-body-sm text-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary shadow-xs" placeholder="Search by ASIN, SKU, Title, Seed Keyword..." type="text"/>
+</div>
+<select class="h-9 px-space-sm pr-7 rounded-lg bg-surface-container-low font-label-sm text-label-sm text-on-surface shadow-xs focus:outline-none focus:ring-2 focus:ring-primary appearance-none cursor-pointer">
+<option>All Optimization Grades</option>
+<option>Grade A (90-100)</option>
+<option>Grade B (75-89)</option>
+<option>Grade C (60-74)</option>
+<option>Grade D/F (&lt;60)</option>
+</select>
+<select class="h-9 px-space-sm pr-7 rounded-lg bg-surface-container-low font-label-sm text-label-sm text-on-surface shadow-xs focus:outline-none focus:ring-2 focus:ring-primary appearance-none cursor-pointer">
+<option>Suppression Status: All</option>
+<option>Active / Buy Box Owned</option>
+<option>Search Suppressed</option>
+<option>Policy Gated</option>
+</select>
+<select class="h-9 px-space-sm pr-7 rounded-lg bg-surface-container-low font-label-sm text-label-sm text-on-surface shadow-xs focus:outline-none focus:ring-2 focus:ring-primary appearance-none cursor-pointer">
+<option>Brand: All (3)</option>
+<option>AmzSphere Audio</option>
+<option>AmzSphere Power</option>
+<option>AmzSphere Fit</option>
+</select>
+</div>
+<div class="flex items-center gap-space-sm justify-between lg:justify-end">
+<span class="font-mono-code-sm text-mono-code-sm text-on-surface-variant">Showing <strong class="text-on-surface">5</strong> of 1,428 tracked products</span>
+<button class="h-9 px-space-md rounded-lg bg-surface-container-high hover:bg-surface-variant text-primary font-label-sm text-label-sm font-semibold flex items-center gap-space-xs transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">magic_button</span>
+<span>Bulk AI Rewrite</span>
+</button>
+</div>
+</div>
+<!-- Data Table -->
+<div class="w-full overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low font-mono-code-sm text-mono-code-sm text-on-surface-variant uppercase tracking-wider">
+<th class="py-space-md px-space-md w-10 text-center">
+<input class="rounded text-primary focus:ring-primary" type="checkbox"/>
+</th>
+<th class="py-space-md px-space-md font-semibold">Product Details &amp; SKU</th>
+<th class="py-space-md px-space-md font-semibold text-center">LQS Index</th>
+<th class="py-space-md px-space-md font-semibold">Core SEO Attributes</th>
+<th class="py-space-md px-space-md font-semibold">Primary Seed Keyword</th>
+<th class="py-space-md px-space-md font-semibold text-center">Buy Box</th>
+<th class="py-space-md px-space-md font-semibold">AI Recommendation</th>
+<th class="py-space-md px-space-md font-semibold text-right pr-space-lg">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y-0 font-body-sm text-body-sm">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-low/60 transition-colors">
+<td class="py-space-md px-space-md text-center">
+<input class="rounded text-primary focus:ring-primary" type="checkbox"/>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-md">
+<img class="w-11 h-11 rounded-lg object-cover bg-surface-container shadow-xs flex-shrink-0" data-alt="High tech matte black portable solar battery bank with LED status screen and heavy duty corner bumpers photographed on clean white studio backdrop" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLYHzwRGExVaKk-n6VZiSdbIKr7wS-6OKhjY0gJY3fcr-W5cyOWY5NwEpS1rLjh-6On_l2UBD_6f3RpOwBu_Rl1rFvZKLslfrNWWp33xTg3JwRddndrfp0SbiJlmFCbjbjEvgUcpPmtwr4-qz8ZzhgK3r978o76KYKXbCAuIPQ11tqz38_KV7uXazj-7kB9l8gyInD1183tZFQbow1KhfTYrmG2CuNTFxtGJmOjtwB"/>
+<div class="flex flex-col min-w-0 max-w-xs">
+<span class="font-headline-sm text-headline-sm text-on-surface truncate font-semibold">Solar Power Pod 50W Fast Charge</span>
+<div class="flex items-center gap-space-xs font-mono-code-sm text-mono-code-sm text-on-surface-variant mt-0.5">
+<span>AMZ-SP-4021</span>
+<span>•</span>
+<span class="text-primary font-semibold">B09V72K88L</span>
+<span>•</span>
+<span>Solar Power</span>
+</div>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md text-center">
+<div class="inline-flex flex-col items-center">
+<span class="px-space-sm py-0.5 rounded-full bg-status-emerald/10 text-status-emerald font-mono-code-sm text-mono-code-sm font-bold">94 / 100</span>
+<span class="font-label-sm text-label-sm text-status-emerald mt-0.5">Grade A</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col gap-0.5 font-mono-code-sm text-mono-code-sm text-on-surface">
+<div class="flex items-center gap-space-xs">
+<span class="text-on-surface-variant">Title:</span> <strong class="text-status-emerald">182</strong>/200c
+                    <span class="text-outline-variant">|</span>
+<span class="text-on-surface-variant">Bullets:</span> <strong class="text-status-emerald">5/5</strong>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="text-on-surface-variant">Images:</span> <strong class="text-status-emerald">7 HD</strong>
+<span class="text-outline-variant">|</span>
+<span class="text-on-surface-variant">Backend:</span> <strong class="text-status-emerald">246</strong>/249b
+                  </div>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col">
+<span class="font-body-md text-body-md text-on-surface font-semibold truncate">portable solar battery</span>
+<div class="flex items-center gap-space-xs font-mono-code-sm text-mono-code-sm text-status-emerald mt-0.5">
+<span class="material-symbols-outlined text-[13px]">military_tech</span>
+<span>Rank #4</span>
+<span class="text-on-surface-variant">(SFR 12,480)</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md text-center">
+<span class="px-space-xs py-0.5 rounded-full bg-status-emerald/15 text-status-emerald font-mono-code-sm text-mono-code-sm font-semibold">100% Owned</span>
+</td>
+<td class="py-space-md px-space-md">
+<span class="inline-flex items-center gap-1 text-status-emerald font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[15px]">check_circle</span>
+<span>Fully Optimized</span>
+</span>
+</td>
+<td class="py-space-md px-space-md text-right pr-space-lg">
+<div class="flex items-center justify-end gap-space-xs">
+<button class="w-8 h-8 rounded-lg hover:bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors" title="Audit &amp; Edit" type="button">
+<span class="material-symbols-outlined text-[18px]">edit_note</span>
+</button>
+<button class="w-8 h-8 rounded-lg hover:bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors" title="Preview on Amazon" type="button">
+<span class="material-symbols-outlined text-[18px]">open_in_new</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-low/60 transition-colors bg-surface-container-lowest">
+<td class="py-space-md px-space-md text-center">
+<input class="rounded text-primary focus:ring-primary" type="checkbox"/>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-md">
+<img class="w-11 h-11 rounded-lg object-cover bg-surface-container shadow-xs flex-shrink-0" data-alt="Ergonomic minimalist wireless noise cancelling earbuds resting inside an open matte indigo charging case against a subtle neutral studio light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRLWvnYgD0RzjUuTj7ocMFGqXzzsFMW7wZNH0W65JsClhn-Ec2jMYCePZVJPfFcL3uHt__0CVhUVq-pC3__c1dSoUTFMisMn086hIC6jWDA3qStUas8l0Mf_IvFVnNIzw8bWIplxX4mZnl_PdI72ZnhryVgfdXEDj3IoPNrbXM0N5m1DwwTuNSxgxRTLQ3GgKRB-y2MzRGHsmzRfa9IG92ECc09lLNkCQdvxT7MCr-"/>
+<div class="flex flex-col min-w-0 max-w-xs">
+<span class="font-headline-sm text-headline-sm text-on-surface truncate font-semibold">Wireless Earset ANC Sweatproof</span>
+<div class="flex items-center gap-space-xs font-mono-code-sm text-mono-code-sm text-on-surface-variant mt-0.5">
+<span>AMZ-AUDIO-09</span>
+<span>•</span>
+<span class="text-primary font-semibold">B08KLE9012</span>
+<span>•</span>
+<span>Audio Tech</span>
+</div>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md text-center">
+<div class="inline-flex flex-col items-center">
+<span class="px-space-sm py-0.5 rounded-full bg-primary/10 text-primary font-mono-code-sm text-mono-code-sm font-bold">86 / 100</span>
+<span class="font-label-sm text-label-sm text-primary mt-0.5">Grade B</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col gap-0.5 font-mono-code-sm text-mono-code-sm text-on-surface">
+<div class="flex items-center gap-space-xs">
+<span class="text-on-surface-variant">Title:</span> <strong class="text-status-emerald">164</strong>/200c
+                    <span class="text-outline-variant">|</span>
+<span class="text-on-surface-variant">Bullets:</span> <strong class="text-status-emerald">5/5</strong>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="text-on-surface-variant">Images:</span> <strong class="text-status-emerald">6 HD</strong>
+<span class="text-outline-variant">|</span>
+<span class="text-on-surface-variant">Backend:</span> <strong class="text-status-amber">210</strong>/249b
+                  </div>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col">
+<span class="font-body-md text-body-md text-on-surface font-semibold truncate">active noise cancelling earbuds</span>
+<div class="flex items-center gap-space-xs font-mono-code-sm text-mono-code-sm text-status-emerald mt-0.5">
+<span class="material-symbols-outlined text-[13px]">military_tech</span>
+<span>Rank #8</span>
+<span class="text-on-surface-variant">(SFR 4,120)</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md text-center">
+<span class="px-space-xs py-0.5 rounded-full bg-status-emerald/15 text-status-emerald font-mono-code-sm text-mono-code-sm font-semibold">98% Owned</span>
+</td>
+<td class="py-space-md px-space-md">
+<span class="inline-flex items-center gap-1 text-primary font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[15px]">videocam</span>
+<span>Missing A+ Video</span>
+</span>
+</td>
+<td class="py-space-md px-space-md text-right pr-space-lg">
+<div class="flex items-center justify-end gap-space-xs">
+<button class="w-8 h-8 rounded-lg hover:bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors" title="Audit &amp; Edit" type="button">
+<span class="material-symbols-outlined text-[18px]">edit_note</span>
+</button>
+<button class="w-8 h-8 rounded-lg hover:bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors" title="AI Rewrite" type="button">
+<span class="material-symbols-outlined text-[18px]">auto_awesome</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-low/60 transition-colors">
+<td class="py-space-md px-space-md text-center">
+<input class="rounded text-primary focus:ring-primary" type="checkbox"/>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-md">
+<img class="w-11 h-11 rounded-lg object-cover bg-surface-container shadow-xs flex-shrink-0" data-alt="Modern architectural dual gooseneck clamp desk lamp with adjustable LED heads illuminating an ultra clean workspace desk setup" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDu72hzVRd6kk3xVjwHRg50TXyCQ1t3nReQWQFqkhJjNakOLk2q10QCcBUxjYKP1orSVutyz3h1AXtfM0xojCZuz1nsfcKoZIera998bs5E0926EPJst4QikhiilBDq7-D_CjdHfli8LTNtCWKVInaaC1ULnnXRqf-YgIIA_6jL_IQPDq52zgKTXDbzRwxaoNKexrKWNrc2MYJcAUwsofZCJVKqmgJCF0HGEmY6HlPB"/>
+<div class="flex flex-col min-w-0 max-w-xs">
+<span class="font-headline-sm text-headline-sm text-on-surface truncate font-semibold">Ergonomic Dual Lamp Desk Clamp</span>
+<div class="flex items-center gap-space-xs font-mono-code-sm text-mono-code-sm text-on-surface-variant mt-0.5">
+<span>AMZ-HOME-882</span>
+<span>•</span>
+<span class="text-primary font-semibold">B07AA38992</span>
+<span>•</span>
+<span>Home Office</span>
+</div>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md text-center">
+<div class="inline-flex flex-col items-center">
+<span class="px-space-sm py-0.5 rounded-full bg-status-amber/15 text-status-amber font-mono-code-sm text-mono-code-sm font-bold">64 / 100</span>
+<span class="font-label-sm text-label-sm text-status-amber mt-0.5">Grade C</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col gap-0.5 font-mono-code-sm text-mono-code-sm text-on-surface">
+<div class="flex items-center gap-space-xs">
+<span class="text-on-surface-variant">Title:</span> <strong class="text-status-rose">112c</strong> (Short)
+                    <span class="text-outline-variant">|</span>
+<span class="text-on-surface-variant">Bullets:</span> <strong class="text-status-amber">4/5</strong>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="text-on-surface-variant">Images:</span> <strong class="text-status-amber">4 Img</strong>
+<span class="text-outline-variant">|</span>
+<span class="text-on-surface-variant">Backend:</span> <strong class="text-status-rose">140</strong>/249b
+                  </div>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col">
+<span class="font-body-md text-body-md text-on-surface font-semibold truncate">clamp desk lamp dual</span>
+<div class="flex items-center gap-space-xs font-mono-code-sm text-mono-code-sm text-status-amber mt-0.5">
+<span class="material-symbols-outlined text-[13px]">trending_flat</span>
+<span>Rank #23</span>
+<span class="text-on-surface-variant">(SFR 18,900)</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md text-center">
+<span class="px-space-xs py-0.5 rounded-full bg-status-emerald/15 text-status-emerald font-mono-code-sm text-mono-code-sm font-semibold">100% Owned</span>
+</td>
+<td class="py-space-md px-space-md">
+<span class="inline-flex items-center gap-1 text-status-amber font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[15px]">edit</span>
+<span>Needs Bullet Polish</span>
+</span>
+</td>
+<td class="py-space-md px-space-md text-right pr-space-lg">
+<div class="flex items-center justify-end gap-space-xs">
+<button class="px-space-sm py-1 rounded-md bg-primary text-on-primary font-label-sm text-label-sm font-semibold hover:bg-primary-container shadow-xs transition-colors" type="button">
+                    AI Fix
+                  </button>
+<button class="w-8 h-8 rounded-lg hover:bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors" title="Audit &amp; Edit" type="button">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-container-low/60 transition-colors bg-surface-container-lowest">
+<td class="py-space-md px-space-md text-center">
+<input class="rounded text-primary focus:ring-primary" type="checkbox"/>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-md">
+<img class="w-11 h-11 rounded-lg object-cover bg-surface-container shadow-xs flex-shrink-0" data-alt="Set of 5 premium heavy duty fitness resistance loop bands neatly coiled with carry pouch and carabiners on clean athletic surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIs3G6P6QUihqOxUft3lfa1zCIWePHPOfRod3mfz5o6KrDFOr0WcUD5lvIbS9d0u6rqB0WF9o6Ixx2wWrs0lYYgg75oc0DhK4-sL5oPtuUPPuQkQsRSQfQG1ZdTi5KPUkYkhLlvXY2FVc92Kq2tGO_KsYCuU4VgEO6rAChd9Tqt4uo65Leu5BoETQt63mC7u7Z2zv25rv8Arug5NvF4cS65zisOK5AIxlLBSv_RE01"/>
+<div class="flex flex-col min-w-0 max-w-xs">
+<span class="font-headline-sm text-headline-sm text-on-surface truncate font-semibold">Resistance Band Kit 5pc Pro</span>
+<div class="flex items-center gap-space-xs font-mono-code-sm text-mono-code-sm text-on-surface-variant mt-0.5">
+<span>AMZ-FIT-104</span>
+<span>•</span>
+<span class="text-primary font-semibold">B09MM90184</span>
+<span>•</span>
+<span>Fitness Gear</span>
+</div>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md text-center">
+<div class="inline-flex flex-col items-center">
+<span class="px-space-sm py-0.5 rounded-full bg-status-emerald/10 text-status-emerald font-mono-code-sm text-mono-code-sm font-bold">92 / 100</span>
+<span class="font-label-sm text-label-sm text-status-emerald mt-0.5">Grade A</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col gap-0.5 font-mono-code-sm text-mono-code-sm text-on-surface">
+<div class="flex items-center gap-space-xs">
+<span class="text-on-surface-variant">Title:</span> <strong class="text-status-emerald">195</strong>/200c
+                    <span class="text-outline-variant">|</span>
+<span class="text-on-surface-variant">Bullets:</span> <strong class="text-status-emerald">5/5</strong>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="text-on-surface-variant">Images:</span> <strong class="text-status-emerald">8 HD</strong>
+<span class="text-outline-variant">|</span>
+<span class="text-on-surface-variant">Backend:</span> <strong class="text-status-emerald">248</strong>/249b
+                  </div>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col">
+<span class="font-body-md text-body-md text-on-surface font-semibold truncate">pull up resistance bands</span>
+<div class="flex items-center gap-space-xs font-mono-code-sm text-mono-code-sm text-status-emerald mt-0.5">
+<span class="material-symbols-outlined text-[13px]">military_tech</span>
+<span>Rank #6</span>
+<span class="text-on-surface-variant">(SFR 8,920)</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md text-center">
+<span class="px-space-xs py-0.5 rounded-full bg-status-emerald/15 text-status-emerald font-mono-code-sm text-mono-code-sm font-semibold">100% Owned</span>
+</td>
+<td class="py-space-md px-space-md">
+<span class="inline-flex items-center gap-1 text-status-emerald font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[15px]">check_circle</span>
+<span>Fully Optimized</span>
+</span>
+</td>
+<td class="py-space-md px-space-md text-right pr-space-lg">
+<div class="flex items-center justify-end gap-space-xs">
+<button class="w-8 h-8 rounded-lg hover:bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors" title="Audit &amp; Edit" type="button">
+<span class="material-symbols-outlined text-[18px]">edit_note</span>
+</button>
+<button class="w-8 h-8 rounded-lg hover:bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors" title="Preview on Amazon" type="button">
+<span class="material-symbols-outlined text-[18px]">open_in_new</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 5 (Suppressed / Urgent) -->
+<tr class="hover:bg-surface-container-low/60 transition-colors bg-status-rose/5">
+<td class="py-space-md px-space-md text-center">
+<input class="rounded text-primary focus:ring-primary" type="checkbox"/>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-md">
+<img class="w-11 h-11 rounded-lg object-cover bg-surface-container shadow-xs flex-shrink-0" data-alt="Compact 65W GaN wall charger with multiple USB-C ports shown on pure white Amazon compliant background with soft shadow" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1okBs1GiQe8v21VtyXfYUmoKpyQaJczU-nBov8o7CxR4tXKUysrXrvQJbRBhdTgzVm9i2YakV622jo3n-T1h07aDFlDA80UQECgYOLr1QUKRtSluCIc-0euGyDhwUv2iPMtS3qFUE8nsaQjvp9c0iNlwX5I3_KIdfqZaT2MxSHX3B9gD5fejVhB3DWrboLVfvSgdcsPo6LvfeNzyHE6Fu_m7oHmpEkKbhgM-lf7xx"/>
+<div class="flex flex-col min-w-0 max-w-xs">
+<span class="font-headline-sm text-headline-sm text-on-surface truncate font-semibold">GaN 65W Multiport USB-C Wall Charger</span>
+<div class="flex items-center gap-space-xs font-mono-code-sm text-mono-code-sm text-on-surface-variant mt-0.5">
+<span>AMZ-CHARG-12</span>
+<span>•</span>
+<span class="text-status-rose font-bold">B07X81ML39</span>
+<span>•</span>
+<span>Power Tech</span>
+</div>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md text-center">
+<div class="inline-flex flex-col items-center">
+<span class="px-space-sm py-0.5 rounded-full bg-status-rose/20 text-status-rose font-mono-code-sm text-mono-code-sm font-bold">52 / 100</span>
+<span class="font-label-sm text-label-sm text-status-rose font-semibold mt-0.5">Grade D</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col gap-0.5 font-mono-code-sm text-mono-code-sm text-on-surface">
+<div class="flex items-center gap-space-xs">
+<span class="text-on-surface-variant">Title:</span> <strong class="text-status-rose">88c</strong> (Violates)
+                    <span class="text-outline-variant">|</span>
+<span class="text-on-surface-variant">Bullets:</span> <strong class="text-status-rose">3/5</strong>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="text-on-surface-variant">Images:</span> <strong class="text-status-rose">3 Img</strong>
+<span class="text-outline-variant">|</span>
+<span class="text-on-surface-variant">Backend:</span> <strong class="text-status-rose">90</strong>/249b
+                  </div>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col">
+<span class="font-body-md text-body-md text-on-surface font-semibold truncate">gan 65w usb c charger</span>
+<div class="flex items-center gap-space-xs font-mono-code-sm text-mono-code-sm text-status-rose mt-0.5">
+<span class="material-symbols-outlined text-[13px]">arrow_downward</span>
+<span>Rank #44</span>
+<span class="text-on-surface-variant">(Lost Rank)</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md text-center">
+<span class="px-space-xs py-0.5 rounded-full bg-status-rose/20 text-status-rose font-mono-code-sm text-mono-code-sm font-bold">Suppressed</span>
+</td>
+<td class="py-space-md px-space-md">
+<span class="inline-flex items-center gap-1 text-status-rose font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[15px]">report</span>
+<span>Policy Suppressed</span>
+</span>
+</td>
+<td class="py-space-md px-space-md text-right pr-space-lg">
+<div class="flex items-center justify-end gap-space-xs">
+<button class="px-space-sm py-1 rounded-md bg-status-rose text-white font-label-sm text-label-sm font-semibold hover:bg-status-rose/90 shadow-xs transition-colors" type="button">
+                    Fix Policy
+                  </button>
+<button class="w-8 h-8 rounded-lg hover:bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors" title="More options" type="button">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination Footer -->
+<div class="p-space-md bg-surface-card flex flex-col sm:flex-row items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-sm text-on-surface-variant font-body-sm text-body-sm">
+<span>Rows per page:</span>
+<select class="h-8 px-space-sm rounded bg-surface-container-low font-label-sm text-label-sm text-on-surface focus:outline-none">
+<option>5</option>
+<option>25</option>
+<option>50</option>
+<option>100</option>
+</select>
+<span>Page 1 of 286</span>
+</div>
+<div class="flex items-center gap-space-2xs">
+<button class="h-8 px-space-sm rounded bg-surface-container-low text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm disabled:opacity-50" disabled="" type="button">
+            Previous
+          </button>
+<button class="h-8 w-8 rounded bg-primary text-on-primary font-mono-code-sm text-mono-code-sm font-semibold" type="button">1</button>
+<button class="h-8 w-8 rounded bg-surface-container-low text-on-surface hover:bg-surface-container font-mono-code-sm text-mono-code-sm" type="button">2</button>
+<button class="h-8 w-8 rounded bg-surface-container-low text-on-surface hover:bg-surface-container font-mono-code-sm text-mono-code-sm" type="button">3</button>
+<span class="px-1 text-on-surface-variant">...</span>
+<button class="h-8 w-8 rounded bg-surface-container-low text-on-surface hover:bg-surface-container font-mono-code-sm text-mono-code-sm" type="button">286</button>
+<button class="h-8 px-space-sm rounded bg-surface-container-low text-on-surface hover:text-on-surface font-label-sm text-label-sm transition-colors" type="button">
+            Next
+          </button>
+</div>
+</div>
+</div>
+<!-- Bottom Module: AI Copy Generation & Keyword Injection Queue -->
+<div class="flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-lg bg-surface-container-high text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">neurology</span>
+</div>
+<div class="flex flex-col">
+<h2 class="font-headline-md text-headline-md text-on-surface font-semibold">AI Copy Generation &amp; Keyword Injection Queue</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Automated search optimization actions ready for SP-API live catalogue push</p>
+</div>
+</div>
+<span class="px-space-sm py-0.5 rounded-full bg-primary/10 text-primary font-mono-code-sm text-mono-code-sm font-semibold">
+          3 Actionable Proposals
+        </span>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter-desktop">
+<!-- Proposal Card 1 -->
+<div class="bg-surface-card rounded-xl p-space-lg shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-mono-code-sm text-mono-code-sm text-primary font-semibold">ASIN: B07AA38992</span>
+<span class="px-space-xs py-0.5 rounded bg-status-emerald/10 text-status-emerald font-label-sm text-label-sm font-semibold">+4.2K Impr/Mo</span>
+</div>
+<div class="font-headline-sm text-headline-sm text-on-surface font-semibold">Ergonomic Dual Lamp</div>
+<div class="bg-surface-container-low rounded-lg p-space-sm flex flex-col gap-1">
+<span class="font-mono-code-sm text-mono-code-sm text-on-surface-variant uppercase font-semibold">Suggested Title Expansion:</span>
+<p class="font-body-sm text-body-sm text-on-surface font-medium italic">
+                "...with 24W Eye-Caring Dual Gooseneck &amp; Touch Dimming, Architecture Clamp Base"
+              </p>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[15px] text-primary">analytics</span>
+<span>Captures 3 high-volume missing search queries</span>
+</div>
+</div>
+<div class="pt-space-md">
+<button class="w-full h-9 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-sm text-label-sm font-semibold flex items-center justify-center gap-space-xs shadow-sm transition-all" type="button">
+<span>Approve &amp; Push to Amazon SP-API</span>
+<span class="material-symbols-outlined text-[15px]">send</span>
+</button>
+</div>
+</div>
+<!-- Proposal Card 2 -->
+<div class="bg-surface-card rounded-xl p-space-lg shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-mono-code-sm text-mono-code-sm text-status-rose font-bold">ASIN: B07X81ML39</span>
+<span class="px-space-xs py-0.5 rounded bg-status-rose/15 text-status-rose font-label-sm text-label-sm font-semibold">Suppression Risk</span>
+</div>
+<div class="font-headline-sm text-headline-sm text-on-surface font-semibold">GaN 65W Charger</div>
+<div class="bg-surface-container-low rounded-lg p-space-sm flex flex-col gap-1">
+<span class="font-mono-code-sm text-mono-code-sm text-on-surface-variant uppercase font-semibold">Policy Compliant Bullet 4 Draft:</span>
+<p class="font-body-sm text-body-sm text-on-surface font-medium">
+<strong>[CERTIFIED SAFE PROTECTION]</strong> Multi-protect system complies with UL62368 safety directives for overheat and overcurrent prevention.
+              </p>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[15px] text-status-amber">verified_user</span>
+<span>Clears electrical safety documentation flags</span>
+</div>
+</div>
+<div class="pt-space-md">
+<button class="w-full h-9 rounded-lg bg-surface-card hover:bg-surface-container text-on-surface font-label-sm text-label-sm font-semibold flex items-center justify-center gap-space-xs shadow-sm transition-all" type="button">
+<span>Review &amp; Resolve Suppression</span>
+<span class="material-symbols-outlined text-[15px]">gavel</span>
+</button>
+</div>
+</div>
+<!-- Proposal Card 3 -->
+<div class="bg-surface-card rounded-xl p-space-lg shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-mono-code-sm text-mono-code-sm text-status-indigo font-semibold">Cross-Catalog Terms</span>
+<span class="px-space-xs py-0.5 rounded bg-status-indigo/15 text-status-indigo font-label-sm text-label-sm font-semibold">14 Terms Ready</span>
+</div>
+<div class="font-headline-sm text-headline-sm text-on-surface font-semibold">Spanish / Long-Tail Harvest</div>
+<div class="bg-surface-container-low rounded-lg p-space-sm flex flex-col gap-1">
+<span class="font-mono-code-sm text-mono-code-sm text-on-surface-variant uppercase font-semibold">Discovered Backend Search Strings:</span>
+<div class="flex flex-wrap gap-1 mt-1 font-mono-code-sm text-mono-code-sm">
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface">cargador rapido tipo c</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface">pantalla lamp dual</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface">bandas elasticas gym</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[15px] text-status-indigo">translate</span>
+<span>Zero cannibalization with existing title copy</span>
+</div>
+</div>
+<div class="pt-space-md">
+<button class="w-full h-9 rounded-lg bg-surface-container-high hover:bg-surface-variant text-primary font-label-sm text-label-sm font-semibold flex items-center justify-center gap-space-xs shadow-sm transition-all" type="button">
+<span>Apply to 34 Parent ASINs</span>
+<span class="material-symbols-outlined text-[15px]">playlist_add_check</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div></main></div></body></html>

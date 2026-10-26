@@ -1,0 +1,859 @@
+<!DOCTYPE html><html lang="en" style=""><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="web_dashboard" name="shell-type"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"primary-fixed-dim":"#c3c0ff","on-surface-variant":"#464555","tertiary-fixed-dim":"#ffb95f","surface-container":"#e5eeff","surface-dim":"#cbdbf5","primary-fixed":"#e2dfff","on-tertiary":"#ffffff","on-primary-container":"#dad7ff","on-secondary-fixed-variant":"#00504a","surface-border":"#E2E8F0","sidebar-active":"#4338CA","surface-card":"#FFFFFF","secondary-fixed":"#9cf2e8","tertiary-fixed":"#ffddb8","background":"#f8f9ff","outline":"#777587","surface-container-highest":"#d3e4fe","primary":"#3525cd","secondary":"#006a63","on-surface":"#0b1c30","inverse-on-surface":"#eaf1ff","metric-line":"#0E7490","on-primary-fixed-variant":"#3323cc","secondary-container":"#99efe5","tertiary-container":"#885500","on-background":"#0b1c30","surface-bright":"#f8f9ff","surface-variant":"#d3e4fe","on-primary":"#ffffff","outline-variant":"#c7c4d8","surface":"#f8f9ff","on-tertiary-container":"#ffd4a4","sidebar-surface":"#0B0F19","on-primary-fixed":"#0f0069","error-container":"#ffdad6","tertiary":"#684000","surface-container-lowest":"#ffffff","surface-container-low":"#eff4ff","on-tertiary-fixed":"#2a1700","sidebar-border":"#1F2937","secondary-fixed-dim":"#80d5cb","primary-container":"#4f46e5","status-amber":"#F59E0B","surface-container-high":"#dce9ff","inverse-primary":"#c3c0ff","on-error":"#ffffff","on-secondary-fixed":"#00201d","on-secondary":"#ffffff","surface-tint":"#4d44e3","status-emerald":"#10B981","status-rose":"#F43F5E","on-tertiary-fixed-variant":"#653e00","workspace-bg":"#F8FAFC","status-indigo":"#6366F1","inverse-surface":"#213145","error":"#ba1a1a","sidebar-card":"#111827","on-error-container":"#93000a","on-secondary-container":"#006f67"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"space-md":"0.75rem","margin":"1rem","gutter":"1rem","space-xl":"1.5rem","space-lg":"1rem","space-xs":"0.25rem","gutter-desktop":"1.25rem","margin-desktop":"1.75rem","space-sm":"0.5rem","space-2xl":"2rem","space-2xs":"0.125rem"},"fontFamily":{"headline-lg":["Plus Jakarta Sans"],"body-lg":["Inter"],"headline-sm":["Plus Jakarta Sans"],"headline-xl":["Plus Jakarta Sans"],"headline-xl-mobile":["Plus Jakarta Sans"],"body-md":["Inter"],"label-sm":["Inter"],"mono-metric-lg":["JetBrains Mono"],"mono-metric-md":["JetBrains Mono"],"body-sm":["Inter"],"label-lg":["Inter"],"mono-code-sm":["JetBrains Mono"],"label-md":["Inter"],"headline-md":["Plus Jakarta Sans"]},"fontSize":{"headline-lg":["22px",{"lineHeight":"30px","letterSpacing":"-0.02em","fontWeight":"600"}],"body-lg":["15px",{"lineHeight":"24px","fontWeight":"400"}],"headline-sm":["15px",{"lineHeight":"22px","letterSpacing":"-0.01em","fontWeight":"600"}],"headline-xl":["30px",{"lineHeight":"38px","letterSpacing":"-0.025em","fontWeight":"700"}],"headline-xl-mobile":["24px",{"lineHeight":"32px","letterSpacing":"-0.02em","fontWeight":"700"}],"body-md":["13px",{"lineHeight":"20px","fontWeight":"400"}],"label-sm":["10px",{"lineHeight":"14px","letterSpacing":"0.05em","fontWeight":"700"}],"mono-metric-lg":["24px",{"lineHeight":"30px","letterSpacing":"-0.02em","fontWeight":"600"}],"mono-metric-md":["14px",{"lineHeight":"20px","fontWeight":"500"}],"body-sm":["12px",{"lineHeight":"18px","fontWeight":"400"}],"label-lg":["13px",{"lineHeight":"18px","fontWeight":"600"}],"mono-code-sm":["11px",{"lineHeight":"16px","fontWeight":"500"}],"label-md":["11px",{"lineHeight":"16px","letterSpacing":"0.04em","fontWeight":"600"}],"headline-md":["18px",{"lineHeight":"26px","letterSpacing":"-0.015em","fontWeight":"600"}]}}}}</script></head><body class="bg-workspace-bg font-body-md text-body-md text-on-surface"><aside class="fixed left-0 top-0 h-full w-64 bg-sidebar-surface z-50 flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col"><div class="h-16 px-space-lg flex items-center justify-between bg-sidebar-surface"><div class="flex items-center gap-space-sm"><div class="w-8 h-8 rounded-xl bg-primary-container flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">hub</span></div><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-on-primary tracking-tight">AmzSphere</span><span class="font-mono-code-sm text-mono-code-sm text-outline uppercase">Operations v4.2</span></div></div><span class="px-space-xs py-space-2xs bg-sidebar-card text-status-indigo font-label-sm text-label-sm rounded-full">ENTERPRISE</span></div><div class="px-space-md py-space-sm"><span class="px-space-sm font-label-sm text-label-sm uppercase text-outline">Control Plane</span></div><nav class="flex flex-col gap-space-2xs px-space-md" data-active-classes="bg-sidebar-active text-on-primary font-label-lg rounded-xl"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-outline hover:bg-sidebar-card hover:text-on-primary transition-colors font-label-lg text-label-lg" data-path="overview" href="#">Overview</a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-outline hover:bg-sidebar-card hover:text-on-primary transition-colors font-label-lg text-label-lg" data-path="seo-and-catalog" href="#">SEO &amp; Catalog</a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-outline hover:bg-sidebar-card hover:text-on-primary transition-colors font-label-lg text-label-lg" data-path="ppc-ads-engine" href="#">PPC Ads Engine</a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-outline hover:bg-sidebar-card hover:text-on-primary transition-colors font-label-lg text-label-lg" data-path="inventory-hub" href="#">Inventory Hub</a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-outline hover:bg-sidebar-card hover:text-on-primary transition-colors font-label-lg text-label-lg" data-path="seller-store" href="#">Seller Store</a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-outline hover:bg-sidebar-card hover:text-on-primary transition-colors font-label-lg text-label-lg" data-path="repricer-monitor" href="#">Repricer Monitor</a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-outline hover:bg-sidebar-card hover:text-on-primary transition-colors font-label-lg text-label-lg" data-path="automation-activity-logs" href="#">Automation Activity Logs</a><a class="flex items-center justify-between px-space-md py-space-sm rounded-xl text-outline hover:bg-sidebar-card hover:text-on-primary transition-colors font-label-lg text-label-lg" data-path="b2b-approvals" href="#"><span class="">B2B Approvals</span><span class="px-space-xs py-space-2xs bg-sidebar-card text-status-amber font-mono-code-sm text-mono-code-sm rounded-full">4 Pending</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl hover:bg-sidebar-card hover:text-on-primary transition-colors font-label-lg text-label-lg bg-sidebar-active text-on-primary" data-path="how-it-works" href="#">How It Works</a><a aria-current="page" class="flex items-center gap-space-sm px-space-md py-space-sm transition-colors font-label-lg rounded-xl" data-path="seo-tool-selector" href="#">SEO Tool Selector</a></nav></div><div class="p-space-md bg-sidebar-surface"><div class="p-space-md rounded-xl bg-sidebar-card flex flex-col gap-space-xs"><div class="flex items-center justify-between"><div class="flex items-center gap-space-xs"><span class="w-2 h-2 rounded-full bg-status-emerald animate-pulse"></span><span class="font-label-sm text-label-sm uppercase text-on-primary">SP-API Status</span></div><span class="px-space-xs py-space-2xs bg-sidebar-surface text-secondary font-mono-code-sm text-mono-code-sm rounded-full">DRY-RUN</span></div><span class="font-body-sm text-body-sm text-outline">Sandbox pipeline live. Syncing telemetry at 120s cadence without live push mutation.</span><div class="flex items-center justify-between pt-space-xs"><span class="font-mono-code-sm text-mono-code-sm text-outline">Latency: 42ms</span><span class="font-mono-code-sm text-mono-code-sm text-status-emerald">OK 200</span></div></div></div></aside><div class="pl-64"><header class="fixed top-0 left-64 right-0 h-16 bg-surface-card/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 px-space-lg flex items-center justify-between"><div class="flex items-center gap-space-lg"><div class="flex items-center gap-space-sm"><span class="font-headline-sm text-headline-sm text-on-surface">AmzSphere Alpha</span><span class="px-space-sm py-space-2xs bg-surface-container text-primary font-mono-code-sm text-mono-code-sm rounded-full">MOCK ENGINE</span></div><div class="flex items-center gap-space-xs px-space-sm py-space-2xs bg-surface-container-low rounded-xl"><span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Buy Box:</span><span class="font-mono-metric-md text-mono-metric-md text-status-emerald">94.2%</span></div></div><div class="flex items-center gap-space-md flex-1 max-w-xl mx-space-lg"><div class="relative w-full"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">search</span><input class="w-full h-9 pl-9 pr-space-md rounded-xl bg-surface-container-low text-on-surface font-body-sm text-body-sm placeholder:text-outline focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Search ASIN (e.g. B08N5WRWNW), SKU, Parent ID..." type="text"></div></div><div class="flex items-center gap-space-sm"><div class="flex items-center gap-space-xs px-space-sm py-space-xs rounded-xl bg-surface-container-low text-on-surface font-label-md text-label-md"><span class="material-symbols-outlined text-[16px] text-outline">public</span><span class="">US (Amazon.com)</span><span class="material-symbols-outlined text-[16px] text-outline">expand_more</span></div><button class="h-9 px-space-sm rounded-xl bg-surface-card text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors flex items-center gap-space-xs font-label-md text-label-md" title="Refresh View" type="button"><span class="material-symbols-outlined text-[16px]">refresh</span><span class="">Refresh</span></button><button class="h-9 px-space-md rounded-xl bg-primary-container text-on-primary hover:bg-primary transition-colors flex items-center gap-space-xs font-label-md text-label-md" type="button"><span class="material-symbols-outlined text-[16px]">sync</span><span class="">Sync Seller Data</span></button><button class="relative w-9 h-9 rounded-xl bg-surface-card text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors flex items-center justify-center" type="button"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-status-rose"></span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></header><main class="w-full pt-16 bg-workspace-bg min-h-screen px-space-lg"><div class="flex flex-col w-full">
+<div class="flex flex-col gap-space-lg mb-space-xl">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="flex flex-col gap-space-2xs">
+<div class="flex items-center gap-space-xs font-mono-code-sm text-mono-code-sm text-outline">
+<span class="hover:text-primary transition-colors cursor-pointer">Seller Operations</span>
+<span class="text-outline-variant">/</span>
+<span class="hover:text-primary transition-colors cursor-pointer">System Blueprint</span>
+<span class="text-outline-variant">/</span>
+<span class="text-on-surface font-label-md">How It Works &amp; Architecture</span>
+</div>
+<h1 class="font-headline-xl text-headline-xl text-on-surface tracking-tight flex items-center gap-space-sm">
+          Enterprise Blueprint &amp; Data Pipeline
+          <span class="px-space-sm py-space-2xs bg-surface-container text-primary font-mono-code-sm text-mono-code-sm rounded-full">v4.2-STABLE</span>
+</h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-3xl">
+          High-throughput event sourcing pipeline for Amazon Selling Partner API (SP-API). Fully resilient, asynchronous worker topology with strict mathematical circuit breakers and zero-accidental-write isolation.
+        </p>
+</div>
+<div class="flex flex-wrap items-center gap-space-xs">
+<button class="h-9 px-space-md rounded-xl bg-surface-card text-on-surface hover:bg-surface-container transition-colors shadow-sm flex items-center gap-space-xs font-label-md text-label-md" type="button">
+<span class="material-symbols-outlined text-[16px] text-outline">picture_as_pdf</span>
+<span class="">Download Blueprint PDF</span>
+</button>
+<button class="h-9 px-space-md rounded-xl bg-surface-card text-on-surface hover:bg-surface-container transition-colors shadow-sm flex items-center gap-space-xs font-label-md text-label-md" type="button">
+<span class="material-symbols-outlined text-[16px] text-outline">api</span>
+<span class="">OpenAPI 3.1 Specs</span>
+</button>
+<button class="h-9 px-space-md rounded-xl bg-primary-container text-on-primary hover:bg-primary transition-colors shadow-sm flex items-center gap-space-xs font-label-md text-label-md" id="trigger-sim-btn" type="button">
+<span class="material-symbols-outlined text-[16px]">play_circle</span>
+<span class="">Test Sandbox Webhook</span>
+</button>
+</div>
+</div>
+<div class="flex flex-wrap items-center gap-space-xs p-space-xs bg-surface-card rounded-xl shadow-sm">
+<div class="flex items-center gap-space-xs px-space-sm py-space-2xs rounded-lg bg-surface-container-low text-on-surface-variant font-mono-code-sm text-mono-code-sm">
+<span class="w-2 h-2 rounded-full bg-status-emerald animate-pulse"></span>
+<span class="text-outline uppercase">SP-API Protocol:</span>
+<span class="text-on-surface font-semibold">TLS 1.3 Active</span>
+</div>
+<div class="flex items-center gap-space-xs px-space-sm py-space-2xs rounded-lg bg-surface-container-low text-on-surface-variant font-mono-code-sm text-mono-code-sm">
+<span class="material-symbols-outlined text-status-emerald text-[14px]">format_image_left</span>
+<span class="text-outline uppercase">Postgres Outbox:</span>
+<span class="text-on-surface font-semibold">ACID Guaranteed</span>
+</div>
+<div class="flex items-center gap-space-xs px-space-sm py-space-2xs rounded-lg bg-surface-container-low text-on-surface-variant font-mono-code-sm text-mono-code-sm">
+<span class="material-symbols-outlined text-primary text-[14px]">lock_clock</span>
+<span class="text-outline uppercase">Zero-Accidental-Write:</span>
+<span class="text-primary font-semibold">Dry-Run Sandbox Enforced</span>
+</div>
+<div class="ml-auto flex items-center gap-space-xs px-space-sm py-space-2xs font-mono-code-sm text-mono-code-sm text-outline">
+<span class="">Cluster: us-east-1-prd-a</span>
+<span class="">•</span>
+<span class="">Sync Window: 120s</span>
+</div>
+</div>
+</div>
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-space-md mb-space-2xl">
+<div class="bg-surface-card rounded-xl p-space-lg shadow-sm flex flex-col justify-between relative overflow-hidden group">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Ingestion Velocity</span>
+<span class="material-symbols-outlined text-outline text-[18px] group-hover:text-primary transition-colors">cloud_download</span>
+</div>
+<div class="my-space-xs">
+<div class="font-mono-metric-lg text-mono-metric-lg text-on-surface">12.4k<span class="font-mono-code-sm text-mono-code-sm text-outline font-normal">/min</span></div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Webhooks &amp; EventBridge</p>
+</div>
+<div class="flex items-center gap-space-xs font-mono-code-sm text-mono-code-sm text-status-emerald">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+<span class="">+8.2% peak surge buffer</span>
+</div>
+<div class="w-full h-1 bg-surface-container mt-space-sm rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[68%]"></div>
+</div>
+</div>
+<div class="bg-surface-card rounded-xl p-space-lg shadow-sm flex flex-col justify-between relative overflow-hidden group">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Queue Pacing &amp; Latency</span>
+<span class="material-symbols-outlined text-outline text-[18px] group-hover:text-status-emerald transition-colors">speed</span>
+</div>
+<div class="my-space-xs">
+<div class="font-mono-metric-lg text-mono-metric-lg text-on-surface">18ms<span class="font-mono-code-sm text-mono-code-sm text-status-emerald font-normal"> P95</span></div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Distributed Redis Celery Broker</p>
+</div>
+<div class="flex items-center gap-space-xs font-mono-code-sm text-mono-code-sm text-status-emerald">
+<span class="material-symbols-outlined text-[14px]">bolt</span>
+<span class="">Zero cold-start lag</span>
+</div>
+<div class="w-full h-1 bg-surface-container mt-space-sm rounded-full overflow-hidden">
+<div class="bg-status-emerald h-full w-[94%]"></div>
+</div>
+</div>
+<div class="bg-surface-card rounded-xl p-space-lg shadow-sm flex flex-col justify-between relative overflow-hidden group">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Circuit Breakers</span>
+<span class="material-symbols-outlined text-outline text-[18px] group-hover:text-status-amber transition-colors">electrical_services</span>
+</div>
+<div class="my-space-xs">
+<div class="font-mono-metric-lg text-mono-metric-lg text-status-amber">4<span class="font-mono-code-sm text-mono-code-sm text-outline font-normal"> / 4 Active</span></div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Floor, Bid, Margin, Starvation</p>
+</div>
+<div class="flex items-center gap-space-xs font-mono-code-sm text-mono-code-sm text-status-amber">
+<span class="material-symbols-outlined text-[14px]">gavel</span>
+<span class="">Hard enforcement</span>
+</div>
+<div class="w-full h-1 bg-surface-container mt-space-sm rounded-full overflow-hidden">
+<div class="bg-status-amber h-full w-[100%]"></div>
+</div>
+</div>
+<div class="bg-surface-card rounded-xl p-space-lg shadow-sm flex flex-col justify-between relative overflow-hidden group">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Trust Architecture</span>
+<span class="material-symbols-outlined text-outline text-[18px] group-hover:text-status-indigo transition-colors">supervised_user_circle</span>
+</div>
+<div class="my-space-xs">
+<div class="font-mono-metric-lg text-mono-metric-lg text-on-surface">HITL<span class="font-mono-code-sm text-mono-code-sm text-status-indigo font-normal"> Dual</span></div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Human-in-the-Loop Safeguard</p>
+</div>
+<div class="flex items-center gap-space-xs font-mono-code-sm text-mono-code-sm text-status-indigo">
+<span class="material-symbols-outlined text-[14px]">rule</span>
+<span class="">Live mutation gatekeeper</span>
+</div>
+<div class="w-full h-1 bg-surface-container mt-space-sm rounded-full overflow-hidden">
+<div class="bg-status-indigo h-full w-[85%]"></div>
+</div>
+</div>
+<div class="bg-surface-card rounded-xl p-space-lg shadow-sm flex flex-col justify-between relative overflow-hidden group">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Quota Compliance</span>
+<span class="material-symbols-outlined text-outline text-[18px] group-hover:text-status-emerald transition-colors">verified_user</span>
+</div>
+<div class="my-space-xs">
+<div class="font-mono-metric-lg text-mono-metric-lg text-on-surface">100%<span class="font-mono-code-sm text-mono-code-sm text-status-emerald font-normal"> Quota</span></div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Leaky-Bucket Throttle Health</p>
+</div>
+<div class="flex items-center gap-space-xs font-mono-code-sm text-mono-code-sm text-status-emerald">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+<span class="">0 HTTP 429 Throttle Exits</span>
+</div>
+<div class="w-full h-1 bg-surface-container mt-space-sm rounded-full overflow-hidden">
+<div class="bg-status-emerald h-full w-[100%]"></div>
+</div>
+</div>
+</section>
+<section class="bg-surface-card rounded-xl p-space-xl shadow-sm mb-space-2xl">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md mb-space-xl">
+<div>
+<div class="flex items-center gap-space-xs">
+<span class="px-space-xs py-space-2xs bg-surface-container text-primary font-mono-code-sm text-mono-code-sm rounded-full">SYSTEM TOPOLOGY</span>
+<span class="font-mono-code-sm text-mono-code-sm text-outline">Real-Time Data Ingestion to Amazon Listing Mutation</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface tracking-tight mt-space-2xs">End-to-End Autonomous Pipeline</h2>
+</div>
+<div class="flex items-center gap-space-xs text-mono-code-sm font-mono-code-sm">
+<span class="flex items-center gap-space-2xs text-status-emerald"><span class="w-2 h-2 rounded-full bg-status-emerald"></span> Ingestion</span>
+<span class="text-outline-variant">→</span>
+<span class="flex items-center gap-space-2xs text-primary"><span class="w-2 h-2 rounded-full bg-primary"></span> Transactional Queue</span>
+<span class="text-outline-variant">→</span>
+<span class="flex items-center gap-space-2xs text-status-amber"><span class="w-2 h-2 rounded-full bg-status-amber"></span> Circuit Breakers</span>
+<span class="text-outline-variant">→</span>
+<span class="flex items-center gap-space-2xs text-status-indigo"><span class="w-2 h-2 rounded-full bg-status-indigo"></span> Execution</span>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-5 gap-space-md relative">
+<div class="bg-surface-container-low rounded-xl p-space-md flex flex-col justify-between relative group hover:bg-surface-container transition-colors">
+<div>
+<div class="flex items-center justify-between mb-space-sm">
+<span class="w-6 h-6 rounded-full bg-surface-card text-on-surface font-mono-code-sm text-mono-code-sm flex items-center justify-center shadow-sm">01</span>
+<span class="px-space-xs py-space-2xs rounded-full bg-surface-card text-status-emerald font-mono-code-sm text-mono-code-sm shadow-sm">INGRESS</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-space-2xs">Amazon SP-API &amp; EventBridge</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-space-md">
+            Asynchronous notification ingestion via AWS EventBridge and Amazon SQS polling.
+          </p>
+<div class="space-y-space-xs">
+<div class="p-space-xs bg-surface-card rounded-lg flex items-center justify-between text-body-sm">
+<span class="font-mono-code-sm text-mono-code-sm text-on-surface">AnyOfferChanged</span>
+<span class="font-mono-code-sm text-mono-code-sm text-status-emerald">SQS PUSH</span>
+</div>
+<div class="p-space-xs bg-surface-card rounded-lg flex items-center justify-between text-body-sm">
+<span class="font-mono-code-sm text-mono-code-sm text-on-surface">SQP Brand Analytics</span>
+<span class="font-mono-code-sm text-mono-code-sm text-outline">Hourly Batch</span>
+</div>
+<div class="p-space-xs bg-surface-card rounded-lg flex items-center justify-between text-body-sm">
+<span class="font-mono-code-sm text-mono-code-sm text-on-surface">Orders &amp; Settlement</span>
+<span class="font-mono-code-sm text-mono-code-sm text-primary">Webhooks</span>
+</div>
+</div>
+</div>
+<div class="pt-space-md mt-space-md flex items-center justify-between text-mono-code-sm font-mono-code-sm text-outline">
+<span class="">Latency: &lt; 4ms</span>
+<span class="text-status-emerald font-semibold">99.999% SLA</span>
+</div>
+</div>
+<div class="bg-surface-container-low rounded-xl p-space-md flex flex-col justify-between relative group hover:bg-surface-container transition-colors">
+<div>
+<div class="flex items-center justify-between mb-space-sm">
+<span class="w-6 h-6 rounded-full bg-surface-card text-on-surface font-mono-code-sm text-mono-code-sm flex items-center justify-center shadow-sm">02</span>
+<span class="px-space-xs py-space-2xs rounded-full bg-surface-card text-primary font-mono-code-sm text-mono-code-sm shadow-sm">BUFFER</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-space-2xs">Transactional Outbox</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-space-md">
+            ACID-compliant PostgreSQL write-ahead log &amp; Redis Celery task orchestration.
+          </p>
+<div class="space-y-space-xs">
+<div class="p-space-xs bg-surface-card rounded-lg flex items-center justify-between text-body-sm">
+<span class="font-mono-code-sm text-mono-code-sm text-on-surface">PostgreSQL WAL Log</span>
+<span class="font-mono-code-sm text-mono-code-sm text-status-emerald">Durable</span>
+</div>
+<div class="p-space-xs bg-surface-card rounded-lg flex items-center justify-between text-body-sm">
+<span class="font-mono-code-sm text-mono-code-sm text-on-surface">Redis Celery Cluster</span>
+<span class="font-mono-code-sm text-mono-code-sm text-primary">In-Memory</span>
+</div>
+<div class="p-space-xs bg-surface-card rounded-lg flex items-center justify-between text-body-sm">
+<span class="font-mono-code-sm text-mono-code-sm text-on-surface">Worker Pool Alpha/Beta</span>
+<span class="font-mono-code-sm text-mono-code-sm text-status-indigo">64 Nodes</span>
+</div>
+</div>
+</div>
+<div class="pt-space-md mt-space-md flex items-center justify-between text-mono-code-sm font-mono-code-sm text-outline">
+<span class="">Transit: ~14ms</span>
+<span class="text-status-emerald font-semibold">At-Least-Once</span>
+</div>
+</div>
+<div class="bg-surface-container-low rounded-xl p-space-md flex flex-col justify-between relative group hover:bg-surface-container transition-colors">
+<div>
+<div class="flex items-center justify-between mb-space-sm">
+<span class="w-6 h-6 rounded-full bg-surface-card text-on-surface font-mono-code-sm text-mono-code-sm flex items-center justify-center shadow-sm">03</span>
+<span class="px-space-xs py-space-2xs rounded-full bg-surface-card text-status-indigo font-mono-code-sm text-mono-code-sm shadow-sm">COMPUTE</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-space-2xs">Algorithmic Engines</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-space-md">
+            Parallel domain-specialized analytical models calculating optimal adjustments.
+          </p>
+<div class="space-y-space-xs">
+<div class="p-space-xs bg-surface-card rounded-lg flex items-center justify-between text-body-sm">
+<span class="font-mono-code-sm text-mono-code-sm text-on-surface">Repricer Sentinel</span>
+<span class="font-mono-code-sm text-mono-code-sm text-status-emerald">Buy Box</span>
+</div>
+<div class="p-space-xs bg-surface-card rounded-lg flex items-center justify-between text-body-sm">
+<span class="font-mono-code-sm text-mono-code-sm text-on-surface">PPC Bid Optimizer</span>
+<span class="font-mono-code-sm text-mono-code-sm text-status-indigo">RoAS Math</span>
+</div>
+<div class="p-space-xs bg-surface-card rounded-lg flex items-center justify-between text-body-sm">
+<span class="font-mono-code-sm text-mono-code-sm text-on-surface">NeuroRank™ SEO Harvester</span>
+<span class="font-mono-code-sm text-mono-code-sm text-status-amber">KW Index</span>
+</div>
+</div>
+</div>
+<div class="pt-space-md mt-space-md flex items-center justify-between text-mono-code-sm font-mono-code-sm text-outline">
+<span class="">Execution: ~24ms</span>
+<span class="text-status-emerald font-semibold">Stateless</span>
+</div>
+</div>
+<div class="bg-surface-container-low rounded-xl p-space-md flex flex-col justify-between relative group hover:bg-surface-container transition-colors">
+<div>
+<div class="flex items-center justify-between mb-space-sm">
+<span class="w-6 h-6 rounded-full bg-surface-card text-on-surface font-mono-code-sm text-mono-code-sm flex items-center justify-center shadow-sm">04</span>
+<span class="px-space-xs py-space-2xs rounded-full bg-surface-card text-status-amber font-mono-code-sm text-mono-code-sm shadow-sm">DEFENSE</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-space-2xs">Circuit Breakers</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-space-md">
+            Mathematical sanity validation before any mutation payload can leave the sandbox.
+          </p>
+<div class="space-y-space-xs">
+<div class="p-space-xs bg-surface-card rounded-lg flex items-center justify-between text-body-sm">
+<span class="font-mono-code-sm text-mono-code-sm text-on-surface">18.5% Hard Margin Floor</span>
+<span class="font-mono-code-sm text-mono-code-sm text-status-amber">Enforced</span>
+</div>
+<div class="p-space-xs bg-surface-card rounded-lg flex items-center justify-between text-body-sm">
+<span class="font-mono-code-sm text-mono-code-sm text-on-surface">$4.50 Max CPC Bid Cap</span>
+<span class="font-mono-code-sm text-mono-code-sm text-status-amber">Clamped</span>
+</div>
+<div class="p-space-xs bg-surface-card rounded-lg flex items-center justify-between text-body-sm">
+<span class="font-mono-code-sm text-mono-code-sm text-on-surface">Inventory Starvation</span>
+<span class="font-mono-code-sm text-mono-code-sm text-status-rose">Block Sync</span>
+</div>
+</div>
+</div>
+<div class="pt-space-md mt-space-md flex items-center justify-between text-mono-code-sm font-mono-code-sm text-outline">
+<span class="">Verdict: ~7ms</span>
+<span class="text-status-emerald font-semibold">Strict Guard</span>
+</div>
+</div>
+<div class="bg-surface-container-low rounded-xl p-space-md flex flex-col justify-between relative group hover:bg-surface-container transition-colors">
+<div>
+<div class="flex items-center justify-between mb-space-sm">
+<span class="w-6 h-6 rounded-full bg-surface-card text-on-surface font-mono-code-sm text-mono-code-sm flex items-center justify-center shadow-sm">05</span>
+<span class="px-space-xs py-space-2xs rounded-full bg-surface-card text-status-emerald font-mono-code-sm text-mono-code-sm shadow-sm">MUTATION</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-space-2xs">HITL &amp; SP-API Push</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-space-md">
+            Dry-Run safe staging with dual authorization gateway for live Amazon seller sync.
+          </p>
+<div class="space-y-space-xs">
+<div class="p-space-xs bg-surface-card rounded-lg flex items-center justify-between text-body-sm">
+<span class="font-mono-code-sm text-mono-code-sm text-on-surface">Dry-Run Sandbox</span>
+<span class="font-mono-code-sm text-mono-code-sm text-status-indigo">Default</span>
+</div>
+<div class="p-space-xs bg-surface-card rounded-lg flex items-center justify-between text-body-sm">
+<span class="font-mono-code-sm text-mono-code-sm text-on-surface">Human Approval Gate</span>
+<span class="font-mono-code-sm text-mono-code-sm text-status-amber">HITL Queue</span>
+</div>
+<div class="p-space-xs bg-surface-card rounded-lg flex items-center justify-between text-body-sm">
+<span class="font-mono-code-sm text-mono-code-sm text-on-surface">Leaky Bucket Push</span>
+<span class="font-mono-code-sm text-mono-code-sm text-status-emerald">SP-API Mutate</span>
+</div>
+</div>
+</div>
+<div class="pt-space-md mt-space-md flex items-center justify-between text-mono-code-sm font-mono-code-sm text-outline">
+<span class="">Push E2E: ~72ms</span>
+<span class="text-status-emerald font-semibold">Dry-Run Staged</span>
+</div>
+</div>
+</div>
+</section>
+<section class="grid grid-cols-1 lg:grid-cols-2 gap-space-lg mb-space-2xl">
+<div class="bg-surface-card rounded-xl p-space-xl shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="w-8 h-8 rounded-lg bg-surface-container text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">sync_saved_locally</span>
+</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Transactional Outbox &amp; Event Sourcing</h3>
+</div>
+<span class="px-space-xs py-space-2xs bg-surface-container-low text-primary font-mono-code-sm text-mono-code-sm rounded-full">CORE RELIABILITY</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-space-md">
+          To eliminate race conditions, phantom overwrites, and rate-limit drops, AmzSphere treats Amazon's SP-API not as a direct HTTP target, but as an asynchronous event sink. All mutations are first written inside an ACID transaction to our Postgres Outbox table.
+        </p>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-sm mb-space-md">
+<div class="bg-surface-container-low p-space-sm rounded-xl">
+<span class="font-label-sm text-label-sm text-outline uppercase block mb-space-2xs">Decoupled UI Responsiveness</span>
+<p class="font-body-sm text-body-sm text-on-surface">UI triggers return in &lt;10ms. Bulk updates are queued safely across 64 Celery workers regardless of external SP-API congestion.</p>
+</div>
+<div class="bg-surface-container-low p-space-sm rounded-xl">
+<span class="font-label-sm text-label-sm text-outline uppercase block mb-space-2xs">Zero Dual-Write Failures</span>
+<p class="font-body-sm text-body-sm text-on-surface">If Amazon throws a 503 or network socket times out, the message never drops. Outbox state persists and retries with jitter.</p>
+</div>
+</div>
+<div class="p-space-md bg-surface-container-lowest rounded-xl font-mono-code-sm text-mono-code-sm text-on-surface-variant space-y-space-2xs">
+<div class="flex items-center justify-between text-outline">
+<span class="">// Outbox Row Schema Signature</span>
+<span class="">idempotency_key = sha256(asin + price_delta + timestamp)</span>
+</div>
+<div class="text-primary font-semibold">INSERT INTO sp_outbox_events (event_id, asin, state, target_payload) VALUES</div>
+<div class="text-on-surface pl-space-md">('evt_90412', 'B09V72K88L', 'STAGED_DRY_RUN', '{"new_price": 47.45, "margin": 0.198}');</div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-space-md mt-space-md text-body-sm text-outline">
+<span class="flex items-center gap-space-2xs"><span class="material-symbols-outlined text-[16px] text-status-emerald">verified</span> WAL Log CDC (Change Data Capture) Active</span>
+<span class="font-mono-code-sm text-mono-code-sm">Retry Cap: 5 Attempts</span>
+</div>
+</div>
+<div class="bg-surface-card rounded-xl p-space-xl shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="w-8 h-8 rounded-lg bg-surface-container text-status-amber flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">balance</span>
+</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Mathematical Floor Enforcers</h3>
+</div>
+<span class="px-space-xs py-space-2xs bg-surface-container-low text-status-amber font-mono-code-sm text-mono-code-sm rounded-full">GUARDRAIL LOGIC</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-space-md">
+          Automated pricing algorithms frequently trigger catastrophic “race-to-the-bottom” spirals during competitive price-matching wars. The AmzSphere Sentinel halts downward pricing whenever net unit margins threaten to cross platform thresholds.
+        </p>
+<div class="p-space-md bg-surface-container-low rounded-xl mb-space-md">
+<div class="flex items-center justify-between font-mono-code-sm text-mono-code-sm text-on-surface font-semibold mb-space-2xs">
+<span class="">Net Unit Margin Equation</span>
+<span class="text-status-emerald">Threshold: 18.5% Net</span>
+</div>
+<div class="p-space-sm bg-surface-card rounded-lg font-mono-code-sm text-mono-code-sm text-on-surface overflow-x-auto">
+            Margin = (P_adj - COGS - FBA_Fee(weight, vol) - Referral_Fee(15%) - Tax) / P_adj ≥ 0.185
+          </div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-space-xs">
+            If competitor undercut drives Margin &lt; 0.185, pricing freezes at Floor Price with an instant Buy Box Surrender Alert dispatched to Slack/Teams.
+          </p>
+</div>
+<div class="grid grid-cols-3 gap-space-xs font-mono-code-sm text-mono-code-sm">
+<div class="p-space-xs bg-surface-container-low rounded-lg text-center">
+<span class="text-outline block text-label-sm">FBA Pick &amp; Pack</span>
+<span class="text-on-surface font-semibold">$5.40 Fixed</span>
+</div>
+<div class="p-space-xs bg-surface-container-low rounded-lg text-center">
+<span class="text-outline block text-label-sm">Standard COGS</span>
+<span class="text-on-surface font-semibold">$19.20 Landed</span>
+</div>
+<div class="p-space-xs bg-surface-container-low rounded-lg text-center">
+<span class="text-outline block text-label-sm">Abs Floor Limit</span>
+<span class="text-status-amber font-semibold">$38.99 Unit</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-space-md mt-space-md text-body-sm text-outline">
+<span class="flex items-center gap-space-2xs"><span class="material-symbols-outlined text-[16px] text-status-amber">security</span> Undercut Dampening: Max -$0.05 step delta</span>
+<span class="font-mono-code-sm text-mono-code-sm">Enforced Pre-Queue</span>
+</div>
+</div>
+<div class="bg-surface-card rounded-xl p-space-xl shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="w-8 h-8 rounded-lg bg-surface-container text-status-indigo flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">water_drop</span>
+</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">SP-API Token Quotas &amp; Leaky Bucket</h3>
+</div>
+<span class="px-space-xs py-space-2xs bg-surface-container-low text-status-indigo font-mono-code-sm text-mono-code-sm rounded-full">THROTTLE PROTOCOL</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-space-md">
+          Amazon strictly throttles feeds and listing updates (Pricing API: 10 requests/sec, burst to 20). Our proxy architecture prevents HTTP 429 quota exhaustion through an asynchronous Redis token bucket algorithm that paces outbound traffic.
+        </p>
+<div class="space-y-space-xs mb-space-md">
+<div class="flex items-center justify-between p-space-sm bg-surface-container-low rounded-xl">
+<div>
+<div class="font-label-lg text-label-lg text-on-surface">Listings Items Feed Quota</div>
+<div class="font-mono-code-sm text-mono-code-sm text-outline">5.0 req/sec sustained • 10.0 burst capacity</div>
+</div>
+<div class="text-right font-mono-metric-md text-mono-metric-md text-status-emerald">
+              88.2% Avail
+            </div>
+</div>
+<div class="flex items-center justify-between p-space-sm bg-surface-container-low rounded-xl">
+<div>
+<div class="font-label-lg text-label-lg text-on-surface">Reports API (SQP &amp; Inventory)</div>
+<div class="font-mono-code-sm text-mono-code-sm text-outline">0.0222 req/sec • 1 req every 45 seconds</div>
+</div>
+<div class="text-right font-mono-metric-md text-mono-metric-md text-status-emerald">
+              100% Ready
+            </div>
+</div>
+</div>
+<div class="p-space-sm bg-surface-container-lowest rounded-lg font-mono-code-sm text-mono-code-sm text-on-surface-variant flex items-center justify-between">
+<span class="">Backoff Curve: T = min(60s, base * 2^retry + jitter)</span>
+<span class="text-status-emerald">Active Pacer</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-space-md mt-space-md text-body-sm text-outline">
+<span class="flex items-center gap-space-2xs"><span class="material-symbols-outlined text-[16px] text-status-emerald">verified</span> Automatic Header Inspection (x-amzn-RateLimit-Limit)</span>
+<span class="font-mono-code-sm text-mono-code-sm">0 Drops</span>
+</div>
+</div>
+<div class="bg-surface-card rounded-xl p-space-xl shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="w-8 h-8 rounded-lg bg-surface-container text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">how_to_reg</span>
+</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Human-in-the-Loop (HITL) Gatekeeper</h3>
+</div>
+<span class="px-space-xs py-space-2xs bg-surface-container-low text-primary font-mono-code-sm text-mono-code-sm rounded-full">GOVERNANCE</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-space-md">
+          Catalog attributes, title revisions, and wholesale volume tiers have irreversible consumer-facing impact. AmzSphere divides operational tasks into two distinct trust tiers: Autonomous &amp; Supervised.
+        </p>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-sm mb-space-md">
+<div class="bg-surface-container-low p-space-sm rounded-xl">
+<div class="flex items-center gap-space-xs mb-space-2xs">
+<span class="w-2 h-2 rounded-full bg-status-emerald"></span>
+<span class="font-label-md text-label-md text-on-surface">Autonomous Class A</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Real-time micro-repricing adjustments within safe margins (±$0.50) dispatch automatically with dry-run logs.</p>
+</div>
+<div class="bg-surface-container-low p-space-sm rounded-xl">
+<div class="flex items-center gap-space-xs mb-space-2xs">
+<span class="w-2 h-2 rounded-full bg-status-amber"></span>
+<span class="font-label-md text-label-md text-on-surface">Supervised Class B</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">B2B bulk bids, title alterations, parent-child variation edits, and inventory write-offs mandate 1-click human approval.</p>
+</div>
+</div>
+<div class="p-space-sm bg-surface-container-lowest rounded-lg font-mono-code-sm text-mono-code-sm flex items-center justify-between text-on-surface">
+<span class="">Staged in Review Queue: 4 Pending Actions</span>
+<a class="text-primary hover:underline font-semibold" href="#">Open B2B Queue →</a>
+</div>
+</div>
+<div class="flex items-center justify-between pt-space-md mt-space-md text-body-sm text-outline">
+<span class="flex items-center gap-space-2xs"><span class="material-symbols-outlined text-[16px] text-primary">fingerprint</span> Dual-Signoff Audit Logging</span>
+<span class="font-mono-code-sm text-mono-code-sm">ISO 27001 Ready</span>
+</div>
+</div>
+</section>
+<section class="bg-surface-card rounded-xl p-space-xl shadow-sm mb-space-2xl" id="simulation-trace-section"><div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md mb-space-lg"><div><div class="flex items-center gap-space-xs"><span class="w-2 h-2 rounded-full bg-status-emerald animate-pulse" id="sim-status-dot"></span><span class="font-mono-code-sm text-mono-code-sm text-outline uppercase" id="sim-status-text">Live Event Sandbox</span><span class="hidden px-space-xs py-space-2xs bg-surface-container text-primary font-mono-code-sm text-mono-code-sm rounded-full animate-pulse" id="sim-active-badge">● Simulating Event Ingestion...</span></div><h2 class="font-headline-lg text-headline-lg text-on-surface tracking-tight mt-space-2xs" id="sim-headline">Simulation Trace: #EVT-90413: PPC Bid Surge Guardrail on B07X81ML39 (Solar Power Pod 50W)</h2></div><div class="flex flex-wrap items-center gap-space-xs"><span class="px-space-sm py-space-2xs rounded-xl bg-surface-container-low font-mono-code-sm text-mono-code-sm text-on-surface" id="sim-event-badge">ID: #EVT-90413 • <span class="text-status-amber font-semibold">Circuit Breaker Enforced</span></span><button class="h-8 px-space-sm rounded-xl bg-surface-container text-primary hover:bg-surface-container-high transition-colors font-label-md text-label-md flex items-center gap-space-2xs cursor-pointer" id="re-run-trace-btn" type="button"><span class="material-symbols-outlined text-[16px]">replay</span><span id="rerun-btn-text" class="">Re-run Trace</span></button></div></div><div class="flex items-center gap-space-xs overflow-x-auto pb-space-sm mb-space-lg" id="sim-scenario-selector"><button class="h-8 px-space-md rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface-variant hover:text-on-surface font-label-md text-label-md flex items-center gap-space-xs transition-colors cursor-pointer event-select-btn" data-event="EVT-90412" type="button"><span class="material-symbols-outlined text-[14px]">sell</span><span class="">#EVT-90412: Competitor Price Drop</span></button><button class="h-8 px-space-md rounded-xl bg-primary text-on-primary font-label-md text-label-md flex items-center gap-space-xs transition-colors cursor-pointer shadow-sm event-select-btn" data-event="EVT-90413" type="button"><span class="material-symbols-outlined text-[14px]">ads_click</span><span class="">#EVT-90413: PPC Bid Surge Guardrail</span></button><button class="h-8 px-space-md rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface-variant hover:text-on-surface font-label-md text-label-md flex items-center gap-space-xs transition-colors cursor-pointer event-select-btn" data-event="EVT-90414" type="button"><span class="material-symbols-outlined text-[14px]">verified_user</span><span class="">#EVT-90414: B2B Quote Intercept</span></button></div><div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg"><div class="lg:col-span-7 flex flex-col gap-space-sm"><div class="relative pl-6 space-y-space-md before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-surface-container" id="trace-timeline-container"><div class="relative group trace-step-item" data-step="0"><span class="absolute -left-6 top-1 w-4 h-4 rounded-full bg-status-emerald flex items-center justify-center ring-4 ring-surface-card transition-all duration-300 step-icon-bubble"><span class="material-symbols-outlined text-surface-card text-[10px]">check</span></span><div class="bg-surface-container-low p-space-sm rounded-xl transition-all duration-300 step-box"><div class="flex items-center justify-between font-mono-code-sm text-mono-code-sm"><span class="text-on-surface font-semibold step-title">T+0ms • Ingestion</span><span class="text-status-emerald step-badge">HTTP 200 OK</span></div><p class="font-body-sm text-body-sm text-on-surface-variant mt-space-2xs step-desc">Amazon Advertising API webhook pushes Sponsored Products bid surge event for keyword <code class="text-primary font-mono-code-sm">solar power pod 50w</code> with proposed CPC spike to $6.80.</p></div></div><div class="relative group trace-step-item" data-step="1"><span class="absolute -left-6 top-1 w-4 h-4 rounded-full bg-primary flex items-center justify-center ring-4 ring-surface-card transition-all duration-300 step-icon-bubble"><span class="material-symbols-outlined text-surface-card text-[10px]">check</span></span><div class="bg-surface-container-low p-space-sm rounded-xl transition-all duration-300 step-box"><div class="flex items-center justify-between font-mono-code-sm text-mono-code-sm"><span class="text-on-surface font-semibold step-title">T+11ms • Outbox Persistence</span><span class="text-primary step-badge">WAL COMMIT 0x981C</span></div><p class="font-body-sm text-body-sm text-on-surface-variant mt-space-2xs step-desc">Staged in PostgreSQL transactional outbox (idempotency key <code class="text-primary font-mono-code-sm">evt_90413_ppc_surge</code>). Dispatched via Redis Celery queue to Worker-Pool-Beta.</p></div></div><div class="relative group trace-step-item" data-step="2"><span class="absolute -left-6 top-1 w-4 h-4 rounded-full bg-status-indigo flex items-center justify-center ring-4 ring-surface-card transition-all duration-300 step-icon-bubble"><span class="material-symbols-outlined text-surface-card text-[10px]">check</span></span><div class="bg-surface-container-low p-space-sm rounded-xl transition-all duration-300 step-box"><div class="flex items-center justify-between font-mono-code-sm text-mono-code-sm"><span class="text-on-surface font-semibold step-title">T+24ms • Algorithmic Evaluation</span><span class="text-status-indigo step-badge">Computed $3.95 (ACoS 24.0%)</span></div><p class="font-body-sm text-body-sm text-on-surface-variant mt-space-2xs step-desc">PPC Ads Engine evaluates target ACoS (target 24.0% vs trailing 36.8%). Computed target optimal bid: <code class="text-primary font-mono-code-sm">$3.95</code> (-$2.85 delta from requested spike).</p></div></div><div class="relative group trace-step-item" data-step="3"><span class="absolute -left-6 top-1 w-4 h-4 rounded-full bg-status-amber flex items-center justify-center ring-4 ring-surface-card transition-all duration-300 step-icon-bubble"><span class="material-symbols-outlined text-surface-card text-[10px]">warning</span></span><div class="bg-surface-container-low p-space-sm rounded-xl transition-all duration-300 step-box"><div class="flex items-center justify-between font-mono-code-sm text-mono-code-sm"><span class="text-on-surface font-semibold step-title">T+36ms • Circuit Breaker Guard</span><span class="text-status-amber font-semibold step-badge">CLAMPED ($4.50 Max Cap)</span></div><p class="font-body-sm text-body-sm text-on-surface-variant mt-space-2xs step-desc">Hard Bid Ceiling Circuit Breaker triggered. Proposed bid of $6.80 strictly clamped to configured safety ceiling of <code class="text-status-amber font-mono-code-sm">$4.50 max CPC</code>.</p></div></div><div class="relative group trace-step-item" data-step="4"><span class="absolute -left-6 top-1 w-4 h-4 rounded-full bg-status-emerald flex items-center justify-center ring-4 ring-surface-card transition-all duration-300 step-icon-bubble"><span class="material-symbols-outlined text-surface-card text-[10px]">check</span></span><div class="bg-surface-container-low p-space-sm rounded-xl transition-all duration-300 step-box"><div class="flex items-center justify-between font-mono-code-sm text-mono-code-sm"><span class="text-on-surface font-semibold step-title">T+58ms • Dispatch &amp; Sandbox Stage</span><span class="text-status-emerald font-semibold step-badge">Dry-Run Complete / Staged</span></div><p class="font-body-sm text-body-sm text-on-surface-variant mt-space-2xs step-desc">Clamped bid update ($4.50) safely staged in Dry-Run sandbox before outbound Amazon Ads API transmission.</p></div></div></div></div><div class="lg:col-span-5 flex flex-col gap-space-sm"><div class="flex items-center justify-between bg-surface-container-lowest p-space-xs rounded-xl shadow-sm"><div class="flex items-center gap-space-xs font-mono-code-sm text-mono-code-sm px-space-xs"><span class="material-symbols-outlined text-outline text-[16px]">data_object</span><span class="text-on-surface font-semibold">Sanitized JSON Event Payload</span></div><button class="h-7 px-space-xs rounded-lg hover:bg-surface-container transition-colors text-outline hover:text-on-surface font-mono-code-sm text-mono-code-sm flex items-center gap-space-2xs cursor-pointer" id="copy-json-btn" type="button"><span class="material-symbols-outlined text-[14px]" id="copy-icon">content_copy</span><span id="copy-label" class="">Copy JSON</span></button></div><div class="bg-sidebar-surface rounded-xl p-space-md font-mono-code-sm text-mono-code-sm text-inverse-on-surface overflow-x-auto shadow-sm flex-1"><pre class="leading-relaxed"><code class="text-primary-fixed" id="json-payload-code">{
+  <span class="text-outline">"event_id"</span>: <span class="text-secondary-fixed">"EVT-90413-PPCSURGE"</span>,
+  <span class="text-outline">"timestamp"</span>: <span class="text-secondary-fixed">"2025-02-24T18:42:10.142Z"</span>,
+  <span class="text-outline">"source"</span>: <span class="text-secondary-fixed">"aws.advertising.sp_api"</span>,
+  <span class="text-outline">"asin"</span>: <span class="text-secondary-fixed">"B07X81ML39"</span>,
+  <span class="text-outline">"campaign"</span>: <span class="text-secondary-fixed">"SP - Solar Power Pod - Exact"</span>,
+  <span class="text-outline">"keyword"</span>: <span class="text-secondary-fixed">"solar power pod 50w"</span>,
+  <span class="text-outline">"proposed_bid_cpc"</span>: <span class="text-status-amber">6.80</span>,
+  <span class="text-outline">"engine_evaluation"</span>: {
+    <span class="text-outline">"target_acos"</span>: <span class="text-status-amber">0.24</span>,
+    <span class="text-outline">"current_trailing_acos"</span>: <span class="text-status-amber">0.368</span>,
+    <span class="text-outline">"model_optimal_bid"</span>: <span class="text-status-amber">3.95</span>
+  },
+  <span class="text-outline">"circuit_breaker"</span>: {
+    <span class="text-outline">"bid_ceiling_rule"</span>: <span class="text-secondary-fixed">"RULE_PPC_MAX_CPC_CAP"</span>,
+    <span class="text-outline">"ceiling_limit"</span>: <span class="text-status-amber">4.50</span>,
+    <span class="text-outline">"action_taken"</span>: <span class="text-secondary-fixed">"CLAMP_TO_CEILING"</span>,
+    <span class="text-outline">"clamped_bid"</span>: <span class="text-status-amber">4.50</span>,
+    <span class="text-outline">"violation"</span>: <span class="text-status-emerald">true</span>
+  },
+  <span class="text-outline">"status"</span>: <span class="text-secondary-fixed">"STAGED_SANDBOX"</span>,
+  <span class="text-outline">"total_latency_ms"</span>: <span class="text-status-amber">58.1</span>
+}</code></pre></div><div class="p-space-sm bg-surface-container-low rounded-xl flex items-center justify-between font-mono-code-sm text-mono-code-sm"><span class="text-outline">Simulation Output:</span><span class="text-status-emerald font-semibold flex items-center gap-space-2xs" id="sim-output-badge"><span class="w-2 h-2 rounded-full bg-status-amber"></span><span id="sim-output-text" class="text-status-amber">Circuit Breaker Enforced: Proposed $6.80 CPC Clamped to $4.50 Ceiling (Dry-Run Staged)</span></span></div></div></div></section>
+<footer class="mt-space-md mb-space-2xl p-space-lg bg-surface-card rounded-xl shadow-sm flex flex-col md:flex-row items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-xl bg-surface-container text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">developer_board</span>
+</div>
+<div>
+<div class="font-headline-sm text-headline-sm text-on-surface">Need a custom private webhook ingestion worker?</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Deploy custom EventBridge rule pipes or Kafka direct connect for aggregators handling &gt;100k SKU catalogs.</p>
+</div>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="h-9 px-space-md rounded-xl bg-surface-container text-primary hover:bg-surface-container-high transition-colors font-label-md text-label-md" type="button">
+        Read Architecture Docs
+      </button>
+<button class="h-9 px-space-md rounded-xl bg-primary-container text-on-primary hover:bg-primary transition-colors font-label-md text-label-md" type="button">
+        Contact Infrastructure Team
+      </button>
+</div>
+</footer>
+</div>
+<script>
+  (function() {
+    // 1. Highlight the active navigation link for "How It Works"
+    const navItems = document.querySelectorAll('aside nav a');
+    navItems.forEach(item => {
+      if (item.getAttribute('data-path') === 'how-it-works') {
+        item.classList.add('bg-sidebar-active', 'text-on-primary');
+        item.classList.remove('text-outline');
+      } else {
+        item.classList.remove('bg-sidebar-active', 'text-on-primary');
+      }
+    });
+
+    // 2. Interactive JSON Copy feature
+    const copyBtn = document.getElementById('copy-json-btn');
+    const copyLabel = document.getElementById('copy-label');
+    if (copyBtn && copyLabel) {
+      copyBtn.addEventListener('click', function() {
+        const jsonText = `{
+  "event_id": "EVT-90412-ANYOFFER",
+  "asin": "B09V72K88L",
+  "marketplace_id": "ATVPDKIKX0DER",
+  "trigger": {
+    "competitor_seller_id": "A2N9V7K80",
+    "previous_price": 49.20,
+    "new_price": 47.50,
+    "buy_box_lost": true
+  },
+  "sentinel_evaluation": {
+    "recommended_counter": 47.45,
+    "step_delta": -0.05,
+    "estimated_net_margin": "19.82%",
+    "hard_floor_limit": "18.50%",
+    "circuit_breaker_pass": true
+  },
+  "telemetry": {
+    "ingest_latency_ms": 4.2,
+    "eval_latency_ms": 38.0,
+    "total_pipeline_ms": 72.4,
+    "dry_run_state": "STAGED"
+  }
+}`;
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(jsonText).then(() => {
+            copyLabel.textContent = 'Copied!';
+            setTimeout(() => { copyLabel.textContent = 'Copy JSON'; }, 2000);
+          });
+        } else {
+          copyLabel.textContent = 'Copied!';
+          setTimeout(() => { copyLabel.textContent = 'Copy JSON'; }, 2000);
+        }
+      });
+    }
+
+    // 3. Interactive Webhook Simulation trigger
+    const simBtn = document.getElementById('trigger-sim-btn');
+    const rerunBtn = document.getElementById('re-run-trace-btn');
+    function triggerSimulationAnimation() {
+      const traceNodes = document.querySelectorAll('.space-y-space-md > .relative');
+      traceNodes.forEach((node, i) => {
+        node.style.opacity = '0.3';
+        node.style.transform = 'translateY(4px)';
+        setTimeout(() => {
+          node.style.transition = 'all 0.3s ease';
+          node.style.opacity = '1';
+          node.style.transform = 'translateY(0)';
+        }, (i + 1) * 120);
+      });
+    }
+
+    if (simBtn) simBtn.addEventListener('click', triggerSimulationAnimation);
+    if (rerunBtn) rerunBtn.addEventListener('click', triggerSimulationAnimation);
+  })();
+</script></main></div>
+
+<script id="sim-controller-script" class="">
+(function() {
+  const scenarios = {
+    'EVT-90412': {
+      headline: 'Simulation Trace: Competitor Price Drop on B09V72K88L',
+      badge: 'ID: #EVT-90412',
+      output: 'Verified Zero Hazard',
+      outputClass: 'text-status-emerald',
+      outputDot: 'bg-status-emerald',
+      steps: [
+        { time: 'T+0ms • Ingestion', badge: 'HTTP 200 OK', badgeClass: 'text-status-emerald', desc: 'AWS EventBridge delivers <code class="text-primary font-mono-code-sm">AnyOfferChanged</code>. Competitor <span class="text-on-surface font-medium">“SwiftDirect”</span> drops price from $49.20 to $47.50 on ASIN B09V72K88L.' },
+        { time: 'T+14ms • Outbox Persistence', badge: 'WAL Commit 0x4B2A', badgeClass: 'text-primary', desc: 'Payload written to PostgreSQL Outbox table with idempotency key. Celery Redis task spawned to Worker-Cluster-04.' },
+        { time: 'T+38ms • Algorithmic Evaluation', badge: 'Delta -$1.75', badgeClass: 'text-status-indigo', desc: 'Repricer Sentinel calculates optimal Buy Box counter-offer at $47.45 (-$0.05 undercut margin target) to recapture primary buy box position.' },
+        { time: 'T+45ms • Circuit Breaker Guard', badge: 'PASSED (19.8% > 18.5%)', badgeClass: 'text-status-emerald', desc: 'Target price $47.45 gives net unit margin of 19.82%, well above hard margin floor of 18.50%. Starvation inventory check confirms 312 FBA units available.' },
+        { time: 'T+72ms • Dispatch & Sandbox Stage', badge: 'Dry-Run Complete', badgeClass: 'text-primary font-semibold', desc: 'Payload validated and logged in Dry-Run registry. Live Push queued for manual batch flush or automated sync window (120s cadence).' }
+      ],
+      rawJson: {
+        event_id: 'EVT-90412-ANYOFFER',
+        asin: 'B09V72K88L',
+        marketplace_id: 'ATVPDKIKX0DER',
+        trigger: {
+          competitor_seller_id: 'A2N9V7K80',
+          previous_price: 49.20,
+          new_price: 47.50,
+          buy_box_lost: true
+        },
+        sentinel_evaluation: {
+          recommended_counter: 47.45,
+          step_delta: -0.05,
+          estimated_net_margin: '19.82%',
+          hard_floor_limit: '18.50%',
+          circuit_breaker_pass: true
+        },
+        telemetry: {
+          ingest_latency_ms: 4.2,
+          eval_latency_ms: 38.0,
+          total_pipeline_ms: 72.4,
+          dry_run_state: 'STAGED'
+        }
+      }
+    },
+    'EVT-90413': {
+      headline: 'Simulation Trace: PPC Bid Surge Guardrail (Solar Power Pod)',
+      badge: 'ID: #EVT-90413',
+      output: 'Bid Clamped to $4.50 Cap',
+      outputClass: 'text-status-amber',
+      outputDot: 'bg-status-amber',
+      steps: [
+        { time: 'T+0ms • Ingestion', badge: 'AMAZON ADS API', badgeClass: 'text-primary', desc: 'Sponsored Products real-time stream reports target keyword CPC bid spike to $5.80 on keyword <span class="text-on-surface font-medium">"portable solar generator 300w"</span>.' },
+        { time: 'T+11ms • Outbox Persistence', badge: 'WAL Commit 0x7E19', badgeClass: 'text-primary', desc: 'Campaign campaign_id_8941 event persisted in Postgres. Distributed worker assigned to PPC Bid Optimizer engine.' },
+        { time: 'T+29ms • Algorithmic Evaluation', badge: 'RoAS Model Calc', badgeClass: 'text-status-indigo', desc: 'NeuroRank™ calculates Target RoAS 3.4x at recommended maximum bid $4.85, surpassing allowed account clamp threshold.' },
+        { time: 'T+36ms • Circuit Breaker Guard', badge: 'CLAMPED ($4.50 MAX)', badgeClass: 'text-status-amber font-semibold', desc: 'Hard Circuit Breaker #2 triggered: Max CPC bid capped at $4.50 to prevent budget depletion. RoAS preservation enforced.' },
+        { time: 'T+58ms • Dispatch & Sandbox Stage', badge: 'Staged for Review', badgeClass: 'text-status-amber font-semibold', desc: 'Clamped bid payload queued into Dry-Run audit log. Alert pushed to AdOps Channel #ppc-alerts.' }
+      ],
+      rawJson: {
+        event_id: 'EVT-90413-BIDCAP',
+        campaign_id: 'SP-88392-SOLAR',
+        keyword: 'portable solar generator 300w',
+        trigger: {
+          suggested_market_cpc: 5.80,
+          historical_cpc: 3.20,
+          surge_pct: '+81.2%'
+        },
+        sentinel_evaluation: {
+          recommended_bid: 4.85,
+          hard_cap_limit: 4.50,
+          action_taken: 'CLAMP_TO_CAP',
+          circuit_breaker_pass: false
+        },
+        telemetry: {
+          ingest_latency_ms: 3.1,
+          eval_latency_ms: 25.9,
+          total_pipeline_ms: 58.0,
+          dry_run_state: 'STAGED_CLAMPED'
+        }
+      }
+    },
+    'EVT-90414': {
+      headline: 'Simulation Trace: B2B High-Volume Quote Intercept (Apex Logistics)',
+      badge: 'ID: #EVT-90414',
+      output: 'HITL Human Review Mandated',
+      outputClass: 'text-status-indigo',
+      outputDot: 'bg-status-indigo',
+      steps: [
+        { time: 'T+0ms • Ingestion', badge: 'B2B RFQ EVENT', badgeClass: 'text-status-emerald', desc: 'B2B Amazon Business bulk RFQ received for 500 units of SKU <code class="text-primary font-mono-code-sm">SLR-POD-PRO-BLK</code> from tier-1 verified buyer.' },
+        { time: 'T+16ms • Outbox Persistence', badge: 'WAL Commit 0x9A32', badgeClass: 'text-primary', desc: 'ACID transaction secured in Outbox queue with idempotent key sha256(b2b_rfq_apex_500). Dual-signoff workflow triggered.' },
+        { time: 'T+34ms • Algorithmic Evaluation', badge: 'Volume Discount', badgeClass: 'text-status-indigo', desc: 'Wholesale pricing model proposes $39.80/unit (16.2% discount) yielding $19,900 gross settlement.' },
+        { time: 'T+49ms • Circuit Breaker Guard', badge: 'HITL ESCALATION', badgeClass: 'text-status-amber font-semibold', desc: 'Wholesale order value exceeds $10,000 threshold and touches Tier-B governance policy. Automatic bypass blocked.' },
+        { time: 'T+64ms • Dispatch & Sandbox Stage', badge: 'Action Queued #4', badgeClass: 'text-status-indigo font-semibold', desc: 'Action held in B2B Approvals queue. Notification dispatched with 1-click accept/counter toggle.' }
+      ],
+      rawJson: {
+        event_id: 'EVT-90414-B2B-RFQ',
+        customer_tier: 'Enterprise Business Buyer',
+        order_volume: 500,
+        sku: 'SLR-POD-PRO-BLK',
+        trigger: {
+          catalog_unit_price: 47.50,
+          requested_discount: '18.0%',
+          proposed_quote: 39.80
+        },
+        sentinel_evaluation: {
+          net_margin_at_quote: '16.4%',
+          policy_tier: 'Class B (Supervised)',
+          auto_execute: false,
+          hitl_approval_required: true
+        },
+        telemetry: {
+          ingest_latency_ms: 4.8,
+          eval_latency_ms: 32.2,
+          total_pipeline_ms: 64.0,
+          dry_run_state: 'QUEUED_FOR_APPROVAL'
+        }
+      }
+    }
+  };
+
+  let currentEventId = 'EVT-90412';
+  let isSimulating = false;
+
+  function renderJson(obj) {
+    const str = JSON.stringify(obj, null, 2);
+    return str.replace(/("[\w_]+")(?=\s*:)/g, '<span class="text-outline">$1</span>')
+              .replace(/(:\s*)("[^"]*")/g, '$1<span class="text-secondary-fixed">$2</span>')
+              .replace(/(:\s*)(\b\d+\.?\d*\b)/g, '$1<span class="text-status-amber">$2</span>')
+              .replace(/(:\s*)(true|false)/g, '$1<span class="text-status-emerald">$2</span>');
+  }
+
+  function applyScenario(eventId, triggerSim = false) {
+    currentEventId = eventId;
+    const data = scenarios[eventId];
+    if (!data) return;
+
+    document.getElementById('sim-headline').textContent = data.headline;
+    document.getElementById('sim-event-badge').textContent = data.badge;
+    
+    const outBadge = document.getElementById('sim-output-badge');
+    outBadge.className = `font-semibold flex items-center gap-space-2xs ${data.outputClass}`;
+    outBadge.innerHTML = `<span class="w-2 h-2 rounded-full ${data.outputDot}"></span><span>${data.output}</span>`;
+
+    const stepNodes = document.querySelectorAll('.trace-step-item');
+    stepNodes.forEach((node, idx) => {
+      if (data.steps[idx]) {
+        node.querySelector('.step-title').textContent = data.steps[idx].time;
+        const badge = node.querySelector('.step-badge');
+        badge.className = `step-badge ${data.steps[idx].badgeClass}`;
+        badge.textContent = data.steps[idx].badge;
+        node.querySelector('.step-desc').innerHTML = data.steps[idx].desc;
+      }
+    });
+
+    document.getElementById('json-payload-code').innerHTML = renderJson(data.rawJson);
+
+    // Update pill buttons active state
+    document.querySelectorAll('.event-select-btn').forEach(btn => {
+      if (btn.getAttribute('data-event') === eventId) {
+        btn.className = 'h-8 px-space-md rounded-xl bg-primary text-on-primary font-label-md text-label-md flex items-center gap-space-xs transition-colors cursor-pointer shadow-sm event-select-btn';
+      } else {
+        btn.className = 'h-8 px-space-md rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface-variant hover:text-on-surface font-label-md text-label-md flex items-center gap-space-xs transition-colors cursor-pointer event-select-btn';
+      }
+    });
+
+    if (triggerSim) {
+      runSimulationAnimation();
+    }
+  }
+
+  function runSimulationAnimation() {
+    if (isSimulating) return;
+    isSimulating = true;
+
+    const activeBadge = document.getElementById('sim-active-badge');
+    const rerunBtnText = document.getElementById('rerun-btn-text');
+    const statusText = document.getElementById('sim-status-text');
+    const traceItems = document.querySelectorAll('.trace-step-item');
+
+    if (activeBadge) activeBadge.classList.remove('hidden');
+    if (statusText) statusText.textContent = 'Simulating Event Ingestion...';
+    if (rerunBtnText) rerunBtnText.textContent = 'Streaming...';
+
+    // Dim all items
+    traceItems.forEach(item => {
+      item.style.opacity = '0.2';
+      item.style.transform = 'translateX(-6px)';
+      item.style.transition = 'all 0.25s ease';
+      const bubble = item.querySelector('.step-icon-bubble');
+      if (bubble) bubble.classList.add('scale-75');
+    });
+
+    // Sequentially activate items
+    traceItems.forEach((item, i) => {
+      setTimeout(() => {
+        item.style.opacity = '1';
+        item.style.transform = 'translateX(0)';
+        const bubble = item.querySelector('.step-icon-bubble');
+        if (bubble) {
+          bubble.classList.remove('scale-75');
+          bubble.classList.add('ring-primary-container');
+          setTimeout(() => bubble.classList.remove('ring-primary-container'), 400);
+        }
+      }, (i + 1) * 220);
+    });
+
+    setTimeout(() => {
+      if (activeBadge) activeBadge.classList.add('hidden');
+      if (statusText) statusText.textContent = 'Live Event Sandbox';
+      if (rerunBtnText) rerunBtnText.textContent = 'Re-run Trace';
+      isSimulating = false;
+    }, (traceItems.length + 1) * 220);
+  }
+
+  // Event selector clicks
+  document.querySelectorAll('.event-select-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const evId = this.getAttribute('data-event');
+      applyScenario(evId, true);
+    });
+  });
+
+  // Re-run and Header Test Sandbox buttons
+  const rerunBtn = document.getElementById('re-run-trace-btn');
+  const headerSimBtn = document.getElementById('trigger-sim-btn');
+  if (rerunBtn) rerunBtn.addEventListener('click', () => runSimulationAnimation());
+  if (headerSimBtn) {
+    headerSimBtn.addEventListener('click', () => {
+      const section = document.getElementById('simulation-trace-section');
+      if (section) section.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      runSimulationAnimation();
+    });
+  }
+
+  // Copy JSON handler
+  const copyBtn = document.getElementById('copy-json-btn');
+  const copyLabel = document.getElementById('copy-label');
+  const copyIcon = document.getElementById('copy-icon');
+  if (copyBtn && copyLabel) {
+    copyBtn.addEventListener('click', function() {
+      const currentPayload = JSON.stringify(scenarios[currentEventId].rawJson, null, 2);
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(currentPayload).then(() => {
+          copyLabel.textContent = 'Copied!';
+          if (copyIcon) copyIcon.textContent = 'check';
+          setTimeout(() => {
+            copyLabel.textContent = 'Copy JSON';
+            if (copyIcon) copyIcon.textContent = 'content_copy';
+          }, 2000);
+        });
+      }
+    });
+  }
+})();
+</script></body></html>

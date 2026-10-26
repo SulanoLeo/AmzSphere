@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={"darkMode":"class","theme":{"extend":{"colors":{"background":"#f8f9ff","surface-container-high":"#dce9ff","tertiary-container":"#885500","surface-variant":"#d3e4fe","error-container":"#ffdad6","on-tertiary-fixed-variant":"#653e00","on-primary-fixed-variant":"#3323cc","surface-card":"#FFFFFF","surface-dim":"#cbdbf5","status-rose":"#F43F5E","primary-fixed":"#e2dfff","workspace-bg":"#F8FAFC","sidebar-card":"#111827","on-tertiary-container":"#ffd4a4","status-amber":"#F59E0B","on-surface":"#0b1c30","sidebar-border":"#1F2937","on-background":"#0b1c30","inverse-primary":"#c3c0ff","metric-line":"#0E7490","on-secondary":"#ffffff","on-primary":"#ffffff","on-secondary-fixed":"#00201d","on-primary-fixed":"#0f0069","outline-variant":"#c7c4d8","sidebar-surface":"#0B0F19","on-secondary-container":"#006f67","inverse-surface":"#213145","sidebar-active":"#4338CA","secondary-fixed":"#9cf2e8","on-secondary-fixed-variant":"#00504a","outline":"#777587","primary":"#3525cd","surface-tint":"#4d44e3","surface-container":"#e5eeff","surface-border":"#E2E8F0","status-emerald":"#10B981","inverse-on-surface":"#eaf1ff","on-error-container":"#93000a","secondary-container":"#99efe5","primary-fixed-dim":"#c3c0ff","on-tertiary-fixed":"#2a1700","on-primary-container":"#dad7ff","surface-container-lowest":"#ffffff","tertiary-fixed-dim":"#ffb95f","surface-bright":"#f8f9ff","on-tertiary":"#ffffff","secondary-fixed-dim":"#80d5cb","error":"#ba1a1a","on-surface-variant":"#464555","surface-container-low":"#eff4ff","primary-container":"#4f46e5","surface-container-highest":"#d3e4fe","surface":"#f8f9ff","status-indigo":"#6366F1","on-error":"#ffffff","tertiary":"#684000","secondary":"#006a63","tertiary-fixed":"#ffddb8"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"margin-desktop":"1.75rem","gutter":"1rem","gutter-desktop":"1.25rem","space-2xs":"0.125rem","space-lg":"1rem","space-xs":"0.25rem","margin":"1rem","space-sm":"0.5rem","space-2xl":"2rem","space-md":"0.75rem","space-xl":"1.5rem"},"fontFamily":{"headline-md":["Plus Jakarta Sans"],"label-lg":["Inter"],"label-md":["Inter"],"headline-xl":["Plus Jakarta Sans"],"body-sm":["Inter"],"label-sm":["Inter"],"mono-code-sm":["JetBrains Mono"],"headline-sm":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"],"body-md":["Inter"],"mono-metric-md":["JetBrains Mono"],"headline-xl-mobile":["Plus Jakarta Sans"],"mono-metric-lg":["JetBrains Mono"],"body-lg":["Inter"]},"fontSize":{"headline-md":["18px",{"lineHeight":"26px","letterSpacing":"-0.015em","fontWeight":"600"}],"label-lg":["13px",{"lineHeight":"18px","fontWeight":"600"}],"label-md":["11px",{"lineHeight":"16px","letterSpacing":"0.04em","fontWeight":"600"}],"headline-xl":["30px",{"lineHeight":"38px","letterSpacing":"-0.025em","fontWeight":"700"}],"body-sm":["12px",{"lineHeight":"18px","fontWeight":"400"}],"label-sm":["10px",{"lineHeight":"14px","letterSpacing":"0.05em","fontWeight":"700"}],"mono-code-sm":["11px",{"lineHeight":"16px","fontWeight":"500"}],"headline-sm":["15px",{"lineHeight":"22px","letterSpacing":"-0.01em","fontWeight":"600"}],"headline-lg":["22px",{"lineHeight":"30px","letterSpacing":"-0.02em","fontWeight":"600"}],"body-md":["13px",{"lineHeight":"20px","fontWeight":"400"}],"mono-metric-md":["14px",{"lineHeight":"20px","fontWeight":"500"}],"headline-xl-mobile":["24px",{"lineHeight":"32px","letterSpacing":"-0.02em","fontWeight":"700"}],"mono-metric-lg":["24px",{"lineHeight":"30px","letterSpacing":"-0.02em","fontWeight":"600"}],"body-lg":["15px",{"lineHeight":"24px","fontWeight":"400"}]}}}};</script></head><body class="bg-workspace-bg font-body-md text-on-surface antialiased"><input class="peer hidden" id="mobile-nav-toggle" type="checkbox"/><aside class="fixed top-0 bottom-0 left-0 z-50 w-64 bg-sidebar-surface text-slate-300 flex flex-col justify-between transition-transform duration-300 ease-in-out -translate-x-full lg:translate-x-0 shadow-[0_1px_8px_rgba(0,0,0,0.12)]"><div class="flex flex-col h-full overflow-hidden"><div class="h-14 px-space-md flex items-center justify-between bg-sidebar-surface/90"><div class="flex items-center gap-space-sm"><div class="w-8 h-8 rounded-xl bg-primary flex items-center justify-center text-on-primary shadow-sm"><span class="material-symbols-outlined text-[18px]">hub</span></div><div class="flex flex-col"><div class="flex items-center gap-space-xs"><span class="font-headline-sm text-headline-sm text-white tracking-tight">AmzSphere</span><span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-status-emerald opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-status-emerald"></span></span></div><span class="font-label-sm text-label-sm text-slate-400 uppercase tracking-widest">OPERATIONS</span></div></div><label class="lg:hidden cursor-pointer text-slate-400 hover:text-white p-space-xs rounded-lg hover:bg-sidebar-card" for="mobile-nav-toggle"><span class="material-symbols-outlined text-[20px]">close</span></label></div><div class="px-space-md py-space-xs"><div class="h-[1px] w-full bg-sidebar-border"></div></div><div class="flex-1 overflow-y-auto px-space-sm py-space-xs"><div class="px-space-sm pb-space-xs font-mono-code-sm text-mono-code-sm uppercase tracking-wider text-slate-400">Control Plane</div><nav class="flex flex-col gap-space-2xs" data-active-classes="bg-sidebar-active text-white font-semibold shadow-sm"><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-slate-300 hover:bg-sidebar-card hover:text-white transition-all text-body-md font-body-md" data-path="overview" href="#"><span>Overview</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-slate-300 hover:bg-sidebar-card hover:text-white transition-all text-body-md font-body-md" data-path="seo-catalog" href="#"><span>SEO &amp; Catalog</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-slate-300 hover:bg-sidebar-card hover:text-white transition-all text-body-md font-body-md" data-path="ppc-ads-engine" href="#"><span>PPC Ads Engine</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-slate-300 hover:bg-sidebar-card hover:text-white transition-all text-body-md font-body-md" data-path="inventory-hub" href="#"><span>Inventory Hub</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-slate-300 hover:bg-sidebar-card hover:text-white transition-all text-body-md font-body-md" data-path="seller-store" href="#"><span>Seller Store</span></a><a aria-current="page" class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl transition-all bg-sidebar-active text-white font-semibold shadow-sm" data-path="repricer-monitor" href="#"><span>Repricer Monitor</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-slate-300 hover:bg-sidebar-card hover:text-white transition-all text-body-md font-body-md" data-path="automation-activity-logs" href="#"><span>Automation Activity Logs</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-slate-300 hover:bg-sidebar-card hover:text-white transition-all text-body-md font-body-md" data-path="b2b-approvals" href="#"><span>B2B Approvals</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-slate-300 hover:bg-sidebar-card hover:text-white transition-all text-body-md font-body-md" data-path="how-it-works" href="#"><span>How It Works</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-slate-300 hover:bg-sidebar-card hover:text-white transition-all text-body-md font-body-md" data-path="seo-tool-selector" href="#"><span>SEO Tool Selector</span></a></nav></div><div class="p-space-sm bg-sidebar-surface flex flex-col gap-space-xs"><div class="bg-sidebar-card rounded-xl p-space-sm flex flex-col gap-space-xs"><div class="flex items-center justify-between"><span class="font-label-sm text-label-sm text-status-amber uppercase font-semibold">SP-API Status</span><span class="px-space-xs py-space-2xs rounded-full bg-status-amber/10 text-status-amber font-mono-code-sm text-mono-code-sm">Dry-Run</span></div><div class="flex items-start gap-space-xs text-slate-400"><span class="material-symbols-outlined text-[14px] text-status-amber mt-0.5">lock</span><span class="font-label-sm text-label-sm leading-tight text-slate-300">Production integration gated. Writes stay disabled until SP-API is enabled and dry-run is off.</span></div></div><div class="bg-sidebar-card rounded-xl p-space-xs flex items-center justify-between gap-space-xs"><div class="flex items-center gap-space-xs overflow-hidden"><div class="w-7 h-7 rounded-lg bg-surface-container-high flex items-center justify-center text-primary font-mono-code-sm text-mono-code-sm font-semibold">AS</div><div class="flex flex-col truncate"><span class="font-label-md text-label-md text-white truncate">AmzSphere Alpha</span><span class="font-label-sm text-label-sm text-slate-400 truncate">Merchant: A21V09X</span></div></div><button class="text-slate-400 hover:text-white p-space-2xs rounded hover:bg-sidebar-border transition-colors" type="button"><span class="material-symbols-outlined text-[18px]">unfold_more</span></button></div></div></div></aside><label class="fixed inset-0 bg-inverse-surface/60 backdrop-blur-sm z-40 lg:hidden hidden peer-checked:block" for="mobile-nav-toggle"></label><div class="lg:pl-64 flex flex-col min-h-screen"><header class="fixed top-0 right-0 left-0 lg:left-64 h-14 z-30 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="w-full h-full px-space-md lg:px-margin-desktop flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-sm overflow-hidden"><label class="lg:hidden p-space-xs rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface cursor-pointer flex items-center" for="mobile-nav-toggle"><span class="material-symbols-outlined text-[20px]">menu</span></label><div class="flex items-center gap-space-xs truncate"><span class="material-symbols-outlined text-[18px] text-on-surface-variant">store</span><span class="font-label-lg text-label-lg text-on-surface font-semibold truncate">Seller Operations</span><span class="text-outline-variant font-label-md text-label-md">/</span><span class="font-label-md text-label-md text-on-surface-variant hidden sm:inline truncate">Control Suite</span></div><div class="hidden md:flex items-center gap-space-xs px-space-sm py-0.5 rounded-full bg-status-emerald/10 text-on-surface font-label-sm text-label-sm"><span class="w-1.5 h-1.5 rounded-full bg-status-emerald"></span><span>Mock engine live</span></div><div class="hidden xl:flex items-center gap-space-2xs px-space-sm py-0.5 rounded-full bg-surface-container-high text-primary font-label-sm text-label-sm"><span class="material-symbols-outlined text-[14px]">verified</span><span>Buy Box owned: 94.2%</span></div></div><div class="flex items-center gap-space-xs lg:gap-space-sm flex-shrink-0"><div class="relative hidden md:block w-44 lg:w-56"><span class="material-symbols-outlined absolute left-space-sm top-1/2 -translate-y-1/2 text-[16px] text-outline">search</span><input class="w-full h-8 pl-8 pr-space-sm rounded-lg bg-surface-container-lowest font-body-sm text-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary shadow-sm" placeholder="Search ASIN, SKU..." type="text"/></div><div class="relative hidden sm:block"><select class="h-8 pl-space-sm pr-7 rounded-lg bg-surface-container-lowest font-label-sm text-label-sm text-on-surface shadow-sm focus:outline-none focus:ring-2 focus:ring-primary appearance-none cursor-pointer"><option value="US">US (Amazon.com)</option><option value="CA">CA (Amazon.ca)</option><option value="UK">UK (Amazon.co.uk)</option><option value="EU">EU (Multi-Region)</option></select><span class="material-symbols-outlined absolute right-space-xs top-1/2 -translate-y-1/2 text-[16px] text-outline pointer-events-none">expand_more</span></div><button class="h-8 px-space-sm rounded-lg bg-surface-container-lowest hover:bg-surface-container-high text-on-surface font-label-sm text-label-sm flex items-center gap-space-xs shadow-sm transition-colors" title="Refresh live state" type="button"><span class="material-symbols-outlined text-[16px] text-on-surface-variant">sync</span><span class="hidden lg:inline">Refresh</span></button><button class="h-8 px-space-sm rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-sm text-label-sm flex items-center gap-space-xs shadow-sm transition-colors" type="button"><span class="material-symbols-outlined text-[16px]">cloud_sync</span><span class="hidden sm:inline">Sync seller data</span></button><button class="w-8 h-8 rounded-lg bg-surface-container-lowest hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface flex items-center justify-center relative shadow-sm transition-colors" type="button"><span class="material-symbols-outlined text-[18px]">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-status-rose"></span></button><div class="flex items-center gap-space-xs pl-space-2xs"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center cursor-pointer shadow-sm"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></div></header><main class="w-full pt-14 flex-1 bg-workspace-bg"><div class="flex flex-col w-full">
+<div class="p-space-md lg:p-margin-desktop space-y-gutter-desktop">
+<!-- Top Action & Title Header -->
+<div class="flex flex-col gap-space-md lg:flex-row lg:items-center lg:justify-between bg-surface-card p-space-lg rounded-xl shadow-sm">
+<div class="space-y-space-xs">
+<div class="flex items-center gap-space-xs text-on-surface-variant font-label-md text-label-md">
+<span>Seller Operations</span>
+<span>/</span>
+<span>Algorithmic Pricing</span>
+<span>/</span>
+<span class="text-primary font-semibold">Repricer Monitor</span>
+</div>
+<div class="flex flex-wrap items-center gap-space-sm">
+<h1 class="font-headline-lg text-headline-lg text-on-surface font-bold tracking-tight">Repricer Monitor &amp; Buy Box Sentinel</h1>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-status-emerald/10 text-status-emerald font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-status-emerald animate-pulse"></span>
+            Algorithmic Engine: High-Frequency Active (Sub-60s SP-API Events)
+          </span>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-status-indigo/10 text-status-indigo font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[14px]">shield</span>
+            Minimum Margin Safeguard: 18.5% Hard Floor
+          </span>
+</div>
+<div class="flex items-center gap-space-sm font-mono-code-sm text-mono-code-sm text-on-surface-variant">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-status-emerald">bolt</span>
+            Last Reprice Cycle: <strong class="text-on-surface">14s ago</strong>
+</span>
+<span>•</span>
+<span>SP-API Ingest Latency: <strong class="text-on-surface">420ms</strong></span>
+<span>•</span>
+<span class="text-status-emerald">Zero Throttling (Bucket 98.4%)</span>
+</div>
+</div>
+<div class="flex flex-wrap items-center gap-space-xs sm:gap-space-sm">
+<div class="inline-flex rounded-lg bg-surface-container-low p-1">
+<button class="px-2.5 py-1 text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm rounded transition-colors" type="button">1H</button>
+<button class="px-2.5 py-1 bg-surface-card text-primary font-semibold shadow-sm rounded font-label-sm text-label-sm" type="button">24H</button>
+<button class="px-2.5 py-1 text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm rounded transition-colors" type="button">7D</button>
+<button class="px-2.5 py-1 text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm rounded transition-colors" type="button">30D</button>
+</div>
+<button class="h-8 px-space-sm rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-sm text-label-sm flex items-center gap-space-xs transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+<span>Simulate Scenarios</span>
+</button>
+<button class="h-8 px-space-sm rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-sm text-label-sm flex items-center gap-space-xs transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">file_download</span>
+<span>Export Audit (CSV)</span>
+</button>
+<button class="h-8 px-space-md rounded-lg bg-primary-container hover:bg-primary text-on-primary font-label-sm text-label-sm flex items-center gap-space-xs shadow-sm transition-all active:scale-95" type="button">
+<span class="material-symbols-outlined text-[16px]">add</span>
+<span>Create Repricing Strategy</span>
+</button>
+</div>
+</div>
+<!-- 5-Column Executive KPI Strip -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-space-md">
+<!-- Card 1 -->
+<div class="bg-surface-card p-space-lg rounded-xl shadow-sm flex flex-col justify-between space-y-space-sm hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Buy Box Ownership</span>
+<span class="inline-flex items-center gap-0.5 text-status-emerald font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>+2.8%
+          </span>
+</div>
+<div class="flex items-baseline justify-between">
+<span class="font-mono-metric-lg text-mono-metric-lg text-status-emerald font-bold">94.2%</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Target: &gt;92.0%</span>
+</div>
+<div class="w-full pt-1">
+<svg class="w-full h-7 text-status-emerald" fill="none" preserveaspectratio="none" viewbox="0 0 100 24">
+<path d="M0 18 Q20 16 35 12 T70 8 T100 4" stroke="currentColor" stroke-linecap="round" stroke-width="2.5"></path>
+<path d="M0 18 Q20 16 35 12 T70 8 T100 4 L100 24 L0 24 Z" fill="currentColor" fill-opacity="0.08"></path>
+</svg>
+</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant flex items-center justify-between pt-1">
+<span>Trailing 7-day win-rate</span>
+<span class="font-semibold text-status-emerald">Peak 98.1%</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-card p-space-lg rounded-xl shadow-sm flex flex-col justify-between space-y-space-sm hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Monitored SKUs</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-primary font-mono-code-sm text-mono-code-sm">Active Guard</span>
+</div>
+<div class="flex items-baseline justify-between">
+<span class="font-mono-metric-lg text-mono-metric-lg text-on-surface font-bold">1,280 <span class="font-headline-sm text-headline-sm text-on-surface-variant font-normal">/ 1,428</span></span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-2 overflow-hidden">
+<div class="bg-primary h-2 rounded-full" style="width: 89.6%"></div>
+</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant flex items-center justify-between">
+<span>89.6% Automated Coverage</span>
+<span class="text-on-surface font-mono-code-sm text-mono-code-sm">148 Manual</span>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-card p-space-lg rounded-xl shadow-sm flex flex-col justify-between space-y-space-sm hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Average Margin Achieved</span>
+<span class="px-1.5 py-0.5 rounded bg-status-emerald/10 text-status-emerald font-label-sm text-label-sm font-semibold">Optimal</span>
+</div>
+<div class="flex items-baseline justify-between">
+<span class="font-mono-metric-lg text-mono-metric-lg text-on-surface font-bold">26.4%</span>
+<span class="font-label-sm text-label-sm text-status-emerald">+1.8% vs Floor</span>
+</div>
+<div class="w-full pt-1">
+<svg class="w-full h-7 text-primary" fill="none" preserveaspectratio="none" viewbox="0 0 100 24">
+<path d="M0 14 L20 16 L40 10 L60 12 L80 6 L100 5" stroke="currentColor" stroke-linecap="round" stroke-width="2.5"></path>
+</svg>
+</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant flex items-center justify-between pt-1">
+<span>+$1.40 Net Realized/Unit</span>
+<span class="text-on-surface font-semibold font-mono-code-sm text-mono-code-sm">Floor: 18.5%</span>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface-card p-space-lg rounded-xl shadow-sm flex flex-col justify-between space-y-space-sm hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Daily Reprice Events</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-primary font-label-sm text-label-sm">Sub-min sync</span>
+</div>
+<div class="flex items-baseline justify-between">
+<span class="font-mono-metric-lg text-mono-metric-lg text-on-surface font-bold">18,450</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Today</span>
+</div>
+<div class="flex items-end gap-1 h-7 w-full pt-1">
+<div class="flex-1 bg-surface-container-high rounded-t h-3"></div>
+<div class="flex-1 bg-surface-container-high rounded-t h-4"></div>
+<div class="flex-1 bg-surface-container-high rounded-t h-5"></div>
+<div class="flex-1 bg-primary/40 rounded-t h-4"></div>
+<div class="flex-1 bg-primary/60 rounded-t h-6"></div>
+<div class="flex-1 bg-primary rounded-t h-7"></div>
+<div class="flex-1 bg-primary rounded-t h-5"></div>
+</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant flex items-center justify-between">
+<span>Avg 14.4 adj/SKU/day</span>
+<span class="font-mono-code-sm text-mono-code-sm text-on-surface">Max: 42</span>
+</div>
+</div>
+<!-- Card 5 -->
+<div class="bg-surface-card p-space-lg rounded-xl shadow-sm flex flex-col justify-between space-y-space-sm hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">At-Risk / Price Wars</span>
+<span class="px-2 py-0.5 rounded-full bg-status-rose/10 text-status-rose font-label-sm text-label-sm font-semibold animate-pulse">Price War Alert</span>
+</div>
+<div class="flex items-baseline justify-between">
+<span class="font-mono-metric-lg text-mono-metric-lg text-status-rose font-bold">4 ASINs</span>
+<span class="font-label-sm text-label-sm text-status-rose font-semibold">Floors Engaged</span>
+</div>
+<div class="w-full bg-status-rose/10 rounded p-1.5 flex items-center gap-1.5 text-status-rose font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[16px]">warning</span>
+<span class="truncate">Floor price reached by 2 competitors</span>
+</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant flex items-center justify-between">
+<span>Downward spirals halted</span>
+<span class="text-primary font-semibold cursor-pointer hover:underline">Review 4</span>
+</div>
+</div>
+</div>
+<!-- Two-Column Analytics & Sentinel Engine Section -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-md lg:gap-gutter-desktop">
+<!-- Left Panel: Live Telemetry & Dynamics (8 cols) -->
+<div class="lg:col-span-8 bg-surface-card p-space-lg rounded-xl shadow-sm flex flex-col justify-between space-y-space-md">
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-space-xs">
+<div>
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">show_chart</span>
+<h2 class="font-headline-md text-headline-md text-on-surface font-bold">Buy Box Price &amp; Velocity Dynamics</h2>
+<span class="px-2 py-0.5 rounded-full bg-status-emerald/10 text-status-emerald font-mono-code-sm text-mono-code-sm">24H Live Telemetry</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Hourly tracking of AmzSphere Price, Lowest Competitor, Buy Box Benchmark, and Unit Sales Velocity.</p>
+</div>
+<div class="flex items-center gap-space-xs">
+<div class="inline-flex rounded-lg bg-surface-container p-0.5 text-on-surface">
+<button class="px-2 py-1 bg-surface-card text-primary font-semibold shadow-xs rounded font-label-sm text-label-sm" type="button">Price ($)</button>
+<button class="px-2 py-1 text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm rounded transition-colors" type="button">Margin (%)</button>
+</div>
+<select class="h-7 px-2 rounded-lg bg-surface-container text-on-surface font-label-sm text-label-sm appearance-none cursor-pointer">
+<option>All Reprice Strategies</option>
+<option>Rule-Based FBA Match</option>
+<option>AI Profit Maximizer</option>
+<option>Velocity Liquidation</option>
+</select>
+</div>
+</div>
+<!-- Metric Legends -->
+<div class="flex flex-wrap items-center gap-space-md text-label-sm font-label-sm py-1 bg-surface-container-low px-space-md rounded-lg">
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-0.5 bg-primary rounded"></span>
+<span class="text-on-surface font-semibold">AmzSphere Offer ($49.20)</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-0.5 bg-status-emerald rounded border border-dashed border-status-emerald"></span>
+<span class="text-on-surface-variant">Buy Box Target ($49.20)</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-3 h-0.5 bg-status-rose rounded"></span>
+<span class="text-on-surface-variant">Competitor Floor ($44.00)</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-2 bg-surface-variant rounded-xs"></span>
+<span class="text-on-surface-variant">Hourly Velocity Units</span>
+</div>
+<div class="ml-auto font-mono-code-sm text-mono-code-sm text-status-emerald">
+            Mean Advantage: +$0.48/unit
+          </div>
+</div>
+<!-- SVG Composite Visualization Chart with Annotations -->
+<div class="relative w-full h-72 bg-gradient-to-b from-surface-container-lowest to-surface-container-low/40 rounded-xl p-space-sm flex flex-col justify-end overflow-hidden">
+<!-- Callout Badges / Annotations -->
+<div class="absolute top-6 left-1/4 transform -translate-x-1/2 z-10 bg-sidebar-surface text-white p-2 rounded-lg shadow-md max-w-[210px] text-left">
+<div class="flex items-center gap-1 text-status-amber font-mono-code-sm text-mono-code-sm">
+<span class="material-symbols-outlined text-[13px]">bolt</span>
+<span>10:42 AM Competitor Undercut</span>
+</div>
+<div class="font-label-sm text-label-sm text-slate-300 mt-0.5 leading-snug">
+              VoltDirect dropped to $47.50. Sentinel re-matched in 42s preserving 94% win-rate.
+            </div>
+</div>
+<div class="absolute top-10 right-16 z-10 bg-sidebar-surface text-white p-2 rounded-lg shadow-md max-w-[210px] text-left">
+<div class="flex items-center gap-1 text-status-emerald font-mono-code-sm text-mono-code-sm">
+<span class="material-symbols-outlined text-[13px]">trending_up</span>
+<span>18:15 Competitor Stockout</span>
+</div>
+<div class="font-label-sm text-label-sm text-slate-300 mt-0.5 leading-snug">
+              Second seller ran out of Prime stock. Algorithm auto-raised price to $51.99.
+            </div>
+</div>
+<!-- Main SVG Canvas -->
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 800 240">
+<!-- Gridlines -->
+<line stroke="#E2E8F0" stroke-dasharray="3 3" stroke-width="1" x1="0" x2="800" y1="40"></line>
+<line stroke="#E2E8F0" stroke-dasharray="3 3" stroke-width="1" x1="0" x2="800" y1="90"></line>
+<line stroke="#E2E8F0" stroke-dasharray="3 3" stroke-width="1" x1="0" x2="800" y1="140"></line>
+<line stroke="#E2E8F0" stroke-dasharray="3 3" stroke-width="1" x1="0" x2="800" y1="190"></line>
+<!-- Hourly Sales Bar Backgrounds (Units) -->
+<rect fill="#d3e4fe" height="28" opacity="0.6" rx="2" width="18" x="30" y="202"></rect>
+<rect fill="#d3e4fe" height="35" opacity="0.6" rx="2" width="18" x="90" y="195"></rect>
+<rect fill="#d3e4fe" height="20" opacity="0.6" rx="2" width="18" x="150" y="210"></rect>
+<rect fill="#d3e4fe" height="52" opacity="0.7" rx="2" width="18" x="210" y="178"></rect>
+<rect fill="#4338CA" height="70" opacity="0.4" rx="2" width="18" x="270" y="160"></rect>
+<rect fill="#4338CA" height="64" opacity="0.4" rx="2" width="18" x="330" y="166"></rect>
+<rect fill="#d3e4fe" height="40" opacity="0.6" rx="2" width="18" x="390" y="190"></rect>
+<rect fill="#d3e4fe" height="48" opacity="0.6" rx="2" width="18" x="450" y="182"></rect>
+<rect fill="#4338CA" height="85" opacity="0.4" rx="2" width="18" x="510" y="145"></rect>
+<rect fill="#4338CA" height="92" opacity="0.5" rx="2" width="18" x="570" y="138"></rect>
+<rect fill="#d3e4fe" height="60" opacity="0.6" rx="2" width="18" x="630" y="170"></rect>
+<rect fill="#d3e4fe" height="45" opacity="0.6" rx="2" width="18" x="690" y="185"></rect>
+<rect fill="#d3e4fe" height="38" opacity="0.6" rx="2" width="18" x="750" y="192"></rect>
+<!-- Competitor Floor Line ($44.00) -->
+<path d="M 0 170 L 800 170" stroke="#F43F5E" stroke-dasharray="4 4" stroke-width="1.5"></path>
+<text fill="#F43F5E" font-family="JetBrains Mono" font-size="10" x="12" y="165">Hard Floor $44.00 (18.5% Margin Safeguard)</text>
+<!-- Buy Box Benchmark Line -->
+<path d="M 0 75 Q 120 74 200 95 T 320 85 T 460 70 T 580 35 T 720 55 T 800 58" fill="none" stroke="#10B981" stroke-dasharray="5 3" stroke-width="2"></path>
+<!-- Seller Active Price Path with Area Gradient -->
+<defs>
+<lineargradient id="priceGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#4f46e5" stop-opacity="0.25"></stop>
+<stop offset="100%" stop-color="#4f46e5" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<path d="M 0 75 L 0 75 Q 120 74 200 95 T 320 85 T 460 70 T 580 35 T 720 55 T 800 58 L 800 230 L 0 230 Z" fill="url(#priceGradient)"></path>
+<path d="M 0 75 Q 120 74 200 95 T 320 85 T 460 70 T 580 35 T 720 55 T 800 58" fill="none" stroke="#3525cd" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
+<!-- Indicator Dots -->
+<circle cx="200" cy="95" fill="#FFFFFF" r="5" stroke="#F59E0B" stroke-width="2.5"></circle>
+<circle cx="580" cy="35" fill="#FFFFFF" r="5" stroke="#10B981" stroke-width="2.5"></circle>
+<circle cx="800" cy="58" fill="#3525cd" r="4.5"></circle>
+</svg>
+</div>
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-xs pt-1 border-t-0 text-on-surface-variant font-mono-code-sm text-mono-code-sm">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-status-emerald"></span>
+<span>Auto-Throttle Guard: Active. Zero runaway downward spirals detected in 72 hours.</span>
+</div>
+<div class="text-right">
+<span>Peak Hourly Conversion: <strong>21 units @ $51.99</strong></span>
+</div>
+</div>
+</div>
+<!-- Right Panel: Algorithmic Rule Profiles & Safety Guardrails (4 cols) -->
+<div class="lg:col-span-4 bg-surface-card p-space-lg rounded-xl shadow-sm flex flex-col justify-between space-y-space-md">
+<div>
+<div class="flex items-center justify-between pb-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">psychology</span>
+<h2 class="font-headline-md text-headline-md text-on-surface font-bold">Rule Profiles &amp; Safety</h2>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-surface-container text-primary font-label-sm text-label-sm font-semibold">3 Active</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-space-sm">Autonomous logic engines controlling live pricing moves across Amazon SP-API channels.</p>
+<div class="space-y-space-sm">
+<!-- Profile 1 -->
+<div class="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors space-y-1.5">
+<div class="flex items-center justify-between">
+<span class="font-label-lg text-label-lg font-bold text-on-surface">AI Profit Maximizer</span>
+<span class="px-2 py-0.5 rounded-full bg-status-emerald/10 text-status-emerald font-mono-code-sm text-mono-code-sm">842 SKUs</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Matches Buy Box with +$0.50 premium when Prime lead time is faster. Auto-raises price upon competitor stockout.</p>
+<div class="flex items-center justify-between pt-1 font-mono-code-sm text-mono-code-sm">
+<span class="text-on-surface-variant">Win-Rate: <strong class="text-status-emerald">96.4%</strong></span>
+<span class="text-primary font-semibold">FBA Dominance</span>
+</div>
+</div>
+<!-- Profile 2 -->
+<div class="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors space-y-1.5">
+<div class="flex items-center justify-between">
+<span class="font-label-lg text-label-lg font-bold text-on-surface">Velocity Liquidation</span>
+<span class="px-2 py-0.5 rounded-full bg-status-amber/10 text-status-amber font-mono-code-sm text-mono-code-sm">112 SKUs</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Dynamic 1% undercut down to breakeven margin for aged inventory &gt;60 days in FBA storage.</p>
+<div class="flex items-center justify-between pt-1 font-mono-code-sm text-mono-code-sm">
+<span class="text-on-surface-variant">Burn Velocity: <strong class="text-on-surface">18.2 units/d</strong></span>
+<span class="text-status-amber font-semibold">Aged Units</span>
+</div>
+</div>
+<!-- Profile 3 -->
+<div class="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors space-y-1.5">
+<div class="flex items-center justify-between">
+<span class="font-label-lg text-label-lg font-bold text-on-surface">Anti-Price-War Dampener</span>
+<span class="px-2 py-0.5 rounded-full bg-primary/10 text-primary font-mono-code-sm text-mono-code-sm">Sentinel Guard ON</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Pauses price drops when competitor executes &gt;3 consecutive cuts in &lt;15 mins to preempt bottom-out loops.</p>
+<div class="flex items-center justify-between pt-1 font-mono-code-sm text-mono-code-sm">
+<span class="text-on-surface-variant">Erosion Saved: <strong class="text-status-emerald">+$4,290/mo</strong></span>
+<span class="text-status-emerald font-semibold">Protected</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Guardrail Toggles -->
+<div class="pt-space-xs space-y-2">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant block">Real-Time Enforcement Policies</span>
+<div class="flex items-center justify-between p-2 rounded-lg bg-surface-container-lowest shadow-2xs">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">verified</span>
+<span class="font-body-sm text-body-sm text-on-surface">Match Prime Competitors Only</span>
+</div>
+<input checked="" class="h-4 w-4 rounded accent-primary cursor-pointer" type="checkbox"/>
+</div>
+<div class="flex items-center justify-between p-2 rounded-lg bg-surface-container-lowest shadow-2xs">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">arrow_circle_up</span>
+<span class="font-body-sm text-body-sm text-on-surface">Auto-Raise on Competitor Stockout</span>
+</div>
+<input checked="" class="h-4 w-4 rounded accent-primary cursor-pointer" type="checkbox"/>
+</div>
+<div class="flex items-center justify-between p-2 rounded-lg bg-surface-container-lowest shadow-2xs">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-status-amber text-[18px]">lock</span>
+<span class="font-body-sm text-body-sm text-on-surface font-semibold">Strict 18.5% Margin Floor (Hard Lock)</span>
+</div>
+<input checked="" class="h-4 w-4 rounded accent-primary opacity-60 cursor-not-allowed" disabled="" type="checkbox"/>
+</div>
+</div>
+</div>
+</div>
+<!-- High-Density SKUs Repricer Matrix (Data Table) -->
+<div class="bg-surface-card rounded-xl shadow-sm overflow-hidden flex flex-col">
+<div class="p-space-lg flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div>
+<div class="flex items-center gap-space-xs">
+<h2 class="font-headline-md text-headline-md text-on-surface font-bold">Active Repricing Matrix &amp; Competitor Radar</h2>
+<span class="px-2.5 py-0.5 rounded-full bg-surface-container text-primary font-mono-code-sm text-mono-code-sm">1,280 Automated SKUs</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Live multi-offer radar, floor envelopes, algorithmic state, and real-time Buy Box retention metrics.</p>
+</div>
+<div class="flex flex-wrap items-center gap-space-xs sm:gap-space-sm">
+<div class="relative w-48 sm:w-60">
+<span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-[16px] text-outline">search</span>
+<input class="w-full h-8 pl-8 pr-2.5 rounded-lg bg-surface-container-low font-body-sm text-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:bg-surface-card focus:ring-1 focus:ring-primary shadow-xs" placeholder="Search ASIN, SKU, Title..." type="text"/>
+</div>
+<select class="h-8 px-2.5 rounded-lg bg-surface-container-low font-label-sm text-label-sm text-on-surface cursor-pointer focus:outline-none">
+<option>All Strategies</option>
+<option>Profit Maximizer</option>
+<option>Match Buy Box</option>
+<option>Floor Guard</option>
+</select>
+<select class="h-8 px-2.5 rounded-lg bg-surface-container-low font-label-sm text-label-sm text-on-surface cursor-pointer focus:outline-none">
+<option>All Statuses</option>
+<option>In Buy Box</option>
+<option>Lost Buy Box</option>
+<option>At Floor Limit</option>
+<option>Suppressed</option>
+</select>
+<button class="h-8 px-space-sm rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-sm text-label-sm flex items-center gap-1 transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">edit_note</span>
+<span>Bulk Edit Min/Max</span>
+</button>
+</div>
+</div>
+<!-- Table Wrapper -->
+<div class="overflow-x-auto w-full">
+<table class="w-full text-left font-body-sm text-body-sm">
+<thead class="bg-surface-container-low font-mono-code-sm text-mono-code-sm text-on-surface-variant uppercase tracking-wider">
+<tr>
+<th class="py-3 px-4 w-10">
+<input class="rounded accent-primary cursor-pointer" type="checkbox"/>
+</th>
+<th class="py-3 px-4">Product Details &amp; SKU</th>
+<th class="py-3 px-4">Our Price &amp; Buy Box</th>
+<th class="py-3 px-4">Floor / Ceiling Limits</th>
+<th class="py-3 px-4 text-right">Net Margin</th>
+<th class="py-3 px-4">Competitor Landscape</th>
+<th class="py-3 px-4">Strategy</th>
+<th class="py-3 px-4 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container/30">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-4">
+<input class="rounded accent-primary cursor-pointer" type="checkbox"/>
+</td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-lg object-cover bg-surface-container-high flex-shrink-0" data-alt="High quality compact solar power pod with rubberized edges on clean studio tech background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1HFe_m-Xqip5ASsGv0iRkH2rBoIJ9OJGh78GE0VnylO9eSw3KCxWV95bkqvhEfDzSF9ZWCsVLBsQcSCjRee5LzFsuKHKXGeI5Jhk-YQMI1vuAal1QmAFPvPFNMNnogReiqKm9pvqJv7sihD5AxpZJ1VtV6Dr-Wuze-IjNO5j68M4iI6ypXtjEiAY9p03Ywy1r4T3HfXGiO4pQgnJaLzNdt1gfGasDwtNbh0izGg0S"/>
+<div class="flex flex-col truncate max-w-xs">
+<span class="font-label-lg text-label-lg font-bold text-on-surface truncate">Solar Power Pod Pro 24,000mAh</span>
+<span class="font-mono-code-sm text-mono-code-sm text-on-surface-variant truncate">SKU: SP-POD-24K • ASIN: B09V72K88L</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-4">
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="font-mono-metric-md text-mono-metric-md text-on-surface font-bold">$49.20</span>
+<span class="px-1.5 py-0.5 rounded-full bg-status-emerald/10 text-status-emerald font-label-sm text-label-sm font-semibold flex items-center gap-0.5">
+<span class="w-1 h-1 rounded-full bg-status-emerald"></span>In Buy Box (100%)
+                    </span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Matched BB • Prime FBA</span>
+</div>
+</td>
+<td class="py-3 px-4">
+<div class="flex flex-col w-36">
+<div class="flex justify-between font-mono-code-sm text-mono-code-sm text-on-surface-variant">
+<span>$44.00</span>
+<span>$59.99</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-1.5 mt-1 overflow-hidden">
+<div class="bg-primary h-1.5 rounded-full" style="width: 32%"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-0.5">$5.20 headroom to floor</span>
+</div>
+</td>
+<td class="py-3 px-4 text-right">
+<div class="flex flex-col items-end">
+<span class="font-mono-metric-md text-mono-metric-md text-status-emerald font-bold">28.4%</span>
+<span class="font-mono-code-sm text-mono-code-sm text-on-surface-variant">+$13.97 net/unit</span>
+</div>
+</td>
+<td class="py-3 px-4">
+<div class="flex flex-col">
+<div class="flex items-center gap-1 font-label-md text-label-md text-on-surface">
+<span class="material-symbols-outlined text-[14px] text-primary">storefront</span>
+<span>AmzSphere (You)</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">5 Offers • Closest: VoltDirect ($49.99 FBA)</span>
+</div>
+</td>
+<td class="py-3 px-4">
+<span class="px-2 py-0.5 rounded-full bg-primary/10 text-primary font-mono-code-sm text-mono-code-sm font-semibold">
+                  AI Profit Maximizer
+                </span>
+</td>
+<td class="py-3 px-4 text-right">
+<div class="flex items-center justify-end gap-1">
+<button class="w-7 h-7 rounded hover:bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-on-surface" title="Inspect Price Ladder" type="button">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+</button>
+<button class="w-7 h-7 rounded hover:bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-on-surface" title="Edit Strategy" type="button">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+</button>
+<button class="w-7 h-7 rounded hover:bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-status-rose" title="Pause Repricer" type="button">
+<span class="material-symbols-outlined text-[16px]">pause_circle</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-4">
+<input class="rounded accent-primary cursor-pointer" type="checkbox"/>
+</td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-lg object-cover bg-surface-container-high flex-shrink-0" data-alt="Matte black wireless active noise cancelling earbuds in sleek open charging case" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIX1MNwN5yXpg8rL8H8M2CqME_zXloFFUAEFk9jOWFQT3GUizTZvNIf5UiKwBQ62U85kDJP4LB__Z8mYs9SUjgWngs1DABYLeqAt-nXoDuHBYJb265f3mlFG0U0huM-protfFyg_Y5HzqCssemoZEdlTIgldyhcCbIV7O2PTcvQkwltjN2FJZ_8rowfL4MX3HGIoI_YU8fCxP3uBGsXeTqdO2RedwUDZW_t1c9n705"/>
+<div class="flex flex-col truncate max-w-xs">
+<span class="font-label-lg text-label-lg font-bold text-on-surface truncate">AeroSound ANC Earset v3</span>
+<span class="font-mono-code-sm text-mono-code-sm text-on-surface-variant truncate">SKU: AS-ANC-V3 • ASIN: B08K12MM09</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-4">
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="font-mono-metric-md text-mono-metric-md text-on-surface font-bold">$78.50</span>
+<span class="px-1.5 py-0.5 rounded-full bg-status-emerald/10 text-status-emerald font-label-sm text-label-sm font-semibold flex items-center gap-0.5">
+<span class="w-1 h-1 rounded-full bg-status-emerald"></span>In Buy Box (92%)
+                    </span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">+$0.50 above FBM</span>
+</div>
+</td>
+<td class="py-3 px-4">
+<div class="flex flex-col w-36">
+<div class="flex justify-between font-mono-code-sm text-mono-code-sm text-on-surface-variant">
+<span>$69.00</span>
+<span>$89.00</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-1.5 mt-1 overflow-hidden">
+<div class="bg-primary h-1.5 rounded-full" style="width: 48%"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-0.5">$9.50 headroom to floor</span>
+</div>
+</td>
+<td class="py-3 px-4 text-right">
+<div class="flex flex-col items-end">
+<span class="font-mono-metric-md text-mono-metric-md text-status-emerald font-bold">31.2%</span>
+<span class="font-mono-code-sm text-mono-code-sm text-on-surface-variant">+$24.49 net/unit</span>
+</div>
+</td>
+<td class="py-3 px-4">
+<div class="flex flex-col">
+<div class="flex items-center gap-1 font-label-md text-label-md text-on-surface">
+<span class="material-symbols-outlined text-[14px] text-primary">storefront</span>
+<span>AmzSphere (You)</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">3 Offers • Closest: Apex Deals ($78.00 FBM)</span>
+</div>
+</td>
+<td class="py-3 px-4">
+<span class="px-2 py-0.5 rounded-full bg-primary/10 text-primary font-mono-code-sm text-mono-code-sm font-semibold">
+                  Rule-Based FBA Match
+                </span>
+</td>
+<td class="py-3 px-4 text-right">
+<div class="flex items-center justify-end gap-1">
+<button class="w-7 h-7 rounded hover:bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-on-surface" title="Inspect Price Ladder" type="button">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+</button>
+<button class="w-7 h-7 rounded hover:bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-on-surface" title="Edit Strategy" type="button">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+</button>
+<button class="w-7 h-7 rounded hover:bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-status-rose" title="Pause Repricer" type="button">
+<span class="material-symbols-outlined text-[16px]">pause_circle</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3: Competitor Undercut Alert -->
+<tr class="hover:bg-surface-container-low/50 transition-colors bg-status-rose/5">
+<td class="py-3 px-4">
+<input class="rounded accent-primary cursor-pointer" type="checkbox"/>
+</td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-lg object-cover bg-surface-container-high flex-shrink-0" data-alt="Modern minimalist dual LED architectural desk lamp with aluminum arm and touch dimmer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCfbKvCPCShT7QByXGW6cpf3FGc4LJuSnBfdoif_ALEaTfxKcEY7PW2Rw0P_liY6pWTULJV9ecM2_r6AKkIPPZ1f4JW1dULd5QXpQD3TvnhSEqRQgtlA8MJaWrOJJOHBnl0o3pY6BcWlB6ggUd_ooIoaVKTotwIEtPSYXOAYmrf_nEBJb1zzJ-75oZlnweivcLgrl5_JHabrwEoH4FxIpfoBbV-_oBN1PrGdfCI1ZIi"/>
+<div class="flex flex-col truncate max-w-xs">
+<span class="font-label-lg text-label-lg font-bold text-on-surface truncate">Ergonomic Dual Lamp Pro</span>
+<span class="font-mono-code-sm text-mono-code-sm text-on-surface-variant truncate">SKU: ED-LAMP-P • ASIN: B07AA38992</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-4">
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="font-mono-metric-md text-mono-metric-md text-on-surface font-bold">$54.00</span>
+<span class="px-1.5 py-0.5 rounded-full bg-status-rose/10 text-status-rose font-label-sm text-label-sm font-semibold flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[12px]">trending_down</span>Lost BB (Comp -$0.30)
+                    </span>
+</div>
+<span class="font-label-sm text-label-sm text-status-rose">Floor locked ($54.00 hard limit)</span>
+</div>
+</td>
+<td class="py-3 px-4">
+<div class="flex flex-col w-36">
+<div class="flex justify-between font-mono-code-sm text-mono-code-sm text-on-surface-variant">
+<span class="text-status-rose font-bold">$54.00</span>
+<span>$64.99</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-1.5 mt-1 overflow-hidden">
+<div class="bg-status-rose h-1.5 rounded-full" style="width: 2%"></div>
+</div>
+<span class="font-label-sm text-label-sm text-status-rose mt-0.5 font-semibold">At hard floor limit</span>
+</div>
+</td>
+<td class="py-3 px-4 text-right">
+<div class="flex flex-col items-end">
+<span class="font-mono-metric-md text-mono-metric-md text-status-amber font-bold">18.5%</span>
+<span class="font-mono-code-sm text-mono-code-sm text-on-surface-variant">+$9.99 net/unit</span>
+</div>
+</td>
+<td class="py-3 px-4">
+<div class="flex flex-col">
+<div class="flex items-center gap-1 font-label-md text-label-md text-status-rose font-semibold">
+<span class="material-symbols-outlined text-[14px]">warning</span>
+<span>Amazon.com Retail ($53.70)</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">4 Offers • Undercut by 1P Retail</span>
+</div>
+</td>
+<td class="py-3 px-4">
+<span class="px-2 py-0.5 rounded-full bg-status-rose/10 text-status-rose font-mono-code-sm text-mono-code-sm font-semibold">
+                  Floor Safeguard
+                </span>
+</td>
+<td class="py-3 px-4 text-right">
+<div class="flex items-center justify-end gap-1">
+<button class="w-7 h-7 rounded hover:bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-on-surface" title="Inspect Price Ladder" type="button">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+</button>
+<button class="w-7 h-7 rounded hover:bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-on-surface" title="Edit Strategy" type="button">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+</button>
+<button class="w-7 h-7 rounded hover:bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-primary font-bold" title="Engage Price War Breaker" type="button">
+<span class="material-symbols-outlined text-[16px]">security</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-4">
+<input class="rounded accent-primary cursor-pointer" type="checkbox"/>
+</td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-lg object-cover bg-surface-container-high flex-shrink-0" data-alt="Ultra compact white GaN 65W dual port USB-C fast wall charger on marble desktop" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0D-NAf-QgOoPRgyyGF72iEHmWO85QExwNeQGO3uQPB8JlJrHxAxPH9LQRSHhsvznvk8bxeTpcuHkOHQDnEHnedJ1syiS5Vf8v4Gsxgo6JzjNcTQt0KCQqpaeUysNYtj9v3ZpZoAHujqxYwiF_JneSoUvrcRO1Xkq4te6h_iYrjarLUEhZLuClYFQAgXAquDJJM9KOfknjfP_uUlYfJYG3-ZDCg5xgiV9QheN4MK-P"/>
+<div class="flex flex-col truncate max-w-xs">
+<span class="font-label-lg text-label-lg font-bold text-on-surface truncate">GaN 65W Fast Charger Duo</span>
+<span class="font-mono-code-sm text-mono-code-sm text-on-surface-variant truncate">SKU: GAN-65-W • ASIN: B08XY799PL</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-4">
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="font-mono-metric-md text-mono-metric-md text-on-surface font-bold">$29.99</span>
+<span class="px-1.5 py-0.5 rounded-full bg-status-emerald/10 text-status-emerald font-label-sm text-label-sm font-semibold flex items-center gap-0.5">
+<span class="w-1 h-1 rounded-full bg-status-emerald"></span>In Buy Box (100%)
+                    </span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Sole Seller / Brand Registered</span>
+</div>
+</td>
+<td class="py-3 px-4">
+<div class="flex flex-col w-36">
+<div class="flex justify-between font-mono-code-sm text-mono-code-sm text-on-surface-variant">
+<span>$24.50</span>
+<span>$34.99</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-1.5 mt-1 overflow-hidden">
+<div class="bg-primary h-1.5 rounded-full" style="width: 53%"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-0.5">$5.49 to floor</span>
+</div>
+</td>
+<td class="py-3 px-4 text-right">
+<div class="flex flex-col items-end">
+<span class="font-mono-metric-md text-mono-metric-md text-status-emerald font-bold">34.8%</span>
+<span class="font-mono-code-sm text-mono-code-sm text-on-surface-variant">+$10.43 net/unit</span>
+</div>
+</td>
+<td class="py-3 px-4">
+<div class="flex flex-col">
+<div class="flex items-center gap-1 font-label-md text-label-md text-on-surface">
+<span class="material-symbols-outlined text-[14px] text-primary">verified</span>
+<span>AmzSphere Direct (Exclusive)</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">1 Offer • Zero unauthorized sellers</span>
+</div>
+</td>
+<td class="py-3 px-4">
+<span class="px-2 py-0.5 rounded-full bg-primary/10 text-primary font-mono-code-sm text-mono-code-sm font-semibold">
+                  AI Profit Maximizer
+                </span>
+</td>
+<td class="py-3 px-4 text-right">
+<div class="flex items-center justify-end gap-1">
+<button class="w-7 h-7 rounded hover:bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-on-surface" title="Inspect Price Ladder" type="button">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+</button>
+<button class="w-7 h-7 rounded hover:bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-on-surface" title="Edit Strategy" type="button">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+</button>
+<button class="w-7 h-7 rounded hover:bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-status-rose" title="Pause Repricer" type="button">
+<span class="material-symbols-outlined text-[16px]">pause_circle</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 5: Velocity Liquidation -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-4">
+<input class="rounded accent-primary cursor-pointer" type="checkbox"/>
+</td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-lg object-cover bg-surface-container-high flex-shrink-0" data-alt="Set of 5 colorful latex fitness resistance loop bands neatly stacked with carrying pouch" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYn1T4O6oN5H-sO4Xbsri_XRIPm-ihFWWWunt8scWL6P9wBBYDg1aaYVxy8KJe2RLYA2oUEx3uVvF8afbRNT0zcQ4qeY9v7SuzNR-eF9EvfCzwXbDg-GyT1WNl-QnCVpMTrvTOMH9F8z6V4K-ggC6apMtITe2fqTfo62Lsz85rCLGtRLTbS2NnAqntJFZYVWrZif7L74_dAsa-wk-OlCXyhmvWTVzozqh3suoB6IfI"/>
+<div class="flex flex-col truncate max-w-xs">
+<span class="font-label-lg text-label-lg font-bold text-on-surface truncate">Resistance Band Kit (5-Pack)</span>
+<span class="font-mono-code-sm text-mono-code-sm text-on-surface-variant truncate">SKU: RB-KIT-5P • ASIN: B07X81ML39</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-4">
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="font-mono-metric-md text-mono-metric-md text-on-surface font-bold">$16.20</span>
+<span class="px-1.5 py-0.5 rounded-full bg-status-emerald/10 text-status-emerald font-label-sm text-label-sm font-semibold flex items-center gap-0.5">
+<span class="w-1 h-1 rounded-full bg-status-emerald"></span>In Buy Box (98%)
+                    </span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Dynamic Undercut -1%</span>
+</div>
+</td>
+<td class="py-3 px-4">
+<div class="flex flex-col w-36">
+<div class="flex justify-between font-mono-code-sm text-mono-code-sm text-on-surface-variant">
+<span>$14.99</span>
+<span>$22.00</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-1.5 mt-1 overflow-hidden">
+<div class="bg-status-amber h-1.5 rounded-full" style="width: 17%"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-0.5">$1.21 to liquidation floor</span>
+</div>
+</td>
+<td class="py-3 px-4 text-right">
+<div class="flex flex-col items-end">
+<span class="font-mono-metric-md text-mono-metric-md text-on-surface font-bold">19.1%</span>
+<span class="font-mono-code-sm text-mono-code-sm text-on-surface-variant">+$3.10 net/unit</span>
+</div>
+</td>
+<td class="py-3 px-4">
+<div class="flex flex-col">
+<div class="flex items-center gap-1 font-label-md text-label-md text-on-surface">
+<span class="material-symbols-outlined text-[14px] text-primary">storefront</span>
+<span>AmzSphere (You)</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">6 Offers • Closest: FitGear Direct ($16.45)</span>
+</div>
+</td>
+<td class="py-3 px-4">
+<span class="px-2 py-0.5 rounded-full bg-status-amber/10 text-status-amber font-mono-code-sm text-mono-code-sm font-semibold">
+                  Velocity Liquidation
+                </span>
+</td>
+<td class="py-3 px-4 text-right">
+<div class="flex items-center justify-end gap-1">
+<button class="w-7 h-7 rounded hover:bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-on-surface" title="Inspect Price Ladder" type="button">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+</button>
+<button class="w-7 h-7 rounded hover:bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-on-surface" title="Edit Strategy" type="button">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+</button>
+<button class="w-7 h-7 rounded hover:bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-status-rose" title="Pause Repricer" type="button">
+<span class="material-symbols-outlined text-[16px]">pause_circle</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination / Matrix Footer -->
+<div class="p-space-md bg-surface-container-low flex flex-col sm:flex-row items-center justify-between gap-space-sm font-body-sm text-body-sm text-on-surface-variant">
+<div class="flex items-center gap-2">
+<span>Showing <strong>1 - 5</strong> of 1,280 Automated SKUs</span>
+<span class="text-outline-variant">•</span>
+<span>Filtered from 1,428 catalog records</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="px-2.5 py-1 rounded bg-surface-card text-on-surface-variant hover:text-on-surface shadow-xs disabled:opacity-50" disabled="" type="button">Previous</button>
+<button class="px-2.5 py-1 rounded bg-primary text-on-primary font-bold shadow-xs" type="button">1</button>
+<button class="px-2.5 py-1 rounded bg-surface-card text-on-surface hover:text-primary shadow-xs" type="button">2</button>
+<button class="px-2.5 py-1 rounded bg-surface-card text-on-surface hover:text-primary shadow-xs" type="button">3</button>
+<span class="px-1 text-on-surface-variant">...</span>
+<button class="px-2.5 py-1 rounded bg-surface-card text-on-surface hover:text-primary shadow-xs" type="button">256</button>
+<button class="px-2.5 py-1 rounded bg-surface-card text-on-surface-variant hover:text-on-surface shadow-xs" type="button">Next</button>
+</div>
+</div>
+</div>
+<!-- Lower Section: Real-Time Repricing Feed & Competitor Move Interceptions -->
+<div class="space-y-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">radar</span>
+<h2 class="font-headline-md text-headline-md text-on-surface font-bold">Real-Time Repricing Feed &amp; Competitor Interceptions</h2>
+</div>
+<span class="font-mono-code-sm text-mono-code-sm text-on-surface-variant">Continuous SP-API Notification Stream (Sub-minute)</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
+<!-- Feed Card 1 -->
+<div class="bg-surface-card p-space-lg rounded-xl shadow-sm space-y-space-sm border-l-4 border-l-status-amber flex flex-col justify-between hover:shadow-md transition-shadow">
+<div class="space-y-1">
+<div class="flex items-center justify-between">
+<span class="px-2 py-0.5 rounded-full bg-status-amber/10 text-status-amber font-mono-code-sm text-mono-code-sm font-semibold">
+                Competitor Undercut Intercepted
+              </span>
+<span class="font-mono-code-sm text-mono-code-sm text-on-surface-variant">28s ago</span>
+</div>
+<h3 class="font-label-lg text-label-lg font-bold text-on-surface pt-1">Solar Power Pod Pro (B09V72K88L)</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              Competitor <strong>'VoltDirect'</strong> dropped price from $48.99 to $47.95. Sentinel matched Buy Box at $47.95 within 28 seconds. Projected margin preserved at 24.1%.
+            </p>
+</div>
+<div class="pt-2 flex items-center justify-between">
+<button class="text-primary hover:text-primary-container font-label-sm text-label-sm font-bold flex items-center gap-1" type="button">
+<span>Inspect Event Trace</span>
+<span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</button>
+<span class="font-mono-code-sm text-mono-code-sm text-status-emerald">Auto-Remedied</span>
+</div>
+</div>
+<!-- Feed Card 2 -->
+<div class="bg-surface-card p-space-lg rounded-xl shadow-sm space-y-space-sm border-l-4 border-l-status-emerald flex flex-col justify-between hover:shadow-md transition-shadow">
+<div class="space-y-1">
+<div class="flex items-center justify-between">
+<span class="px-2 py-0.5 rounded-full bg-status-emerald/10 text-status-emerald font-mono-code-sm text-mono-code-sm font-semibold">
+                Autonomous Price Escalation
+              </span>
+<span class="font-mono-code-sm text-mono-code-sm text-on-surface-variant">3m ago</span>
+</div>
+<h3 class="font-label-lg text-label-lg font-bold text-on-surface pt-1">Ergonomic Dual Lamp Pro (B07AA38992)</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              Nearest FBA competitor stockout confirmed. Repricer systematically stepped price from $54.00 to $58.90 (+9.1% revenue). Buy Box ownership maintained at 100%.
+            </p>
+</div>
+<div class="pt-2 flex items-center justify-between">
+<button class="text-primary hover:text-primary-container font-label-sm text-label-sm font-bold flex items-center gap-1" type="button">
+<span>Confirm Pricing</span>
+<span class="material-symbols-outlined text-[14px]">check</span>
+</button>
+<span class="font-mono-code-sm text-mono-code-sm text-status-emerald font-bold">+$4.90/unit Gain</span>
+</div>
+</div>
+<!-- Feed Card 3 -->
+<div class="bg-surface-card p-space-lg rounded-xl shadow-sm space-y-space-sm border-l-4 border-l-status-rose flex flex-col justify-between hover:shadow-md transition-shadow">
+<div class="space-y-1">
+<div class="flex items-center justify-between">
+<span class="px-2 py-0.5 rounded-full bg-status-rose/10 text-status-rose font-mono-code-sm text-mono-code-sm font-semibold">
+                Margin Floor Lock Engaged
+              </span>
+<span class="font-mono-code-sm text-mono-code-sm text-on-surface-variant">11m ago</span>
+</div>
+<h3 class="font-label-lg text-label-lg font-bold text-on-surface pt-1">Resistance Band Kit (B07X81ML39)</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              Competitor <strong>'QuickShip'</strong> slashed price to $14.20 below our $14.99 margin floor (18.5%). Algorithmic descent halted to protect unit profitability.
+            </p>
+</div>
+<div class="pt-2 flex items-center justify-between">
+<button class="text-status-rose hover:text-status-rose/80 font-label-sm text-label-sm font-bold flex items-center gap-1" type="button">
+<span>View War Analysis</span>
+<span class="material-symbols-outlined text-[14px]">open_in_new</span>
+</button>
+<span class="font-mono-code-sm text-mono-code-sm text-status-rose font-bold">Floor Protected</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer System Status Strip -->
+<div class="p-space-md rounded-xl bg-surface-card shadow-sm flex flex-col sm:flex-row items-center justify-between gap-space-sm font-mono-code-sm text-mono-code-sm text-on-surface-variant">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-status-emerald animate-pulse"></span>
+<span class="text-on-surface">AmzSphere High-Frequency Repricer Sentinel: Active SP-API AnyOfferChanged notification stream. Zero API throttling detected.</span>
+</div>
+<div class="flex items-center gap-space-md">
+<span>Engine: <strong>v4.2.1-turbo</strong></span>
+<span>Polling cycle: <strong>Sub-60s</strong></span>
+<span>Region: <strong>US-EAST-1 (AWS)</strong></span>
+</div>
+</div>
+</div>
+</div></main></div></body></html>

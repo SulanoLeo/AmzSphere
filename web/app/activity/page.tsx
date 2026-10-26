@@ -6,7 +6,7 @@ import type { ActivityItem } from "@/lib/provider/types";
 
 function Metric({ label, value, detail, accent, tag }: { label: string; value: string; detail: string; accent: string; tag?: string }) {
   return (
-    <section className={`metric ${accent === "green" || accent === "teal" || accent === "blue" || accent === "warn" ? "" : ""}`}>
+    <section className={`metric`} data-accent={accent}>
       <div className="metric-label"><span>{label}</span>{tag && <span className="mini-tag">{tag}</span>}</div>
       <div className="metric-value">{value}</div>
       <div className="metric-foot">{detail}</div>

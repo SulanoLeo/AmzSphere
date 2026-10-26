@@ -47,7 +47,7 @@ export default function HowPage() {
                     <div className="flow-title">Draft an optimization</div>
                     <div className="flow-copy">Side-by-side current vs suggested copy (title, bullets, keywords, description). Saving creates a product_revision with status draft_ready or pending_approval; nothing touches Amazon until approved.</div>
                   </div>
-                  <span className="flow-endpoint">POST /api/products/{'{'}id{'}'}/optimize</span>
+                  <span className="flow-endpoint">POST /api/products/{'{' + 'id' + '}'}/optimize</span>
                 </div>
                 <div className="flow-step">
                   <span className="flow-number">04</span>
@@ -55,7 +55,7 @@ export default function HowPage() {
                     <div className="flow-title">Approve or reject</div>
                     <div className="flow-copy">Approvals shows pending revisions with a before/after diff. Approve applies the changes to the shared product, sets opt_status=published, recomputes the score, updates marketplace listings to Live & In Sync, and logs the publish. Reject returns the product to needs_optimization.</div>
                   </div>
-                  <span className="flow-endpoint">POST /api/approvals/{'{'}id{'}'}/approve|reject</span>
+                  <span className="flow-endpoint">POST /api/approvals/{'{' + 'id' + '}'}/approve|reject</span>
                 </div>
                 <div className="flow-step">
                   <span className="flow-number">05</span>
@@ -113,7 +113,7 @@ export default function HowPage() {
             <section className="panel insight-panel">
               <div className="panel-content">
                 <div className="insight-tag">Mock mode · visual simulation</div>
-                <blockquote className="insight-quote">Live won’t run without SP-API credentials, PostgreSQL, Redis, and Google OAuth.</blockquote>
+                <blockquote className="insight-quote">Live won't run without SP-API credentials, PostgreSQL, Redis, and Google OAuth.</blockquote>
                 <p className="insight-body">The Next.js/FastAPI/Celery scaffold keeps the same product model and endpoints; only the sync source swaps from the mock catalog to real SP-API Listings/Catalog/FBA Inventory calls when credentials are added.</p>
                 <div className="recommendation"><strong>Safety boundary</strong><br />All data here is mock. Approval actions are not authenticated yet; keep hosted access private.</div>
               </div>
