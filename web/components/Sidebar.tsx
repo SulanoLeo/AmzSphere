@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ChevronLeft, Activity, PackageSearch, ChartNoAxesCombined, Boxes, Store, CircleDollarSign, FileText, ClipboardCheck, HelpCircle, SlidersHorizontal } from "lucide-react";
+import { ChevronLeft, Activity, PackageSearch, ChartNoAxesCombined, Boxes, Store, CircleDollarSign, FileText, ClipboardCheck, HelpCircle, SlidersHorizontal, Settings } from "lucide-react";
 
 const navigation = [
   { label: "Overview", href: "/", Icon: Activity },
@@ -15,6 +15,7 @@ const navigation = [
   { label: "B2B Approvals", href: "/approvals", Icon: ClipboardCheck },
   { label: "How It Works", href: "/how", Icon: HelpCircle },
   { label: "SEO Tool Selector", href: "/seo-tools", Icon: SlidersHorizontal },
+  { label: "SEO Tool Admin", href: "/admin/seo-tools", Icon: Settings },
 ] as const;
 
 export function Sidebar() {

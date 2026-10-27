@@ -17,6 +17,13 @@ export interface SeoToolFeature {
   label: string;
 }
 
+export interface SeoToolCategoryDef {
+  id: SeoToolCategory;
+  label: string;
+  description: string;
+  is_active: boolean;
+}
+
 export interface SeoTool {
   id: string;
   name: string;
@@ -90,6 +97,57 @@ const CATEGORY_ORDER: SeoToolCategory[] = [
   "Review & Feedback",
   "Analytics",
   "Competitor Analysis",
+];
+
+export const SEO_CATEGORIES: SeoToolCategoryDef[] = [
+  {
+    id: "Keyword Research",
+    label: "Keyword Research",
+    description: "Discover high-volume Amazon search terms and track keyword rankings.",
+    is_active: true,
+  },
+  {
+    id: "Listing Optimization",
+    label: "Listing Optimization",
+    description: "Improve titles, bullets, descriptions, and backend keywords for conversion.",
+    is_active: true,
+  },
+  {
+    id: "Rank Tracking",
+    label: "Rank Tracking",
+    description: "Monitor keyword positions and ranking movement over time.",
+    is_active: true,
+  },
+  {
+    id: "PPC/Advertising",
+    label: "PPC / Advertising",
+    description: "Manage Amazon sponsored ads, bids, and ad-campaign performance.",
+    is_active: true,
+  },
+  {
+    id: "Product Research",
+    label: "Product Research",
+    description: "Find profitable products and validate demand before launching.",
+    is_active: true,
+  },
+  {
+    id: "Review & Feedback",
+    label: "Review & Feedback",
+    description: "Automate review requests and monitor customer feedback.",
+    is_active: true,
+  },
+  {
+    id: "Analytics",
+    label: "Analytics",
+    description: "Track sales, profitability, and listing performance metrics.",
+    is_active: true,
+  },
+  {
+    id: "Competitor Analysis",
+    label: "Competitor Analysis",
+    description: "Monitor competitor pricing, buy box, and share of voice.",
+    is_active: true,
+  },
 ];
 
 export function marketplaceLabel(code: Marketplace): string {
@@ -452,4 +510,82 @@ export function findTool(id: string): SeoTool | undefined {
 
 export function isToolSelected(id: string, selected: string[]): boolean {
   return selected.includes(id);
+}
+
+export function getCategoryRegistry(): SeoToolCategoryDef[] {
+  return [...SEO_CATEGORIES];
+}
+
+export interface RecommendationAnswers {
+  seller_size: "small" | "medium" | "large";
+  budget: "low" | "medium" | "high";
+  goals: string[];
+  marketplaces: Marketplace[];
+}
+
+export interface RecommendationResult {
+  tool_ids: string[];
+  reason: string;
+}
+
+const GOAL_CATEGORY_MAP: Record<string, SeoToolCategory[]> = {
+  ranking: ["Rank Tracking", "Keyword Research"],
+  ppc: ["PPC/Advertising", "Analytics"],
+  reviews: ["Review & Feedback"],
+  listings: ["Listing Optimization"],
+  products: ["Product Research"],
+  competitors: ["Competitor Analysis"],
+};
+
+export function recommendStarterStack(answers: RecommendationAnswers): RecommendationResult {
+  const allTools = SEED_TOOLS.filter((t) => t.is_active);
+  const activeCategories = new Set(
+    SEO_CATEGORIES.filter((c) => c.is_active).map((c) => c.id),
+  );
+
+  const wantedCategories = new Set<SeoToolCategory>();
+  for (const goal of answers.goals) {
+    for (const category of GOAL_CATEGORY_MAP[goal] ?? []) {
+      if (activeCategories.has(category)) wantedCategories.add(category);
+    }
+  }
+  if (wantedCategories.size === 0) {
+    wantedCategories.add("Keyword Research");
+    wantedCategories.add("Listing Optimization");
+  }
+
+  const budgetMax =
+    answers.budget === "low" ? 50 : answers.budget === "medium" ? 150 : 500;
+
+  const scored = allTools
+    .filter((t) => {
+      if (!wantedCategories.has(t.category)) return false;
+      if (t.starting_price_usd != null && t.starting_price_usd > budgetMax) return false;
+      if (
+        answers.marketplaces.length > 0 &&
+        !answers.marketplaces.some((m) => t.marketplaces.includes(m))
+      )
+        return false;
+      return true;
+    })
+    .sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0) || a.starting_price_usd! - b.starting_price_usd!);
+
+  const selected: SeoTool[] = [];
+  const usedCategories = new Set<SeoToolCategory>();
+  for (const tool of scored) {
+    if (selected.length >= 4) break;
+    selected.push(tool);
+    usedCategories.add(tool.category);
+  }
+
+  const reasonParts: string[] = [];
+  if (answers.goals.length > 0) reasonParts.push(`focused on ${answers.goals.join(", ")}`);
+  reasonParts.push(`budget up to $${budgetMax}/mo`);
+  if (answers.marketplaces.length > 0)
+    reasonParts.push(`marketplaces: ${answers.marketplaces.join(", ")}`);
+
+  return {
+    tool_ids: selected.map((t) => t.id),
+    reason: `Starter stack ${reasonParts.join("; ")}.`,
+  };
 }

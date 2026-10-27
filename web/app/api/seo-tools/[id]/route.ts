@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { requireAllowedUser } from "@/lib/require-user";
-import { SEED_TOOLS, type SeoTool } from "@/lib/seo-tools";
+import { SEED_TOOLS, type SeoTool, type SeoToolCategory, type Marketplace } from "@/lib/seo-tools";
+import { seoToolPatchSchema, type SeoToolPatchInput } from "@/lib/validation";
 
 type Context = { params: Promise<{ id: string }> };
 
@@ -23,7 +24,7 @@ export async function GET(_request: Request, { params }: Context) {
 }
 
 export async function PATCH(request: Request, { params }: Context) {
-  const user = await requireAllowedUser();
+  const user = await requireAllowedUser("approver");
   if ("response" in user) return user.response;
 
   const { id } = await params;
@@ -31,12 +32,22 @@ export async function PATCH(request: Request, { params }: Context) {
   if (index === -1) {
     return NextResponse.json({ detail: `Tool not found: ${id}` }, { status: 404 });
   }
-  const body = (await request.json()) as Partial<SeoTool>;
+  const body: unknown = await request.json();
+  const parsed = seoToolPatchSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json(
+      { detail: "Validation failed", errors: parsed.error.flatten().fieldErrors },
+      { status: 422 },
+    );
+  }
+  const input = parsed.data as SeoToolPatchInput;
   const now = new Date().toISOString();
   const updated: SeoTool = {
     ...SEED_TOOLS[index],
-    ...body,
+    ...input,
     id,
+    category: input.category ? (input.category as SeoToolCategory) : SEED_TOOLS[index].category,
+    marketplaces: input.marketplaces as Marketplace[],
     updated_at: now,
   };
   (SEED_TOOLS as SeoTool[])[index] = updated;
@@ -44,7 +55,7 @@ export async function PATCH(request: Request, { params }: Context) {
 }
 
 export async function DELETE(_request: Request, { params }: Context) {
-  const user = await requireAllowedUser();
+  const user = await requireAllowedUser("approver");
   if ("response" in user) return user.response;
 
   const { id } = await params;

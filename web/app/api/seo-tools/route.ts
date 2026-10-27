@@ -3,10 +3,14 @@ import { requireAllowedUser } from "@/lib/require-user";
 import {
   SEED_TOOLS,
   type SeoTool,
+  type SeoToolCategory,
+  type Marketplace,
   type SeoToolFilters,
   type SeoToolPage,
   filterAndSortTools,
 } from "@/lib/seo-tools";
+import { seoToolCreateSchema } from "@/lib/validation";
+import type { SeoToolCreateInput } from "@/lib/validation";
 
 export const dynamic = "force-dynamic";
 
@@ -56,27 +60,33 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const user = await requireAllowedUser();
+  const user = await requireAllowedUser("approver");
   if ("response" in user) return user.response;
 
-  const body = (await request.json()) as Partial<SeoTool>;
-  if (!body.name || !body.category) {
-    return NextResponse.json({ detail: "name and category are required" }, { status: 422 });
+  const body: unknown = await request.json();
+  const parsed = seoToolCreateSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json(
+      { detail: "Validation failed", errors: parsed.error.flatten().fieldErrors },
+      { status: 422 },
+    );
   }
+
+  const input = parsed.data;
   const now = new Date().toISOString();
   const tool: SeoTool = {
     id: `tool-${crypto.randomUUID()}`,
-    name: body.name,
-    logo: body.logo ?? "https://placehold.co/64x64?text=?",
-    short_description: body.short_description ?? "",
-    category: body.category,
-    pricing_model: body.pricing_model ?? "freemium",
-    starting_price_usd: body.starting_price_usd ?? null,
-    features: body.features ?? [],
-    marketplaces: body.marketplaces ?? [],
-    rating: body.rating ?? null,
-    website_url: body.website_url ?? "",
-    is_active: Boolean(body.is_active ?? true),
+    name: input.name,
+    logo: "https://placehold.co/64x64?text=?",
+    short_description: input.short_description,
+    category: input.category as SeoToolCategory,
+    pricing_model: input.pricing_model,
+    starting_price_usd: input.starting_price_usd ?? null,
+    features: input.features,
+    marketplaces: input.marketplaces as Marketplace[],
+    rating: input.rating ?? null,
+    website_url: input.website_url,
+    is_active: input.is_active,
     created_at: now,
     updated_at: now,
   };

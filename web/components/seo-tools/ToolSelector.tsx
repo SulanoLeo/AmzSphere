@@ -23,14 +23,21 @@ import {
   type SeoToolFilters,
   type SeoToolPage,
 } from "@/lib/seo-tools";
+import { useSession } from "next-auth/react";
 import { CompareTable } from "@/components/seo-tools/CompareTable";
 import { FilterSidebar } from "@/components/seo-tools/FilterSidebar";
 import { StackPanel } from "@/components/seo-tools/StackPanel";
 import { ToolCard } from "@/components/seo-tools/ToolCard";
+import { RecommendationWizard } from "@/components/seo-tools/RecommendationWizard";
 
 interface ToolSelectorProps {}
 
+const SELECTION_API = "/api/seo-tools/selection";
+
 export function ToolSelector(_props: ToolSelectorProps) {
+  const sessionResult = useSession();
+  const isLoggedIn = !!sessionResult?.data?.user?.email;
+
   const [tools, setTools] = useState<SeoTool[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
@@ -70,7 +77,6 @@ export function ToolSelector(_props: ToolSelectorProps) {
       } catch (cause) {
         if (!active) return;
         setError(cause instanceof Error ? cause.message : "Unable to load SEO tools");
-        // Fall back to seed data so the UI still works offline/mock.
         setTools(SEED_TOOLS);
       } finally {
         if (active) setIsLoading(false);
@@ -80,18 +86,58 @@ export function ToolSelector(_props: ToolSelectorProps) {
     return () => { active = false; };
   }, [filters.page, filters.page_size]);
 
+  // Load persisted selection: server-backed when logged in, localStorage otherwise.
+  useEffect(() => {
+    let active = true;
+    const loadSelection = async () => {
+      if (isLoggedIn) {
+        try {
+          const response = await fetch(SELECTION_API, { cache: "no-store" });
+          if (response.ok) {
+            const data = await response.json();
+            if (Array.isArray(data.selected_tool_ids) && active) {
+              setSelectedIds(data.selected_tool_ids);
+              return;
+            }
+          }
+        } catch {
+          // fall through to localStorage
+        }
+      }
+      if (active) setSelectedIds(loadSelectionFromStorage());
+    };
+    void loadSelection();
+    return () => { active = false; };
+  }, [isLoggedIn]);
+
+  const persistSelection = useCallback(
+    (next: string[]) => {
+      saveSelectionToStorage(next);
+      if (isLoggedIn) {
+        void fetch(SELECTION_API, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ selected_tool_ids: next }),
+        }).catch(() => {
+          // localStorage remains the durable fallback.
+        });
+      }
+    },
+    [isLoggedIn],
+  );
+
   const handleSelect = useCallback((toolId: string) => {
     setSelectedIds((prev) => {
       const next = prev.includes(toolId) ? prev.filter((id) => id !== toolId) : [...prev, toolId];
-      saveSelectionToStorage(next);
+      persistSelection(next);
       return next;
     });
-  }, []);
+  }, [persistSelection]);
 
   const handleClearSelection = useCallback(() => {
     setSelectedIds([]);
-    saveSelectionToStorage([]);
-  }, []);
+    persistSelection([]);
+  }, [persistSelection]);
 
   const handleToggleCompare = useCallback((toolId: string) => {
     setCompareIds((prev) => {
@@ -221,13 +267,15 @@ export function ToolSelector(_props: ToolSelectorProps) {
               onRemove={(toolId) => {
                 setSelectedIds((prev) => {
                   const next = prev.filter((id) => id !== toolId);
-                  saveSelectionToStorage(next);
+                  persistSelection(next);
                   return next;
                 });
               }}
               onClear={handleClearSelection}
               onCompare={handleStartCompare}
             />
+
+            <RecommendationWizard selectedIds={selectedIds} onSelect={handleSelect} />
           </div>
         </div>
       </div>
