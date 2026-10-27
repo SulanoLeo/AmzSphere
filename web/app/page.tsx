@@ -2,13 +2,12 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { PackageSearch, RefreshCw, TriangleAlert } from "lucide-react";
+import { PackageSearch, RefreshCw, TriangleAlert, ShieldAlert, LayoutDashboard, PieChartIcon, BarChart3, ShoppingCart } from "lucide-react";
 import { Bar, BarChart, Line, LineChart, Pie, PieChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { BuyBoxStatus } from "@/components/product/BuyBoxStatus";
 import { ClientProductProvider } from "@/lib/provider/client";
 import type { Dashboard, Seller } from "@/lib/provider/types";
 
@@ -31,20 +30,58 @@ const acosHistory = [
 ];
 
 const procurementMix = [
-  { category: "Office", value: 45 },
-  { category: "Electronics", value: 28 },
-  { category: "Lighting", value: 15 },
-  { category: "Home & Kitchen", value: 12 },
+  { category: "Direct", value: 48, color: "#6366F1" },
+  { category: "Seller Vendor", value: 28, color: "#006a63" },
+  { category: "FBA", value: 15, color: "#FFB95F" },
+  { category: "Distributed", value: 9, color: "#10B981" },
 ];
 
-function Metric({ label, value, detail, accent, tag }: { label: string; value: string; detail: string; accent: string; tag?: string }) {
+function Metric({
+  label,
+  value,
+  detail,
+  accent,
+  tag,
+}: {
+  label: string;
+  value: string;
+  detail: string;
+  accent: string;
+  tag?: string;
+}) {
   return (
     <section className="metric" data-accent={accent}>
-      <div className="metric-label"><span>{label}</span>{tag && <span className="mini-tag">{tag}</span>}</div>
+      <div className="metric-label">
+        <span>{label}</span>
+        {tag && <span className="mini-tag">{tag}</span>}
+      </div>
       <div className="metric-value">{value}</div>
       <div className="metric-foot">{detail}</div>
       <div className={`metric-accent ${accent}`}></div>
     </section>
+  );
+}
+
+function SellerPill({
+  label,
+  value,
+  color,
+}: {
+  label: string;
+  value: string;
+  color: string;
+}) {
+  return (
+    <span
+      className="inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-[10px] font-medium"
+      style={{ borderColor: color, color, backgroundColor: `${color}1a` }}
+    >
+      <span
+        className="inline-block w-1.5 h-1.5 rounded-full"
+        style={{ backgroundColor: color }}
+      />
+      {label}: {value}
+    </span>
   );
 }
 
@@ -93,6 +130,16 @@ export default function DashboardPage() {
     }
   }
 
+  async function runInventoryScan() {
+    if (!selectedSeller) return;
+    try {
+      await provider.runInventoryScan(selectedSeller);
+      await loadDashboard(selectedSeller);
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "Inventory scan failed");
+    }
+  }
+
   useEffect(() => {
     let active = true;
     const loadSellers = async () => {
@@ -104,7 +151,12 @@ export default function DashboardPage() {
           setError("No Amazon seller is connected yet.");
           setLoading(false);
         } else {
-          setSelectedSeller((current) => current && payload.some((seller: Seller) => seller.id === current) ? current : payload[0].id);
+          setSelectedSeller(
+            (current) =>
+              current && payload.some((seller: Seller) => seller.id === current)
+                ? current
+                : payload[0].id,
+          );
         }
       } catch (cause) {
         setError(cause instanceof Error ? cause.message : "Seller accounts unavailable");
@@ -115,33 +167,51 @@ export default function DashboardPage() {
     return () => { active = false; };
   }, [provider]);
 
-  useEffect(() => { if (selectedSeller) void loadDashboard(selectedSeller); }, [selectedSeller, loadDashboard]);
+  useEffect(() => {
+    if (selectedSeller) void loadDashboard(selectedSeller);
+  }, [selectedSeller, loadDashboard]);
 
   const reorderRows = (data?.products || []).filter((product) => product.reorder_flag);
-  const totalStock = (data?.products || []).reduce((total, product) => total + (product.stock ?? 0), 0);
-  const chartData = (data?.products || []).map((product) => ({ sku: product.sku, velocity: product.velocity_30d }));
+  const totalStock = (data?.products || []).reduce(
+    (total, product) => total + (product.stock ?? 0),
+    0,
+  );
+  const chartData = (data?.products || []).map((product) => ({
+    sku: product.sku,
+    velocity: product.velocity_30d,
+  }));
+
+  const connected = data?.sync_status === "completed";
 
   return (
     <main className="min-h-screen bg-canvas px-4 py-6 md:px-10 md:py-10">
-      <header className="mb-7 flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-line pb-5">
+      {/* Header */}
+      <header className="mb-6 flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-line pb-5">
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2 text-primary font-label-md uppercase tracking-wider">
             <PackageSearch size={15} />
-            <span>Seller Operations</span>
+            <span>SEO & Catalog</span>
           </div>
-          <h1 className="font-headline-xl text-headline-xl text-on-surface tracking-tight mt-0.5">Operations overview</h1>
-          <p className="font-body-md text-body-md text-on-surface-variant">Inventory health and human-review work queue.</p>
+          <div className="flex flex-col lg:flex-row lg:items-center gap-2 lg:gap-4">
+            <div className="flex flex-col gap-0.5">
+              <span className="text-[10px] font-bold text-muted uppercase tracking-wider">Seller</span>
+              <SellerPill label="SELLER" value={sellers.find((s) => s.id === selectedSeller)?.merchant_id ?? "—"} color="#6366F1" />
+            </div>
+            <div className="flex flex-col gap-0.5">
+              <span className="text-[10px] font-bold text-muted uppercase tracking-wider">Period</span>
+              <span className="text-sm font-semibold text-on-surface">10-26-26 / 10-27-26</span>
+            </div>
+            <h1 className="font-headline-xl text-headline-xl text-on-surface tracking-tight mt-0 lg:mt-2 lg:ml-4 lg:border-l lg:border-line lg:pl-4">
+              Operations overview
+            </h1>
+          </div>
+          <p className="font-body-md text-body-md text-on-surface-variant mt-2 lg:mt-0 lg:ml-5">
+            Inventory health and human-review work queue.
+          </p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          {sellers.length > 1 && (
-            <select aria-label="Seller account" className="h-9 max-w-56 rounded-md border border-line bg-white px-2 text-xs" value={selectedSeller} onChange={(event) => setSelectedSeller(event.target.value)}>
-              {sellers.map((seller) => (
-                <option key={seller.id} value={seller.id}>{seller.merchant_id} · {seller.marketplace_id}</option>
-              ))}
-            </select>
-          )}
-          <Badge className={data?.sync_status === "completed" ? "bg-teal-50 text-teal-800" : "bg-amber-50 text-amber-800"}>
-            {data?.sync_status === "completed" ? `Synced · ${data?.last_synced_at ? new Date(data.last_synced_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : ""}` : "Not connected"}
+          <Badge className={connected ? "bg-teal-50 text-teal-800" : "bg-amber-50 text-amber-800"}>
+            {connected ? `Synced · ${data?.last_synced_at ? new Date(data.last_synced_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : ""}` : "Not connected"}
           </Badge>
           <Button variant="outline" onClick={() => void syncSeller()} disabled={!selectedSeller || loading}>
             <RefreshCw size={15} /> Sync seller data
@@ -149,96 +219,84 @@ export default function DashboardPage() {
           <Button variant="outline" onClick={() => selectedSeller && void loadDashboard(selectedSeller)} disabled={!selectedSeller || loading}>
             <RefreshCw size={15} className={loading ? "animate-spin" : ""} /> Refresh
           </Button>
-          <BuyBoxStatus />
         </div>
       </header>
 
-      {syncMessage && <p role="status" className="mb-4 rounded-md border border-line bg-white px-4 py-3 text-xs">{syncMessage}</p>}
+      {/* Alert banner */}
       {error && (
         <div role="alert" className="alert-banner amber mb-5">
           <div className="alert-banner-icon">
-            <TriangleAlert size={18} />
+            <ShieldAlert size={18} />
           </div>
           <div className="alert-banner-content">
-            <div className="alert-banner-title">Backend not ready</div>
-            <div className="alert-banner-desc">{error}</div>
+            <div className="alert-banner-title">Backend not ready · Authorization required</div>
+            <div className="alert-banner-desc">
+              Connect a seller account to ingest catalog, inventory, and pricing data. SP-API credentials remain server-side.
+            </div>
+          </div>
+          <div className="flex items-start gap-2">
+            <Button variant="outline" onClick={() => {}}>
+              Edit setup
+            </Button>
+            <Button onClick={() => void syncSeller()} disabled={loading}>
+              Connect seller account
+            </Button>
           </div>
         </div>
       )}
 
-      <div className="sync-bar">
-        <span className="sync-badge good">Mock engine live</span>
-        <button className="button" onClick={() => selectedSeller && void loadDashboard(selectedSeller)} disabled={!selectedSeller || loading}>Sync seller data</button>
-        <button className="button button-outline" onClick={() => selectedSeller && void loadDashboard(selectedSeller)} disabled={!selectedSeller || loading}>Refresh</button>
-      </div>
-
-      <div className="metrics metrics-five">
-        <Metric label="Catalog items" value={String(data?.products.length ?? "—")} detail="Seller-linked ASINs · one shared product record each" accent="blue" tag="CATALOG" />
-        <Metric label="Sellable units" value={data ? data.products.reduce((total, item) => total + (item.stock ?? 0), 0).toLocaleString() : "—"} detail="Latest inventory snapshots across all marketplaces" accent="teal" tag="INVENTORY" />
-        <Metric label="Needs optimization" value={data ? String(data.needs_optimization_count) : "—"} detail="Products below a 70 optimization score" accent="orange" tag="OPTIMIZATION" />
-        <Metric label="Reorder flags" value={data ? String(reorderRows.length) : "—"} detail="Below 15 days of supply" accent="warn" tag="DAYS OF SUPPLY" />
-        <Metric label="Pending approvals" value={String(data?.pending_purchase_orders.length ?? "—")} detail="Revisions awaiting your decision" accent="teal" tag="APPROVALS" />
-      </div>
-
-      {data?.top_10_by_impact?.length && (
-        <Card className="mb-5">
-          <CardHeader>
-            <div>
-              <h2 className="panel-title">Optimization priority list</h2>
-              <p className="panel-subtitle">Ranked by (100 − score) × recent sales volume. Open the catalog to optimize.</p>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="table-wrap">
-              <table className="mock-table">
-                <thead>
-                  <tr>
-                    <th>SKU</th>
-                    <th>ASIN</th>
-                    <th>Product</th>
-                    <th className="tabular-nums">Score</th>
-                    <th>Status</th>
-                    <th className="tabular-nums">Impact</th>
-                    <th>Issues</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.top_10_by_impact.map((item) => {
-                    const issues = item.opt_issues || [];
-                    return (
-                      <tr key={item.asin} className="border-t border-line">
-                        <td className="sku-cell">{item.sku}</td>
-                        <td className="sku-cell tabular-nums text-[10px] text-muted">{item.asin}</td>
-                        <td>{item.name}</td>
-                        <td className="tabular-nums font-semibold">{item.opt_score}</td>
-                        <td>
-                          <span className={`status-pill ${item.opt_status === "needs_optimization" ? "warn" : item.opt_status === "draft_ready" || item.opt_status === "pending_approval" ? "pending" : item.opt_status === "optimized" ? "good" : ""}`}>
-                            {item.opt_status || "—"}
-                          </span>
-                        </td>
-                        <td className="tabular-nums">{Math.round(item.impact)}</td>
-                        <td className="issue-cell">{issues.length ? issues.map((issue) => <span className="issue-tag" key={issue}>{issue}</span>) : <span className="issue-tag muted">—</span>}</td>
-                        <td><button className="button button-outline button-sm" onClick={() => {}}>Optimize</button></td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-            <p className="mt-2 text-xs text-muted">Open <Link href="/catalog" className="font-semibold underline">SEO & Catalog</Link> to run the full optimize → approval → publish flow on any product above.</p>
-          </CardContent>
-        </Card>
+      {syncMessage && (
+        <p role="status" className="mb-4 rounded-md border border-line bg-white px-4 py-3 text-xs">{syncMessage}</p>
       )}
 
-      <section className="section-grid mb-5">
+      {/* Metrics row */}
+      <div className="metrics metrics-five mb-6">
+        <Metric
+          label="Catalog items"
+          value={String(data?.products.length ?? "—")}
+          detail="Seller-linked ASINs · one shared product record each"
+          accent="blue"
+          tag="CATALOG"
+        />
+        <Metric
+          label="Inventory"
+          value={data ? data.products.reduce((total, item) => total + (item.stock ?? 0), 0).toLocaleString() : "—"}
+          detail="Latest inventory snapshots across all marketplaces"
+          accent="teal"
+          tag="INVENTORY"
+        />
+        <Metric
+          label="Optimization"
+          value={data ? String(Math.round((data.products.reduce((s, p) => s + (p.opt_score ?? 0), 0) / Math.max(data.products.length, 1)))) : "—"}
+          detail="Moving below 70 score"
+          accent="orange"
+          tag="▲70 score"
+        />
+        <Metric
+          label="Urgent"
+          value={String(reorderRows.length)}
+          detail="1+ days below normal reorder level"
+          accent="warn"
+          tag="REORDER FLAGS"
+        />
+        <Metric
+          label="In queue"
+          value={String(data?.pending_purchase_orders.length ?? "—")}
+          detail="Revisions awaiting your decision"
+          accent="teal"
+          tag="APPROVALS"
+        />
+      </div>
+
+      {/* Chart row: velocity + guard */}
+      <section className="section-grid mb-6">
         <div className="panel">
-          <div className="panel-header">
+          <div className="panel-header flex items-center justify-between">
             <div>
               <h2 className="panel-title">30-day unit velocity</h2>
               <div className="panel-subtitle">Calculated from ingested daily sales records</div>
             </div>
-            <span className="category-pill">Rate-limited</span>
+            <span className="category-pill">Rate-Limited</span>
           </div>
           <div className="panel-content">
             <div className="h-64 w-full">
@@ -258,36 +316,10 @@ export default function DashboardPage() {
             </div>
           </div>
         </div>
-        <div className="panel">
-          <div className="panel-header">
-            <div>
-              <h2 className="panel-title">Execution guard</h2>
-              <div className="panel-subtitle">Control plane status</div>
-            </div>
-          </div>
-          <div className="panel-content space-y-4 text-xs">
-            <div className="flex items-start gap-3">
-              <span className="mt-1 size-2 rounded-full bg-teal-700" />
-              <div>
-                <strong>Redis/Celery queue</strong>
-                <p className="mt-1 text-muted">Tasks are dispatched from the PostgreSQL outbox.</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <span className="mt-1 size-2 rounded-full bg-amber-500" />
-              <div>
-                <strong>Amazon write mode</strong>
-                <p className="mt-1 text-muted">Requires server-side enablement and human approval.</p>
-              </div>
-            </div>
-            <Link href={`/catalog?seller_id=${encodeURIComponent(selectedSeller)}`} className="inline-flex items-center gap-2 pt-2 font-semibold text-teal-700 hover:underline">
-              <PackageSearch size={15} /> Open SEO workspace
-            </Link>
-          </div>
-        </div>
       </section>
 
-      <section className="section-grid mb-5">
+      {/* Chart row: ACoS + procurement mix */}
+      <section className="section-grid mb-6">
         <div className="panel">
           <div className="panel-header">
             <div>
@@ -322,24 +354,44 @@ export default function DashboardPage() {
             <div className="grid h-full place-items-center">
               <ResponsiveContainer width={220} height={220}>
                 <PieChart>
-                  <Pie data={procurementMix} dataKey="value" nameKey="category" cx="110" cy="110" outerRadius={70} fill="#8884d8" label>
+                  <Pie
+                    data={procurementMix}
+                    dataKey="value"
+                    nameKey="category"
+                    cx="110"
+                    cy="110"
+                    outerRadius={70}
+                    label
+                  >
                     <Tooltip />
                   </Pie>
                   <Tooltip />
                 </PieChart>
               </ResponsiveContainer>
+              <div className="mt-4 space-y-2 text-xs">
+                {procurementMix.map((item) => (
+                  <div
+                    key={item.category}
+                    className="flex items-center justify-between"
+                  >
+                    <span className="text-muted">{item.category}</span>
+                    <span className="font-semibold text-on-surface">{item.value}%</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <Card className="mb-5">
-        <CardHeader>
+      {/* Autonomous procurement queue */}
+      <Card className="mb-6">
+        <CardHeader className="flex items-center justify-between">
           <div>
             <h2 className="panel-title">Autonomous procurement queue</h2>
             <p className="panel-subtitle">Trailing 7/30/90-day velocity · replenishment proposals require review</p>
           </div>
-          <Button variant="outline" disabled={!selectedSeller || loading} onClick={async () => { await provider.runInventoryScan(selectedSeller); if (selectedSeller) await loadDashboard(selectedSeller); }}>
+          <Button variant="outline" disabled={!selectedSeller || loading} onClick={runInventoryScan}>
             Run inventory scan
           </Button>
         </CardHeader>
@@ -354,6 +406,7 @@ export default function DashboardPage() {
                   <th className="px-4 py-3">Days supply</th>
                   <th className="px-4 py-3">Vendor</th>
                   <th className="px-4 py-3">Status</th>
+                  <th className="px-4 py-3">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -368,13 +421,22 @@ export default function DashboardPage() {
                     <td className="px-4 py-3">{product.days_supply ?? "Unknown"}</td>
                     <td className="px-4 py-3">{product.vendor || "Vendor not mapped"}</td>
                     <td className="px-4 py-3">
-                      {product.reorder_flag ? <Badge className="bg-amber-50 text-amber-800">Review reorder</Badge> : <Badge>{product.stock === null ? "Inventory pending" : "Healthy"}</Badge>}
+                      {product.reorder_flag ? (
+                        <Badge className="bg-amber-50 text-amber-800">Review reorder</Badge>
+                      ) : (
+                        <Badge>{product.stock === null ? "Inventory pending" : "Healthy"}</Badge>
+                      )}
+                    </td>
+                    <td className="px-4 py-3">
+                      <Button variant="outline" onClick={() => {}}>
+                        Optimize
+                      </Button>
                     </td>
                   </tr>
                 ))}
                 {!data?.products.length && (
                   <tr>
-                    <td className="px-4 py-8 text-center text-muted" colSpan={6}>
+                    <td className="px-4 py-8 text-center text-muted" colSpan={7}>
                       {loading ? "Loading catalog…" : "Connect a seller and ingest catalog/inventory data to populate this table."}
                     </td>
                   </tr>
@@ -384,8 +446,10 @@ export default function DashboardPage() {
           </div>
         </CardContent>
       </Card>
-      <Card className="mb-5">
-        <CardHeader>
+
+      {/* Purchase orders awaiting review */}
+      <Card className="mb-6">
+        <CardHeader className="flex items-center justify-between">
           <div>
             <h2 className="panel-title">Purchase orders awaiting review</h2>
             <p className="panel-subtitle">Vendor-formatted PDF drafts · approval does not transmit an order</p>
@@ -393,7 +457,9 @@ export default function DashboardPage() {
           <Badge>{data?.pending_purchase_orders.length ?? 0} pending</Badge>
         </CardHeader>
         <CardContent>
-          {poMessage && <p role="status" className="border-b border-line bg-canvas px-4 py-2 text-xs">{poMessage}</p>}
+          {poMessage && (
+            <p role="status" className="border-b border-line bg-canvas px-4 py-2 text-xs">{poMessage}</p>
+          )}
           <div className="divide-y divide-line">
             {data?.pending_purchase_orders.map((purchaseOrder) => (
               <div key={purchaseOrder.id} className="flex flex-wrap items-center justify-between gap-3 px-4 py-3">
@@ -403,13 +469,20 @@ export default function DashboardPage() {
                 </div>
                 <strong className="text-xs tabular-nums">{purchaseOrder.currency} {(purchaseOrder.total_amount_minor / 100).toFixed(2)}</strong>
                 <div className="flex items-center gap-2">
-                  <a className="inline-flex min-h-9 items-center rounded-md border border-line px-3 text-xs font-semibold hover:bg-canvas" href={`/api/purchase-orders/${encodeURIComponent(purchaseOrder.id)}/pdf`}>
+                  <a
+                    className="inline-flex min-h-9 items-center rounded-md border border-line px-3 text-xs font-semibold hover:bg-canvas"
+                    href={`/api/purchase-orders/${encodeURIComponent(purchaseOrder.id)}/pdf`}
+                  >
                     PO PDF
                   </a>
                   {isApprover ? (
                     <>
-                      <Button variant="outline" onClick={() => void decidePurchaseOrder(purchaseOrder.id, "deny")}>Deny</Button>
-                      <Button onClick={() => void decidePurchaseOrder(purchaseOrder.id, "approve")}>Approve</Button>
+                      <Button variant="outline" onClick={() => void decidePurchaseOrder(purchaseOrder.id, "deny")}>
+                        Deny
+                      </Button>
+                      <Button onClick={() => void decidePurchaseOrder(purchaseOrder.id, "approve")}>
+                        Approve
+                      </Button>
                     </>
                   ) : (
                     <Badge className="bg-amber-50 text-amber-800">Approver required</Badge>
@@ -417,10 +490,16 @@ export default function DashboardPage() {
                 </div>
               </div>
             ))}
+            {!data?.pending_purchase_orders.length && (
+              <div className="px-4 py-6 text-center text-muted text-sm">No purchase orders awaiting review.</div>
+            )}
           </div>
         </CardContent>
       </Card>
-      <p className="text-right text-[10px] text-muted">{totalStock ? `${totalStock.toLocaleString()} units represented` : "No seller data loaded"} · API credentials remain server-side</p>
+
+      <p className="text-right text-[10px] text-muted">
+        {totalStock ? `${totalStock.toLocaleString()} units represented` : "No seller data loaded"} · API credentials remain server-side
+      </p>
     </main>
   );
 }

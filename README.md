@@ -69,23 +69,35 @@ Native Next.js route handlers under `web/app/api/`:
 - `GET /api/procurement/pdf/preview/[id]`, `POST /api/procurement/pdf/[id]/dispatch` — mock PO PDF
 - `GET /api/seo-tools` — paginated, filterable, searchable Amazon SEO tool catalog
 - `GET /api/seo-tools/[id]` — single tool detail
-- `PATCH /api/seo-tools/[id]`, `DELETE /api/seo-tools/[id]`, `POST /api/seo-tools` — admin tool CRUD (mock)
-- `GET /api/seo-tools/selection`, `POST /api/seo-tools/selection` — selection save/get (mock; persisted client-side in localStorage)
+- `POST /api/seo-tools`, `PATCH /api/seo-tools/[id]`, `DELETE /api/seo-tools/[id]` — admin tool CRUD (mock; approver-gated)
+- `GET /api/seo-tools/categories`, `POST /api/seo-tools/categories`, `PATCH /api/seo-tools/categories/[id]`, `DELETE /api/seo-tools/categories/[id]` — category management (mock; approver-gated)
+- `GET /api/seo-tools/selection`, `POST /api/seo-tools/selection` — selection save/get (mock; per-user when logged in, localStorage fallback)
 
-## SEO Tool Selector (`/seo-tools`)
+## SEO Tool Selector (`/seo-tools`) & Admin (`/admin/seo-tools`)
 
 Browse, filter, compare, and save Amazon SEO tools (listing optimization, keyword research, PPC, rank tracking, review management, competitor analysis).
 
-**Features:**
+**Selector (`/seo-tools`):**
 - Tool cards with logo, category, pricing model (free / freemium / paid), starting price, rating, and supported marketplaces.
 - Text search, category/pricing/marketplace/rating/price filters, and sorting (relevance, rating, price, name).
 - "My Amazon SEO Stack" panel: select/deselect multiple tools, view estimated total monthly cost, and clear the stack.
 - Side-by-side comparison of 2–4 selected tools (features, price, marketplaces).
-- Selection persisted in `localStorage` (no login/database required).
+- Optional starter-stack recommendation wizard (seller size, budget, goals, marketplaces).
+- Selection persisted in `localStorage`; synced to the server per authenticated user when logged in.
 
-**Data:** 12 sample tools are seeded in `web/lib/seo-tools.ts` (marked sample data). Admin add/edit/disable endpoints exist as mock route handlers; edits live in memory only unless wired to a real store.
+**Admin (`/admin/seo-tools`):**
+- Add, edit, enable/disable SEO tools.
+- Add, edit, disable categories (a category in use by tools cannot be deleted).
+- Admin mutations are approver-gated (mock mode always approves).
 
-**Stack:** Pure-frontend Next.js + Tailwind. No database, backend service, or hard-coded secrets.
+**Data:** 12 sample tools are seeded in `web/lib/seo-tools.ts` (marked sample data). Validate seed data with:
+
+```bash
+cd web
+node --experimental-strip-types scripts/seed-seo-tools.ts
+```
+
+**Stack:** Pure-frontend Next.js + Tailwind. No database, backend service, or hard-coded secrets. Admin edits live in memory only (mock stack); wire to a real store for production persistence.
 
 ## Deploy to Vercel
 

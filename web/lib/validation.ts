@@ -446,3 +446,44 @@ export type BillingAddressCreateInput = z.infer<typeof billingAddressCreateSchem
 export type BillingAddressUpdateInput = z.infer<typeof billingAddressUpdateSchema>;
 export type TeamMembershipCreateInput = z.infer<typeof teamMembershipCreateSchema>;
 export type TeamMembershipUpdateInput = z.infer<typeof teamMembershipUpdateSchema>;
+
+export const seoToolCreateSchema = z.object({
+  name: z.string().min(1, "Tool name is required.").max(200),
+  short_description: z.string().max(500).default(""),
+  category: z.string().min(1, "Category is required."),
+  pricing_model: z.enum(["free", "freemium", "paid"]).default("freemium"),
+  starting_price_usd: z.coerce.number().nonnegative("Price must be non-negative.").nullable().optional(),
+  features: z.array(z.object({ id: z.string().min(1), label: z.string().min(1) })).default([]),
+  marketplaces: z.array(z.string()).default([]),
+  rating: z.coerce.number().min(0).max(5).nullable().optional(),
+  website_url: z.string().url("Invalid website URL.").default(""),
+  is_active: z.boolean().default(true),
+});
+
+export const seoToolPatchSchema = z.object({
+  name: z.string().min(1).max(200).optional(),
+  short_description: z.string().max(500).optional(),
+  category: z.string().min(1).optional(),
+  pricing_model: z.enum(["free", "freemium", "paid"]).optional(),
+  starting_price_usd: z.coerce.number().nonnegative().nullable().optional(),
+  features: z.array(z.object({ id: z.string().min(1), label: z.string().min(1) })).optional(),
+  marketplaces: z.array(z.string()).optional(),
+  rating: z.coerce.number().min(0).max(5).nullable().optional(),
+  website_url: z.string().url("Invalid website URL.").optional(),
+  is_active: z.boolean().optional(),
+});
+
+export const seoCategoryPatchSchema = z.object({
+  label: z.string().min(1).max(100).optional(),
+  description: z.string().max(500).optional(),
+  is_active: z.boolean().optional(),
+});
+
+export const selectionSaveSchema = z.object({
+  selected_tool_ids: z.array(z.string()).default([]),
+});
+
+export type SeoToolCreateInput = z.infer<typeof seoToolCreateSchema>;
+export type SeoToolPatchInput = z.infer<typeof seoToolPatchSchema>;
+export type SeoCategoryPatchInput = z.infer<typeof seoCategoryPatchSchema>;
+export type SelectionSaveInput = z.infer<typeof selectionSaveSchema>;
