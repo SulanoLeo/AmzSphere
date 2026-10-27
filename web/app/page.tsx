@@ -2,8 +2,8 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { PackageSearch, RefreshCw, TriangleAlert, ShieldAlert, LayoutDashboard, PieChartIcon, BarChart3, ShoppingCart } from "lucide-react";
-import { Bar, BarChart, Line, LineChart, Pie, PieChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { PackageSearch, RefreshCw, ShieldAlert, TriangleAlert, LayoutDashboard } from "lucide-react";
+import { Bar, BarChart, Line, LineChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -27,13 +27,6 @@ const acosHistory = [
   { day: "Oct 18", acos: 22.6 },
   { day: "Oct 20", acos: 20.8 },
   { day: "Oct 22", acos: 22.1 },
-];
-
-const procurementMix = [
-  { category: "Direct", value: 48, color: "#6366F1" },
-  { category: "Seller Vendor", value: 28, color: "#006a63" },
-  { category: "FBA", value: 15, color: "#FFB95F" },
-  { category: "Distributed", value: 9, color: "#10B981" },
 ];
 
 function Metric({
@@ -76,10 +69,7 @@ function SellerPill({
       className="inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-[10px] font-medium"
       style={{ borderColor: color, color, backgroundColor: `${color}1a` }}
     >
-      <span
-        className="inline-block w-1.5 h-1.5 rounded-full"
-        style={{ backgroundColor: color }}
-      />
+      <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ backgroundColor: color }} />
       {label}: {value}
     </span>
   );
@@ -182,6 +172,13 @@ export default function DashboardPage() {
   }));
 
   const connected = data?.sync_status === "completed";
+  const avgScore =
+    data?.products.length
+      ? Math.round(
+          (data.products.reduce((s, p) => s + (p.opt_score ?? 0), 0) /
+            Math.max(data.products.length, 1)) * 10,
+        ) / 10
+      : 0;
 
   return (
     <main className="min-h-screen bg-canvas px-4 py-6 md:px-10 md:py-10">
@@ -210,6 +207,13 @@ export default function DashboardPage() {
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
+          {sellers.length > 1 && (
+            <select aria-label="Seller account" className="h-9 max-w-56 rounded-md border border-line bg-white px-2 text-xs" value={selectedSeller} onChange={(event) => setSelectedSeller(event.target.value)}>
+              {sellers.map((seller) => (
+                <option key={seller.id} value={seller.id}>{seller.merchant_id} · {seller.marketplace_id}</option>
+              ))}
+            </select>
+          )}
           <Badge className={connected ? "bg-teal-50 text-teal-800" : "bg-amber-50 text-amber-800"}>
             {connected ? `Synced · ${data?.last_synced_at ? new Date(data.last_synced_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : ""}` : "Not connected"}
           </Badge>
@@ -219,6 +223,7 @@ export default function DashboardPage() {
           <Button variant="outline" onClick={() => selectedSeller && void loadDashboard(selectedSeller)} disabled={!selectedSeller || loading}>
             <RefreshCw size={15} className={loading ? "animate-spin" : ""} /> Refresh
           </Button>
+          <Badge className="bg-teal-50 text-teal-800 border-teal-200">Buy Box owned</Badge>
         </div>
       </header>
 
@@ -226,18 +231,16 @@ export default function DashboardPage() {
       {error && (
         <div role="alert" className="alert-banner amber mb-5">
           <div className="alert-banner-icon">
-            <ShieldAlert size={18} />
+            <TriangleAlert size={18} />
           </div>
           <div className="alert-banner-content">
-            <div className="alert-banner-title">Backend not ready · Authorization required</div>
+            <div className="alert-banner-title">Backend not ready</div>
             <div className="alert-banner-desc">
-              Connect a seller account to ingest catalog, inventory, and pricing data. SP-API credentials remain server-side.
+              Connect a seller account to activate real-time Selling Partner API (SP-API) streams. Writes and automated pricing repricing remain safely gated.
             </div>
           </div>
           <div className="flex items-start gap-2">
-            <Button variant="outline" onClick={() => {}}>
-              Edit setup
-            </Button>
+            <Badge className="bg-teal-50 text-teal-800 border-teal-200">Mock engine live</Badge>
             <Button onClick={() => void syncSeller()} disabled={loading}>
               Connect seller account
             </Button>
@@ -252,7 +255,7 @@ export default function DashboardPage() {
       {/* Metrics row */}
       <div className="metrics metrics-five mb-6">
         <Metric
-          label="Catalog items"
+          label="Catalog"
           value={String(data?.products.length ?? "—")}
           detail="Seller-linked ASINs · one shared product record each"
           accent="blue"
@@ -266,23 +269,23 @@ export default function DashboardPage() {
           tag="INVENTORY"
         />
         <Metric
-          label="Optimization"
+          label="Needs optimization"
           value={data ? String(Math.round((data.products.reduce((s, p) => s + (p.opt_score ?? 0), 0) / Math.max(data.products.length, 1)))) : "—"}
-          detail="Moving below 70 score"
+          detail="Missing bullets or imagery"
           accent="orange"
-          tag="▲70 score"
+          tag="REVIEW SEO"
         />
         <Metric
-          label="Urgent"
-          value={String(reorderRows.length)}
-          detail="1+ days below normal reorder level"
+          label="Days of supply"
+          value={data ? String(reorderRows.length) : "—"}
+          detail="Below 15 days of inventory left"
           accent="warn"
-          tag="REORDER FLAGS"
+          tag="STOCKOUT DANGER"
         />
         <Metric
-          label="In queue"
+          label="Approvals"
           value={String(data?.pending_purchase_orders.length ?? "—")}
-          detail="Revisions awaiting your decision"
+          detail="Revisions awaiting decision"
           accent="teal"
           tag="APPROVALS"
         />
@@ -342,46 +345,6 @@ export default function DashboardPage() {
             </div>
           </div>
         </div>
-        <div className="panel">
-          <div className="panel-header">
-            <div>
-              <h2 className="panel-title">Procurement mix</h2>
-              <div className="panel-subtitle">Open and approved workflow value</div>
-            </div>
-            <span className="category-pill">Open + approved</span>
-          </div>
-          <div className="panel-content">
-            <div className="grid h-full place-items-center">
-              <ResponsiveContainer width={220} height={220}>
-                <PieChart>
-                  <Pie
-                    data={procurementMix}
-                    dataKey="value"
-                    nameKey="category"
-                    cx="110"
-                    cy="110"
-                    outerRadius={70}
-                    label
-                  >
-                    <Tooltip />
-                  </Pie>
-                  <Tooltip />
-                </PieChart>
-              </ResponsiveContainer>
-              <div className="mt-4 space-y-2 text-xs">
-                {procurementMix.map((item) => (
-                  <div
-                    key={item.category}
-                    className="flex items-center justify-between"
-                  >
-                    <span className="text-muted">{item.category}</span>
-                    <span className="font-semibold text-on-surface">{item.value}%</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
       </section>
 
       {/* Autonomous procurement queue */}
@@ -400,8 +363,8 @@ export default function DashboardPage() {
             <table className="w-full min-w-[780px] text-left text-xs">
               <thead className="bg-canvas text-[10px] uppercase tracking-wide text-muted">
                 <tr>
-                  <th className="px-4 py-3">SKU</th>
-                  <th className="px-4 py-3">Stock</th>
+                  <th className="px-4 py-3">SKU / ASIN</th>
+                  <th className="px-4 py-3">Stock level</th>
                   <th className="px-4 py-3">Velocity 7 / 30 / 90d</th>
                   <th className="px-4 py-3">Days supply</th>
                   <th className="px-4 py-3">Vendor</th>
@@ -422,14 +385,14 @@ export default function DashboardPage() {
                     <td className="px-4 py-3">{product.vendor || "Vendor not mapped"}</td>
                     <td className="px-4 py-3">
                       {product.reorder_flag ? (
-                        <Badge className="bg-amber-50 text-amber-800">Review reorder</Badge>
+                        <Badge className="bg-amber-50 text-amber-800">Needs PO draft</Badge>
                       ) : (
-                        <Badge>{product.stock === null ? "Inventory pending" : "Healthy"}</Badge>
+                        <Badge className="bg-teal-50 text-teal-800">In queue</Badge>
                       )}
                     </td>
                     <td className="px-4 py-3">
                       <Button variant="outline" onClick={() => {}}>
-                        Optimize
+                        Review PO
                       </Button>
                     </td>
                   </tr>
@@ -452,9 +415,9 @@ export default function DashboardPage() {
         <CardHeader className="flex items-center justify-between">
           <div>
             <h2 className="panel-title">Purchase orders awaiting review</h2>
-            <p className="panel-subtitle">Vendor-formatted PDF drafts · approval does not transmit an order</p>
+            <p className="panel-subtitle">Vendor-formatted PDF drafts · approval does not automatically transmit an order to external EDI</p>
           </div>
-          <Badge>{data?.pending_purchase_orders.length ?? 0} pending</Badge>
+          <Badge>{data?.pending_purchase_orders.length ?? 0} drafts</Badge>
         </CardHeader>
         <CardContent>
           {poMessage && (
@@ -473,19 +436,14 @@ export default function DashboardPage() {
                     className="inline-flex min-h-9 items-center rounded-md border border-line px-3 text-xs font-semibold hover:bg-canvas"
                     href={`/api/purchase-orders/${encodeURIComponent(purchaseOrder.id)}/pdf`}
                   >
-                    PO PDF
+                    Inspect PDF
                   </a>
                   {isApprover ? (
-                    <>
-                      <Button variant="outline" onClick={() => void decidePurchaseOrder(purchaseOrder.id, "deny")}>
-                        Deny
-                      </Button>
-                      <Button onClick={() => void decidePurchaseOrder(purchaseOrder.id, "approve")}>
-                        Approve
-                      </Button>
-                    </>
+                    <Button onClick={() => void decidePurchaseOrder(purchaseOrder.id, "approve")}>
+                      Approve
+                    </Button>
                   ) : (
-                    <Badge className="bg-amber-50 text-amber-800">Approver required</Badge>
+                    <Badge className="bg-amber-50 text-amber-800">Awaiting signature</Badge>
                   )}
                 </div>
               </div>
