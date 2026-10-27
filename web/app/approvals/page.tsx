@@ -7,6 +7,7 @@ import { PackageSearch, RefreshCw, ShieldAlert } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Modal } from "@/components/ui/modal";
 import { ClientProductProvider } from "@/lib/provider/client";
 import type { ProductRevision, Order } from "@/lib/provider/types";
 
@@ -40,6 +41,12 @@ export default function ApprovalsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [isApprover, setIsApprover] = useState(true);
+  const [message, setMessage] = useState("");
+
+  // Modal states
+  const [downloadLogOpen, setDownloadLogOpen] = useState(false);
+  const [createQuoteOpen, setCreateQuoteOpen] = useState(false);
+  const [reviewRevisionOpen, setReviewRevisionOpen] = useState<{ id: string; status: string } | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -104,10 +111,10 @@ export default function ApprovalsPage() {
           <p className="font-body-md text-body-md text-on-surface-variant mt-2">B2B volume discounts, custom price quotes, buyer credit limit vetting, and human-in-the-loop Amazon Business transaction reviews.</p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <Button variant="outline" onClick={() => {}}>
+          <Button variant="outline" onClick={() => setDownloadLogOpen(true)}>
             Download Log (CSV)
           </Button>
-          <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => {}}>
+          <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => setCreateQuoteOpen(true)}>
             + Create Custom Quote Draft
           </Button>
         </div>
@@ -215,12 +222,8 @@ export default function ApprovalsPage() {
           <div className="flex items-center gap-2">
             <span className="text-xs font-semibold text-muted">All Statuses (Pending, Approved, Flagged)</span>
             <span className="text-xs font-semibold text-muted">All Margins (&gt;18.5% Floor)</span>
-            <Button variant="outline" onClick={() => {}}>
-              Bulk Counter-Offer
-            </Button>
-            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => {}}>
-              Bulk Approve (2 Eligible)
-            </Button>
+            <Button variant="outline" onClick={() => {}}>Bulk Counter-Offer</Button>
+            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => {}}>Bulk Approve (2 Eligible)</Button>
           </div>
         </CardHeader>
         <CardContent className="pt-0">
@@ -272,10 +275,10 @@ export default function ApprovalsPage() {
                       <td className="px-4 py-3">
                         {revision.status === "pending_approval" ? (
                           <>
-                            <Button variant="outline" onClick={() => void decideRevision(revision.id, "approve")}>
+                            <Button variant="outline" onClick={() => { setReviewRevisionOpen({ id: revision.id, status: revision.status }); void decideRevision(revision.id, "approve"); }}>
                               Approve &amp; Release
                             </Button>
-                            <Button variant="outline" className="text-[10px]" onClick={() => void decideRevision(revision.id, "reject")}>
+                            <Button variant="outline" className="text-[10px]" onClick={() => { setReviewRevisionOpen({ id: revision.id, status: revision.status }); void decideRevision(revision.id, "reject"); }}>
                               Review
                             </Button>
                           </>
@@ -360,10 +363,107 @@ export default function ApprovalsPage() {
         <span>· SP-API PB2B Quotes Stream: ACTIVE · TLS 1.3 Amazon Business Authenticated · Dry-Run Pipeline Safe (Zero accidental push)</span>
         <div className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-teal-500" />
-          <span>Node Pod: us-east-1-pod-09</span>
+          <span className="text-xs text-muted">Node Pod: us-east-1-pod-09</span>
           <span className="text-xs text-muted">· Latency: 38ms</span>
         </div>
       </div>
+
+      {/* Modals */}
+      <Modal open={downloadLogOpen} onClose={() => setDownloadLogOpen(false)} title="Download Log — Setup">
+        <div className="space-y-4">
+          <div>
+            <div className="text-xs font-semibold text-indigo-900 mb-1">Export Configuration</div>
+            <div className="text-[10px] text-muted mb-3">Download approval and PO decision logs for compliance and audit review.</div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div>
+                <label className="text-[10px] font-bold text-muted block mb-1">Format</label>
+                <select className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px]">
+                  <option>CSV</option>
+                  <option>Excel (.xlsx)</option>
+                  <option>JSON</option>
+                </select>
+              </div>
+              <div>
+                <label className="text-[10px] font-bold text-muted block mb-1">Date Range</label>
+                <select className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px]">
+                  <option>Last 7 days</option>
+                  <option>Last 30 days</option>
+                  <option>Last 90 days</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div className="p-3 rounded-md border border-line bg-teal-50">
+            <div className="text-[10px] font-bold text-teal-800 mb-1">Capabilities</div>
+            <ul className="text-[10px] text-muted space-y-1 list-disc pl-4">
+              <li>Export all approval decisions</li>
+              <li>Include PO details and margin data</li>
+              <li>Download for audit compliance</li>
+            </ul>
+          </div>
+          <div className="flex justify-end gap-2 pt-4">
+            <Button variant="outline" onClick={() => setDownloadLogOpen(false)}>Cancel</Button>
+            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setDownloadLogOpen(false); setMessage("Approval log exported to downloads."); }}>Download CSV</Button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal open={createQuoteOpen} onClose={() => setCreateQuoteOpen(false)} title="Create Custom Quote Draft — Setup">
+        <div className="space-y-4">
+          <div>
+            <div className="text-xs font-semibold text-indigo-900 mb-1">Custom Quote Configuration</div>
+            <div className="text-[10px] text-muted mb-3">Create a custom price quote draft for B2B buyers requiring volume discounts and negotiated terms.</div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div>
+                <label className="text-[10px] font-bold text-muted block mb-1">Buyer / Organization</label>
+                <input className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" placeholder="Apex Medical Logistics" />
+              </div>
+              <div>
+                <label className="text-[10px] font-bold text-muted block mb-1">Quote Amount ($)</label>
+                <input type="number" step="0.01" className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" placeholder="14630.00" />
+              </div>
+              <div className="sm:col-span-2">
+                <label className="text-[10px] font-bold text-muted block mb-1">ASIN / Product</label>
+                <input className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" placeholder="B09YW72KB8L · Solar Power Pod Pro 50W" />
+              </div>
+            </div>
+          </div>
+          <div className="p-3 rounded-md border border-line bg-indigo-50">
+            <div className="text-[10px] font-bold text-indigo-800 mb-1">Capabilities</div>
+            <ul className="text-[10px] text-muted space-y-1 list-disc pl-4">
+              <li>Create custom price quote drafts</li>
+              <li>Apply volume discount curves</li>
+              <li>Validate margin floor (18.5% hard cap)</li>
+              <li>Route to approver for signoff</li>
+            </ul>
+          </div>
+          <div className="flex justify-end gap-2 pt-4">
+            <Button variant="outline" onClick={() => setCreateQuoteOpen(false)}>Cancel</Button>
+            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setCreateQuoteOpen(false); setMessage("Custom quote draft created and queued for approval."); }}>Create Quote Draft</Button>
+          </div>
+        </div>
+      </Modal>
+
+      {reviewRevisionOpen && (
+        <Modal open={true} onClose={() => setReviewRevisionOpen(null)} title="Review Revision Decision">
+          <div className="space-y-4">
+            <div>
+              <div className="text-xs font-semibold text-indigo-900 mb-1">Decision Confirmation</div>
+              <div className="text-[10px] text-muted mb-3">Confirm your decision on this product revision. Approved revisions apply to the catalog; rejected revisions return to needs_optimization.</div>
+              <div className="p-3 rounded-md border border-line bg-white/50">
+                <div className="text-[10px] font-bold text-on-surface mb-1">Revision ID</div>
+                <div className="text-xs font-semibold text-indigo-900">{reviewRevisionOpen.id}</div>
+                <div className="text-[10px] font-bold text-on-surface mt-2">Current Status</div>
+                <div className="text-xs font-semibold text-indigo-900">{reviewRevisionOpen.status}</div>
+              </div>
+            </div>
+            <div className="flex justify-end gap-2 pt-4">
+              <Button variant="outline" onClick={() => setReviewRevisionOpen(null)}>Cancel</Button>
+              <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => setReviewRevisionOpen(null)}>Confirm</Button>
+            </div>
+          </div>
+        </Modal>
+      )}
     </main>
   );
 }

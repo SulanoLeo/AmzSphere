@@ -2,12 +2,13 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { PackageSearch, RefreshCw, ShieldAlert, TriangleAlert, LayoutDashboard } from "lucide-react";
+import { PackageSearch, RefreshCw, ShieldAlert, TriangleAlert } from "lucide-react";
 import { Bar, BarChart, Line, LineChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Modal } from "@/components/ui/modal";
 import { ClientProductProvider } from "@/lib/provider/client";
 import type { Dashboard, Seller } from "@/lib/provider/types";
 
@@ -75,6 +76,20 @@ function SellerPill({
   );
 }
 
+function SetupStep({ number, title, desc }: { number: string; title: string; desc: string }) {
+  return (
+    <div className="flex gap-3 mb-3">
+      <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-900 text-white text-[10px] font-bold flex items-center justify-center">
+        {number}
+      </span>
+      <div>
+        <div className="text-xs font-semibold text-indigo-900">{title}</div>
+        <div className="text-[10px] text-muted">{desc}</div>
+      </div>
+    </div>
+  );
+}
+
 export default function DashboardPage() {
   const provider = new ClientProductProvider();
   const [data, setData] = useState<Dashboard | null>(null);
@@ -85,6 +100,13 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [poMessage, setPoMessage] = useState("");
   const [syncMessage, setSyncMessage] = useState("");
+
+  // Modal states
+  const [connectSellerOpen, setConnectSellerOpen] = useState(false);
+  const [syncStatusOpen, setSyncStatusOpen] = useState(false);
+  const [refreshStatusOpen, setRefreshStatusOpen] = useState(false);
+  const [reviewPoOpen, setReviewPoOpen] = useState("");
+  const [approvePoOpen, setApprovePoOpen] = useState("");
 
   const loadDashboard = useCallback(async (sellerId: string) => {
     setLoading(true);
@@ -115,6 +137,7 @@ export default function DashboardPage() {
     try {
       await provider.syncState();
       setSyncMessage("Seller sync queued.");
+      setSyncStatusOpen(true);
     } catch (cause) {
       setSyncMessage(cause instanceof Error ? cause.message : "Could not queue seller sync");
     }
@@ -186,22 +209,16 @@ export default function DashboardPage() {
       <header className="mb-6 flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-line pb-5">
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2 text-primary font-label-md uppercase tracking-wider">
-            <PackageSearch size={15} />
-            <span>SEO & Catalog</span>
+            <Link href="/" className="flex items-center gap-1">
+              <PackageSearch size={13} />
+              <span>Seller Operations</span>
+            </Link>
+            <span className="text-xs text-muted">/</span>
+            <span>Operations overview</span>
           </div>
-          <div className="flex flex-col lg:flex-row lg:items-center gap-2 lg:gap-4">
-            <div className="flex flex-col gap-0.5">
-              <span className="text-[10px] font-bold text-muted uppercase tracking-wider">Seller</span>
-              <SellerPill label="SELLER" value={sellers.find((s) => s.id === selectedSeller)?.merchant_id ?? "—"} color="#6366F1" />
-            </div>
-            <div className="flex flex-col gap-0.5">
-              <span className="text-[10px] font-bold text-muted uppercase tracking-wider">Period</span>
-              <span className="text-sm font-semibold text-on-surface">10-26-26 / 10-27-26</span>
-            </div>
-            <h1 className="font-headline-xl text-headline-xl text-on-surface tracking-tight mt-0 lg:mt-2 lg:ml-4 lg:border-l lg:border-line lg:pl-4">
-              Operations overview
-            </h1>
-          </div>
+          <h1 className="font-headline-xl text-headline-xl text-on-surface tracking-tight mt-0 lg:mt-2 lg:ml-4 lg:border-l lg:border-line lg:pl-4">
+            Operations overview
+          </h1>
           <p className="font-body-md text-body-md text-on-surface-variant mt-2 lg:mt-0 lg:ml-5">
             Inventory health and human-review work queue.
           </p>
@@ -217,7 +234,7 @@ export default function DashboardPage() {
           <Badge className={connected ? "bg-teal-50 text-teal-800" : "bg-amber-50 text-amber-800"}>
             {connected ? `Synced · ${data?.last_synced_at ? new Date(data.last_synced_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : ""}` : "Not connected"}
           </Badge>
-          <Button variant="outline" onClick={() => void syncSeller()} disabled={!selectedSeller || loading}>
+          <Button variant="outline" onClick={syncSeller} disabled={!selectedSeller || loading}>
             <RefreshCw size={15} /> Sync seller data
           </Button>
           <Button variant="outline" onClick={() => selectedSeller && void loadDashboard(selectedSeller)} disabled={!selectedSeller || loading}>
@@ -241,7 +258,7 @@ export default function DashboardPage() {
           </div>
           <div className="flex items-start gap-2">
             <Badge className="bg-teal-50 text-teal-800 border-teal-200">Mock engine live</Badge>
-            <Button onClick={() => void syncSeller()} disabled={loading}>
+            <Button onClick={() => setConnectSellerOpen(true)} disabled={loading}>
               Connect seller account
             </Button>
           </div>
@@ -391,7 +408,11 @@ export default function DashboardPage() {
                       )}
                     </td>
                     <td className="px-4 py-3">
-                      <Button variant="outline" onClick={() => {}}>
+                      <Button
+                        variant="outline"
+                        onClick={() => setReviewPoOpen(product.asin)}
+                        disabled={!product.reorder_flag}
+                      >
                         Review PO
                       </Button>
                     </td>
@@ -439,7 +460,7 @@ export default function DashboardPage() {
                     Inspect PDF
                   </a>
                   {isApprover ? (
-                    <Button onClick={() => void decidePurchaseOrder(purchaseOrder.id, "approve")}>
+                    <Button onClick={() => { setApprovePoOpen(purchaseOrder.id); void decidePurchaseOrder(purchaseOrder.id, "approve"); }}>
                       Approve
                     </Button>
                   ) : (
@@ -458,6 +479,147 @@ export default function DashboardPage() {
       <p className="text-right text-[10px] text-muted">
         {totalStock ? `${totalStock.toLocaleString()} units represented` : "No seller data loaded"} · API credentials remain server-side
       </p>
+
+      {/* Modals */}
+      <Modal open={connectSellerOpen} onClose={() => setConnectSellerOpen(false)} title="Connect Seller Account">
+        <div className="space-y-4">
+          <div>
+            <div className="text-xs font-semibold text-indigo-900 mb-1">SP-API credentials</div>
+            <div className="text-[10px] text-muted mb-3">Enter your Amazon Selling Partner API credentials to connect your seller account. Credentials remain server-side and are never exposed to the browser.</div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div>
+                <label className="text-[10px] font-bold text-muted block mb-1">Seller ID</label>
+                <input className="w-full h-9 rounded-md border border-line px-3 text-[10px] focus:outline-none focus:border-teal-700" placeholder="ATVPDKIKX0DER" />
+              </div>
+              <div>
+                <label className="text-[10px] font-bold text-muted block mb-1">Marketplace ID</label>
+                <input className="w-full h-9 rounded-md border border-line px-3 text-[10px] focus:outline-none focus:border-teal-700" placeholder="ATVPDKIKX0DER" />
+              </div>
+            </div>
+          </div>
+          <div className="p-3 rounded-md border border-line bg-amber-50">
+            <div className="text-[10px] font-bold text-amber-800 mb-1">Capabilities once connected</div>
+            <ul className="text-[10px] text-muted space-y-1 list-disc pl-4">
+              <li>Real-time catalog ingestion from Amazon</li>
+              <li>Inventory snapshots across all marketplaces</li>
+              <li>PPC campaign telemetry and bid automation</li>
+              <li>Autonomous replenishment queue</li>
+              <li>Purchase-order approval workflow</li>
+            </ul>
+          </div>
+          <div className="flex justify-end gap-2 pt-4">
+            <Button variant="outline" onClick={() => setConnectSellerOpen(false)}>Cancel</Button>
+            <Button onClick={() => { setConnectSellerOpen(false); void syncSeller(); }}>Connect &amp; Sync</Button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal open={syncStatusOpen} onClose={() => setSyncStatusOpen(false)} title="Sync Status">
+        <div className="space-y-4">
+          <div className="flex items-center justify-between text-xs">
+            <span className="text-muted">Last sync</span>
+            <span className="text-on-surface">{new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>
+          </div>
+          <div className="flex items-center justify-between text-xs">
+            <span className="text-muted">Status</span>
+            <span className="text-teal-700 font-semibold">Completed</span>
+          </div>
+          <div className="flex items-center justify-between text-xs">
+            <span className="text-muted">Products synced</span>
+            <span className="text-on-surface tabular-nums">{data?.products.length ?? 0}</span>
+          </div>
+          <div className="flex items-center justify-between text-xs">
+            <span className="text-muted">Orders synced</span>
+            <span className="text-on-surface tabular-nums">{data?.pending_purchase_orders.length ?? 0}</span>
+          </div>
+          <div className="p-3 rounded-md border border-line bg-teal-50">
+            <div className="text-[10px] font-bold text-teal-800 mb-1">What sync does</div>
+            <ul className="text-[10px] text-muted space-y-1 list-disc pl-4">
+              <li>Ingests product catalog and inventory from Amazon SP-API</li>
+              <li>Pulls pending purchase orders and revisions</li>
+              <li>Refreshes velocity metrics and days-of-supply</li>
+            </ul>
+          </div>
+          <div className="flex justify-end pt-4">
+            <Button onClick={() => setSyncStatusOpen(false)}>Done</Button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal open={refreshStatusOpen} onClose={() => setRefreshStatusOpen(false)} title="Refresh Dashboard">
+        <div className="space-y-4">
+          <div className="flex items-center justify-between text-xs">
+            <span className="text-muted">Last refresh</span>
+            <span className="text-on-surface">{new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>
+          </div>
+          <div className="flex items-center justify-between text-xs">
+            <span className="text-muted">Dashboard data</span>
+            <span className="text-teal-700 font-semibold">Current</span>
+          </div>
+          <div className="p-3 rounded-md border border-line bg-indigo-50">
+            <div className="text-[10px] font-bold text-indigo-800 mb-1">What refresh does</div>
+            <ul className="text-[10px] text-muted space-y-1 list-disc pl-4">
+              <li>Recomputes all metric cards from latest data</li>
+              <li>Refreshes velocity charts and procurement queue</li>
+              <li>Updates ACoS trend and optimization scores</li>
+            </ul>
+          </div>
+          <div className="flex justify-end pt-4">
+            <Button onClick={() => setRefreshStatusOpen(false)}>Done</Button>
+          </div>
+        </div>
+      </Modal>
+
+      {reviewPoOpen && (
+        <Modal open={true} onClose={() => setReviewPoOpen("")} title="Review Purchase Order">
+          <div className="space-y-4">
+            <div>
+              <div className="text-xs font-semibold text-indigo-900 mb-1">PO Details</div>
+              <div className="text-[10px] text-muted mb-3">Review vendor-formatted draft before approving. Approval does not transmit to external EDI.</div>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div>
+                  <label className="text-[10px] font-bold text-muted block mb-1">Vendor</label>
+                  <span className="text-xs text-on-surface">Vendor not mapped</span>
+                </div>
+                <div>
+                  <label className="text-[10px] font-bold text-muted block mb-1">Status</label>
+                  <Badge className="bg-amber-50 text-amber-800 border-amber-200">Pending Review</Badge>
+                </div>
+              </div>
+            </div>
+            <div className="p-3 rounded-md border border-line bg-white/50">
+              <div className="text-[10px] font-bold text-on-surface mb-1">Line Items</div>
+              <div className="text-[10px] text-muted">No line items ingested yet. Connect a seller and run inventory scan to populate PO drafts.</div>
+            </div>
+            <div className="flex justify-end pt-4">
+              <Button variant="outline" onClick={() => setReviewPoOpen("")}>Close</Button>
+            </div>
+          </div>
+        </Modal>
+      )}
+
+      {approvePoOpen && (
+        <Modal open={true} onClose={() => setApprovePoOpen("")} title="Approve Purchase Order">
+          <div className="space-y-4">
+            <div>
+              <div className="text-xs font-semibold text-indigo-900 mb-1">Confirmation</div>
+              <div className="text-[10px] text-muted mb-3">Approving this purchase order will release it for vendor fulfillment. Approval requires approver role.</div>
+            </div>
+            <div className="p-3 rounded-md border border-line bg-teal-50">
+              <div className="text-[10px] font-bold text-teal-800 mb-1">What approval does</div>
+              <ul className="text-[10px] text-muted space-y-1 list-disc pl-4">
+                <li>Transmits PO to vendor via Amazon SP-API</li>
+                <li>Logs decision in activity trail</li>
+                <li>Updates inventory forecast with ordered units</li>
+              </ul>
+            </div>
+            <div className="flex justify-end gap-2 pt-4">
+              <Button variant="outline" onClick={() => setApprovePoOpen("")}>Cancel</Button>
+              <Button onClick={() => setApprovePoOpen("")}>Confirm Approve</Button>
+            </div>
+          </div>
+        </Modal>
+      )}
     </main>
   );
 }
