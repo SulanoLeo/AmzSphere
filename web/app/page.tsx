@@ -393,7 +393,7 @@ export default function DashboardPage() {
               <span className="text-[10px] text-muted">Target lead-time fulfillment</span>
             </div>
           </div>
-          <div className="panel-content pt-4">
+          <div className="panel-content">
             <div className="flex items-center justify-between">
               <div className="w-32 h-32 flex items-center justify-center">
                 <PieChart width={140} height={140}>
