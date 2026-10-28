@@ -1,22 +1,43 @@
 "use client";
 
-import { Suspense, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { ArrowLeft, BadgeCheck, Bot, LoaderCircle, Search, ToggleRight, ToggleLeft } from "lucide-react";
-
+import { ArrowLeft, Bot, LoaderCircle, Search, ToggleRight, ToggleLeft } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Modal } from "@/components/ui/modal";
 import { StorefrontView } from "@/components/product/StorefrontView";
 import { ApiIntegrationStatus } from "@/components/ApiIntegrationStatus";
 import { HealthScoreBar } from "@/components/HealthScoreBar";
 import { ClientProductProvider } from "@/lib/provider/client";
 import type { Dashboard, Product } from "@/lib/provider/types";
 
-function CatalogWorkspace() {
-  const searchParams = useSearchParams();
-  const sellerId = searchParams.get("seller_id") || "";
+function Metric({
+  label,
+  value,
+  detail,
+  accent,
+  tag,
+}: {
+  label: string;
+  value: string;
+  detail: string;
+  accent: string;
+  tag?: string;
+}) {
+  return (
+    <section className="metric" data-accent={accent}>
+      <div className="metric-label"><span>{label}</span>{tag && <span className="mini-tag">{tag}</span>}</div>
+      <div className="metric-value">{value}</div>
+      <div className="metric-foot">{detail}</div>
+      <div className={`metric-accent ${accent}`}></div>
+    </section>
+  );
+}
+
+function CatalogWorkspace({ sellerId }: { sellerId?: string }) {
   const provider = new ClientProductProvider();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -34,6 +55,13 @@ function CatalogWorkspace() {
   const [drawerMode, setDrawerMode] = useState<"view" | "optimize">("optimize");
   const [addModal, setAddModal] = useState(false);
   const [addTab, setAddTab] = useState<"import" | "manual">("import");
+
+  // Setup modals
+  const [bulkRewriteOpen, setBulkRewriteOpen] = useState(false);
+  const [aiRewriteOpen, setAiRewriteOpen] = useState(false);
+  const [storefrontOpen, setStorefrontOpen] = useState(false);
+  const [integrationsOpen, setIntegrationsOpen] = useState(false);
+  const [healthScoreOpen, setHealthScoreOpen] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -80,22 +108,6 @@ function CatalogWorkspace() {
     const timer = window.setInterval(() => { void poll(); }, 4000);
     return () => { active = false; window.clearInterval(timer); };
   }, [operation, operationStatus]);
-
-  async function approveSuggestion() {
-    if (!operation) return;
-    setBusy(true);
-    try {
-      const response = await fetch(`/api/operations/${encodeURIComponent(operation)}/approve`, { method: "POST" });
-      const payload = await response.json();
-      if (!response.ok) throw new Error(payload.detail || "Approval failed");
-      setOperationStatus(payload.status);
-      setMessage("Approved listing feed queued. Amazon processing remains asynchronous and will be reconciled from its notification.");
-    } catch (cause) {
-      setMessage(cause instanceof Error ? cause.message : "Approval failed");
-    } finally {
-      setBusy(false);
-    }
-  }
 
   async function queueOptimization(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -203,368 +215,285 @@ function CatalogWorkspace() {
   }
 
   const suggestion = (operationResult?.suggestion as Record<string, unknown> | undefined) ?? {};
-  const healthScore = suggestion.health_score as number | null ?? null;
-  const missingKeywords = (suggestion.missing_high_volume_keywords as Array<{ keyword: string; search_volume?: number; organic_rank?: number }> | undefined) ?? [];
 
   return (
     <Suspense fallback={<div className="min-h-screen bg-canvas px-4 py-6 md:px-10 md:py-10">Loading catalog…</div>}>
       <main className="min-h-screen bg-canvas px-4 py-6 md:px-10 md:py-10">
-      {/* Header */}
-      <header className="mb-6 flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-line pb-5">
-        <div className="flex flex-col gap-1">
-          <div className="flex items-center gap-2 text-primary font-label-md uppercase tracking-wider">
-            <Link href="/" className="flex items-center gap-1">
-              <ArrowLeft size={13} />
-              <span>Seller Operations</span>
-            </Link>
-            <span className="text-xs text-muted">/</span>
-            <span>SEO & Catalog</span>
+        {/* Header */}
+        <header className="mb-6 flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-line pb-5">
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center gap-2 text-primary font-label-md uppercase tracking-wider">
+              <Link href="/" className="flex items-center gap-1">
+                <ArrowLeft size={13} />
+                <span>Seller Operations</span>
+              </Link>
+              <span className="text-xs text-muted">/</span>
+              <span>SEO & Catalog</span>
+            </div>
+            <h1 className="font-headline-xl text-headline-xl text-on-surface tracking-tight">SEO & Catalog Optimizer</h1>
+            <p className="font-body-md text-body-md text-on-surface-variant mt-2">Search by ASIN, SKU, Title, Seed Keyword · All Optimization Grades</p>
           </div>
-          <h1 className="font-headline-xl text-headline-xl text-on-surface tracking-tight">SEO & Catalog Optimizer</h1>
-          <p className="font-body-md text-body-md text-on-surface-variant mt-2">Search by ASIN, SKU, Title, Seed Keyword · All Optimization Grades</p>
-        </div>
-        <div className="flex flex-wrap items-center gap-3">
-          <div className="flex items-center gap-1 border border-line rounded-md bg-white px-2 py-0.5 text-xs text-muted">
-            <span>All Marketplaces</span>
-            <span className="text-teal-700 font-semibold">▼</span>
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="flex items-center gap-1 border border-line rounded-md bg-white px-2 py-0.5 text-xs text-muted">
+              <span>All Marketplaces</span>
+              <span className="text-teal-700 font-semibold">▼</span>
+            </div>
+            <div className="flex items-center gap-1 border border-line rounded-md bg-white px-2 py-0.5 text-xs text-muted">
+              <span>US (.com)</span>
+              <span className="text-teal-700 font-semibold">▼</span>
+            </div>
+            <Badge className="bg-teal-50 text-teal-800 border-teal-200">Prime Eligible</Badge>
+            <Button variant="outline" onClick={() => setBulkRewriteOpen(true)}>
+              Export Report
+            </Button>
           </div>
-          <div className="flex items-center gap-1 border border-line rounded-md bg-white px-2 py-0.5 text-xs text-muted">
-            <span>US (.com)</span>
-            <span className="text-teal-700 font-semibold">▼</span>
+        </header>
+
+        {/* Toolbar */}
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3 text-xs font-medium text-on-surface-variant">
+            <Badge className="bg-teal-50 text-teal-800 border-teal-200">Catalog Sync: Live · SP-API (v2024-09)</Badge>
+            <Badge className="bg-amber-50 text-amber-800 border-amber-200">Algorithmic Listing Health Sentinel</Badge>
           </div>
-          <Badge className="bg-teal-50 text-teal-800 border-teal-200">Prime Eligible</Badge>
-          <Button variant="outline" onClick={() => {}}>
-            Export Report
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" onClick={() => setAiRewriteOpen(true)} icon-left={<Bot size={13} className="mr-2" />}>
+              Generate AI Rewrites
+            </Button>
+            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => setBulkRewriteOpen(true)} icon-left={<Search size={13} className="mr-2" />}>
+              Run Bulk Audit
+            </Button>
+          </div>
         </div>
-      </header>
 
-      {/* Toolbar */}
-      <div className="mb-4 flex items-center justify-between gap-3">
-        <div className="flex items-center gap-3 text-xs font-medium text-on-surface-variant">
-          <Badge className="bg-teal-50 text-teal-800 border-teal-200">Catalog Sync: Live · SP-API (v2024-09)</Badge>
-          <Badge className="bg-amber-50 text-amber-800 border-amber-200">Algorithmic Listing Health Sentinel</Badge>
+        {/* Metrics row */}
+        <div className="metrics metrics-five mb-6">
+          <Metric label="Catalog Health Index" value="84.2 / 100" detail="+3.8 pts vs last crawl" accent="teal" tag="LIVE" />
+          <Metric label="Critical SEO Deficits" value="34 SKUs" detail="▲ Title &lt;50c or back-..." accent="warn" tag="PRIORITY" />
+          <Metric label="Indexation Rate" value="94.6%" detail="+1.2% organic coverage" accent="blue" tag="TARGET KEYWORDS" />
+          <Metric label="Brand Story" value="91.8%" detail="118 ASINs lack Modul..." accent="blue" tag="CONVERSION LIFT EST." />
+          <Metric label="Suppressed / At-Risk" value="2 ASINs" detail="▲ Limp policy, I search GMV" accent="rose" tag="URGENT" />
         </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" icon-left={<Bot size={13} className="mr-2" />}>
-            Generate AI Rewrites
-          </Button>
-          <Button className="bg-indigo-600 text-white hover:bg-indigo-700" icon-left={<Search size={13} className="mr-2" />}>
-            Run Bulk Audit
-          </Button>
-        </div>
-      </div>
 
-      {/* Metrics row */}
-      <div className="metrics metrics-five mb-6">
-        <Metric
-          label="Catalog Health Index"
-          value="84.2 / 100"
-          detail="+3.8 pts vs last crawl"
-          accent="teal"
-          tag="LIVE"
-        />
-        <Metric
-          label="Critical SEO Deficits"
-          value="34 SKUs"
-          detail="▲ Title &lt;50c or back-..."
-          accent="warn"
-          tag="PRIORITY"
-        />
-        <Metric
-          label="Indexation Rate"
-          value="94.6%"
-          detail="+1.2% organic coverage"
-          accent="blue"
-          tag="TARGET KEYWORDS"
-        />
-        <Metric
-          label="Brand Story"
-          value="91.8%"
-          detail="118 ASINs lack Modul..."
-          accent="blue"
-          tag="CONVERSION LIFT EST."
-        />
-        <Metric
-          label="Suppressed / At-Risk"
-          value="2 ASINs"
-          detail="▲ Limp policy, I search GMV"
-          accent="rose"
-          tag="URGENT"
-        />
-      </div>
-
-      {/* Listings Optimization & Search Frequency */}
-      <div className="grid gap-6 lg:grid-cols-[1fr_380px]">
-        <div className="space-y-6">
-          <Card>
-            <CardHeader className="flex items-center justify-between pb-2">
-              <div>
-                <h2 className="panel-title">Listing Optimization &amp; Search Frequency Rank Velocity</h2>
-                <div className="panel-subtitle">Distribution of listing scores across active ASINs and organic rank trajectory</div>
-              </div>
-              <div className="flex items-center gap-1 text-xs font-semibold">
-                <Badge className="bg-teal-50 text-teal-800 border-teal-200">Quality Tiers</Badge>
-                <Badge className="bg-indigo-50 text-indigo-800 border-indigo-200">Rank Velocity</Badge>
-                <Badge className="bg-amber-50 text-amber-800 border-amber-200">Search Terms</Badge>
-              </div>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <div className="mb-4 flex items-end justify-between">
-                <div className="text-[10px] font-bold uppercase tracking-wide text-muted">Catalog Score Spectrum (1,428 Tracked Child Listings)</div>
-                <div className="flex items-end gap-1 text-[10px] font-semibold text-on-surface">
-                  <span>Average: 84.2 LQS</span>
+        {/* Listings Optimization & Search Frequency */}
+        <div className="grid gap-6 lg:grid-cols-[1fr_380px]">
+          <div className="space-y-6">
+            <Card>
+              <CardHeader className="flex items-center justify-between pb-2">
+                <div>
+                  <h2 className="panel-title">Listing Optimization &amp; Search Frequency Rank Velocity</h2>
+                  <div className="panel-subtitle">Distribution of listing scores across active ASINs and organic rank trajectory</div>
                 </div>
-              </div>
-              <div className="h-8 w-full bg-canvas rounded-md border border-line mb-4 relative overflow-hidden">
-                <div className="absolute left-0 top-0 bottom-0 w-[35%] bg-emerald-500/60" />
-                <div className="absolute left-[35%] top-0 bottom-0 w-[32%] bg-indigo-500/60" />
-                <div className="absolute left-[67%] top-0 bottom-0 w-[25%] bg-amber-500/60" />
-                <div className="absolute left-[92%] top-0 bottom-0 w-[8%] bg-rose-500/60" />
-                <div className="absolute bottom-[-22px] left-0 w-[25%] text-[10px] text-muted text-center">Grade A (90–100)</div>
-                <div className="absolute bottom-[-22px] left-[35%] w-[30%] text-[10px] text-muted text-center">Grade B (75–89)</div>
-                <div className="absolute bottom-[-22px] left-[67%] w-[25%] text-[10px] text-muted text-center">Grade C (60–74)</div>
-                <div className="absolute bottom-[-22px] left-[92%] w-[8%] text-[10px] text-muted text-center">Grade D (&lt;60)</div>
-              </div>
-              <div className="flex items-center justify-between text-[10px] mt-2">
-                <div className="flex items-center gap-1">
-                  <span className="inline-block w-3 h-3 rounded-full bg-emerald-500" /> Grade A (90–100)
+                <div className="flex items-center gap-1 text-xs font-semibold">
+                  <Badge className="bg-teal-50 text-teal-800 border-teal-200">Quality Tiers</Badge>
+                  <Badge className="bg-indigo-50 text-indigo-800 border-indigo-200">Rank Velocity</Badge>
+                  <Badge className="bg-amber-50 text-amber-800 border-amber-200">Search Terms</Badge>
                 </div>
-                <div className="flex items-center gap-1">
-                  <span className="inline-block w-3 h-3 rounded-full bg-indigo-500" /> Grade B (75–89)
-                </div>
-                <div className="flex items-center gap-1">
-                  <span className="inline-block w-3 h-3 rounded-full bg-amber-500" /> Grade C (60–74)
-                </div>
-                <div className="flex items-center gap-1">
-                  <span className="inline-block w-3 h-3 rounded-full bg-rose-500" /> Grade D (&lt;60)
-                </div>
-              </div>
-
-              <div className="mt-6 h-64">
-                <div className="flex items-end justify-between text-[10px] font-semibold text-on-surface mb-2">
-                  <span>AVERAGE ORGANIC RANK (PRIMARY SEED TARGETS · 30D TREND)</span>
-                  <div className="flex items-center gap-2">
-                    <span>Day 1: #18.4</span>
-                    <span className="text-teal-700">→</span>
-                    <span>Today: #9.2</span>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <div className="mb-4 flex items-end justify-between">
+                  <div className="text-[10px] font-bold uppercase tracking-wide text-muted">Catalog Score Spectrum (1,428 Tracked Child Listings)</div>
+                  <div className="flex items-end gap-1 text-[10px] font-semibold text-on-surface">
+                    <span>Average: 84.2 LQS</span>
                   </div>
                 </div>
-                <div className="relative h-full">
-                  <svg className="w-full h-full" viewBox="0 0 400 200" preserveAspectRatio="none">
-                    <defs>
-                      <linearGradient id="rankGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0" stop-color="#6366F1" />
-                        <stop offset="100" stop-color="#A78BFA" />
-                      </linearGradient>
-                    </defs>
-                    <path d="M 20 150 L 100 140 L 200 120 L 300 80 L 380 60" fill="none" stroke="url(#rankGrad)" strokeWidth={3} />
-                    <circle cx="380" cy="60" r={4} fill="#6366F1" />
-                  </svg>
+                <div className="h-8 w-full bg-canvas rounded-md border border-line mb-4 relative overflow-hidden">
+                  <div className="absolute left-0 top-0 bottom-0 w-[35%] bg-emerald-500/60" />
+                  <div className="absolute left-[35%] top-0 bottom-0 w-[32%] bg-indigo-500/60" />
+                  <div className="absolute left-[67%] top-0 bottom-0 w-[25%] bg-amber-500/60" />
+                  <div className="absolute left-[92%] top-0 bottom-0 w-[8%] bg-rose-500/60" />
                 </div>
-              </div>
-
-              <div className="mt-6 flex items-center justify-between gap-4 p-4 rounded-md bg-indigo-50 border border-indigo-100">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-md bg-indigo-100">
-                    <Bot size={16} className="text-indigo-600" />
+                <div className="mt-6 h-64">
+                  <div className="flex items-end justify-between text-[10px] font-semibold text-on-surface mb-2">
+                    <span>AVERAGE ORGANIC RANK (PRIMARY SEED TARGETS · 30D TREND)</span>
+                    <div className="flex items-center gap-2">
+                      <span>Day 1: #18.4</span>
+                      <span className="text-teal-700">→</span>
+                      <span>Today: #9.2</span>
+                    </div>
                   </div>
+                  <div className="relative h-full">
+                    <svg className="w-full h-full" viewBox="0 0 400 200" preserveAspectRatio="none">
+                      <defs>
+                        <linearGradient id="rankGrad" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0" stop-color="#6366F1" />
+                          <stop offset="100" stop-color="#A78BFA" />
+                        </linearGradient>
+                      </defs>
+                      <path d="M 20 150 L 100 140 L 200 120 L 300 80 L 380 60" fill="none" stroke="url(#rankGrad)" strokeWidth={3} />
+                      <circle cx="380" cy="60" r={4} fill="#6366F1" />
+                    </svg>
+                  </div>
+                </div>
+                <div className="mt-6 flex items-center justify-between gap-4 p-4 rounded-md bg-indigo-50 border border-indigo-100">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-md bg-indigo-100">
+                      <Bot size={16} className="text-indigo-600" />
+                    </div>
+                    <div>
+                      <div className="text-xs font-semibold text-indigo-900">AI COPILOT RECOMMENDATION</div>
+                      <div className="text-xs text-indigo-700">18 high-volume search queries detected with zero organic indexation across your Electronics category.</div>
+                    </div>
+                  </div>
+                  <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => setAiRewriteOpen(true)}>
+                    Auto-Inject to Backend Terms ⚡
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            <div className="space-y-6">
+              <Card>
+                <CardHeader>
                   <div>
-                    <div className="text-xs font-semibold text-indigo-900">AI COPILOT RECOMMENDATION</div>
-                    <div className="text-xs text-indigo-700">18 high-volume search queries detected with zero organic indexation across your Electronics category.</div>
+                    <h2 className="panel-title">Simulated Amazon Storefront</h2>
+                    <p className="panel-subtitle">Live listing preview updated reactively from sourcing inputs.</p>
                   </div>
-                </div>
-                <Button className="bg-indigo-600 text-white hover:bg-indigo-700">
-                  Auto-Inject to Backend Terms ⚡
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+                  <Badge>Preview</Badge>
+                </CardHeader>
+                <CardContent>
+                  <StorefrontView />
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <div>
+                    <h2 className="panel-title">Shared product table</h2>
+                    <p className="panel-subtitle">One product record read by catalog, inventory, pricing, and approvals.</p>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+                    <span className="text-[10px] font-bold uppercase tracking-wide text-muted">Filters</span>
+                    <div className="flex items-center gap-1 border border-line rounded-md bg-canvas p-1 text-xs">
+                      <button className="px-2 py-1 rounded-md text-[10px] font-semibold bg-amber-50 text-amber-800 border-amber-200">Suppression Status: All</button>
+                      <button className="px-2 py-1 rounded-md text-[10px] font-semibold text-muted border-transparent hover:bg-canvas">Brand: All (3)</button>
+                    </div>
+                    <div className="text-right text-[10px] text-muted">Showing 5 of 1,428 tracked products</div>
+                    <button className="button button-outline button-sm" type="button" onClick={() => { setAddTab("import"); setAddModal(true); }}>
+                      Bulk AI Rewrite
+                    </button>
+                  </div>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left text-xs">
+                      <thead className="bg-canvas text-[10px] uppercase tracking-wide text-muted">
+                        <tr>
+                          <th style={{width:34}}></th>
+                          <th className="px-4 py-3">ASIN</th>
+                          <th className="px-4 py-3">SKU</th>
+                          <th style={{minWidth:220}} className="px-4 py-3">Title</th>
+                          <th className="px-4 py-3">Category</th>
+                          <th className="px-4 py-3">Status</th>
+                          <th className="px-4 py-3 tabular-nums">Score</th>
+                          <th style={{width:300}} className="px-4 py-3">Issues</th>
+                          <th className="px-4 py-3 tabular-nums">Stock</th>
+                          <th className="px-4 py-3 tabular-nums">Days of supply</th>
+                          <th className="px-4 py-3 tabular-nums">Price</th>
+                          <th style={{width:170}} className="px-4 py-3">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {loading ? (
+                          <tr><td colSpan={12} className="text-center text-xs text-muted py-4">Loading products…</td></tr>
+                        ) : products.length ? products.map((product) => {
+                          const statusClass = product.opt_status === "optimized" ? "status good" : "status warn";
+                          return (
+                            <tr key={product.asin} className="border-t border-line">
+                              <td className="px-4 py-3 tabular-nums text-[10px] text-muted">☐</td>
+                              <td className="px-4 py-3">{product.asin}</td>
+                              <td className="px-4 py-3">{product.sku}</td>
+                              <td className="px-4 py-3">{product.title}</td>
+                              <td className="px-4 py-3">{product.category}</td>
+                              <td className="px-4 py-3"><span className={statusClass}>{product.opt_status}</span></td>
+                              <td className="px-4 py-3 tabular-nums">{product.opt_score}</td>
+                              <td className="px-4 py-3 issue-cell">{product.opt_issues.length ? product.opt_issues.map((issue: string) => <span className="issue-tag" key={issue}>{issue}</span>) : <span className="issue-tag muted">—</span>}</td>
+                              <td className="px-4 py-3 tabular-nums">{product.stock}</td>
+                              <td className="px-4 py-3 tabular-nums">{product.days_of_supply}</td>
+                              <td className="px-4 py-3 tabular-nums">${product.price.toFixed(2)}</td>
+                              <td className="px-4 py-3"><button className="button button-outline button-sm" type="button" onClick={() => { setDrawerId(product.id); setDrawerMode("optimize"); }}>Optimize</button></td>
+                            </tr>
+                          );
+                        }) : (
+                          <tr><td colSpan={12} className="text-center text-xs text-muted py-4">No products in catalog.</td></tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </CardContent>
+              </Card>
+          </div>
 
           <div className="space-y-6">
             <Card>
-              <CardHeader>
-                <div>
-                  <h2 className="panel-title">Simulated Amazon Storefront</h2>
-                  <p className="panel-subtitle">Live listing preview updated reactively from sourcing inputs.</p>
+              <CardHeader className="flex items-center justify-between pb-2">
+                <div className="flex items-center gap-2">
+                  <Bot size={14} className="text-indigo-600" />
+                  <div>
+                    <h3 className="panel-title">AI Copy Generation &amp; Keyword Injection Queue</h3>
+                    <div className="panel-subtitle">Automated search optimization actions ready for SP-API live catalogue push</div>
+                  </div>
                 </div>
-                <Badge>Preview</Badge>
+                <Badge className="bg-amber-50 text-amber-800 border-amber-200">3 Actionable Proposals</Badge>
               </CardHeader>
-              <CardContent>
-                <StorefrontView />
+              <CardContent className="pt-0">
+                <div className="space-y-4">
+                  <div className="flex items-start gap-3 p-3 rounded-md border border-line bg-white/50">
+                    <div className="flex-shrink-0">
+                      <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-semibold">+4.2K</span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-xs font-semibold text-indigo-900 truncate">ASIN: B07X3A8992</span>
+                        <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200">Ergonomic Dual Lamp</Badge>
+                      </div>
+                      <div className="text-[10px] text-muted truncate">Suggested Title Expansion: .. with 24W Eye-Caring Gooseneck &amp; Touch Dimming, Architecture Clamp Base”</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3 p-3 rounded-md border border-line bg-white/50">
+                    <div className="flex-shrink-0">
+                      <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-amber-50 text-amber-700 text-[10px] font-semibold">CP: 19.2%</span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-xs font-semibold text-indigo-900 truncate">ASIN: B07X81M3L9</span>
+                        <Badge className="bg-amber-50 text-amber-800 border-amber-200">GaN65W Charger</Badge>
+                      </div>
+                      <div className="text-[10px] text-muted truncate">POLICY COMPLIANT BULLET 4 DRAFT: [CERTIFIED SAFE PROTECTION] Multi-protection system complies with UL62368 safety directives for overcurrent prevention.</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3 p-3 rounded-md border border-line bg-white/50">
+                    <div className="flex-shrink-0">
+                      <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-teal-50 text-teal-700 text-[10px] font-semibold">CR: 16.5%</span>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-xs font-semibold text-indigo-900 truncate">ASIN: B08K2PWQ6X</span>
+                        <Badge className="bg-teal-50 text-teal-800 border-teal-200">Spanish Long-Tail Harvest</Badge>
+                      </div>
+                      <div className="text-[10px] text-muted truncate">Discovered Backend Search Strings: cargador rapido tipo c · pantalla lampa dual · bandejas elasticas gym</div>
+                    </div>
+                  </div>
+                </div>
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader>
-                <div>
-                  <h2 className="panel-title">Shared product table</h2>
-                  <p className="panel-subtitle">One product record read by catalog, inventory, pricing, and approvals.</p>
+            <div className="space-y-4">
+              <div className="flex items-center gap-2 p-3 rounded-md border border-line bg-white/50">
+                <Bot size={13} className="text-indigo-600" />
+                <div className="flex-1 min-w-0">
+                  <div className="text-xs font-semibold text-indigo-900">SP-API Rate Ceiling</div>
+                  <div className="text-[10px] text-muted">18.4 / 20.0 rps</div>
                 </div>
-              </CardHeader>
-              <CardContent>
-                <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
-                  <span className="text-[10px] font-bold uppercase tracking-wide text-muted">Filters</span>
-                  <div className="flex items-center gap-1 border border-line rounded-md bg-canvas p-1 text-xs">
-                    <button className="px-2 py-1 rounded-md text-[10px] font-semibold bg-amber-50 text-amber-800 border-amber-200">Suppression Status: All</button>
-                    <button className="px-2 py-1 rounded-md text-[10px] font-semibold text-muted border-transparent hover:bg-canvas">Brand: All (3)</button>
-                  </div>
-                  <div className="text-right text-[10px] text-muted">Showing 5 of 1,428 tracked products</div>
-                  <button className="button button-outline button-sm" type="button" onClick={() => { setAddTab("import"); setAddModal(true); }}>
-                    Bulk AI Rewrite
-                  </button>
+                <div className="text-right">
+                  <div className="text-[10px] font-semibold text-indigo-900">DAILY TOKEN AI QUOTA</div>
+                  <div className="text-[10px] font-bold text-on-surface">84.5% Remaining</div>
                 </div>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left text-xs">
-                    <thead className="bg-canvas text-[10px] uppercase tracking-wide text-muted">
-                      <tr>
-                        <th style={{width:34}}></th>
-                        <th className="px-4 py-3">ASIN</th>
-                        <th className="px-4 py-3">SKU</th>
-                        <th style={{minWidth:220}} className="px-4 py-3">Title</th>
-                        <th className="px-4 py-3">Category</th>
-                        <th className="px-4 py-3">Status</th>
-                        <th className="px-4 py-3 tabular-nums">Score</th>
-                        <th style={{width:300}} className="px-4 py-3">Issues</th>
-                        <th className="px-4 py-3 tabular-nums">Stock</th>
-                        <th className="px-4 py-3 tabular-nums">Days of supply</th>
-                        <th className="px-4 py-3 tabular-nums">Price</th>
-                        <th style={{width:170}} className="px-4 py-3">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {loading ? (
-                        <tr><td colSpan={12} className="text-center text-xs text-muted py-4">Loading products…</td></tr>
-                      ) : products.length ? products.map((product) => {
-                        const statusClass = product.opt_status === "optimized" ? "status good" : "status warn";
-                        return (
-                          <tr key={product.asin} className="border-t border-line">
-                            <td className="px-4 py-3 tabular-nums text-[10px] text-muted">☐</td>
-                            <td className="px-4 py-3">{product.asin}</td>
-                            <td className="px-4 py-3">{product.sku}</td>
-                            <td className="px-4 py-3">{product.title}</td>
-                            <td className="px-4 py-3">{product.category}</td>
-                            <td className="px-4 py-3"><span className={statusClass}>{product.opt_status}</span></td>
-                            <td className="px-4 py-3 tabular-nums">{product.opt_score}</td>
-                            <td className="px-4 py-3 issue-cell">{product.opt_issues.length ? product.opt_issues.map((issue) => <span className="issue-tag" key={issue}>{issue}</span>) : <span className="issue-tag muted">—</span>}</td>
-                            <td className="px-4 py-3 tabular-nums">{product.stock}</td>
-                            <td className="px-4 py-3 tabular-nums">{product.days_of_supply}</td>
-                            <td className="px-4 py-3 tabular-nums">${product.price.toFixed(2)}</td>
-                            <td className="px-4 py-3"><button className="button button-outline button-sm" type="button" onClick={() => { setDrawerId(product.id); setDrawerMode("optimize"); }}>Optimize</button></td>
-                          </tr>
-                        );
-                      }) : (
-                        <tr><td colSpan={12} className="text-center text-xs text-muted py-4">No products in catalog.</td></tr>
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-                <div className="flex items-center justify-between mt-3">
-                  <div className="flex items-center gap-2 text-[10px] text-muted">
-                    <span>Rows per page:</span>
-                    <select className="rounded-md border border-line bg-white px-2 text-[10px]" defaultValue={5}>
-                      <option>5</option>
-                      <option>10</option>
-                      <option>25</option>
-                      <option>50</option>
-                    </select>
-                    <span>Page 1 of 286</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <button className="button button-outline button-sm disabled">Previous</button>
-                    <button className="button button-primary button-sm">1</button>
-                    <button className="button button-outline button-sm">2</button>
-                    <button className="button button-outline button-sm">3</button>
-                    <span className="px-2 text-[10px] text-muted">...</span>
-                    <button className="button button-outline button-sm">286</button>
-                    <button className="button button-outline button-sm">Next</button>
-                  </div>
-                </div>
-                <p className="mt-2 text-[10px] text-muted">Row actions: Optimize (opens side-by-side current vs suggested copy) · View. Bulk select with "Optimize selected". Add product opens Import from Amazon (ASIN/SKU) or Create manually.</p>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-
-        <div className="space-y-6">
-          {/* AI Copy Generation Queue */}
-          <Card>
-            <CardHeader className="flex items-center justify-between pb-2">
-              <div className="flex items-center gap-2">
-                <Bot size={14} className="text-indigo-600" />
-                <div>
-                  <h3 className="panel-title">AI Copy Generation &amp; Keyword Injection Queue</h3>
-                  <div className="panel-subtitle">Automated search optimization actions ready for SP-API live catalogue push</div>
-                </div>
-              </div>
-              <Badge className="bg-amber-50 text-amber-800 border-amber-200">3 Actionable Proposals</Badge>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <div className="space-y-4">
-                <div className="flex items-start gap-3 p-3 rounded-md border border-line bg-white/50">
-                  <div className="flex-shrink-0">
-                    <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-green-100 text-green-700 text-[10px] font-semibold">+4.2K</span>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-xs font-semibold text-indigo-900 truncate">ASIN: B07X3A8992</span>
-                      <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200">Ergonomic Dual Lamp</Badge>
-                    </div>
-                    <div className="text-[10px] text-muted truncate">Suggested Title Expansion: .. with 24W Eye-Caring Gooseneck &amp; Touch Dimming, Architecture Clamp Base”</div>
-                    <div className="mt-2 flex items-center justify-between">
-                      <Button className="bg-indigo-600 text-white text-[10px] px-3 py-1.5">Approve &amp; Push to Amazon SP-API ▶</Button>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3 p-3 rounded-md border border-line bg-white/50">
-                  <div className="flex-shrink-0">
-                    <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-amber-100 text-amber-700 text-[10px] font-semibold">CP: 19.2%</span>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-xs font-semibold text-indigo-900 truncate">ASIN: B07X81M3L9</span>
-                      <Badge className="bg-amber-50 text-amber-800 border-amber-200">GaN65W Charger</Badge>
-                    </div>
-                    <div className="text-[10px] text-muted truncate">POLICY COMPLIANT BULLET 4 DRAFT: [CERTIFIED SAFE PROTECTION] Multi-protection system complies with UL62368 safety directives for overcurrent prevention.</div>
-                    <div className="mt-2 flex items-center justify-between">
-                      <Button variant="outline" className="text-[10px] px-3 py-1.5">Review &amp; Resolve Suppression</Button>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3 p-3 rounded-md border border-line bg-white/50">
-                  <div className="flex-shrink-0">
-                    <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-teal-100 text-teal-700 text-[10px] font-semibold">CR: 16.5%</span>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-xs font-semibold text-indigo-900 truncate">ASIN: B08K2PWQ6X</span>
-                      <Badge className="bg-teal-50 text-teal-800 border-teal-200">Spanish Long-Tail Harvest</Badge>
-                    </div>
-                    <div className="text-[10px] text-muted truncate">Discovered Backend Search Strings: cargador rapido tipo c · pantalla lampa dual · bandejas elasticas gym</div>
-                    <div className="mt-2 flex items-center justify-between">
-                      <Button variant="outline" className="text-[10px] px-3 py-1.5">Apply to 34 Parent ASINs ▶</Button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <div className="space-y-4">
-            <div className="flex items-center gap-2 p-3 rounded-md border border-line bg-white/50">
-              <Bot size={13} className="text-indigo-600" />
-              <div className="flex-1 min-w-0">
-                <div className="text-xs font-semibold text-indigo-900">SP-API Rate Ceiling</div>
-                <div className="text-[10px] text-muted">18.4 / 20.0 rps</div>
-              </div>
-              <div className="text-right">
-                <div className="text-[10px] font-semibold text-indigo-900">DAILY TOKEN AI QUOTA</div>
-                <div className="text-[10px] font-bold text-on-surface">84.5% Remaining</div>
               </div>
             </div>
           </div>
         </div>
       </div>
+      </main>
 
       {drawerId && (
         <>
@@ -708,24 +637,131 @@ function CatalogWorkspace() {
           </div>
         </>
       )}
-    </main>
-      </Suspense>
+
+      {/* Modals */}
+      <Modal open={bulkRewriteOpen} onClose={() => setBulkRewriteOpen(false)} title="Bulk AI Rewrite — Setup & Capabilities">
+        <div className="space-y-4">
+          <div>
+            <div className="text-xs font-semibold text-indigo-900 mb-1">Bulk Rewrite Configuration</div>
+            <div className="text-[10px] text-muted mb-3">Rewrite listing titles, bullets, and backend keywords across multiple ASINs at scale using deterministic scoring rules.</div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div>
+                <label className="text-[10px] font-bold text-muted block mb-1">Rewrite Scope</label>
+                <select className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px]">
+                  <option>All active listings</option>
+                  <option>Needs optimization only</option>
+                  <option>Suppressed listings</option>
+                </select>
+              </div>
+              <div>
+                <label className="text-[10px] font-bold text-muted block mb-1">Rewrite Mode</label>
+                <select className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px]">
+                  <option>Conservative</option>
+                  <option>Aggressive</option>
+                  <option>SEO-optimized</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div className="p-3 rounded-md border border-line bg-indigo-50">
+            <div className="text-[10px] font-bold text-indigo-800 mb-1">Capabilities</div>
+            <ul className="text-[10px] text-muted space-y-1 list-disc pl-4">
+              <li>Bulk rewrite titles and bullets</li>
+              <li>Inject high-volume backend keywords</li>
+              <li>Score each rewritten variant (0–100 LQS)</li>
+              <li>Queue rewrites for human approval before publish</li>
+            </ul>
+          </div>
+          <div className="flex justify-end gap-2 pt-4">
+            <Button variant="outline" onClick={() => setBulkRewriteOpen(false)}>Cancel</Button>
+            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setBulkRewriteOpen(false); setAddModal(false); }}>Start Bulk Rewrite</Button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal open={aiRewriteOpen} onClose={() => setAiRewriteOpen(false)} title="AI Copy Generation — Setup & Capabilities">
+        <div className="space-y-4">
+          <div>
+            <div className="text-xs font-semibold text-indigo-900 mb-1">AI Copy Settings</div>
+            <div className="text-[10px] text-muted mb-3">Generate AI-powered listing copy suggestions for titles, bullets, descriptions, and backend keywords.</div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div>
+                <label className="text-[10px] font-bold text-muted block mb-1">AI Provider</label>
+                <select className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px]">
+                  <option>Helium 10 (mock)</option>
+                  <option>Jungle Scout (mock)</option>
+                  <option>AmzSphere AI (default)</option>
+                </select>
+              </div>
+              <div>
+                <label className="text-[10px] font-bold text-muted block mb-1">Tone</label>
+                <select className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px]">
+                  <option>Professional</option>
+                  <option>Persuasive</option>
+                  <option>Informative</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div className="p-3 rounded-md border border-line bg-indigo-50">
+            <div className="text-[10px] font-bold text-indigo-800 mb-1">Capabilities</div>
+            <ul className="text-[10px] text-muted space-y-1 list-disc pl-4">
+              <li>AI-generated title expansions</li>
+              <li>Policy-compliant bullet drafts</li>
+              <li>Backend keyword harvesting</li>
+              <li>Token quota tracking (84.5% remaining)</li>
+            </ul>
+          </div>
+          <div className="flex justify-end gap-2 pt-4">
+            <Button variant="outline" onClick={() => setAiRewriteOpen(false)}>Cancel</Button>
+            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setAiRewriteOpen(false); setMessage("AI copy generation queued for review."); }}>Generate AI Copy</Button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal open={storefrontOpen} onClose={() => setStorefrontOpen(false)} title="Simulated Amazon Storefront — Preview">
+        <div className="space-y-4">
+          <div className="p-3 rounded-md border border-line bg-white/50">
+            <div className="text-[10px] font-bold text-indigo-900 mb-1">Storefront Preview</div>
+            <div className="text-[10px] text-muted mb-3">Live listing preview updated reactively from sourcing inputs. This shows how your optimized listings will appear to shoppers on Amazon.</div>
+            <StorefrontView />
+          </div>
+          <div className="flex justify-end pt-4">
+            <Button onClick={() => setStorefrontOpen(false)}>Close</Button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal open={integrationsOpen} onClose={() => setIntegrationsOpen(false)} title="API Integration Status — Setup">
+        <div className="space-y-4">
+          <div className="p-3 rounded-md border border-line bg-white/50">
+            <div className="text-[10px] font-bold text-indigo-900 mb-1">SP-API Integration</div>
+            <div className="text-[10px] text-muted mb-3">Connect Amazon Selling Partner API for real-time data ingestion.</div>
+            <ApiIntegrationStatus onTokenChange={() => {}} token="" mode="free" />
+          </div>
+          <div className="flex justify-end pt-4">
+            <Button onClick={() => setIntegrationsOpen(false)}>Close</Button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal open={healthScoreOpen} onClose={() => setHealthScoreOpen(false)} title="Listing Health Score — Details">
+        <div className="space-y-4">
+          <div className="p-3 rounded-md border border-line bg-white/50">
+            <div className="text-[10px] font-bold text-indigo-900 mb-1">Health Score Breakdown</div>
+            <div className="text-[10px] text-muted mb-3">Deterministic rules score 0–100 on title length/keywords, bullets, images, description, backend keywords, and suppression.</div>
+            <HealthScoreBar score={null} missingKeywords={[]} mode="free" />
+          </div>
+          <div className="flex justify-end pt-4">
+            <Button onClick={() => setHealthScoreOpen(false)}>Close</Button>
+          </div>
+        </div>
+      </Modal>
+    </Suspense>
   );
 }
 
-function Metric({
-  label,
-  value,
-  detail,
-  accent,
-  tag,
-}: {
-  label: string;
-  value: string;
-  detail: string;
-  accent: string;
-  tag?: string;
-}) {
+function Metric2({ label, value, detail, accent, tag }: { label: string; value: string; detail: string; accent: string; tag?: string }) {
   return (
     <section className="metric" data-accent={accent}>
       <div className="metric-label"><span>{label}</span>{tag && <span className="mini-tag">{tag}</span>}</div>
@@ -739,7 +775,13 @@ function Metric({
 export default function CatalogPage() {
   return (
     <Suspense fallback={<div className="min-h-screen bg-canvas px-4 py-6 md:px-10 md:py-10">Loading catalog…</div>}>
-      <CatalogWorkspace />
+      <CatalogWithParams />
     </Suspense>
   );
+}
+
+function CatalogWithParams() {
+  const searchParams = useSearchParams();
+  const sellerId = searchParams.get("seller_id") || "";
+  return <CatalogWorkspace sellerId={sellerId} />;
 }

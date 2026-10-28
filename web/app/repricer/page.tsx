@@ -7,6 +7,7 @@ import { PackageSearch, RefreshCw, ChartNoAxesCombined } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Modal } from "@/components/ui/modal";
 import { ClientProductProvider } from "@/lib/provider/client";
 import type { Product } from "@/lib/provider/types";
 
@@ -38,6 +39,12 @@ export default function RepricerPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+
+  // Modal states
+  const [exportAuditOpen, setExportAuditOpen] = useState(false);
+  const [createStrategyOpen, setCreateStrategyOpen] = useState(false);
+  const [adjustFloorOpen, setAdjustFloorOpen] = useState<string | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -90,10 +97,10 @@ export default function RepricerPage() {
             <span>30D</span>
             <span>Simulate Scenarios</span>
           </div>
-          <Button variant="outline" onClick={() => {}}>
+          <Button variant="outline" onClick={() => setExportAuditOpen(true)}>
             Export Audit (CSV)
           </Button>
-          <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => {}}>
+          <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => setCreateStrategyOpen(true)}>
             + Create Repricing Strategy
           </Button>
         </div>
@@ -143,6 +150,7 @@ export default function RepricerPage() {
                 <h2 className="panel-title">Rule Profiles &amp; Safety</h2>
                 <div className="panel-subtitle">3 Active</div>
               </div>
+              <Button variant="outline" onClick={() => setCreateStrategyOpen(true)}>Create Rule Profile</Button>
             </CardHeader>
             <CardContent>
               <div className="space-y-3 text-xs">
@@ -243,6 +251,7 @@ export default function RepricerPage() {
                       <td className="px-4 py-3">
                         {position}
                         <div className="mt-1 text-[10px] text-muted">Floor: ${product.min_floor.toFixed(2)}</div>
+                        <Button variant="outline" onClick={() => setAdjustFloorOpen(product.asin)} className="mt-1 text-[10px] px-2 py-0.5">Adjust Floor</Button>
                       </td>
                     </tr>
                   );
@@ -286,12 +295,129 @@ export default function RepricerPage() {
             <div className="text-emerald-400">[14:43:02.190] CELERY_TASK · catalog.inject_generic_keywords(ASIN=B07X81M3L9, tokens=["camping","portable solar","lamp"])</div>
             <div className="text-slate-400">AmzSphere High-Frequency Repricer Sentinel: Active SP-API OfferChanged notification stream. Zero API throttling detected.</div>
           </div>
+          <div className="flex items-center justify-between mt-3 text-[10px]">
+            <span className="text-muted">SP-API Sync Worker: worker-us-east-1-04a (Active)</span>
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-teal-500" />
+              <span className="text-xs text-muted">View Telemetry Stream</span>
+            </div>
+          </div>
         </CardContent>
       </Card>
 
       <p className="text-right text-[10px] text-muted">
         AmzSphere High-Frequency Repricer Sentinel: Active SP-API OfferChanged notification stream. Zero API throttling detected. · Engine: v4.2.1-turbo · Sub-sec · Region: US-EAST-1 (MBS) · Polling cycle: 10s
       </p>
+
+      {/* Modals */}
+      <Modal open={exportAuditOpen} onClose={() => setExportAuditOpen(false)} title="Export Audit — Setup">
+        <div className="space-y-4">
+          <div>
+            <div className="text-xs font-semibold text-indigo-900 mb-1">Export Configuration</div>
+            <div className="text-[10px] text-muted mb-3">Export repricer audit data for offline analysis or compliance review.</div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div>
+                <label className="text-[10px] font-bold text-muted block mb-1">Format</label>
+                <select className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px]">
+                  <option>CSV</option>
+                  <option>Excel (.xlsx)</option>
+                  <option>JSON</option>
+                </select>
+              </div>
+              <div>
+                <label className="text-[10px] font-bold text-muted block mb-1">Date Range</label>
+                <select className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px]">
+                  <option>Last 24 hours</option>
+                  <option>Last 7 days</option>
+                  <option>Last 30 days</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div className="p-3 rounded-md border border-line bg-teal-50">
+            <div className="text-[10px] font-bold text-teal-800 mb-1">Capabilities</div>
+            <ul className="text-[10px] text-muted space-y-1 list-disc pl-4">
+              <li>Export all reprice events with timestamps</li>
+              <li>Include floor interventions and guardrails</li>
+              <li>Download for compliance and audit review</li>
+            </ul>
+          </div>
+          <div className="flex justify-end gap-2 pt-4">
+            <Button variant="outline" onClick={() => setExportAuditOpen(false)}>Cancel</Button>
+            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setExportAuditOpen(false); setMessage("Repricer audit exported to downloads."); }}>Export CSV</Button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal open={createStrategyOpen} onClose={() => setCreateStrategyOpen(false)} title="Create Repricing Strategy — Setup">
+        <div className="space-y-4">
+          <div>
+            <div className="text-xs font-semibold text-indigo-900 mb-1">Strategy Configuration</div>
+            <div className="text-[10px] text-muted mb-3">Create a new algorithmic repricing strategy with rule profiles and safety guardrails.</div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div>
+                <label className="text-[10px] font-bold text-muted block mb-1">Strategy Name</label>
+                <input className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" placeholder="Q4 Profit Maximizer" />
+              </div>
+              <div>
+                <label className="text-[10px] font-bold text-muted block mb-1">Margin Floor (%)</label>
+                <input type="number" step="0.1" className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" defaultValue="18.5" />
+              </div>
+              <div className="sm:col-span-2">
+                <label className="text-[10px] font-bold text-muted block mb-1">Rule Profiles</label>
+                <select className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px]">
+                  <option>AI Profit Maximizer</option>
+                  <option>Velocity Liquidation</option>
+                  <option>Anti-Price-War Dampener</option>
+                  <option>Custom Hybrid</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div className="p-3 rounded-md border border-line bg-indigo-50">
+            <div className="text-[10px] font-bold text-indigo-800 mb-1">Capabilities</div>
+            <ul className="text-[10px] text-muted space-y-1 list-disc pl-4">
+              <li>Algorithmic bid and price adjustments</li>
+              <li>Hard margin floor protection</li>
+              <li>Competitor stockout auto-raise</li>
+              <li>Anti-price-war throttling</li>
+            </ul>
+          </div>
+          <div className="flex justify-end gap-2 pt-4">
+            <Button variant="outline" onClick={() => setCreateStrategyOpen(false)}>Cancel</Button>
+            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setCreateStrategyOpen(false); setMessage("Repricing strategy created and activated."); }}>Create Strategy</Button>
+          </div>
+        </div>
+      </Modal>
+
+      {adjustFloorOpen && (
+        <Modal open={true} onClose={() => setAdjustFloorOpen(null)} title="Adjust Floor Price">
+          <div className="space-y-4">
+            <div>
+              <div className="text-xs font-semibold text-indigo-900 mb-1">Floor Adjustment</div>
+              <div className="text-[10px] text-muted mb-3">Adjust the minimum price floor for this SKU. Hard lock at 18.5% margin.</div>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div>
+                  <label className="text-[10px] font-bold text-muted block mb-1">ASIN</label>
+                  <span className="text-xs text-on-surface">{adjustFloorOpen}</span>
+                </div>
+                <div>
+                  <label className="text-[10px] font-bold text-muted block mb-1">New Floor ($)</label>
+                  <input type="number" step="0.01" className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" defaultValue="0.00" />
+                </div>
+              </div>
+            </div>
+            <div className="p-3 rounded-md border border-line bg-amber-50">
+              <div className="text-[10px] font-bold text-amber-800 mb-1">Guardrail</div>
+              <div className="text-[10px] text-muted">Floor cannot go below 18.5% margin. Changes require approver signoff.</div>
+            </div>
+            <div className="flex justify-end gap-2 pt-4">
+              <Button variant="outline" onClick={() => setAdjustFloorOpen(null)}>Cancel</Button>
+              <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setAdjustFloorOpen(null); setMessage(`Floor adjusted for ${adjustFloorOpen}.`); }}>Save Floor</Button>
+            </div>
+          </div>
+        </Modal>
+      )}
     </main>
   );
 }

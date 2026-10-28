@@ -1,13 +1,17 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { PackageSearch, RefreshCw } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Modal } from "@/components/ui/modal";
 
 export default function HowPage() {
+  const [openModal, setOpenModal] = useState<string | null>(null);
+
   return (
     <main className="min-h-screen bg-canvas px-4 py-6 md:px-10 md:py-10">
       <header className="mb-6 flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-line pb-5">
@@ -27,6 +31,9 @@ export default function HowPage() {
         </div>
         <div className="flex items-center gap-2">
           <Badge className="bg-teal-50 text-teal-800 border-teal-200">System Guide</Badge>
+          <Button onClick={() => setOpenModal("system-overview")}>
+            Walkthrough Demo
+          </Button>
         </div>
       </header>
 
@@ -50,7 +57,7 @@ export default function HowPage() {
             <CardContent>
               <div className="flow-steps space-y-4">
                 <div className="flow-step flex items-start gap-3 p-3 rounded-md border border-line bg-white/50">
-                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-600 text-white text-[10px] font-semibold flex items-center justify-center">01</span>
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-600 text-white text-[10px] font-bold flex items-center justify-center">01</span>
                   <div className="flex-1 min-w-0">
                     <div className="flow-title text-xs font-semibold text-indigo-900">Add or sync a product</div>
                     <div className="flow-copy text-[10px] text-muted">Import by ASIN/SKU from the catalog or create manually. Sync upserts by ASIN + marketplace (idempotent, re-runnable) and records each run in the activity log.</div>
@@ -58,7 +65,7 @@ export default function HowPage() {
                   </div>
                 </div>
                 <div className="flow-step flex items-start gap-3 p-3 rounded-md border border-line bg-white/50">
-                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-600 text-white text-[10px] font-semibold flex items-center justify-center">02</span>
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-600 text-white text-[10px] font-bold flex items-center justify-center">02</span>
                   <div className="flex-1 min-w-0">
                     <div className="flow-title text-xs font-semibold text-indigo-900">Score every listing</div>
                     <div className="flow-copy text-[10px] text-muted">Deterministic rules score 0–100 on title length/keywords, bullets, images, description, backend keywords, and suppression. Score below 70 flags needs_optimization with human-readable issues.</div>
@@ -66,7 +73,7 @@ export default function HowPage() {
                   </div>
                 </div>
                 <div className="flow-step flex items-start gap-3 p-3 rounded-md border border-line bg-white/50">
-                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-600 text-white text-[10px] font-semibold flex items-center justify-center">03</span>
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-600 text-white text-[10px] font-bold flex items-center justify-center">03</span>
                   <div className="flex-1 min-w-0">
                     <div className="flow-title text-xs font-semibold text-indigo-900">Draft an optimization</div>
                     <div className="flow-copy text-[10px] text-muted">Side-by-side current vs suggested copy (title, bullets, keywords, description). Saving creates a product_revision with status draft_ready or pending_approval; nothing touches Amazon until approved.</div>
@@ -74,7 +81,7 @@ export default function HowPage() {
                   </div>
                 </div>
                 <div className="flow-step flex items-start gap-3 p-3 rounded-md border border-line bg-white/50">
-                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-600 text-white text-[10px] font-semibold flex items-center justify-center">04</span>
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-600 text-white text-[10px] font-bold flex items-center justify-center">04</span>
                   <div className="flex-1 min-w-0">
                     <div className="flow-title text-xs font-semibold text-indigo-900">Approve or reject</div>
                     <div className="flow-copy text-[10px] text-muted">Approvals shows pending revisions with a before/after diff. Approve applies the changes to the shared product, sets opt_status=published, recomputes the score, updates marketplace listings to Live & In Sync, and logs the publish. Reject returns the product to needs_optimization.</div>
@@ -82,7 +89,7 @@ export default function HowPage() {
                   </div>
                 </div>
                 <div className="flow-step flex items-start gap-3 p-3 rounded-md border border-line bg-white/50">
-                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-600 text-white text-[10px] font-semibold flex items-center justify-center">05</span>
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-600 text-white text-[10px] font-bold flex items-center justify-center">05</span>
                   <div className="flex-1 min-w-0">
                     <div className="flow-title text-xs font-semibold text-indigo-900">Every page reflects the update</div>
                     <div className="flow-copy text-[10px] text-muted">After any write, the product query invalidates so the catalog table, Overview cards, Inventory, Pricing, and Activity Log all refresh without a manual reload.</div>
@@ -90,7 +97,7 @@ export default function HowPage() {
                   </div>
                 </div>
                 <div className="flow-step flex items-start gap-3 p-3 rounded-md border border-line bg-white/50">
-                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-600 text-white text-[10px] font-semibold flex items-center justify-center">06</span>
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-600 text-white text-[10px] font-bold flex items-center justify-center">06</span>
                   <div className="flex-1 min-w-0">
                     <div className="flow-title text-xs font-semibold text-indigo-900">Execution guard</div>
                     <div className="flow-copy text-[10px] text-muted">Nothing is written to Amazon (or the mock "Amazon") without an approved revision. Mock mode only — no real Amazon calls, no credentials, no secrets.</div>
@@ -188,7 +195,7 @@ export default function HowPage() {
                     <span className="inline-flex items-center gap-1">
                       <span className="bg-teal-50 text-teal-700 border border-teal-200 rounded-md px-2 py-0.5">published</span>
                     </span>
-                    <span className="text-muted">Score recomputed · listings Live & In Sync</span>
+                    <span className="text-muted">Score recomputed · listings Live &amp; In Sync</span>
                   </div>
                   <div className="flex items-center justify-between text-xs">
                     <span className="inline-flex items-center gap-1">
@@ -226,6 +233,65 @@ export default function HowPage() {
       <p className="text-right text-[10px] text-muted mt-6">
         AmzSphere Operations · Mock engine live · API credentials remain server-side
       </p>
+
+      {/* Modal */}
+      <Modal open={!!openModal} onClose={() => setOpenModal(null)} title="System Walkthrough — AmzSphere Flow">
+        <div className="space-y-4">
+          <div>
+            <div className="text-xs font-semibold text-indigo-900 mb-1">End-to-End Flow</div>
+            <div className="text-[10px] text-muted mb-3">This walkthrough demonstrates how a single product record moves through the entire AmzSphere system, from ingestion to publication.</div>
+            <div className="space-y-3">
+              <div className="flex items-start gap-3 p-3 rounded-md border border-line bg-white/50">
+                <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-600 text-white text-[10px] font-bold flex items-center justify-center">1</span>
+                <div className="flex-1 min-w-0">
+                  <div className="text-xs font-semibold text-indigo-900">Ingest Product</div>
+                  <div className="text-[10px] text-muted">ASIN/SKU lookup via SP-API or manual creation. Upserts are idempotent.</div>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 p-3 rounded-md border border-line bg-white/50">
+                <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-600 text-white text-[10px] font-bold flex items-center justify-center">2</span>
+                <div className="flex-1 min-w-0">
+                  <div className="text-xs font-semibold text-indigo-900">Score Listing (0–100)</div>
+                  <div className="text-[10px] text-muted">Deterministic rules evaluate title, bullets, images, description, keywords, suppression.</div>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 p-3 rounded-md border border-line bg-white/50">
+                <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-600 text-white text-[10px] font-bold flex items-center justify-center">3</span>
+                <div className="flex-1 min-w-0">
+                  <div className="text-xs font-semibold text-indigo-900">Draft Optimization</div>
+                  <div className="text-[10px] text-muted">Side-by-side copy comparison. Creates product_revision (draft_ready).</div>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 p-3 rounded-md border border-line bg-white/50">
+                <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-600 text-white text-[10px] font-bold flex items-center justify-center">4</span>
+                <div className="flex-1 min-w-0">
+                  <div className="text-xs font-semibold text-indigo-900">Approve &amp; Publish</div>
+                  <div className="text-[10px] text-muted">Human approver reviews diff. Approval writes to shared product record and marketplace listings.</div>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 p-3 rounded-md border border-line bg-white/50">
+                <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-600 text-white text-[10px] font-bold flex items-center justify-center">5</span>
+                <div className="flex-1 min-w-0">
+                  <div className="text-xs font-semibold text-indigo-900">All Pages Reflect Update</div>
+                  <div className="text-[10px] text-muted">Catalog, Inventory, Pricing, Approvals, Activity Log refresh via invalidation.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="p-3 rounded-md border border-line bg-indigo-50">
+            <div className="text-[10px] font-bold text-indigo-800 mb-1">What this showcase demonstrates</div>
+            <ul className="text-[10px] text-muted space-y-1 list-disc pl-4">
+              <li>Single source of truth across all pages</li>
+              <li>Human-in-the-loop approval required before publish</li>
+              <li>No writes to Amazon without approved revision</li>
+              <li>Mock mode — no real credentials or secrets</li>
+            </ul>
+          </div>
+          <div className="flex justify-end pt-4">
+            <Button onClick={() => setOpenModal(null)}>Close</Button>
+          </div>
+        </div>
+      </Modal>
     </main>
   );
 }

@@ -8,6 +8,7 @@ import { Bar, BarChart, Line, LineChart, CartesianGrid, ResponsiveContainer, Too
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Modal } from "@/components/ui/modal";
 import { ClientProductProvider } from "@/lib/provider/client";
 import type { Dashboard } from "@/lib/provider/types";
 
@@ -39,6 +40,15 @@ export default function PpcPage() {
   const [data, setData] = useState<{ campaigns: any[]; search_terms: any[]; targeted_exact_keywords: any[]; negative_keywords: any[] } | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+
+  // Modal states
+  const [launchCampaignOpen, setLaunchCampaignOpen] = useState(false);
+  const [exportTermsOpen, setExportTermsOpen] = useState(false);
+  const [bidEngineOpen, setBidEngineOpen] = useState(false);
+  const [placementOpen, setPlacementOpen] = useState(false);
+  const [daypartingOpen, setDaypartingOpen] = useState(false);
+  const [promoteKeywordOpen, setPromoteKeywordOpen] = useState("");
 
   useEffect(() => {
     let active = true;
@@ -160,10 +170,10 @@ export default function PpcPage() {
             <span>90D</span>
             <span>Lifetime</span>
           </div>
-          <Button variant="outline" onClick={() => {}}>
+          <Button variant="outline" onClick={() => setExportTermsOpen(true)}>
             Export Search Terms
           </Button>
-          <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => {}}>
+          <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => setLaunchCampaignOpen(true)}>
             + Launch Campaign
           </Button>
         </div>
@@ -217,6 +227,7 @@ export default function PpcPage() {
                 <h2 className="panel-title">Bid Engine &amp; PACER</h2>
                 <div className="panel-subtitle">PID 2.4 · Active</div>
               </div>
+              <Button variant="outline" onClick={() => setBidEngineOpen(true)}>Configure Bid Engine</Button>
             </CardHeader>
             <CardContent>
               <div className="space-y-3 text-xs">
@@ -245,6 +256,7 @@ export default function PpcPage() {
                 <h2 className="panel-title">Placement Modifiers</h2>
                 <div className="panel-subtitle">Edit Rules</div>
               </div>
+              <Button variant="outline" onClick={() => setPlacementOpen(true)}>Edit Placement Rules</Button>
             </CardHeader>
             <CardContent>
               <div className="space-y-2 text-xs">
@@ -270,6 +282,7 @@ export default function PpcPage() {
                 <h2 className="panel-title">Dayparting &amp; Boost Matrix</h2>
                 <div className="panel-subtitle">Peak 14:00 - 21:00 EST</div>
               </div>
+              <Button variant="outline" onClick={() => setDaypartingOpen(true)}>Configure Dayparting</Button>
             </CardHeader>
             <CardContent>
               <div className="space-y-1 text-xs">
@@ -298,12 +311,8 @@ export default function PpcPage() {
             <div className="panel-subtitle">Real-time Amazon Advertising SP-API telemetry &amp; live automated bid interventions.</div>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="outline" onClick={() => {}}>
-              Bulk Adjust Target ACoS
-            </Button>
-            <Button onClick={() => {}}>
-              Reallocate Budget
-            </Button>
+            <Button variant="outline" onClick={() => {}}>Bulk Adjust Target ACoS</Button>
+            <Button onClick={() => {}}>Reallocate Budget</Button>
           </div>
         </CardHeader>
         <CardContent className="pt-0">
@@ -311,9 +320,7 @@ export default function PpcPage() {
             <span className="text-xs font-semibold text-muted">State: All Enabled</span>
             <span className="text-xs font-semibold text-muted">Format: All (SP, SB, SD)</span>
             <span className="text-xs font-semibold text-muted">Portfolio: All Lines</span>
-            <Button variant="outline" onClick={() => {}}>
-              Reset Filters
-            </Button>
+            <Button variant="outline" onClick={() => {}}>Reset Filters</Button>
           </div>
           <div className="table-wrap">
             <table className="w-full text-left text-xs">
@@ -403,7 +410,7 @@ export default function PpcPage() {
                   <div className="flex items-center gap-2">
                     <span className="text-[10px] font-bold text-on-surface tabular-nums">$1.12</span>
                     <span className="text-[10px] text-muted">Exact</span>
-                    <Button className="bg-indigo-600 text-white text-[10px] px-3 py-1">Promote to Exact</Button>
+                    <Button onClick={() => setPromoteKeywordOpen("portable solar battery 50w fast charge")} className="bg-indigo-600 text-white text-[10px] px-3 py-1">Promote to Exact</Button>
                   </div>
                 </div>
               </div>
@@ -427,7 +434,7 @@ export default function PpcPage() {
                   <div className="flex items-center gap-2">
                     <span className="text-[10px] font-bold text-on-surface tabular-nums">$0.94</span>
                     <span className="text-[10px] text-muted">Exact</span>
-                    <Button className="bg-indigo-600 text-white text-[10px] px-3 py-1">Promote to Exact</Button>
+                    <Button onClick={() => setPromoteKeywordOpen("active noise cancelling earbuds running sweatproof")} className="bg-indigo-600 text-white text-[10px] px-3 py-1">Promote to Exact</Button>
                   </div>
                 </div>
               </div>
@@ -451,7 +458,7 @@ export default function PpcPage() {
                   <div className="flex items-center gap-2">
                     <span className="text-[10px] font-bold text-on-surface tabular-nums">$1.35</span>
                     <span className="text-[10px] text-muted">Exact</span>
-                    <Button className="bg-indigo-600 text-white text-[10px] px-3 py-1">Promote to Exact</Button>
+                    <Button onClick={() => setPromoteKeywordOpen("dual monitor arm lamp clamp architecture")} className="bg-indigo-600 text-white text-[10px] px-3 py-1">Promote to Exact</Button>
                   </div>
                 </div>
               </div>
@@ -459,6 +466,192 @@ export default function PpcPage() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Modals */}
+      <Modal open={launchCampaignOpen} onClose={() => setLaunchCampaignOpen(false)} title="Launch New Campaign — Setup">
+        <div className="space-y-4">
+          <div>
+            <div className="text-xs font-semibold text-indigo-900 mb-1">Campaign Configuration</div>
+            <div className="text-[10px] text-muted mb-3">Create a new Sponsored Products campaign with automated bid rules and budget pacing.</div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div>
+                <label className="text-[10px] font-bold text-muted block mb-1">Campaign Name</label>
+                <input className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" placeholder="Q4 Holiday Push" />
+              </div>
+              <div>
+                <label className="text-[10px] font-bold text-muted block mb-1">Daily Budget ($)</label>
+                <input type="number" className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" placeholder="50.00" />
+              </div>
+              <div className="sm:col-span-2">
+                <label className="text-[10px] font-bold text-muted block mb-1">Targeting Type</label>
+                <select className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px]">
+                  <option>Automatic</option>
+                  <option>Manual</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div className="p-3 rounded-md border border-line bg-indigo-50">
+            <div className="text-[10px] font-bold text-indigo-800 mb-1">Capabilities</div>
+            <ul className="text-[10px] text-muted space-y-1 list-disc pl-4">
+              <li>Autonomous bid adjustments via PACER</li>
+              <li>Negative keyword auto-harvesting</li>
+              <li>Placement modifiers (Top of Search, PDP)</li>
+              <li>Dayparting boost matrix</li>
+            </ul>
+          </div>
+          <div className="flex justify-end gap-2 pt-4">
+            <Button variant="outline" onClick={() => setLaunchCampaignOpen(false)}>Cancel</Button>
+            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setLaunchCampaignOpen(false); setMessage("Campaign launched and queued for SP-API submission."); }}>Launch Campaign</Button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal open={exportTermsOpen} onClose={() => setExportTermsOpen(false)} title="Export Search Terms — Setup">
+        <div className="space-y-4">
+          <div>
+            <div className="text-xs font-semibold text-indigo-900 mb-1">Export Configuration</div>
+            <div className="text-[10px] text-muted mb-3">Export search term data for offline analysis or upload to external bid management tools.</div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div>
+                <label className="text-[10px] font-bold text-muted block mb-1">Format</label>
+                <select className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px]">
+                  <option>CSV</option>
+                  <option>Excel (.xlsx)</option>
+                  <option>JSON</option>
+                </select>
+              </div>
+              <div>
+                <label className="text-[10px] font-bold text-muted block mb-1">Date Range</label>
+                <select className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px]">
+                  <option>Last 7 days</option>
+                  <option>Last 30 days</option>
+                  <option>Last 90 days</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div className="p-3 rounded-md border border-line bg-teal-50">
+            <div className="text-[10px] font-bold text-teal-800 mb-1">Capabilities</div>
+            <ul className="text-[10px] text-muted space-y-1 list-disc pl-4">
+              <li>Export search terms with clicks, spend, conversions</li>
+              <li>Include ACoS and automation status</li>
+              <li>Download ready for Google Sheets / Excel</li>
+            </ul>
+          </div>
+          <div className="flex justify-end gap-2 pt-4">
+            <Button variant="outline" onClick={() => setExportTermsOpen(false)}>Cancel</Button>
+            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setExportTermsOpen(false); setMessage("Search terms exported to downloads folder."); }}>Export CSV</Button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal open={bidEngineOpen} onClose={() => setBidEngineOpen(false)} title="Bid Engine & PACER — Configuration">
+        <div className="space-y-4">
+          <div>
+            <div className="text-xs font-semibold text-indigo-900 mb-1">Bid Engine Settings</div>
+            <div className="text-[10px] text-muted mb-3">Configure the PID 2.4 algorithmic bidding engine that autonomously adjusts bids based on ACoS targets.</div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div>
+                <label className="text-[10px] font-bold text-muted block mb-1">Max Bid Cap ($)</label>
+                <input type="number" step="0.01" className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" defaultValue="4.50" />
+              </div>
+              <div>
+                <label className="text-[10px] font-bold text-muted block mb-1">Target ACoS (%)</label>
+                <input type="number" step="0.1" className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" defaultValue="22.0" />
+              </div>
+            </div>
+          </div>
+          <div className="p-3 rounded-md border border-line bg-indigo-50">
+            <div className="text-[10px] font-bold text-indigo-800 mb-1">Capabilities</div>
+            <ul className="text-[10px] text-muted space-y-1 list-disc pl-4">
+              <li>344 automated bid shifts per day</li>
+              <li>PID 2.4 control loop for ACoS targeting</li>
+              <li>Anti-price-war dampener</li>
+              <li>Hard margin floor protection (18.5%)</li>
+            </ul>
+          </div>
+          <div className="flex justify-end gap-2 pt-4">
+            <Button variant="outline" onClick={() => setBidEngineOpen(false)}>Cancel</Button>
+            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setBidEngineOpen(false); setMessage("Bid engine configuration saved."); }}>Save Configuration</Button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal open={placementOpen} onClose={() => setPlacementOpen(false)} title="Placement Modifiers — Edit Rules">
+        <div className="space-y-4">
+          <div>
+            <div className="text-xs font-semibold text-indigo-900 mb-1">Placement Bid Modifiers</div>
+            <div className="text-[10px] text-muted mb-3">Adjust bids for specific placement types to control where your ads appear.</div>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-muted">Top of Search (First Page)</span>
+                <input type="number" step="1" className="w-16 h-7 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" defaultValue="45" />%
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-muted">Product Detail Pages</span>
+                <input type="number" step="1" className="w-16 h-7 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" defaultValue="15" />%
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-muted">Rest of Search</span>
+                <span className="text-[10px] text-muted">(Base — not adjustable)</span>
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-end pt-4">
+            <Button onClick={() => setPlacementOpen(false)}>Close</Button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal open={daypartingOpen} onClose={() => setDaypartingOpen(false)} title="Dayparting & Boost Matrix — Configure">
+        <div className="space-y-4">
+          <div>
+            <div className="text-xs font-semibold text-indigo-900 mb-1">Dayparting Schedule</div>
+            <div className="text-[10px] text-muted mb-3">Set boost hours for peak conversion periods. Peak window: 14:00 - 21:00 EST.</div>
+            <div className="grid grid-cols-8 gap-1">
+              {[0, 4, 8, 12, 16, 20, 23].map((hour) => (
+                <div key={hour} className="flex flex-col items-center gap-1">
+                  <span className="text-[9px] text-muted">{hour}:00</span>
+                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: hour >= 14 && hour <= 21 ? "#10B981" : "#CBD5E1" }} />
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="p-3 rounded-md border border-line bg-amber-50">
+            <div className="text-[10px] font-bold text-amber-800 mb-1">Capabilities</div>
+            <ul className="text-[10px] text-muted space-y-1 list-disc pl-4">
+              <li>Boost bids during peak hours</li>
+              <li>Pause auto-pacer when needed</li>
+              <li>Time-zone aware scheduling</li>
+            </ul>
+          </div>
+          <div className="flex justify-end gap-2 pt-4">
+            <Button variant="outline" onClick={() => setDaypartingOpen(false)}>Cancel</Button>
+            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setDaypartingOpen(false); setMessage("Dayparting schedule saved."); }}>Save Schedule</Button>
+          </div>
+        </div>
+      </Modal>
+
+      {promoteKeywordOpen && (
+        <Modal open={true} onClose={() => setPromoteKeywordOpen("")} title="Promote Keyword to Exact Match">
+          <div className="space-y-4">
+            <div>
+              <div className="text-xs font-semibold text-indigo-900 mb-1">Keyword Promotion</div>
+              <div className="text-[10px] text-muted mb-3">Promote this high-converting search term to an exact match target in your campaigns.</div>
+              <div className="p-3 rounded-md border border-line bg-white/50">
+                <div className="text-[10px] font-bold text-on-surface mb-1">Keyword</div>
+                <div className="text-xs font-semibold text-indigo-900">{promoteKeywordOpen}</div>
+                <div className="text-[10px] text-muted mt-1">Match type: Exact</div>
+              </div>
+            </div>
+            <div className="flex justify-end gap-2 pt-4">
+              <Button variant="outline" onClick={() => setPromoteKeywordOpen("")}>Cancel</Button>
+              <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setPromoteKeywordOpen(""); setMessage(`Keyword "${promoteKeywordOpen}" promoted to exact match target.`); }}>Promote</Button>
+            </div>
+          </div>
+        </Modal>
+      )}
     </main>
   );
 }

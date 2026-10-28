@@ -1,11 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { PackageSearch, RefreshCw, SlidersHorizontal, Bot, ChartNoAxesCombined, BarChart3, ShoppingCart, ShieldCheck, ToggleRight, Activity } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Modal } from "@/components/ui/modal";
 import { SEED_TOOLS, getAllMarketplaces, marketplaceLabel, computeMonthlyCost, type SeoTool } from "@/lib/seo-tools";
 
 function Metric({
@@ -32,6 +34,16 @@ function Metric({
 }
 
 export default function SeoToolsPage() {
+  const [message, setMessage] = useState("");
+  // Modal states
+  const [compareBenchmarksOpen, setCompareBenchmarksOpen] = useState(false);
+  const [catalogScanOpen, setCatalogScanOpen] = useState(false);
+  const [customToolOpen, setCustomToolOpen] = useState(false);
+  const [newEventHookOpen, setNewEventHookOpen] = useState(false);
+  const [routingLogsOpen, setRoutingLogsOpen] = useState(false);
+  const [configureToolOpen, setConfigureToolOpen] = useState<string | null>(null);
+  const [telemetryOpen, setTelemetryOpen] = useState(false);
+
   return (
     <main className="min-h-screen bg-canvas px-4 py-6 md:px-10 md:py-10">
       <header className="mb-6 flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-line pb-5">
@@ -56,13 +68,13 @@ export default function SeoToolsPage() {
           <p className="font-body-md text-body-md text-on-surface-variant mt-2">Configure, benchmark, and orchestrate AI keyword harvesters, listing score checkers, search query (SQP) analyzers, and SP-API automated catalog sync routines.</p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <Button variant="outline" onClick={() => {}}>
+          <Button variant="outline" onClick={() => setCompareBenchmarksOpen(true)}>
             Compare Benchmarks
           </Button>
-          <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => {}}>
+          <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => setCatalogScanOpen(true)}>
             Run Catalog Scan
           </Button>
-          <Button variant="outline" onClick={() => {}}>
+          <Button variant="outline" onClick={() => setCustomToolOpen(true)}>
             Add Custom Tool Pipeline
           </Button>
         </div>
@@ -149,7 +161,7 @@ export default function SeoToolsPage() {
             </div>
             <div className="flex items-center justify-between">
               <Badge className="bg-indigo-50 text-indigo-800 border-indigo-200 text-[9px]">{tool.pricing_model}</Badge>
-              <Button variant="outline" onClick={() => {}}>
+              <Button variant="outline" onClick={() => setConfigureToolOpen(tool.id)}>
                 Configure
               </Button>
             </div>
@@ -167,10 +179,10 @@ export default function SeoToolsPage() {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="outline" onClick={() => {}}>
+            <Button variant="outline" onClick={() => setNewEventHookOpen(true)}>
               New Event Hook
             </Button>
-            <Button variant="outline" onClick={() => {}}>
+            <Button variant="outline" onClick={() => setRoutingLogsOpen(true)}>
               Routing Logs
             </Button>
           </div>
@@ -329,7 +341,7 @@ export default function SeoToolsPage() {
             <span className="text-muted">SP-API Sync Worker: worker-us-east-1-04a (Active)</span>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-teal-500" />
-              <span className="text-xs text-muted">View Telemetry Stream</span>
+              <span className="text-xs text-muted" onClick={() => setTelemetryOpen(true)}>View Telemetry Stream</span>
             </div>
           </div>
         </CardContent>
@@ -338,6 +350,256 @@ export default function SeoToolsPage() {
       <p className="text-right text-[10px] text-muted mt-6">
         AmzSphere Operations · Mock engine live · API credentials remain server-side
       </p>
+
+      {/* Modals */}
+      <Modal open={compareBenchmarksOpen} onClose={() => setCompareBenchmarksOpen(false)} title="Compare Benchmarks — Setup">
+        <div className="space-y-4">
+          <div>
+            <div className="text-xs font-semibold text-indigo-900 mb-1">Benchmark Configuration</div>
+            <div className="text-[10px] text-muted mb-3">Compare your SEO tool performance against industry benchmarks and competitor baselines.</div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div>
+                <label className="text-[10px] font-bold text-muted block mb-1">Metric</label>
+                <select className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px]">
+                  <option>LQS Score Distribution</option>
+                  <option>Indexation Rate</option>
+                  <option>Keyword Coverage</option>
+                </select>
+              </div>
+              <div>
+                <label className="text-[10px] font-bold text-muted block mb-1">Benchmark Against</label>
+                <select className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px]">
+                  <option>Industry Average</option>
+                  <option>Top 10% Performers</option>
+                  <option>Custom Baseline</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div className="p-3 rounded-md border border-line bg-indigo-50">
+            <div className="text-[10px] font-bold text-indigo-800 mb-1">Capabilities</div>
+            <ul className="text-[10px] text-muted space-y-1 list-disc pl-4">
+              <li>Compare LQS scores across ASINs</li>
+              <li>Benchmark indexation rates</li>
+              <li>Track keyword coverage vs peers</li>
+              <li>Export benchmark reports</li>
+            </ul>
+          </div>
+          <div className="flex justify-end gap-2 pt-4">
+            <Button variant="outline" onClick={() => setCompareBenchmarksOpen(false)}>Cancel</Button>
+            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setCompareBenchmarksOpen(false); setMessage("Benchmark comparison generated."); }}>Run Benchmark</Button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal open={catalogScanOpen} onClose={() => setCatalogScanOpen(false)} title="Run Catalog Scan — Setup">
+        <div className="space-y-4">
+          <div>
+            <div className="text-xs font-semibold text-indigo-900 mb-1">Catalog Scan Configuration</div>
+            <div className="text-[10px] text-muted mb-3">Scan your entire catalog for SEO issues, suppression risks, and optimization opportunities.</div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div>
+                <label className="text-[10px] font-bold text-muted block mb-1">Scan Scope</label>
+                <select className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px]">
+                  <option>Full Catalog (1,428 ASINs)</option>
+                  <option>Needs Optimization Only</option>
+                  <option>Suppressed Listings</option>
+                </select>
+              </div>
+              <div>
+                <label className="text-[10px] font-bold text-muted block mb-1">Scan Depth</label>
+                <select className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px]">
+                  <option>Quick (Titles + Bullets)</option>
+                  <option>Full (All Fields)</option>
+                  <option>Deep (Including Images)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div className="p-3 rounded-md border border-line bg-teal-50">
+            <div className="text-[10px] font-bold text-teal-800 mb-1">Capabilities</div>
+            <ul className="text-[10px] text-muted space-y-1 list-disc pl-4">
+              <li>Scan for SEO deficits across catalog</li>
+              <li>Detect suppression risk flags</li>
+              <li>Generate optimization task queue</li>
+              <li>Export scan results to CSV</li>
+            </ul>
+          </div>
+          <div className="flex justify-end gap-2 pt-4">
+            <Button variant="outline" onClick={() => setCatalogScanOpen(false)}>Cancel</Button>
+            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setCatalogScanOpen(false); setMessage("Catalog scan queued. Results will appear in the activity log."); }}>Start Scan</Button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal open={customToolOpen} onClose={() => setCustomToolOpen(false)} title="Add Custom Tool Pipeline — Setup">
+        <div className="space-y-4">
+          <div>
+            <div className="text-xs font-semibold text-indigo-900 mb-1">Custom Tool Configuration</div>
+            <div className="text-[10px] text-muted mb-3">Register a third-party SEO tool or custom pipeline into the AmzSphere cluster.</div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div>
+                <label className="text-[10px] font-bold text-muted block mb-1">Tool Name</label>
+                <input className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" placeholder="My SEO Tool" />
+              </div>
+              <div>
+                <label className="text-[10px] font-bold text-muted block mb-1">Category</label>
+                <select className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px]">
+                  <option>Keyword Research</option>
+                  <option>Listing Optimization</option>
+                  <option>Rank Tracking</option>
+                  <option>PPC/Advertising</option>
+                  <option>Review &amp; Feedback</option>
+                  <option>Competitor Analysis</option>
+                </select>
+              </div>
+              <div className="sm:col-span-2">
+                <label className="text-[10px] font-bold text-muted block mb-1">SP-API Endpoint URL</label>
+                <input className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" placeholder="https://api.example.com/webhook" />
+              </div>
+            </div>
+          </div>
+          <div className="p-3 rounded-md border border-line bg-amber-50">
+            <div className="text-[10px] font-bold text-amber-800 mb-1">Capabilities</div>
+            <ul className="text-[10px] text-muted space-y-1 list-disc pl-4">
+              <li>Register custom SEO tools</li>
+              <li>Configure SP-API webhook integration</li>
+              <li>Assign to execution pipeline</li>
+              <li>Monitor tool health and uptime</li>
+            </ul>
+          </div>
+          <div className="flex justify-end gap-2 pt-4">
+            <Button variant="outline" onClick={() => setCustomToolOpen(false)}>Cancel</Button>
+            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setCustomToolOpen(false); setMessage("Custom tool pipeline registered."); }}>Register Tool</Button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal open={newEventHookOpen} onClose={() => setNewEventHookOpen(false)} title="New Event Hook — Setup">
+        <div className="space-y-4">
+          <div>
+            <div className="text-xs font-semibold text-indigo-900 mb-1">Event Hook Configuration</div>
+            <div className="text-[10px] text-muted mb-3">Define trigger-driven execution paths for autonomous catalog event responses.</div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div>
+                <label className="text-[10px] font-bold text-muted block mb-1">Trigger Event</label>
+                <select className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px]">
+                  <option>New ASIN Ingest</option>
+                  <option>Rank Loss Surge</option>
+                  <option>Suppression Risk Flagged</option>
+                  <option>Global Catalog Replication</option>
+                </select>
+              </div>
+              <div>
+                <label className="text-[10px] font-bold text-muted block mb-1">Execution Cadence</label>
+                <select className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px]">
+                  <option>Real-time (Webhook)</option>
+                  <option>Hourly Polling</option>
+                  <option>Nightly Batch</option>
+                  <option>Immediate (Priority 0)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div className="p-3 rounded-md border border-line bg-indigo-50">
+            <div className="text-[10px] font-bold text-indigo-800 mb-1">Capabilities</div>
+            <ul className="text-[10px] text-muted space-y-1 list-disc pl-4">
+              <li>Define trigger conditions</li>
+              <li>Chain autonomous tool execution</li>
+              <li>Set enforcement guardrails</li>
+              <li>Enable/disable hooks</li>
+            </ul>
+          </div>
+          <div className="flex justify-end gap-2 pt-4">
+            <Button variant="outline" onClick={() => setNewEventHookOpen(false)}>Cancel</Button>
+            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setNewEventHookOpen(false); setMessage("Event hook created and activated."); }}>Create Hook</Button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal open={routingLogsOpen} onClose={() => setRoutingLogsOpen(false)} title="Routing Logs — View">
+        <div className="space-y-4">
+          <div className="p-3 rounded-md border border-line bg-white/50">
+            <div className="text-[10px] font-bold text-indigo-900 mb-1">Pipeline Execution Logs</div>
+            <div className="text-[10px] text-muted mb-3">View recent autonomous tool execution chains and their outcomes.</div>
+            <div className="h-[200px] overflow-y-auto border border-line rounded-md bg-[#0B0F19] p-3 font-mono text-[9px]">
+              <div className="text-teal-400">[14:48:22] NEW_ASIN → LQS Auditor → NeuroRank → BST 249-Packer → Sentinel Check (Approved)</div>
+              <div className="text-emerald-400">[14:47:09] RANK_SURGE → SQP Funnel Ingest → NeuroRank Reseed → Remediation Draft (Staged)</div>
+              <div className="text-amber-400">[14:46:59] SUPPRESSION_RISK → Brand Sentinel Scan → Auto-Rollback Canonical → SP-API Urgent Patch (Enacted)</div>
+              <div className="text-slate-400">[14:45:55] GLOBAL_CATALOG → Cross-Border Localizer → BST 249-Packer → A+ Story Localizer (Pending Review)</div>
+            </div>
+          </div>
+          <div className="flex justify-end pt-4">
+            <Button onClick={() => setRoutingLogsOpen(false)}>Close</Button>
+          </div>
+        </div>
+      </Modal>
+
+      {configureToolOpen && (
+        <Modal open={true} onClose={() => setConfigureToolOpen(null)} title="Configure Tool — Setup">
+          <div className="space-y-4">
+            <div>
+              <div className="text-xs font-semibold text-indigo-900 mb-1">Tool Configuration</div>
+              <div className="text-[10px] text-muted mb-3">Configure settings for the selected SEO tool in your cluster.</div>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div>
+                  <label className="text-[10px] font-bold text-muted block mb-1">Tool</label>
+                  <span className="text-xs text-on-surface">{SEED_TOOLS.find((t) => t.id === configureToolOpen)?.name ?? "Unknown"}</span>
+                </div>
+                <div>
+                  <label className="text-[10px] font-bold text-muted block mb-1">Status</label>
+                  <Badge className="bg-teal-50 text-teal-800 border-teal-200">ACTIVE</Badge>
+                </div>
+                <div className="sm:col-span-2">
+                  <label className="text-[10px] font-bold text-muted block mb-1">API Endpoint</label>
+                  <input className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" placeholder="https://api.tool.example.com/v1" />
+                </div>
+              </div>
+            </div>
+            <div className="p-3 rounded-md border border-line bg-indigo-50">
+              <div className="text-[10px] font-bold text-indigo-800 mb-1">Capabilities</div>
+              <ul className="text-[10px] text-muted space-y-1 list-disc pl-4">
+                <li>Configure tool API credentials</li>
+                <li>Set execution frequency</li>
+                <li>Assign marketplace scope</li>
+                <li>Enable/disable tool</li>
+              </ul>
+            </div>
+            <div className="flex justify-end gap-2 pt-4">
+              <Button variant="outline" onClick={() => setConfigureToolOpen(null)}>Cancel</Button>
+              <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setConfigureToolOpen(null); setMessage("Tool configuration saved."); }}>Save Configuration</Button>
+            </div>
+          </div>
+        </Modal>
+      )}
+
+      <Modal open={telemetryOpen} onClose={() => setTelemetryOpen(false)} title="SP-API Telemetry Stream — View">
+        <div className="space-y-4">
+          <div className="p-3 rounded-md border border-line bg-white/50">
+            <div className="text-[10px] font-bold text-indigo-900 mb-1">Real-Time Telemetry</div>
+            <div className="text-[10px] text-muted mb-3">Live SP-API keyword extraction throughput and cluster latency metrics.</div>
+            <div className="flex items-center justify-between text-xs mb-2">
+              <span className="text-muted">Current Throughput</span>
+              <span className="text-on-surface font-semibold">$40 keywords/sec</span>
+            </div>
+            <div className="flex items-center justify-between text-xs mb-2">
+              <span className="text-muted">Average Latency</span>
+              <span className="text-on-surface font-semibold">64ms</span>
+            </div>
+            <div className="flex items-center justify-between text-xs mb-2">
+              <span className="text-muted">Report Queue</span>
+              <span className="text-on-surface font-semibold">3 In-Flight</span>
+            </div>
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-muted">Active Worker</span>
+              <span className="text-on-surface font-semibold">worker-us-east-1-04a</span>
+            </div>
+          </div>
+          <div className="flex justify-end pt-4">
+            <Button onClick={() => setTelemetryOpen(false)}>Close</Button>
+          </div>
+        </div>
+      </Modal>
     </main>
   );
 }

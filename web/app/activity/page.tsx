@@ -7,6 +7,7 @@ import { PackageSearch, RefreshCw, ChartNoAxesCombined, ShieldAlert } from "luci
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Modal } from "@/components/ui/modal";
 import { ClientProductProvider } from "@/lib/provider/client";
 import type { ActivityItem } from "@/lib/provider/types";
 
@@ -38,6 +39,12 @@ export default function ActivityPage() {
   const [items, setItems] = useState<ActivityItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+
+  // Modal states
+  const [exportAuditOpen, setExportAuditOpen] = useState(false);
+  const [triggerSyncOpen, setTriggerSyncOpen] = useState(false);
+  const [rerunFailedOpen, setRerunFailedOpen] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -90,10 +97,10 @@ export default function ActivityPage() {
             <span>24h</span>
             <span>7d</span>
           </div>
-          <Button variant="outline" onClick={() => {}}>
+          <Button variant="outline" onClick={() => setExportAuditOpen(true)}>
             Export Audit
           </Button>
-          <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => {}}>
+          <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => setTriggerSyncOpen(true)}>
             + Trigger Manual Sync
           </Button>
         </div>
@@ -101,7 +108,7 @@ export default function ActivityPage() {
 
       <div className="metrics metrics-five mb-6">
         <Metric label="Dispatched Tasks" value="48,290" detail="+14.2% Peak: 340 tasks/min" accent="blue" tag="24h window" />
-        <Metric label="Success Rate" value="99.84%" detail="+0.12% (opt) Failed: 76 0 dead-letter" accent="green" tag="Optimal" />
+        <Metric label="Success Rate" value="99.84%" detail="+0.12% (opt) Failed: 76 · 0 dead-letter" accent="green" tag="Optimal" />
         <Metric label="Latency (P95)" value="142 ms" detail="Median wait: 28ms Target: &lt;280ms" accent="teal" tag="Fast (&lt;250ms)" />
         <Metric label="Guardrails" value="18 Blocked" detail="12 Price drops pre… · 6 bids" accent="rose" tag="Active" />
         <Metric label="SP-API Quota" value="41.6%" detail="Bucket: 30.0 / 50.0 reg/s limit" accent="blue" tag="Healthy" />
@@ -192,10 +199,10 @@ export default function ActivityPage() {
             <select className="h-9 rounded-md border border-line bg-white px-2 text-xs" defaultValue="All Levels">
               <option>Severity: All Levels</option>
             </select>
-            <Button variant="outline" onClick={() => {}}>
+            <Button variant="outline" onClick={() => setExportAuditOpen(true)}>
               JSON
             </Button>
-            <Button onClick={() => {}}>
+            <Button onClick={() => setRerunFailedOpen(true)}>
               Re-run Failed (0)
             </Button>
           </div>
@@ -263,6 +270,100 @@ export default function ActivityPage() {
       <p className="text-right text-[10px] text-muted mt-4">
         No unencrypted seller data loaded · API credentials remain server-side in KMS enclave · AmzSphere Engine v2.4.9 · Documentation · System Status
       </p>
+
+      {/* Modals */}
+      <Modal open={exportAuditOpen} onClose={() => setExportAuditOpen(false)} title="Export Audit — Setup">
+        <div className="space-y-4">
+          <div>
+            <div className="text-xs font-semibold text-indigo-900 mb-1">Export Configuration</div>
+            <div className="text-[10px] text-muted mb-3">Export activity log data for compliance review or offline analysis.</div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div>
+                <label className="text-[10px] font-bold text-muted block mb-1">Format</label>
+                <select className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px]">
+                  <option>CSV</option>
+                  <option>JSON</option>
+                </select>
+              </div>
+              <div>
+                <label className="text-[10px] font-bold text-muted block mb-1">Date Range</label>
+                <select className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px]">
+                  <option>Last 24 hours</option>
+                  <option>Last 7 days</option>
+                  <option>Last 30 days</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div className="p-3 rounded-md border border-line bg-teal-50">
+            <div className="text-[10px] font-bold text-teal-800 mb-1">Capabilities</div>
+            <ul className="text-[10px] text-muted space-y-1 list-disc pl-4">
+              <li>Export all activity events with timestamps</li>
+              <li>Include engine, status, and latency data</li>
+              <li>Download for compliance and audit review</li>
+            </ul>
+          </div>
+          <div className="flex justify-end gap-2 pt-4">
+            <Button variant="outline" onClick={() => setExportAuditOpen(false)}>Cancel</Button>
+            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setExportAuditOpen(false); setMessage("Activity log exported to downloads."); }}>Export</Button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal open={triggerSyncOpen} onClose={() => setTriggerSyncOpen(false)} title="Trigger Manual Sync — Setup">
+        <div className="space-y-4">
+          <div>
+            <div className="text-xs font-semibold text-indigo-900 mb-1">Manual Sync</div>
+            <div className="text-[10px] text-muted mb-3">Force a full SP-API sync of catalog, inventory, and pricing data from Amazon.</div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div>
+                <label className="text-[10px] font-bold text-muted block mb-1">Sync Scope</label>
+                <select className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px]">
+                  <option>Full Catalog</option>
+                  <option>Inventory Only</option>
+                  <option>Pricing Only</option>
+                </select>
+              </div>
+              <div>
+                <label className="text-[10px] font-bold text-muted block mb-1">Marketplace</label>
+                <select className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px]">
+                  <option>All Marketplaces</option>
+                  <option>US (.com)</option>
+                  <option>EU</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div className="p-3 rounded-md border border-line bg-indigo-50">
+            <div className="text-[10px] font-bold text-indigo-800 mb-1">Capabilities</div>
+            <ul className="text-[10px] text-muted space-y-1 list-disc pl-4">
+              <li>Force full catalog re-ingestion</li>
+              <li>Refresh inventory and pricing from SP-API</li>
+              <li>Record sync run in activity log</li>
+              <li>Resume from last checkpoint if interrupted</li>
+            </ul>
+          </div>
+          <div className="flex justify-end gap-2 pt-4">
+            <Button variant="outline" onClick={() => setTriggerSyncOpen(false)}>Cancel</Button>
+            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setTriggerSyncOpen(false); setMessage("Manual sync queued. Activity will appear in the stream."); }}>Trigger Sync</Button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal open={rerunFailedOpen} onClose={() => setRerunFailedOpen(false)} title="Re-run Failed Tasks — Confirm">
+        <div className="space-y-4">
+          <div>
+            <div className="text-xs font-semibold text-indigo-900 mb-1">Re-run Failed Tasks</div>
+            <div className="text-[10px] text-muted mb-3">Re-queue previously failed tasks for reprocessing. 0 failed tasks currently in the queue.</div>
+            <div className="p-3 rounded-md border border-line bg-white/50">
+              <div className="text-[10px] text-muted">No failed tasks to re-run. All tasks completed successfully.</div>
+            </div>
+          </div>
+          <div className="flex justify-end pt-4">
+            <Button variant="outline" onClick={() => setRerunFailedOpen(false)}>Close</Button>
+          </div>
+        </div>
+      </Modal>
     </main>
   );
 }

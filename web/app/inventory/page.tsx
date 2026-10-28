@@ -7,6 +7,7 @@ import { PackageSearch, RefreshCw, ChartNoAxesCombined } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Modal } from "@/components/ui/modal";
 import { ClientProductProvider } from "@/lib/provider/client";
 import type { Product } from "@/lib/provider/types";
 
@@ -38,6 +39,14 @@ export default function InventoryPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+
+  // Modal states
+  const [calculateReorderOpen, setCalculateReorderOpen] = useState(false);
+  const [createShipmentOpen, setCreateShipmentOpen] = useState(false);
+  const [viewManifestsOpen, setViewManifestsOpen] = useState(false);
+  const [createPOOpen, setCreatePOOpen] = useState<string | null>(null);
+  const [adjustMaxOpen, setAdjustMaxOpen] = useState<string | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -88,10 +97,10 @@ export default function InventoryPage() {
             <span>90D</span>
             <span>Projection (60D)</span>
           </div>
-          <Button variant="outline" onClick={() => {}}>
+          <Button variant="outline" onClick={() => setCalculateReorderOpen(true)}>
             Calculate Reorder Quantities
           </Button>
-          <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => {}}>
+          <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => setCreateShipmentOpen(true)}>
             + Create Inbound Shipment
           </Button>
         </div>
@@ -102,7 +111,7 @@ export default function InventoryPage() {
         <Metric label="Estimated Stock Value" value="$412,850.00" detail="+$514.2k vs last month" accent="teal" tag="COGS: $184.2k" />
         <Metric label="At-Risk Stock" value="<16 SKUs" detail="Est. last rev: $8,420/wk" accent="rose" tag="IMMEDIATE REORDER REQ." />
         <Metric label="Average Days of Supply" value="38.5 Days" detail="Target buffer: 30-45 days" accent="teal" tag="Healthy Range" />
-        <Metric label="Inbound & In-Transit" value="14,250 Units" detail="8 Active Shipments" accent="blue" tag="TRANSIT VALUATION: $62.8k" />
+        <Metric label="Inbound &amp; In-Transit" value="14,250 Units" detail="8 Active Shipments" accent="blue" tag="TRANSIT VALUATION: $62.8k" />
       </div>
 
       <section className="section-grid mb-6">
@@ -185,7 +194,7 @@ export default function InventoryPage() {
                 <h2 className="panel-title">Inbound Shipment Pipeline &amp; FBA Receiving Queue</h2>
                 <div className="panel-subtitle">Active Inflow: 14,250 Units across 8 Shipments</div>
               </div>
-              <Button variant="outline" onClick={() => {}}>
+              <Button variant="outline" onClick={() => setViewManifestsOpen(true)}>
                 View Flight Manifests
               </Button>
             </CardHeader>
@@ -232,12 +241,8 @@ export default function InventoryPage() {
           </div>
           <div className="flex items-center gap-2">
             <span className="text-xs font-semibold text-muted">All Stock Statuses</span>
-            <Button variant="outline" onClick={() => {}}>
-              Export CSV
-            </Button>
-            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => {}}>
-              Bulk PO Generator
-            </Button>
+            <Button variant="outline" onClick={() => {}}>Export CSV</Button>
+            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => setCalculateReorderOpen(true)}>Bulk PO Generator</Button>
           </div>
         </CardHeader>
         <CardContent className="pt-0">
@@ -306,11 +311,11 @@ export default function InventoryPage() {
                       </td>
                       <td className="px-4 py-3">
                         {days < 15 ? (
-                          <Button variant="outline" onClick={() => {}}>
+                          <Button variant="outline" onClick={() => setCreatePOOpen(product.asin)}>
                             Create PO
                           </Button>
                         ) : (
-                          <Button variant="outline" onClick={() => {}}>
+                          <Button variant="outline" onClick={() => setAdjustMaxOpen(product.asin)}>
                             Adjust Max
                           </Button>
                         )}
@@ -341,6 +346,174 @@ export default function InventoryPage() {
       <p className="text-right text-[10px] text-muted">
         AmzSphere High-Frequency Sentinel Protocol: 256-bit AES KMS SP-API Gated. Safe dry-run verified. · Region: US-EAST-1 · Node: Pod-FBA-04 · Latency: 18ms
       </p>
+
+      {/* Modals */}
+      <Modal open={calculateReorderOpen} onClose={() => setCalculateReorderOpen(false)} title="Calculate Reorder Quantities — Setup">
+        <div className="space-y-4">
+          <div>
+            <div className="text-xs font-semibold text-indigo-900 mb-1">Reorder Calculation</div>
+            <div className="text-[10px] text-muted mb-3">Calculate optimal reorder quantities based on trailing velocity, lead-time buffers, and inbound freight confirmations.</div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div>
+                <label className="text-[10px] font-bold text-muted block mb-1">Buffer Days</label>
+                <input type="number" step="1" className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" defaultValue="15" />
+              </div>
+              <div>
+                <label className="text-[10px] font-bold text-muted block mb-1">Lead Time (days)</label>
+                <input type="number" step="1" className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" defaultValue="21" />
+              </div>
+              <div className="sm:col-span-2">
+                <label className="text-[10px] font-bold text-muted block mb-1">Scope</label>
+                <select className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px]">
+                  <option>All low-stock SKUs</option>
+                  <option>Critical only (&lt;15 days)</option>
+                  <option>Watch only (&lt;30 days)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div className="p-3 rounded-md border border-line bg-indigo-50">
+            <div className="text-[10px] font-bold text-indigo-800 mb-1">Capabilities</div>
+            <ul className="text-[10px] text-muted space-y-1 list-disc pl-4">
+              <li>Auto-calculate reorder quantities per SKU</li>
+              <li>Factor in lead-time and buffer days</li>
+              <li>Generate bulk purchase orders</li>
+              <li>Export to CSV or send to vendor</li>
+            </ul>
+          </div>
+          <div className="flex justify-end gap-2 pt-4">
+            <Button variant="outline" onClick={() => setCalculateReorderOpen(false)}>Cancel</Button>
+            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setCalculateReorderOpen(false); setMessage("Reorder quantities calculated and PO drafts generated."); }}>Calculate Reorder</Button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal open={createShipmentOpen} onClose={() => setCreateShipmentOpen(false)} title="Create Inbound Shipment — Setup">
+        <div className="space-y-4">
+          <div>
+            <div className="text-xs font-semibold text-indigo-900 mb-1">Inbound Shipment</div>
+            <div className="text-[10px] text-muted mb-3">Create a new inbound shipment to Amazon FBA fulfillment centers.</div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div>
+                <label className="text-[10px] font-bold text-muted block mb-1">Shipment Name</label>
+                <input className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" placeholder="Q4 Holiday Replenishment" />
+              </div>
+              <div>
+                <label className="text-[10px] font-bold text-muted block mb-1">Ship From</label>
+                <input className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" placeholder="Warehouse West" />
+              </div>
+              <div className="sm:col-span-2">
+                <label className="text-[10px] font-bold text-muted block mb-1">Ship To (FBA)</label>
+                <select className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px]">
+                  <option>ONT8 (Moreno Valley, CA)</option>
+                  <option>SBDI (San Bernardino, CA)</option>
+                  <option>Other FBA center</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div className="p-3 rounded-md border border-line bg-teal-50">
+            <div className="text-[10px] font-bold text-teal-800 mb-1">Capabilities</div>
+            <ul className="text-[10px] text-muted space-y-1 list-disc pl-4">
+              <li>Create FBA inbound shipments via SP-API</li>
+              <li>Generate shipment labels and BOLs</li>
+              <li>Track receiving status in real-time</li>
+              <li>Auto-adjust inventory on receiving</li>
+            </ul>
+          </div>
+          <div className="flex justify-end gap-2 pt-4">
+            <Button variant="outline" onClick={() => setCreateShipmentOpen(false)}>Cancel</Button>
+            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setCreateShipmentOpen(false); setMessage("Inbound shipment created and queued for SP-API submission."); }}>Create Shipment</Button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal open={viewManifestsOpen} onClose={() => setViewManifestsOpen(false)} title="Flight Manifests — View">
+        <div className="space-y-4">
+          <div className="p-3 rounded-md border border-line bg-white/50">
+            <div className="text-[10px] font-bold text-indigo-900 mb-1">Active Inbound Shipments</div>
+            <div className="grid gap-2 sm:grid-cols-3">
+              <div className="p-2 rounded border border-line bg-white">
+                <div className="text-[10px] text-muted mb-1">FBA-INB-99412</div>
+                <div className="text-xs font-semibold text-indigo-900">3PL West → ONT8</div>
+                <div className="text-[10px] text-muted">ETA: Nov 03 · In Transit</div>
+              </div>
+              <div className="p-2 rounded border border-line bg-white">
+                <div className="text-[10px] text-muted mb-1">FBA-INB-88301</div>
+                <div className="text-xs font-semibold text-indigo-900">Yantian Port → Long Beach</div>
+                <div className="text-[10px] text-muted">ETA: Nov 12 · Customs Clearance</div>
+              </div>
+              <div className="p-2 rounded border border-line bg-white">
+                <div className="text-[10px] text-muted mb-1">FBA-INB-10462</div>
+                <div className="text-xs font-semibold text-indigo-900">Factory → SBDI</div>
+                <div className="text-[10px] text-muted">Receiving (85%)</div>
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-end pt-4">
+            <Button onClick={() => setViewManifestsOpen(false)}>Close</Button>
+          </div>
+        </div>
+      </Modal>
+
+      {createPOOpen && (
+        <Modal open={true} onClose={() => setCreatePOOpen(null)} title="Create Purchase Order">
+          <div className="space-y-4">
+            <div>
+              <div className="text-xs font-semibold text-indigo-900 mb-1">PO Details</div>
+              <div className="text-[10px] text-muted mb-3">Generate a purchase order draft for critical replenishment.</div>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div>
+                  <label className="text-[10px] font-bold text-muted block mb-1">ASIN</label>
+                  <span className="text-xs text-on-surface">{createPOOpen}</span>
+                </div>
+                <div>
+                  <label className="text-[10px] font-bold text-muted block mb-1">Quantity</label>
+                  <input type="number" className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" defaultValue="2500" />
+                </div>
+              </div>
+            </div>
+            <div className="p-3 rounded-md border border-line bg-amber-50">
+              <div className="text-[10px] font-bold text-amber-800 mb-1">Capabilities</div>
+              <ul className="text-[10px] text-muted space-y-1 list-disc pl-4">
+                <li>Draft POs for below-threshold SKUs</li>
+                <li>Auto-calculate quantity based on velocity</li>
+                <li>Route to approver for signoff</li>
+                <li>Track PO status in activity log</li>
+              </ul>
+            </div>
+            <div className="flex justify-end gap-2 pt-4">
+              <Button variant="outline" onClick={() => setCreatePOOpen(null)}>Cancel</Button>
+              <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setCreatePOOpen(null); setMessage(`PO draft created for ${createPOOpen}.`); }}>Create PO Draft</Button>
+            </div>
+          </div>
+        </Modal>
+      )}
+
+      {adjustMaxOpen && (
+        <Modal open={true} onClose={() => setAdjustMaxOpen(null)} title="Adjust Max Stock — Setup">
+          <div className="space-y-4">
+            <div>
+              <div className="text-xs font-semibold text-indigo-900 mb-1">Stock Cap Adjustment</div>
+              <div className="text-[10px] text-muted mb-3">Adjust the maximum stock suggestion for this SKU.</div>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div>
+                  <label className="text-[10px] font-bold text-muted block mb-1">ASIN</label>
+                  <span className="text-xs text-on-surface">{adjustMaxOpen}</span>
+                </div>
+                <div>
+                  <label className="text-[10px] font-bold text-muted block mb-1">Max Units</label>
+                  <input type="number" className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" defaultValue="5000" />
+                </div>
+              </div>
+            </div>
+            <div className="flex justify-end gap-2 pt-4">
+              <Button variant="outline" onClick={() => setAdjustMaxOpen(null)}>Cancel</Button>
+              <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setAdjustMaxOpen(null); setMessage(`Max stock adjusted for ${adjustMaxOpen}.`); }}>Save Adjustment</Button>
+            </div>
+          </div>
+        </Modal>
+      )}
     </main>
   );
 }
