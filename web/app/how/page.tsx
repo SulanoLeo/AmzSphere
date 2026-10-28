@@ -108,7 +108,7 @@ export default function HowPage() {
             </CardContent>
           </Card>
 
-          <div className="section-grid mb-6">
+          <div className="section-grid align-items-stretch mb-6">
             <Card>
               <CardHeader>
                 <div>

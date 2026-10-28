@@ -114,7 +114,7 @@ export default function ActivityPage() {
         <Metric label="SP-API Quota" value="41.6%" detail="Bucket: 30.0 / 50.0 reg/s limit" accent="blue" tag="Healthy" />
       </div>
 
-      <section className="section-grid mb-6">
+      <section className="section-grid align-items-stretch mb-6">
         <div className="panel lg:col-span-2">
           <div className="panel-header">
             <div>
@@ -126,7 +126,7 @@ export default function ActivityPage() {
               <Badge className="bg-indigo-50 text-indigo-800 border-indigo-200">By Task Type</Badge>
             </div>
           </div>
-          <div className="panel-content">
+          <div className="panel-content min-h-full">
             <div className="h-64 w-full">
               <div className="grid h-full place-items-center text-sm text-muted">No task history ingested yet.</div>
             </div>

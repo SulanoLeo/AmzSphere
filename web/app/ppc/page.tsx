@@ -187,7 +187,7 @@ export default function PpcPage() {
         <Metric label="TACoS (Total ACOS)" value="9.8%" detail="of Gross Sales" accent="blue" tag="Healthy" />
       </div>
 
-      <section className="section-grid mb-6">
+      <section className="section-grid align-items-stretch mb-6">
         <div className="panel lg:col-span-2">
           <div className="panel-header flex items-center justify-between pb-2">
             <div>
@@ -200,7 +200,7 @@ export default function PpcPage() {
               <Badge className="bg-indigo-50 text-indigo-800 border-indigo-200">Sponsored Display</Badge>
             </div>
           </div>
-          <div className="panel-content">
+          <div className="panel-content min-h-full">
             <div className="h-64 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={acosHistory} margin={{ top: 12, right: 12, bottom: 4, left: -16 }}>

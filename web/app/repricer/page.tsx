@@ -114,7 +114,7 @@ export default function RepricerPage() {
         <Metric label="At-Risk Price Wars" value="4" detail="Floors Engaged" accent="rose" tag="ASINs Engaged" />
       </div>
 
-      <section className="section-grid mb-6">
+      <section className="section-grid align-items-stretch mb-6">
         <div className="panel lg:col-span-2">
           <div className="panel-header">
             <div>
@@ -127,7 +127,7 @@ export default function RepricerPage() {
               <Badge className="bg-amber-50 text-amber-800 border-amber-200">All Reprice Strategies</Badge>
             </div>
           </div>
-          <div className="panel-content">
+          <div className="panel-content min-h-full">
             <div className="h-64 w-full">
               <div className="grid h-full place-items-center text-sm text-muted">No price history ingested yet.</div>
             </div>

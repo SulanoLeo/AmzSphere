@@ -128,7 +128,7 @@ export default function ApprovalsPage() {
         <Metric label="Active Buyers" value="142 Verified" detail="100% Tax Exempt Validated PO Lines Pledged $250k Active" accent="blue" tag="VERIFIED" />
       </div>
 
-      <section className="section-grid mb-6">
+      <section className="section-grid align-items-stretch mb-6">
         <div className="panel lg:col-span-2">
           <div className="panel-header">
             <div>
@@ -141,7 +141,7 @@ export default function ApprovalsPage() {
               <Badge className="bg-indigo-50 text-indigo-800 border-indigo-200">Exposure</Badge>
             </div>
           </div>
-          <div className="panel-content">
+          <div className="panel-content min-h-full">
             <div className="h-64 w-full">
               <div className="grid h-full place-items-center text-sm text-muted">No pricing history ingested yet.</div>
             </div>

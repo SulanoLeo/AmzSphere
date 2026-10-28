@@ -309,7 +309,7 @@ export default function DashboardPage() {
       )}
 
       {/* Metrics row */}
-      <div className="metrics metrics-five mb-8">
+      <div className="metrics metrics-five align-items-stretch mb-8">
         <Metric
           label="CATALOG"
           value={String(data?.products.length ?? "—")}

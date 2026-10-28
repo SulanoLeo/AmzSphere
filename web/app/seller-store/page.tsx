@@ -144,7 +144,7 @@ export default function SellerStorePage() {
         <Metric label="Buy Box Rate" value="96.8%" detail="+0.4% vs last week" accent="teal" tag="OWNERSHIP" />
       </div>
 
-      <section className="section-grid mb-6">
+      <section className="section-grid align-items-stretch mb-6">
         <div className="panel lg:col-span-2">
           <div className="panel-header">
             <div>
@@ -153,7 +153,7 @@ export default function SellerStorePage() {
             </div>
             <span className="category-pill">All Pages</span>
           </div>
-          <div className="panel-content">
+          <div className="panel-content min-h-full">
             <div className="grid grid-cols-4 gap-4 mb-4">
               <div className="text-center">
                 <div className="text-[10px] font-bold text-on-surface">4,890,210</div>
