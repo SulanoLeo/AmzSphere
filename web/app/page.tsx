@@ -357,7 +357,7 @@ export default function DashboardPage() {
             </div>
             <span className="category-pill">Rate-Limited</span>
           </div>
-          <div className="panel-content">
+          <div className="panel-content min-h-full">
             <div className="h-64 w-full">
               {velocityHistory.length ? (
                 <ResponsiveContainer width="100%" height="100%">
@@ -393,7 +393,7 @@ export default function DashboardPage() {
               <span className="text-[10px] text-muted">Target lead-time fulfillment</span>
             </div>
           </div>
-          <div className="panel-content">
+          <div className="panel-content min-h-full">
             <div className="flex items-center justify-between">
               <div className="w-32 h-32 flex items-center justify-center">
                 <PieChart width={140} height={140}>
