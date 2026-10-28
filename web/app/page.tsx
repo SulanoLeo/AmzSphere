@@ -348,7 +348,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Chart row: velocity + procurement mix */}
-      <section className="section-grid mb-8">
+      <section className="section-grid align-items-stretch mb-8">
         <div className="panel">
           <div className="panel-header flex items-center justify-between">
             <div>
