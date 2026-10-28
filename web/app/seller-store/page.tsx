@@ -145,7 +145,7 @@ export default function SellerStorePage() {
       </div>
 
       <section className="section-grid align-items-stretch mb-6">
-        <div className="panel lg:col-span-2">
+        <div className="panel lg:col-span-2 flex flex-col h-full">
           <div className="panel-header">
             <div>
               <h2 className="panel-title">Storefront Traffic Funnel &amp; Engagement</h2>
@@ -153,7 +153,7 @@ export default function SellerStorePage() {
             </div>
             <span className="category-pill">All Pages</span>
           </div>
-          <div className="panel-content min-h-full">
+          <div className="panel-content min-h-full flex-1">
             <div className="grid grid-cols-4 gap-4 mb-4">
               <div className="text-center">
                 <div className="text-[10px] font-bold text-on-surface">4,890,210</div>

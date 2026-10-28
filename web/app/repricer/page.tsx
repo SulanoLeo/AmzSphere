@@ -115,7 +115,7 @@ export default function RepricerPage() {
       </div>
 
       <section className="section-grid align-items-stretch mb-6">
-        <div className="panel lg:col-span-2">
+        <div className="panel lg:col-span-2 flex flex-col h-full">
           <div className="panel-header">
             <div>
               <h2 className="panel-title">Buy Box Price &amp; Velocity Dynamics</h2>
@@ -127,7 +127,7 @@ export default function RepricerPage() {
               <Badge className="bg-amber-50 text-amber-800 border-amber-200">All Reprice Strategies</Badge>
             </div>
           </div>
-          <div className="panel-content min-h-full">
+          <div className="panel-content min-h-full flex-1">
             <div className="h-64 w-full">
               <div className="grid h-full place-items-center text-sm text-muted">No price history ingested yet.</div>
             </div>

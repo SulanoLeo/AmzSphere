@@ -349,7 +349,7 @@ export default function DashboardPage() {
 
       {/* Chart row: velocity + procurement mix */}
       <section className="section-grid align-items-stretch mb-8">
-        <div className="panel">
+        <div className="panel flex flex-col h-full">
           <div className="panel-header flex items-center justify-between">
             <div>
               <h2 className="panel-title">30-day unit velocity</h2>
@@ -357,7 +357,7 @@ export default function DashboardPage() {
             </div>
             <span className="category-pill">Rate-Limited</span>
           </div>
-          <div className="panel-content min-h-full">
+          <div className="panel-content min-h-full flex-1">
             <div className="h-64 w-full">
               {velocityHistory.length ? (
                 <ResponsiveContainer width="100%" height="100%">
@@ -382,7 +382,7 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="panel">
+        <div className="panel flex flex-col h-full">
           <div className="panel-header flex items-center justify-between">
             <div>
               <h2 className="panel-title">Procurement mix</h2>
@@ -393,7 +393,7 @@ export default function DashboardPage() {
               <span className="text-[10px] text-muted">Target lead-time fulfillment</span>
             </div>
           </div>
-          <div className="panel-content min-h-full">
+          <div className="panel-content min-h-full flex-1">
             <div className="flex items-center justify-between">
               <div className="w-32 h-32 flex items-center justify-center">
                 <PieChart width={140} height={140}>
@@ -432,7 +432,7 @@ export default function DashboardPage() {
 
       {/* Chart row: Advertising efficiency */}
       <section className="mb-8">
-        <div className="panel">
+        <div className="panel flex flex-col h-full">
           <div className="panel-header flex items-center justify-between">
             <div>
               <h2 className="panel-title">Advertising efficiency</h2>
@@ -440,7 +440,7 @@ export default function DashboardPage() {
             </div>
             <span className="category-pill">ACoS</span>
           </div>
-          <div className="panel-content">
+          <div className="panel-content min-h-full flex-1">
             <div className="grid grid-cols-4 gap-3 mb-4">
               <StatCard label="ACoS Target" value="22%" detail="Target portfolio efficiency" color="#006a63" />
               <StatCard label="ACoS" value="24.1%" detail="Last 30-day average" color="#3525cd" />

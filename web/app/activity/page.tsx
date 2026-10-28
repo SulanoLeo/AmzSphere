@@ -115,7 +115,7 @@ export default function ActivityPage() {
       </div>
 
       <section className="section-grid align-items-stretch mb-6">
-        <div className="panel lg:col-span-2">
+        <div className="panel lg:col-span-2 flex flex-col h-full">
           <div className="panel-header">
             <div>
               <h2 className="panel-title">Worker Throughput &amp; Queue Pacing</h2>
@@ -126,7 +126,7 @@ export default function ActivityPage() {
               <Badge className="bg-indigo-50 text-indigo-800 border-indigo-200">By Task Type</Badge>
             </div>
           </div>
-          <div className="panel-content min-h-full">
+          <div className="panel-content min-h-full flex-1">
             <div className="h-64 w-full">
               <div className="grid h-full place-items-center text-sm text-muted">No task history ingested yet.</div>
             </div>
