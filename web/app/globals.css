@@ -156,6 +156,7 @@ a { color: inherit; text-decoration: none; }
 .metric-accent.green { background: var(--mock-green); }
 .metric-accent.blue { background: var(--mock-blue); }
 .metric-accent.amber { background: var(--mock-orange); }
+.metric-accent.red { background: var(--mock-red); }
 
 /* Drawer & modal (mock add-product / optimize overlays) */
 .drawer-backdrop { position: fixed; inset: 0; background: rgba(11,28,48,0.45); z-index: 40; backdrop-filter: blur(2px); }

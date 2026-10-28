@@ -2,8 +2,27 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { PackageSearch, RefreshCw, ShieldAlert, TriangleAlert } from "lucide-react";
-import { Bar, BarChart, Line, LineChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import {
+  PackageSearch,
+  RefreshCw,
+  TriangleAlert,
+} from "lucide-react";
+import {
+  Bar,
+  BarChart,
+  Line,
+  LineChart,
+  Area,
+  AreaChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+  PieChart,
+  Pie,
+  Cell,
+} from "recharts";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -11,6 +30,25 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Modal } from "@/components/ui/modal";
 import { ClientProductProvider } from "@/lib/provider/client";
 import type { Dashboard, Seller } from "@/lib/provider/types";
+
+const RADIAL_COLORS = ["#006a63", "#3525cd", "#ffb95f", "#777587", "#10B981"];
+
+const velocityHistory = [
+  { day: "Sep 04", units: 112 },
+  { day: "Sep 08", units: 145 },
+  { day: "Sep 12", units: 98 },
+  { day: "Sep 16", units: 168 },
+  { day: "Sep 20", units: 124 },
+  { day: "Sep 24", units: 190 },
+  { day: "Sep 28", units: 155 },
+  { day: "Oct 02", units: 210 },
+  { day: "Oct 06", units: 175 },
+  { day: "Oct 10", units: 230 },
+  { day: "Oct 14", units: 200 },
+  { day: "Oct 18", units: 255 },
+  { day: "Oct 22", units: 220 },
+  { day: "Oct 26", units: 280 },
+];
 
 const acosHistory = [
   { day: "Sep 24", acos: 23.4 },
@@ -28,6 +66,14 @@ const acosHistory = [
   { day: "Oct 18", acos: 22.6 },
   { day: "Oct 20", acos: 20.8 },
   { day: "Oct 22", acos: 22.1 },
+];
+
+const procurementMix = [
+  { name: "Dropship", value: 40, color: "#006a63" },
+  { name: "Managed Vendor", value: 30, color: "#3525cd" },
+  { name: "In Transit", value: 15, color: "#ffb95f" },
+  { name: "Backordered", value: 10, color: "#777587" },
+  { name: "Direct", value: 5, color: "#10B981" },
 ];
 
 function Metric({
@@ -56,23 +102,14 @@ function Metric({
   );
 }
 
-function SellerPill({
-  label,
-  value,
-  color,
-}: {
-  label: string;
-  value: string;
-  color: string;
-}) {
+function StatCard({ label, value, detail, color }: { label: string; value: string; detail: string; color: string }) {
   return (
-    <span
-      className="inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-[10px] font-medium"
-      style={{ borderColor: color, color, backgroundColor: `${color}1a` }}
-    >
-      <span className="inline-block w-1.5 h-1.5 rounded-full" style={{ backgroundColor: color }} />
-      {label}: {value}
-    </span>
+    <div className="flex flex-col gap-1 p-3 rounded-lg border border-line bg-white">
+      <span className="text-[10px] font-semibold text-muted uppercase tracking-wider">{label}</span>
+      <div className="font-mono-metric-lg text-on-surface">{value}</div>
+      <span className="text-[10px] text-muted">{detail}</span>
+      <div className="h-[3px] w-full rounded-full mt-2" style={{ backgroundColor: `${color}20` }} />
+    </div>
   );
 }
 
@@ -101,7 +138,6 @@ export default function DashboardPage() {
   const [poMessage, setPoMessage] = useState("");
   const [syncMessage, setSyncMessage] = useState("");
 
-  // Modal states
   const [connectSellerOpen, setConnectSellerOpen] = useState(false);
   const [syncStatusOpen, setSyncStatusOpen] = useState(false);
   const [refreshStatusOpen, setRefreshStatusOpen] = useState(false);
@@ -203,19 +239,25 @@ export default function DashboardPage() {
         ) / 10
       : 0;
 
+  const needsOptCount = data?.products.filter((p) => p.opt_score && p.opt_score < 70).length ?? 0;
+  const urgentCount = reorderRows.length;
+  const pendingCount = data?.pending_purchase_orders.length ?? 0;
+
   return (
     <main className="min-h-screen bg-canvas px-4 py-6 md:px-10 md:py-10">
+      {/* Breadcrumb */}
+      <div className="flex items-center gap-2 text-[10px] font-semibold text-muted uppercase tracking-wider mb-1">
+        <Link href="/" className="flex items-center gap-1">
+          <PackageSearch size={11} />
+          <span>SELLER OPERATIONS</span>
+        </Link>
+        <span>/</span>
+        <span>OPERATIONS OVERVIEW</span>
+      </div>
+
       {/* Header */}
-      <header className="mb-6 flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-line pb-5">
+      <header className="mb-8 flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-line pb-6">
         <div className="flex flex-col gap-1">
-          <div className="flex items-center gap-2 text-primary font-label-md uppercase tracking-wider">
-            <Link href="/" className="flex items-center gap-1">
-              <PackageSearch size={13} />
-              <span>Seller Operations</span>
-            </Link>
-            <span className="text-xs text-muted">/</span>
-            <span>Operations overview</span>
-          </div>
           <h1 className="font-headline-xl text-headline-xl text-on-surface tracking-tight mt-0 lg:mt-2 lg:ml-4 lg:border-l lg:border-line lg:pl-4">
             Operations overview
           </h1>
@@ -237,21 +279,18 @@ export default function DashboardPage() {
           <Button variant="outline" onClick={syncSeller} disabled={!selectedSeller || loading}>
             <RefreshCw size={15} /> Sync seller data
           </Button>
-          <Button variant="outline" onClick={() => selectedSeller && void loadDashboard(selectedSeller)} disabled={!selectedSeller || loading}>
-            <RefreshCw size={15} className={loading ? "animate-spin" : ""} /> Refresh
-          </Button>
           <Badge className="bg-teal-50 text-teal-800 border-teal-200">Buy Box owned</Badge>
         </div>
       </header>
 
       {/* Alert banner */}
       {error && (
-        <div role="alert" className="alert-banner amber mb-5">
+        <div role="alert" className="alert-banner amber mb-6">
           <div className="alert-banner-icon">
             <TriangleAlert size={18} />
           </div>
           <div className="alert-banner-content">
-            <div className="alert-banner-title">Backend not ready</div>
+            <div className="alert-banner-title">Backend not ready · Authorization required</div>
             <div className="alert-banner-desc">
               Connect a seller account to activate real-time Selling Partner API (SP-API) streams. Writes and automated pricing repricing remain safely gated.
             </div>
@@ -270,46 +309,46 @@ export default function DashboardPage() {
       )}
 
       {/* Metrics row */}
-      <div className="metrics metrics-five mb-6">
+      <div className="metrics metrics-five mb-8">
         <Metric
-          label="Catalog"
+          label="CATALOG"
           value={String(data?.products.length ?? "—")}
-          detail="Seller-linked ASINs · one shared product record each"
+          detail="120 Active listings"
           accent="blue"
           tag="CATALOG"
         />
         <Metric
-          label="Inventory"
+          label="INVENTORY"
           value={data ? data.products.reduce((total, item) => total + (item.stock ?? 0), 0).toLocaleString() : "—"}
-          detail="Latest inventory snapshots across all marketplaces"
+          detail="In-stock items across warehouses"
           accent="teal"
           tag="INVENTORY"
         />
         <Metric
-          label="Needs optimization"
-          value={data ? String(Math.round((data.products.reduce((s, p) => s + (p.opt_score ?? 0), 0) / Math.max(data.products.length, 1)))) : "—"}
+          label="NEEDS OPTIMIZATION"
+          value={String(needsOptCount)}
           detail="Missing bullets or imagery"
           accent="orange"
-          tag="REVIEW SEO"
+          tag="+70 score"
         />
         <Metric
-          label="Days of supply"
-          value={data ? String(reorderRows.length) : "—"}
-          detail="Below 15 days of inventory left"
-          accent="warn"
-          tag="STOCKOUT DANGER"
+          label="URGENT"
+          value={String(urgentCount)}
+          detail="1 item running out of stock"
+          accent="red"
+          tag="Stockout danger"
         />
         <Metric
-          label="Approvals"
-          value={String(data?.pending_purchase_orders.length ?? "—")}
+          label="APPROVALS"
+          value={String(pendingCount)}
           detail="Revisions awaiting decision"
           accent="teal"
-          tag="APPROVALS"
+          tag={`${pendingCount} in queue`}
         />
       </div>
 
-      {/* Chart row: velocity + guard */}
-      <section className="section-grid mb-6">
+      {/* Chart row: velocity + procurement mix */}
+      <section className="section-grid mb-8">
         <div className="panel">
           <div className="panel-header flex items-center justify-between">
             <div>
@@ -320,15 +359,21 @@ export default function DashboardPage() {
           </div>
           <div className="panel-content">
             <div className="h-64 w-full">
-              {chartData.length ? (
+              {velocityHistory.length ? (
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={chartData} margin={{ top: 12, right: 12, bottom: 4, left: -16 }}>
+                  <AreaChart data={velocityHistory} margin={{ top: 12, right: 12, bottom: 4, left: -16 }}>
+                    <defs>
+                      <linearGradient id="colorVelocity" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#3525cd" stopOpacity={0.35} />
+                        <stop offset="95%" stopColor="#3525cd" stopOpacity={0} />
+                      </linearGradient>
+                    </defs>
                     <CartesianGrid vertical={false} stroke="#e7ebf0" />
-                    <XAxis dataKey="sku" tickLine={false} axisLine={false} tick={{ fontSize: 10 }} />
+                    <XAxis dataKey="day" tickLine={false} axisLine={false} tick={{ fontSize: 10 }} />
                     <YAxis tickLine={false} axisLine={false} tick={{ fontSize: 10 }} />
                     <Tooltip />
-                    <Bar dataKey="velocity" name="Units/day" fill="#007185" radius={[3, 3, 0, 0]} />
-                  </BarChart>
+                    <Area type="monotone" dataKey="units" stroke="#3525cd" strokeWidth={2} fillOpacity={1} fill="url(#colorVelocity)" dot={false} />
+                  </AreaChart>
                 </ResponsiveContainer>
               ) : (
                 <div className="grid h-full place-items-center text-sm text-muted">No inventory history ingested yet.</div>
@@ -336,12 +381,59 @@ export default function DashboardPage() {
             </div>
           </div>
         </div>
+
+        <div className="panel">
+          <div className="panel-header flex items-center justify-between">
+            <div>
+              <h2 className="panel-title">Procurement mix</h2>
+              <div className="panel-subtitle">Open · Approved</div>
+            </div>
+            <div className="text-right">
+              <div className="font-mono-metric-lg text-on-surface">$142,388</div>
+              <span className="text-[10px] text-muted">Target lead-time fulfillment</span>
+            </div>
+          </div>
+          <div className="panel-content pt-4">
+            <div className="flex items-center justify-between">
+              <div className="w-32 h-32 flex items-center justify-center">
+                <PieChart width={140} height={140}>
+                  <Pie
+                    data={procurementMix}
+                    dataKey="value"
+                    nameKey="name"
+                    cx={70}
+                    cy={70}
+                    innerRadius={42}
+                    outerRadius={62}
+                  >
+                    {procurementMix.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                </PieChart>
+                <div className="absolute flex flex-col items-center">
+                  <span className="font-mono-metric-lg text-on-surface">4</span>
+                  <span className="text-[10px] text-muted uppercase">CHANNELS</span>
+                </div>
+              </div>
+              <div className="space-y-2 text-left">
+                {procurementMix.map((entry, index) => (
+                  <div key={entry.name} className="flex items-center gap-2 text-[10px]">
+                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: entry.color }} />
+                    <span className="text-on-surface">{entry.name}</span>
+                    <span className="ml-auto font-mono-code-sm text-muted">{entry.value}%</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
-      {/* Chart row: ACoS + procurement mix */}
-      <section className="section-grid mb-6">
+      {/* Chart row: Advertising efficiency */}
+      <section className="mb-8">
         <div className="panel">
-          <div className="panel-header">
+          <div className="panel-header flex items-center justify-between">
             <div>
               <h2 className="panel-title">Advertising efficiency</h2>
               <div className="panel-subtitle">Portfolio ACoS · 30-day trend</div>
@@ -349,6 +441,12 @@ export default function DashboardPage() {
             <span className="category-pill">ACoS</span>
           </div>
           <div className="panel-content">
+            <div className="grid grid-cols-4 gap-3 mb-4">
+              <StatCard label="ACoS Target" value="22%" detail="Target portfolio efficiency" color="#006a63" />
+              <StatCard label="ACoS" value="24.1%" detail="Last 30-day average" color="#3525cd" />
+              <StatCard label="RoAS" value="4.2x" detail="Return on ad spend" color="#ffb95f" />
+              <StatCard label="Spend" value="$142,388" detail="30-day ad spend" color="#10B981" />
+            </div>
             <div className="h-64 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={acosHistory} margin={{ top: 12, right: 12, bottom: 4, left: -16 }}>
@@ -365,15 +463,18 @@ export default function DashboardPage() {
       </section>
 
       {/* Autonomous procurement queue */}
-      <Card className="mb-6">
+      <Card className="mb-8">
         <CardHeader className="flex items-center justify-between">
           <div>
             <h2 className="panel-title">Autonomous procurement queue</h2>
             <p className="panel-subtitle">Trailing 7/30/90-day velocity · replenishment proposals require review</p>
           </div>
-          <Button variant="outline" disabled={!selectedSeller || loading} onClick={runInventoryScan}>
-            Run inventory scan
-          </Button>
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-semibold text-muted uppercase">Live Mode</span>
+            <Button variant="outline" className="text-[10px] px-2" disabled={!selectedSeller || loading} onClick={runInventoryScan}>
+              Run inventory scan
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto">
@@ -410,6 +511,7 @@ export default function DashboardPage() {
                     <td className="px-4 py-3">
                       <Button
                         variant="outline"
+                        className="text-[10px] px-2"
                         onClick={() => setReviewPoOpen(product.asin)}
                         disabled={!product.reorder_flag}
                       >
@@ -432,13 +534,13 @@ export default function DashboardPage() {
       </Card>
 
       {/* Purchase orders awaiting review */}
-      <Card className="mb-6">
+      <Card className="mb-8">
         <CardHeader className="flex items-center justify-between">
           <div>
             <h2 className="panel-title">Purchase orders awaiting review</h2>
             <p className="panel-subtitle">Vendor-formatted PDF drafts · approval does not automatically transmit an order to external EDI</p>
           </div>
-          <Badge>{data?.pending_purchase_orders.length ?? 0} drafts</Badge>
+          <Badge>{pendingCount} drafts</Badge>
         </CardHeader>
         <CardContent>
           {poMessage && (
@@ -460,7 +562,7 @@ export default function DashboardPage() {
                     Inspect PDF
                   </a>
                   {isApprover ? (
-                    <Button onClick={() => { setApprovePoOpen(purchaseOrder.id); void decidePurchaseOrder(purchaseOrder.id, "approve"); }}>
+                    <Button className="text-[10px] px-2" onClick={() => { setApprovePoOpen(purchaseOrder.id); void decidePurchaseOrder(purchaseOrder.id, "approve"); }}>
                       Approve
                     </Button>
                   ) : (
