@@ -17,25 +17,45 @@ export function Modal({
   children: React.ReactNode;
   className?: string;
 }) {
-  if (!open) return null;
+  const dialogRef = React.useRef<HTMLDialogElement>(null);
+  const titleId = React.useId();
+
+  React.useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+
+    if (open && !dialog.open) {
+      dialog.showModal();
+      dialog.querySelector<HTMLElement>(
+        "[autofocus], button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex='-1'])",
+      )?.focus();
+    } else if (!open && dialog.open) {
+      dialog.close();
+    }
+  }, [open]);
 
   return (
-    <>
-      <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm" onClick={onClose} />
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div
-          className={cn(
-            "w-full max-w-2xl bg-white rounded-xl border border-line shadow-2xl flex flex-col",
-            className,
-          )}
-        >
+    <dialog
+      ref={dialogRef}
+      aria-labelledby={titleId}
+      onClose={onClose}
+      onClick={(event) => {
+        if (event.target === event.currentTarget) dialogRef.current?.close();
+      }}
+      className={cn(
+        "fixed m-auto max-h-[90vh] w-[calc(100%-2rem)] max-w-2xl overflow-hidden rounded-xl border border-line bg-white p-0 text-ink shadow-2xl backdrop:bg-black/50 backdrop:backdrop-blur-sm",
+        className,
+      )}
+    >
+      <div className="flex max-h-[90vh] flex-col">
           <div className="flex items-center justify-between px-6 py-4 border-b border-line bg-white/90 sticky top-0 z-10">
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wide text-muted">{title}</span>
+              <h2 id={titleId} className="text-[10px] font-bold uppercase tracking-wide text-muted">{title}</h2>
             </div>
             <button
+              type="button"
               className="p-1.5 rounded-md text-muted hover:bg-canvas hover:text-indigo-950 transition-colors"
-              onClick={onClose}
+              onClick={() => dialogRef.current?.close()}
               aria-label="Close modal"
             >
               <span className="sr-only">Close</span>
@@ -54,8 +74,7 @@ export function Modal({
             </button>
           </div>
           <div className="flex-1 overflow-y-auto p-6">{children}</div>
-        </div>
       </div>
-    </>
+    </dialog>
   );
 }

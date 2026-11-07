@@ -62,10 +62,10 @@ export default function SeoToolsPage() {
           <div className="flex items-center gap-2 text-[10px] font-semibold text-teal-600 bg-teal-50 border border-teal-200 rounded-md px-3 py-1.5 mt-1">
             <span className="inline-flex items-center gap-1">
               <span className="w-2 h-2 rounded-full bg-amber-400" />
-              CLUSTER v2024.9
+              MOCK DATASET
             </span>
           </div>
-          <p className="font-body-md text-body-md text-on-surface-variant mt-2">Configure, benchmark, and orchestrate AI keyword harvesters, listing score checkers, search query (SQP) analyzers, and SP-API automated catalog sync routines.</p>
+          <p className="font-body-md text-body-md text-on-surface-variant mt-2">Explore sample keyword, listing quality, and search-query analytics. Actions on this page demonstrate local UI workflows and do not call Amazon or third-party services.</p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <Button variant="outline" onClick={() => setCompareBenchmarksOpen(true)}>
@@ -83,22 +83,22 @@ export default function SeoToolsPage() {
       <div className="flex items-center justify-between text-[10px] font-semibold mb-4">
         <div className="flex items-center gap-2">
           <Activity size={14} className="text-indigo-600" />
-          <span>ENGINE ORCHESTRATOR: Live (v2024.9)</span>
+          <span>SEO WORKBENCH: Sample data</span>
           <span className="text-xs text-muted">·</span>
-          <span className="bg-amber-50 text-amber-700 border border-amber-200 rounded-md px-2 py-0.5">AMAZON SFR SYNC: Enabled (US / EU)</span>
+          <span className="bg-amber-50 text-amber-700 border border-amber-200 rounded-md px-2 py-0.5">AMAZON SYNC: Not connected</span>
           <span className="text-xs text-muted">·</span>
-          <span className="text-xs font-bold text-indigo-900">DAILY TOKEN BUDGET: 84.5% Remaining</span>
+          <span className="text-xs font-bold text-indigo-900">MOCK MODE: Enabled</span>
         </div>
         <div className="text-right">
-          <span className="text-xs font-bold text-indigo-900">SP-API RATE CEILING</span>
-          <div className="text-sm font-semibold text-on-surface">18.4 / 20.0 rps</div>
+          <span className="text-xs font-bold text-indigo-900">INTEGRATION STATUS</span>
+          <div className="text-sm font-semibold text-on-surface">Demo only</div>
         </div>
       </div>
 
       <div className="metrics metrics-five mb-6">
         <Metric
           label="Active Engines"
-          value="7 Connected"
+          value="7 Sample"
           detail="+2 · 99.9% Custom Uptime"
           accent="blue"
           tag="LIVE"
@@ -272,7 +272,7 @@ export default function SeoToolsPage() {
                       <span className="text-xs text-muted">→</span>
                       <span className="px-2 py-1 rounded-md bg-indigo-50 text-indigo-700">2. Auto-Rollback Canonical</span>
                       <span className="text-xs text-muted">→</span>
-                      <span className="px-2 py-1 rounded-md bg-indigo-50 text-indigo-700">3. SP-API Urgent Patch</span>
+                      <span className="px-2 py-1 rounded-md bg-indigo-50 text-indigo-700">3. Sample Remediation Draft</span>
                     </div>
                   </td>
                   <td className="px-4 py-3 text-[10px] text-muted">Immediate (Priority 0)</td>
@@ -323,11 +323,11 @@ export default function SeoToolsPage() {
       <Card className="mb-6">
         <CardHeader className="flex items-center justify-between pb-2">
           <div>
-            <h2 className="panel-title">Real-Time SP-API Telemetry &amp; Keyword Extraction Throughput</h2>
-            <div className="panel-subtitle">STREAM · $40 keywords /sec · AVG CLUSTER LATENCY: 64ms</div>
+            <h2 className="panel-title">Sample Keyword Analytics</h2>
+            <div className="panel-subtitle">Illustrative metrics only · no live telemetry or background worker</div>
           </div>
           <div className="flex items-center gap-2">
-            <Badge className="bg-teal-50 text-teal-800 border-teal-200">STREAM</Badge>
+            <Badge className="bg-teal-50 text-teal-800 border-teal-200">SAMPLE</Badge>
             <Badge className="bg-amber-50 text-amber-800 border-amber-200">$40 keywords/sec</Badge>
             <Badge className="bg-indigo-50 text-indigo-800 border-indigo-200">64ms LATENCY</Badge>
             <Badge className="bg-amber-50 text-amber-700 border-amber-200">REPORT QUEUE: 3 In-Flight</Badge>
@@ -335,10 +335,10 @@ export default function SeoToolsPage() {
         </CardHeader>
         <CardContent className="pt-0">
           <div className="h-48 w-full">
-            <div className="flex items-center justify-center h-full text-sm text-muted">SP-API Sync Worker: worker-us-east-1-04a (Active)</div>
+            <div className="flex items-center justify-center h-full text-sm text-muted">Sample telemetry preview — no worker is connected</div>
           </div>
           <div className="flex items-center justify-between mt-3 text-[10px]">
-            <span className="text-muted">SP-API Sync Worker: worker-us-east-1-04a (Active)</span>
+            <span className="text-muted">Local mock data · no external connection</span>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-teal-500" />
               <span className="text-xs text-muted" onClick={() => setTelemetryOpen(true)}>View Telemetry Stream</span>
@@ -348,7 +348,7 @@ export default function SeoToolsPage() {
       </Card>
 
       <p className="text-right text-[10px] text-muted mt-6">
-        AmzSphere Operations · Mock engine live · API credentials remain server-side
+        AmzSphere Operations · Sample data only · no API credentials or integrations
       </p>
 
       {/* Modals */}
@@ -387,7 +387,7 @@ export default function SeoToolsPage() {
           </div>
           <div className="flex justify-end gap-2 pt-4">
             <Button variant="outline" onClick={() => setCompareBenchmarksOpen(false)}>Cancel</Button>
-            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setCompareBenchmarksOpen(false); setMessage("Benchmark comparison generated."); }}>Run Benchmark</Button>
+            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setCompareBenchmarksOpen(false); setMessage("Demo benchmark previewed using sample metrics; no report was saved."); }}>Run Benchmark</Button>
           </div>
         </div>
       </Modal>
@@ -427,7 +427,7 @@ export default function SeoToolsPage() {
           </div>
           <div className="flex justify-end gap-2 pt-4">
             <Button variant="outline" onClick={() => setCatalogScanOpen(false)}>Cancel</Button>
-            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setCatalogScanOpen(false); setMessage("Catalog scan queued. Results will appear in the activity log."); }}>Start Scan</Button>
+            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setCatalogScanOpen(false); setMessage("Demo scan completed against sample catalog data; no background job was created."); }}>Start Scan</Button>
           </div>
         </div>
       </Modal>
@@ -454,7 +454,7 @@ export default function SeoToolsPage() {
                 </select>
               </div>
               <div className="sm:col-span-2">
-                <label className="text-[10px] font-bold text-muted block mb-1">SP-API Endpoint URL</label>
+                <label className="text-[10px] font-bold text-muted block mb-1">Sample Provider URL</label>
                 <input className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" placeholder="https://api.example.com/webhook" />
               </div>
             </div>
@@ -463,14 +463,14 @@ export default function SeoToolsPage() {
             <div className="text-[10px] font-bold text-amber-800 mb-1">Capabilities</div>
             <ul className="text-[10px] text-muted space-y-1 list-disc pl-4">
               <li>Register custom SEO tools</li>
-              <li>Configure SP-API webhook integration</li>
+              <li>Preview a provider configuration form (not saved or connected)</li>
               <li>Assign to execution pipeline</li>
               <li>Monitor tool health and uptime</li>
             </ul>
           </div>
           <div className="flex justify-end gap-2 pt-4">
             <Button variant="outline" onClick={() => setCustomToolOpen(false)}>Cancel</Button>
-            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setCustomToolOpen(false); setMessage("Custom tool pipeline registered."); }}>Register Tool</Button>
+            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setCustomToolOpen(false); setMessage("Demo form submitted; the custom tool was not saved or connected."); }}>Register Tool</Button>
           </div>
         </div>
       </Modal>
@@ -512,7 +512,7 @@ export default function SeoToolsPage() {
           </div>
           <div className="flex justify-end gap-2 pt-4">
             <Button variant="outline" onClick={() => setNewEventHookOpen(false)}>Cancel</Button>
-            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setNewEventHookOpen(false); setMessage("Event hook created and activated."); }}>Create Hook</Button>
+            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setNewEventHookOpen(false); setMessage("Demo event-hook form submitted; no hook was saved or activated."); }}>Create Hook</Button>
           </div>
         </div>
       </Modal>
@@ -525,7 +525,7 @@ export default function SeoToolsPage() {
             <div className="h-[200px] overflow-y-auto border border-line rounded-md bg-[#0B0F19] p-3 font-mono text-[9px]">
               <div className="text-teal-400">[14:48:22] NEW_ASIN → LQS Auditor → NeuroRank → BST 249-Packer → Sentinel Check (Approved)</div>
               <div className="text-emerald-400">[14:47:09] RANK_SURGE → SQP Funnel Ingest → NeuroRank Reseed → Remediation Draft (Staged)</div>
-              <div className="text-amber-400">[14:46:59] SUPPRESSION_RISK → Brand Sentinel Scan → Auto-Rollback Canonical → SP-API Urgent Patch (Enacted)</div>
+              <div className="text-amber-400">[14:46:59] SUPPRESSION_RISK → Brand Sentinel Scan → Sample Remediation Draft (Previewed)</div>
               <div className="text-slate-400">[14:45:55] GLOBAL_CATALOG → Cross-Border Localizer → BST 249-Packer → A+ Story Localizer (Pending Review)</div>
             </div>
           </div>
@@ -567,17 +567,17 @@ export default function SeoToolsPage() {
             </div>
             <div className="flex justify-end gap-2 pt-4">
               <Button variant="outline" onClick={() => setConfigureToolOpen(null)}>Cancel</Button>
-              <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setConfigureToolOpen(null); setMessage("Tool configuration saved."); }}>Save Configuration</Button>
+              <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setConfigureToolOpen(null); setMessage("Demo configuration previewed; settings were not saved or connected."); }}>Save Configuration</Button>
             </div>
           </div>
         </Modal>
       )}
 
-      <Modal open={telemetryOpen} onClose={() => setTelemetryOpen(false)} title="SP-API Telemetry Stream — View">
+      <Modal open={telemetryOpen} onClose={() => setTelemetryOpen(false)} title="Sample Telemetry — View">
         <div className="space-y-4">
           <div className="p-3 rounded-md border border-line bg-white/50">
             <div className="text-[10px] font-bold text-indigo-900 mb-1">Real-Time Telemetry</div>
-            <div className="text-[10px] text-muted mb-3">Live SP-API keyword extraction throughput and cluster latency metrics.</div>
+            <div className="text-[10px] text-muted mb-3">Illustrative keyword extraction metrics. No live telemetry is collected.</div>
             <div className="flex items-center justify-between text-xs mb-2">
               <span className="text-muted">Current Throughput</span>
               <span className="text-on-surface font-semibold">$40 keywords/sec</span>
@@ -592,7 +592,7 @@ export default function SeoToolsPage() {
             </div>
             <div className="flex items-center justify-between text-xs">
               <span className="text-muted">Active Worker</span>
-              <span className="text-on-surface font-semibold">worker-us-east-1-04a</span>
+              <span className="text-on-surface font-semibold">Sample preview</span>
             </div>
           </div>
           <div className="flex justify-end pt-4">

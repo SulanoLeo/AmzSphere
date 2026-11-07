@@ -1,118 +1,51 @@
 # AmzSphere
 
-Amazon marketplace operations simulator MVP — now a unified, pure-frontend Next.js (App Router) + Tailwind CSS application optimized for production on Vercel.
-
-The Python/FastAPI backend has been completely removed. All business logic, fields, schemas, and processing paradigms are preserved and driven by deterministic local mock data (`mock_db.json`) served through native Next.js API Routes under `web/app/api/`.
+AmzSphere is a portfolio demo of Amazon seller operations built with mock data. It showcases sample dashboards and seller workflows without connecting to Amazon or any production service.
 
 ## Stack
 
-- **Framework:** Next.js 15 (App Router, TypeScript, React 19)
-- **Styling:** Tailwind CSS (dark-mode palettes, flex/grid layouts)
-- **Data:** Local mock state (`mock_db.json`) with in-memory read/write via `web/lib/mock-state.ts`
-- **Deployment:** Vercel (zero backend; `vercel.json` simplified to project settings only)
+- Next.js 16 App Router, TypeScript, React 19
+- Tailwind CSS 4
+- Native Next.js API routes backed by deterministic, process-local mock state
+- Node.js 20 or later
 
 ## Run locally
 
 ```bash
 cd web
 npm install
-npm run dev
+AMZ_DATA_MODE=mock npm run dev
 ```
 
-Open <http://localhost:3000>.
+Open <http://localhost:3000>. The mock-mode flag is required; no credentials, database, or external account is needed.
 
-Available scripts:
+## Verify changes
 
-| Script | Purpose |
-|--------|---------|
-| `npm run dev` | Start the Next.js dev server |
-| `npm run build` | Production build (Vercel-ready) |
-| `npm run start` | Start the production server |
-| `npx tsc --noEmit` | TypeScript typecheck |
-
-## Data strategy
-
-All API routes read from and write to `mock_db.json` (loaded once and cached in memory). Mock responses are deterministic and react to client payloads: search/filter/sort on `/api/products`, dynamic opt-score computation via `web/lib/scoring.ts`, purchase-order approve/deny transitions, revision approve/reject, catalog optimization queuing, sync simulation, and inventory scanning via the mock simulator (`web/lib/simulator.ts`).
-
-UI surfaces loading states (`isLoading`), error states, and data tables/charts exactly as live production streams would.
-
-## API routes
-
-Native Next.js route handlers under `web/app/api/`:
-
-- `GET /api/health` — mock service health
-- `GET /api/state` — full mock state snapshot
-- `GET /api/dashboard` — aggregated seller dashboard
-- `GET /api/products` — paginated, filterable, searchable product catalog
-- `POST /api/products` — create a product
-- `PATCH /api/products/[id]` — update a product (recomputes opt_score)
-- `GET /api/sellers` — connected seller accounts
-- `POST /api/seller/sync` — simulate Amazon catalog sync
-- `GET /api/orders` — purchase workflows
-- `POST /api/purchase-orders/[id]/decision` — approve/deny a workflow
-- `GET /api/purchase-orders/[id]/pdf` — mock PO draft PDF
-- `GET /api/product-revisions` — pending optimization drafts
-- `POST /api/product-revisions/[id]/[action]` — approve/reject a revision
-- `POST /api/catalog/optimize` — queue a catalog optimization (mock)
-- `GET /api/catalog/helium10/status` — mock Helium 10 status
-- `POST /api/catalog/helium10/token` — mock token store
-- `GET /api/activity` — activity feed
-- `GET /api/campaigns`, `GET /api/search-terms`, `GET /api/ppc` — PPC data
-- `GET /api/execution-queue` — async execution queue
-- `GET /api/operations/[id]`, `POST /api/operations/[id]/approve` — operation lifecycle
-- `GET /api/seller-store`, `POST /api/seller-store`, `PATCH /api/seller-store/[id]/visibility`
-- `GET /api/reviews`, `GET /api/review-themes`, `GET /api/catalog-profiles`
-- `POST /api/inventory/scan` — run a mock inventory scan tick
-- `GET /api/access`, `GET /api/manager` — access / profile
-- `POST /api/listings/remediations/approve` — mock listing remediation
-- `POST /api/procurement/bulk-approve` — mock bulk PO approval
-- `GET /api/procurement/pdf/preview/[id]`, `POST /api/procurement/pdf/[id]/dispatch` — mock PO PDF
-- `GET /api/seo-tools` — paginated, filterable, searchable Amazon SEO tool catalog
-- `GET /api/seo-tools/[id]` — single tool detail
-- `POST /api/seo-tools`, `PATCH /api/seo-tools/[id]`, `DELETE /api/seo-tools/[id]` — admin tool CRUD (mock; approver-gated)
-- `GET /api/seo-tools/categories`, `POST /api/seo-tools/categories`, `PATCH /api/seo-tools/categories/[id]`, `DELETE /api/seo-tools/categories/[id]` — category management (mock; approver-gated)
-- `GET /api/seo-tools/selection`, `POST /api/seo-tools/selection` — selection save/get (mock; per-user when logged in, localStorage fallback)
-
-## SEO Tool Selector (`/seo-tools`) & Admin (`/admin/seo-tools`)
-
-Browse, filter, compare, and save Amazon SEO tools (listing optimization, keyword research, PPC, rank tracking, review management, competitor analysis).
-
-**Selector (`/seo-tools`):**
-- Tool cards with logo, category, pricing model (free / freemium / paid), starting price, rating, and supported marketplaces.
-- Text search, category/pricing/marketplace/rating/price filters, and sorting (relevance, rating, price, name).
-- "My Amazon SEO Stack" panel: select/deselect multiple tools, view estimated total monthly cost, and clear the stack.
-- Side-by-side comparison of 2–4 selected tools (features, price, marketplaces).
-- Optional starter-stack recommendation wizard (seller size, budget, goals, marketplaces).
-- Selection persisted in `localStorage`; synced to the server per authenticated user when logged in.
-
-**Admin (`/admin/seo-tools`):**
-- Add, edit, enable/disable SEO tools.
-- Add, edit, disable categories (a category in use by tools cannot be deleted).
-- Admin mutations are approver-gated (mock mode always approves).
-
-**Data:** 12 sample tools are seeded in `web/lib/seo-tools.ts` (marked sample data). Validate seed data with:
+Run from `web/`:
 
 ```bash
-cd web
-node --experimental-strip-types scripts/seed-seo-tools.ts
+npm test
+npm run typecheck
+npm run build
 ```
 
-**Stack:** Pure-frontend Next.js + Tailwind. No database, backend service, or hard-coded secrets. Admin edits live in memory only (mock stack); wire to a real store for production persistence.
+## Demo routes
 
-## Deploy to Vercel
+- `/` — overview
+- `/catalog` — catalog and listing workflow
+- `/inventory` — mock stock and reorder controls
+- `/ppc` — sample campaigns and search terms
+- `/approvals` — purchase-order and listing approvals
+- `/seller-store` — sample storefront controls
+- `/repricer` — simulated price monitoring
+- `/activity` — sample activity feed
+- `/seo-tools` and `/admin/seo-tools` — sample tool selector and local admin
+- `/how` — how the demo works
 
-1. Push the repository to GitHub.
-2. Import the project in Vercel. Set the root directory to `web` (or rely on automatic Next.js detection).
-3. Add `AMZ_DATA_MODE=mock` (default) if desired. No database, Redis, or SP-API credentials are required.
-4. Deploy. The app is fully static/client-rendered with dynamic API routes; no `vercel.json` rewrites or cron jobs are needed.
+## Mock-only behavior
 
-No Supabase, PostgreSQL, or Python runtime is provisioned.
+The committed seed data is `web/mock_db.json`. The app loads it into an in-memory cache; mutations do not write to the seed file and are lost when the process restarts. Serverless invocations do not share that memory. Integration, publishing, campaign, and synchronization actions are simulated and have no external side effects.
 
-## Tech stack guardrail
+Keep `AMZ_DATA_MODE=mock`. Do not add production credentials or enable a live integration. Product Research is a known feature gap and is intentionally deferred.
 
-AmzSphere is a **pure-frontend Next.js (App Router, TypeScript, React 19) + Tailwind CSS** application. To avoid confusion and stack drift:
-
-- **Allowed:** Next.js App Router, Tailwind CSS, native Next.js API Routes (`web/app/api/`), and mock data driven by `mock_db.json` via `web/lib/mock-state.ts`. All logic must live under `web/`.
-- **Forbidden:** Python/FastAPI (`backend/`, `server.py`, `local_server.py`, `requirements.txt`, `compose.yaml`), PostgreSQL/Redis/Supabase, `vercel.json` microservice rewrites/crons, and `app/api/v1/` PostgreSQL-backed routes.
-
-If a proposed change requires a live backend service, a database, or any Python code, it is out of scope unless this guardrail is explicitly revised and approved.
+See [PROJECT_GUIDE.md](./PROJECT_GUIDE.md), [ARCHITECTURE.md](./ARCHITECTURE.md), and [PRODUCTION_SETUP.md](./PRODUCTION_SETUP.md).

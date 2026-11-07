@@ -104,6 +104,7 @@ export function QueueMonitorDashboard() {
       const data = await fetchQueueTelemetry();
       if (!mountedRef.current) return;
       setTelemetry(data);
+      setBackoffItems(data.backoff_items);
     } catch (cause) {
       if (!mountedRef.current) return;
       setError(cause instanceof Error ? cause.message : "Telemetry feed unavailable");
@@ -143,9 +144,6 @@ export function QueueMonitorDashboard() {
   const listingHealth = telemetry?.listing_health ?? { pending: 0, processed: 0, published: 0, failed: 0, dead_letter: 0 };
   const outbox = telemetry?.amazon_write_outbox ?? { pending: 0, processed: 0, published: 0, failed: 0, dead_letter: 0 };
 
-  // Derive backoff items: pending outbox rows with future available_at
-  // In a full implementation these would come from a dedicated endpoint.
-  // Here we render a representative list derived from telemetry shape.
   const pendingCount = outbox.pending;
 
   return (
@@ -155,7 +153,7 @@ export function QueueMonitorDashboard() {
           <p className="text-[10px] font-bold uppercase tracking-widest text-teal-700">Queue diagnostics</p>
           <h1 className="mt-0.5 text-lg font-semibold text-indigo-950">Outbox throughput &amp; backoff</h1>
         </div>
-        <BadgeStatus pill={telemetry ? "live" : "stale"} />
+        <BadgeStatus available={Boolean(telemetry)} />
       </div>
 
       {error && (
@@ -177,14 +175,14 @@ export function QueueMonitorDashboard() {
           value={outbox.pending}
           accent="warn"
           icon={Clock}
-          detail="Awaiting SP-API execution window"
+          detail="Sample jobs waiting in local mock state"
         />
         <QueueMetricCard
           label="Published"
           value={outbox.published}
           accent="default"
           icon={CheckCircle}
-          detail="Successfully executed on Amazon"
+          detail="Sample jobs marked published in local mock state"
         />
         <QueueMetricCard
           label="Failed / dead-letter"
@@ -295,28 +293,9 @@ export function QueueMonitorDashboard() {
                       <span className="text-[10px] font-bold tabular-nums text-muted">{entry.count}x</span>
                     </div>
                     {expandedErrorId === entry.error && (
-                      <div className="mt-2 pt-2 border-t border-line flex items-center gap-2">
-                        <Button
-                          variant="outline"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            void handleRetry("placeholder-id");
-                          }}
-                          className="h-7 px-2 text-[10px] text-amber-600 border-amber-200 hover:bg-amber-50"
-                        >
-                          Force retry
-                        </Button>
-                        <Button
-                          variant="outline"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            void handleDeadLetter("placeholder-id");
-                          }}
-                          className="h-7 px-2 text-[10px] text-red-600 border-red-200 hover:bg-red-50"
-                        >
-                          Dead-letter
-                        </Button>
-                      </div>
+                      <p className="mt-2 border-t border-line pt-2 text-[10px] text-muted">
+                        This is an aggregated sample error. Use actions on a specific queue row to change mock queue state.
+                      </p>
                     )}
                   </div>
                 ))}
@@ -362,14 +341,14 @@ export function QueueMonitorDashboard() {
   );
 }
 
-function BadgeStatus({ pill }: { pill: "live" | "stale" }) {
+function BadgeStatus({ available }: { available: boolean }) {
   return (
     <span className={cn(
       "inline-flex items-center rounded-md px-2.5 py-1 text-[10px] font-semibold border",
-      pill === "live" ? "border-teal-100 bg-teal-50 text-teal-700" : "border-amber-100 bg-amber-50 text-amber-700"
+      available ? "border-teal-100 bg-teal-50 text-teal-700" : "border-amber-100 bg-amber-50 text-amber-700"
     )}>
-      {pill === "live" ? <Activity size={12} className="mr-1 animate-pulse" aria-hidden="true" /> : <Clock size={12} className="mr-1" aria-hidden="true" />}
-      {pill === "live" ? "Telemetry live" : "Telemetry stale"}
+      {available ? <Activity size={12} className="mr-1" aria-hidden="true" /> : <Clock size={12} className="mr-1" aria-hidden="true" />}
+      {available ? "Mock telemetry" : "Mock telemetry unavailable"}
     </span>
   );
 }

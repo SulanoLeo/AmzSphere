@@ -1,73 +1,36 @@
-# AmzSphere Swarm Guide
+# AmzSphere Agent Guide
 
-This directory contains the agent configuration for the AmzSphere pure-frontend Next.js + Tailwind CSS migration.
+This repository is a mock-only Next.js seller operations demo. Read this guide before making changes.
 
-## Stack
+## Supported stack
 
-- **Framework:** Next.js 15 (App Router, TypeScript, React 19) — lives in `web/`
-- **Styling:** Tailwind CSS
-- **Data:** Local mock state (`mock_db.json`) served via native Next.js API Routes (`web/app/api/`)
-- **Python/FastAPI backend:** removed
+- Next.js 16 App Router, React 19, TypeScript, and Tailwind CSS 4 in `web/`.
+- Native Next.js route handlers in `web/app/api/`.
+- Deterministic mock state from `web/mock_db.json`, accessed through `web/lib/mock-state.ts`.
+- Mock business logic in `web/lib/`.
 
-## Agents
+All application changes belong under `web/`, except for directly related documentation, tests, and agent configuration.
 
-| Agent | Role |
-|-------|------|
-| Orchestrator | Coordinates tasks, verifies build/typecheck, handles confirmations |
-| Frontend & UI | Modifies `web/app/`, `web/components/`, `web/lib/`, Tailwind config |
-| QA & Verification | Runs `cd web && npx tsc --noEmit` and `cd web && npx next build` |
+## Hard boundaries
 
-## Swarm Board
+- Never add Python, FastAPI, PostgreSQL, Redis, Supabase, or a separate backend service.
+- Never add real Amazon, advertising, SEO-provider, or other external API calls or credentials.
+- Keep all example data synthetic and clearly distinguish simulated actions from real side effects.
+- Do not claim that process-local writes are durable or synchronized across serverless instances.
+- Product Research remains deferred; do not present it as an implemented page.
 
-The task queue lives at `.kilo/swarm_board.json`. Each task has:
-- `id`: unique task identifier
-- `title`: short description
-- `agent`: which agent is assigned
-- `status`: `pending`, `in_progress`, `completed`, or `blocked`
+If work appears to need a live service or production credential, keep it out of scope and explain the limitation instead.
 
 ## Verification
 
-All agents should verify with:
+Run from `web/`:
 
 ```bash
-cd /home/lkkolokoy/AmzSphere/web && npx tsc --noEmit
-cd /home/lkkolokoy/AmzSphere/web && npx next build
+npm test
+npm run typecheck
+npm run build
 ```
 
-## Project structure
+For UI changes, preserve keyboard access, semantic HTML, status announcements, and responsive layouts. Use the `accessibility-lead` skill before changing HTML, JSX, TSX, CSS, or templates.
 
-```
-web/
-  app/              # Next.js App Router (pages + API routes)
-  app/api/*         # Mock-backed route handlers (replaces FastAPI endpoints)
-  components/       # Modular, reusable UI components
-  components/ui/*   # Base UI primitives (button, card, badge)
-  context/          # React context (ProductContext)
-  hooks/            # Client hooks (useListingHealth)
-  lib/              # Mock state, scoring, simulator, providers, utils
-  lib/mock-state.ts # Read/write cache over mock_db.json
-  lib/scoring.ts    # Optimization score rules
-  lib/simulator.ts  # Mock market simulator (10-second ticks)
-  lib/provider/*    # Product provider interface + mock client
-```
-
-No Python, PostgreSQL, Redis, or Supabase is required to run or deploy.
-
-## Tech stack guardrail
-
-AmzSphere is a **pure-frontend Next.js + Tailwind CSS application**. To avoid confusion and drift, the following rules are enforced for all future work:
-
-**Allowed stack:**
-- Next.js 15 (App Router, TypeScript, React 19) under `web/`
-- Tailwind CSS for styling under `web/`
-- Native Next.js API Routes under `web/app/api/` backed by `mock_db.json` via `web/lib/mock-state.ts`
-- Mock-only business logic (scoring, simulator, provider) under `web/lib/`
-
-**Forbidden (do not reintroduce):**
-- Python / FastAPI / `server.py`, `local_server.py`, `database.py`, `scoring.py`, `simulator.py`
-- `backend/`, `requirements.txt`, `compose.yaml`, `.venv`, `supabase/`
-- PostgreSQL, Redis, or any live database (`lib/db.ts`, `pg`, `asyncpg`)
-- `vercel.json` microservice rewrites, crons, or backend env vars (SP-API, DATABASE_URL, REDIS_URL, etc.)
-- `app/api/v1/` PostgreSQL-backed routes
-
-Before starting any feature, confirm the change touches only `web/` and uses the allowed stack. If a change would require Python, a database, or a live backend service, it is out of scope for this repository unless the stack guardrail is explicitly revised and approved.
+See [README.md](./README.md), [PROJECT_GUIDE.md](./PROJECT_GUIDE.md), and [ARCHITECTURE.md](./ARCHITECTURE.md) for the current project details.

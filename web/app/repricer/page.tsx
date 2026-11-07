@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Modal } from "@/components/ui/modal";
-import { ClientProductProvider } from "@/lib/provider/client";
+import { clientProductProvider as provider } from "@/lib/provider/client";
 import type { Product } from "@/lib/provider/types";
 
 function Metric({
@@ -35,7 +35,6 @@ function Metric({
 }
 
 export default function RepricerPage() {
-  const provider = new ClientProductProvider();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -63,7 +62,6 @@ export default function RepricerPage() {
     return () => { active = false; };
   }, [provider]);
 
-  const last_updated = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
 
   return (
     <main className="min-h-screen bg-canvas px-4 py-6 md:px-10 md:py-10">
@@ -86,7 +84,7 @@ export default function RepricerPage() {
               Algorithmic Engine: High-Frequency Active
             </span>
             <span className="text-xs text-muted">·</span>
-            <span className="text-xs text-muted">Sub-sec · SP-API Events</span>
+            <span className="text-xs text-muted">Sample offer data · Mock mode</span>
           </div>
           <p className="font-body-md text-body-md text-on-surface-variant mt-2">Competitive offers refresh every 10 seconds with a protected minimum margin floor.</p>
         </div>
@@ -201,7 +199,7 @@ export default function RepricerPage() {
         <CardHeader className="flex items-center justify-between pb-2">
           <div>
             <h2 className="panel-title">Active Repricing Matrix &amp; Competitor Radar</h2>
-            <div className="panel-subtitle">Live multi-offer radar, floor envelopes, algorithmic state, and real-time Buy Box retention metrics.</div>
+            <div className="panel-subtitle">Sample offer comparisons, price floors, and simulated Buy Box metrics. No Amazon data is connected.</div>
           </div>
           <div className="flex items-center gap-2">
             <span className="text-xs font-semibold text-muted">All Statuses</span>
@@ -280,7 +278,7 @@ export default function RepricerPage() {
         <CardHeader className="flex items-center justify-between pb-2">
           <div>
             <h2 className="panel-title">Real-Time Reprice Feed &amp; Competitor Interceptions</h2>
-            <div className="panel-subtitle">Continuous SP-API Notification Stream (Sub-minute)</div>
+            <div className="panel-subtitle">Static sample event history · not an Amazon notification stream</div>
           </div>
           <div className="flex items-center gap-2">
             <Badge className="bg-teal-50 text-teal-800 border-teal-200">WebSockets: Connected</Badge>
@@ -293,10 +291,10 @@ export default function RepricerPage() {
             <div className="text-amber-400">[14:46:59.840] GUARDIAL_INTERCEPT · VIOLATION_TRIGGED proposed bid of $8.90 strictly clamped to $4.50 max CPC.</div>
             <div className="text-teal-400">[14:45:55.792] SP-API_DRIVER · POST /fba/inventory/v1/replenishmentPlan (SIMULATED) status=201_CREATED track=true units=2500</div>
             <div className="text-emerald-400">[14:43:02.190] CELERY_TASK · catalog.inject_generic_keywords(ASIN=B07X81M3L9, tokens=["camping","portable solar","lamp"])</div>
-            <div className="text-slate-400">AmzSphere High-Frequency Repricer Sentinel: Active SP-API OfferChanged notification stream. Zero API throttling detected.</div>
+            <div className="text-slate-400">Mock repricer simulator: sample offer-change events only. No API requests are made.</div>
           </div>
           <div className="flex items-center justify-between mt-3 text-[10px]">
-            <span className="text-muted">SP-API Sync Worker: worker-us-east-1-04a (Active)</span>
+            <span className="text-muted">Mock simulator: ready</span>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-teal-500" />
               <span className="text-xs text-muted">View Telemetry Stream</span>
@@ -306,7 +304,7 @@ export default function RepricerPage() {
       </Card>
 
       <p className="text-right text-[10px] text-muted">
-        AmzSphere High-Frequency Repricer Sentinel: Active SP-API OfferChanged notification stream. Zero API throttling detected. · Engine: v4.2.1-turbo · Sub-sec · Region: US-EAST-1 (MBS) · Polling cycle: 10s
+        Sample repricing scenario · mock data only · no connected seller account or API stream
       </p>
 
       {/* Modals */}

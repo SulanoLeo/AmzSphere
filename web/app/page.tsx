@@ -28,7 +28,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Modal } from "@/components/ui/modal";
-import { ClientProductProvider } from "@/lib/provider/client";
+import { clientProductProvider as provider } from "@/lib/provider/client";
 import type { Dashboard, Seller } from "@/lib/provider/types";
 
 const RADIAL_COLORS = ["#006a63", "#3525cd", "#ffb95f", "#777587", "#10B981"];
@@ -128,7 +128,6 @@ function SetupStep({ number, title, desc }: { number: string; title: string; des
 }
 
 export default function DashboardPage() {
-  const provider = new ClientProductProvider();
   const [data, setData] = useState<Dashboard | null>(null);
   const [sellers, setSellers] = useState<Seller[]>([]);
   const [selectedSeller, setSelectedSeller] = useState("");
@@ -274,7 +273,7 @@ export default function DashboardPage() {
             </select>
           )}
           <Badge className={connected ? "bg-teal-50 text-teal-800" : "bg-amber-50 text-amber-800"}>
-            {connected ? `Synced · ${data?.last_synced_at ? new Date(data.last_synced_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : ""}` : "Not connected"}
+            {connected ? `Mock sync · ${data?.last_synced_at ? new Date(data.last_synced_at).toISOString() : "complete"}` : "Sample data"}
           </Badge>
           <Button variant="outline" onClick={syncSeller} disabled={!selectedSeller || loading}>
             <RefreshCw size={15} /> Sync seller data
@@ -292,7 +291,7 @@ export default function DashboardPage() {
           <div className="alert-banner-content">
             <div className="alert-banner-title">Backend not ready · Authorization required</div>
             <div className="alert-banner-desc">
-              Connect a seller account to activate real-time Selling Partner API (SP-API) streams. Writes and automated pricing repricing remain safely gated.
+              This work sample runs on local mock seller data only. It does not connect to Amazon or require production credentials.
             </div>
           </div>
           <div className="flex items-start gap-2">
@@ -579,39 +578,28 @@ export default function DashboardPage() {
       </Card>
 
       <p className="text-right text-[10px] text-muted">
-        {totalStock ? `${totalStock.toLocaleString()} units represented` : "No seller data loaded"} · API credentials remain server-side
+        {totalStock ? `${totalStock.toLocaleString()} sample units represented` : "No mock seller data loaded"} · Changes use temporary mock state
       </p>
 
       {/* Modals */}
-      <Modal open={connectSellerOpen} onClose={() => setConnectSellerOpen(false)} title="Connect Seller Account">
+      <Modal open={connectSellerOpen} onClose={() => setConnectSellerOpen(false)} title="Load Mock Seller Data">
         <div className="space-y-4">
           <div>
-            <div className="text-xs font-semibold text-indigo-900 mb-1">SP-API credentials</div>
-            <div className="text-[10px] text-muted mb-3">Enter your Amazon Selling Partner API credentials to connect your seller account. Credentials remain server-side and are never exposed to the browser.</div>
-            <div className="grid gap-3 sm:grid-cols-2">
-              <div>
-                <label className="text-[10px] font-bold text-muted block mb-1">Seller ID</label>
-                <input className="w-full h-9 rounded-md border border-line px-3 text-[10px] focus:outline-none focus:border-teal-700" placeholder="ATVPDKIKX0DER" />
-              </div>
-              <div>
-                <label className="text-[10px] font-bold text-muted block mb-1">Marketplace ID</label>
-                <input className="w-full h-9 rounded-md border border-line px-3 text-[10px] focus:outline-none focus:border-teal-700" placeholder="ATVPDKIKX0DER" />
-              </div>
-            </div>
+            <div className="text-xs font-semibold text-indigo-900 mb-1">Demo seller profile</div>
+            <div className="text-[10px] text-muted mb-3">Use the bundled sample seller and catalog. No API credentials, seller account, or external service is contacted.</div>
           </div>
           <div className="p-3 rounded-md border border-line bg-amber-50">
-            <div className="text-[10px] font-bold text-amber-800 mb-1">Capabilities once connected</div>
+            <div className="text-[10px] font-bold text-amber-800 mb-1">Mock workflow</div>
             <ul className="text-[10px] text-muted space-y-1 list-disc pl-4">
-              <li>Real-time catalog ingestion from Amazon</li>
-              <li>Inventory snapshots across all marketplaces</li>
-              <li>PPC campaign telemetry and bid automation</li>
-              <li>Autonomous replenishment queue</li>
-              <li>Purchase-order approval workflow</li>
+              <li>Load sample catalog and inventory records</li>
+              <li>Review PPC and replenishment examples</li>
+              <li>Try local purchase-order approval flows</li>
+              <li>Data mutations remain process-local</li>
             </ul>
           </div>
           <div className="flex justify-end gap-2 pt-4">
             <Button variant="outline" onClick={() => setConnectSellerOpen(false)}>Cancel</Button>
-            <Button onClick={() => { setConnectSellerOpen(false); void syncSeller(); }}>Connect &amp; Sync</Button>
+            <Button onClick={() => { setConnectSellerOpen(false); void syncSeller(); }}>Load Sample Seller</Button>
           </div>
         </div>
       </Modal>
@@ -620,7 +608,7 @@ export default function DashboardPage() {
         <div className="space-y-4">
           <div className="flex items-center justify-between text-xs">
             <span className="text-muted">Last sync</span>
-            <span className="text-on-surface">{new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>
+            <span className="text-on-surface">{data?.last_synced_at ? new Date(data.last_synced_at).toISOString() : "No mock sync recorded"}</span>
           </div>
           <div className="flex items-center justify-between text-xs">
             <span className="text-muted">Status</span>
@@ -637,9 +625,9 @@ export default function DashboardPage() {
           <div className="p-3 rounded-md border border-line bg-teal-50">
             <div className="text-[10px] font-bold text-teal-800 mb-1">What sync does</div>
             <ul className="text-[10px] text-muted space-y-1 list-disc pl-4">
-              <li>Ingests product catalog and inventory from Amazon SP-API</li>
-              <li>Pulls pending purchase orders and revisions</li>
-              <li>Refreshes velocity metrics and days-of-supply</li>
+              <li>Reads the bundled sample catalog and inventory</li>
+              <li>Refreshes temporary mock records for this process</li>
+              <li>Does not contact Amazon or persist changes across restarts</li>
             </ul>
           </div>
           <div className="flex justify-end pt-4">
@@ -651,8 +639,8 @@ export default function DashboardPage() {
       <Modal open={refreshStatusOpen} onClose={() => setRefreshStatusOpen(false)} title="Refresh Dashboard">
         <div className="space-y-4">
           <div className="flex items-center justify-between text-xs">
-            <span className="text-muted">Last refresh</span>
-            <span className="text-on-surface">{new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>
+            <span className="text-muted">Dashboard state</span>
+            <span className="text-on-surface">Current mock state</span>
           </div>
           <div className="flex items-center justify-between text-xs">
             <span className="text-muted">Dashboard data</span>
@@ -710,9 +698,9 @@ export default function DashboardPage() {
             <div className="p-3 rounded-md border border-line bg-teal-50">
               <div className="text-[10px] font-bold text-teal-800 mb-1">What approval does</div>
               <ul className="text-[10px] text-muted space-y-1 list-disc pl-4">
-                <li>Transmits PO to vendor via Amazon SP-API</li>
-                <li>Logs decision in activity trail</li>
-                <li>Updates inventory forecast with ordered units</li>
+                <li>Records the decision in local mock state</li>
+                <li>Does not submit a PO to a vendor</li>
+                <li>Refreshes the sample dashboard after a decision</li>
               </ul>
             </div>
             <div className="flex justify-end gap-2 pt-4">

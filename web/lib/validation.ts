@@ -38,6 +38,7 @@ export const productPatchSchema = z.object({
   category: z.string().min(1).max(100).optional(),
   price: z.coerce.number().nonnegative().optional(),
   stock: z.coerce.number().nonnegative().optional(),
+  max_stock: z.coerce.number().nonnegative().optional(),
   daily_velocity: z.coerce.number().nonnegative().optional(),
   competitor_price: z.coerce.number().nonnegative().optional(),
   market_price: z.coerce.number().nonnegative().optional(),
@@ -60,6 +61,11 @@ export const purchaseOrderDecisionSchema = z.object({
   action: z.enum(["approve", "deny"]),
 });
 
+export const purchaseOrderCreateSchema = z.object({
+  product_asin: asinSchema,
+  units: z.coerce.number().int().positive().max(100_000),
+});
+
 export const catalogOptimizeSchema = z.object({
   asin: asinSchema,
   sku: z.string().max(80).optional(),
@@ -74,6 +80,9 @@ export const sellerSyncSchema = z.object({
 
 export const inventoryScanSchema = z.object({
   seller_id: sellerIdSchema,
+  buffer_days: z.coerce.number().int().min(0).max(365).default(15),
+  lead_time_days: z.coerce.number().int().min(0).max(365).optional(),
+  scope: z.enum(["all", "critical", "watch"]).default("all"),
 });
 
 export const revisionActionSchema = z.object({

@@ -8,8 +8,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Modal } from "@/components/ui/modal";
-import { ClientProductProvider } from "@/lib/provider/client";
+import { clientProductProvider as provider } from "@/lib/provider/client";
 import type { ProductRevision, Order } from "@/lib/provider/types";
+import { downloadCsv } from "@/lib/csv";
 
 function Metric({
   label,
@@ -35,7 +36,6 @@ function Metric({
 }
 
 export default function ApprovalsPage() {
-  const provider = new ClientProductProvider();
   const [revisions, setRevisions] = useState<ProductRevision[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
@@ -46,7 +46,9 @@ export default function ApprovalsPage() {
   // Modal states
   const [downloadLogOpen, setDownloadLogOpen] = useState(false);
   const [createQuoteOpen, setCreateQuoteOpen] = useState(false);
-  const [reviewRevisionOpen, setReviewRevisionOpen] = useState<{ id: string; status: string } | null>(null);
+  const [reviewRevisionOpen, setReviewRevisionOpen] = useState<{ id: string; status: string; action: "approve" | "reject" } | null>(null);
+  const [selectedRevisionIds, setSelectedRevisionIds] = useState<string[]>([]);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -66,13 +68,48 @@ export default function ApprovalsPage() {
   }, [provider]);
 
   async function decideRevision(id: string, action: "approve" | "reject") {
+    setIsSaving(true);
+    setError("");
     try {
       await provider.decideRevision(id, action);
       const payload = await provider.getProductRevisions();
       setRevisions(payload);
+      setSelectedRevisionIds((selected) => selected.filter((selectedId) => selectedId !== id));
+      setReviewRevisionOpen(null);
+      setMessage(`Mock revision ${id} ${action === "approve" ? "approved" : "rejected"}.`);
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "Revision decision failed");
+    } finally {
+      setIsSaving(false);
     }
+  }
+
+  async function approveSelectedRevisions() {
+    const selected = eligibleRevisions.filter((revision) => selectedRevisionIds.includes(revision.id));
+    if (!selected.length) return;
+    setIsSaving(true);
+    setError("");
+    try {
+      for (const revision of selected) await provider.decideRevision(revision.id, "approve");
+      setRevisions(await provider.getProductRevisions());
+      setSelectedRevisionIds([]);
+      setMessage(`Approved ${selected.length} selected mock revision${selected.length === 1 ? "" : "s"}.`);
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "Bulk revision approval failed");
+      setRevisions(await provider.getProductRevisions());
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
+  function exportApprovalLog() {
+    downloadCsv("amzsphere-approval-log.csv", [
+      ["Type", "ID", "Product", "Status", "Created"],
+      ...revisions.map((revision) => ["Product revision", revision.id, revision.asin || revision.product_id, revision.status, revision.created_at]),
+      ...orders.map((order) => ["Purchase order", order.id, order.product_name, order.status, order.reviewed_at || ""]),
+    ]);
+    setDownloadLogOpen(false);
+    setMessage(`Exported ${revisions.length + orders.length} mock approval records to CSV.`);
   }
 
   async function decidePurchaseOrder(id: string, action: "approve" | "deny") {
@@ -85,7 +122,12 @@ export default function ApprovalsPage() {
     }
   }
 
-  const approvalFilter = "all";
+  const eligibleRevisions = revisions.filter((revision) => {
+    if (revision.status !== "pending_approval") return false;
+    const margin = (revision.field_changes as Record<string, { before: unknown; after: unknown }> | undefined)?.margin?.after;
+    return margin === undefined || Number(margin) >= 18.5;
+  });
+  const allEligibleSelected = eligibleRevisions.length > 0 && eligibleRevisions.every((revision) => selectedRevisionIds.includes(revision.id));
 
   return (
     <main className="min-h-screen bg-canvas px-4 py-6 md:px-10 md:py-10">
@@ -105,7 +147,7 @@ export default function ApprovalsPage() {
           <div className="flex items-center gap-2 text-[10px] font-semibold text-amber-600 bg-amber-50 border border-amber-200 rounded-md px-3 py-1.5 mt-1">
             <span className="inline-flex items-center gap-1">
               <span className="w-2 h-2 rounded-full bg-amber-600" />
-              Pending Human Review: 6 Orders ($48.6k total volume)
+              Pending Human Review: {revisions.filter((revision) => revision.status === "pending_approval").length} sample revisions
             </span>
           </div>
           <p className="font-body-md text-body-md text-on-surface-variant mt-2">B2B volume discounts, custom price quotes, buyer credit limit vetting, and human-in-the-loop Amazon Business transaction reviews.</p>
@@ -217,13 +259,15 @@ export default function ApprovalsPage() {
         <CardHeader className="flex items-center justify-between pb-2">
           <div>
             <h2 className="panel-title">PO &amp; Request Details</h2>
-            <div className="panel-subtitle">Showing 1–5 of 18 B2B Requests · 2 Selected ($20,150.00 Val)</div>
+            <div className="panel-subtitle">Showing {revisions.length} sample revision requests · {selectedRevisionIds.length} selected</div>
           </div>
           <div className="flex items-center gap-2">
             <span className="text-xs font-semibold text-muted">All Statuses (Pending, Approved, Flagged)</span>
             <span className="text-xs font-semibold text-muted">All Margins (&gt;18.5% Floor)</span>
-            <Button variant="outline" onClick={() => {}}>Bulk Counter-Offer</Button>
-            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => {}}>Bulk Approve (2 Eligible)</Button>
+            <Button variant="outline" disabled={selectedRevisionIds.length === 0} onClick={() => setCreateQuoteOpen(true)}>Draft Counter-Offer</Button>
+            <Button disabled={isSaving || selectedRevisionIds.length === 0} className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { void approveSelectedRevisions(); }}>
+              {isSaving ? "Approving…" : `Bulk Approve (${selectedRevisionIds.length} Selected)`}
+            </Button>
           </div>
         </CardHeader>
         <CardContent className="pt-0">
@@ -231,7 +275,15 @@ export default function ApprovalsPage() {
             <table className="w-full text-left text-xs">
               <thead className="bg-canvas text-[10px] uppercase tracking-wide text-muted">
                 <tr>
-                  <th style={{width:34}}></th>
+                  <th className="px-3 py-3" style={{width:34}}>
+                    <input
+                      type="checkbox"
+                      aria-label="Select all eligible revisions"
+                      checked={allEligibleSelected}
+                      disabled={eligibleRevisions.length === 0}
+                      onChange={(event) => setSelectedRevisionIds(event.target.checked ? eligibleRevisions.map((revision) => revision.id) : [])}
+                    />
+                  </th>
                   <th className="px-4 py-3">PO &amp; Request Details</th>
                   <th className="px-4 py-3">Buyer / Organization</th>
                   <th className="px-4 py-3">Items &amp; Volume</th>
@@ -248,7 +300,17 @@ export default function ApprovalsPage() {
                   const over = fc && parseFloat(String(fc.after)) < 18.5;
                   return (
                     <tr key={revision.id} className="border-t border-line">
-                      <td className="px-4 py-3 tabular-nums text-[10px] text-muted">☐</td>
+                      <td className="px-4 py-3 tabular-nums text-[10px] text-muted">
+                        <input
+                          type="checkbox"
+                          aria-label={`Select revision ${revision.id}`}
+                          checked={selectedRevisionIds.includes(revision.id)}
+                          disabled={revision.status !== "pending_approval" || !eligibleRevisions.some((eligible) => eligible.id === revision.id)}
+                          onChange={(event) => setSelectedRevisionIds((selected) => event.target.checked
+                            ? [...selected, revision.id]
+                            : selected.filter((id) => id !== revision.id))}
+                        />
+                      </td>
                       <td className="px-4 py-3">
                         <div className="product-name">{revision.asin || revision.product_id}</div>
                         <div className="product-meta text-[10px] text-muted">{revision.created_at}</div>
@@ -275,11 +337,11 @@ export default function ApprovalsPage() {
                       <td className="px-4 py-3">
                         {revision.status === "pending_approval" ? (
                           <>
-                            <Button variant="outline" onClick={() => { setReviewRevisionOpen({ id: revision.id, status: revision.status }); void decideRevision(revision.id, "approve"); }}>
+                            <Button variant="outline" disabled={Boolean(over)} onClick={() => setReviewRevisionOpen({ id: revision.id, status: revision.status, action: "approve" })}>
                               Approve &amp; Release
                             </Button>
-                            <Button variant="outline" className="text-[10px]" onClick={() => { setReviewRevisionOpen({ id: revision.id, status: revision.status }); void decideRevision(revision.id, "reject"); }}>
-                              Review
+                            <Button variant="outline" className="text-[10px]" onClick={() => setReviewRevisionOpen({ id: revision.id, status: revision.status, action: "reject" })}>
+                              Reject
                             </Button>
                           </>
                         ) : (
@@ -295,7 +357,7 @@ export default function ApprovalsPage() {
             </table>
           </div>
           <div className="flex items-center justify-between mt-3 text-[10px] text-muted">
-            <span>Showing 1–5 of 18 B2B Requests · 2 Selected ($20,150.00 Val)</span>
+            <span>Showing {revisions.length} sample revision requests · {selectedRevisionIds.length} selected</span>
             <div className="flex items-center gap-1">
               <button className="button button-outline button-sm disabled">Previous</button>
               <button className="button button-primary button-sm">1</button>
@@ -313,7 +375,7 @@ export default function ApprovalsPage() {
         <CardHeader className="flex items-center justify-between pb-2">
           <div>
             <h2 className="panel-title">Algorithmic Workflow Recommendations &amp; Decision Assist</h2>
-            <div className="panel-subtitle">Updated: Just Now (real-time telemetry)</div>
+            <div className="panel-subtitle">Sample recommendation data · no live telemetry</div>
           </div>
           <Badge className="bg-indigo-50 text-indigo-800 border-indigo-200">Updated: Just Now</Badge>
         </CardHeader>
@@ -360,7 +422,7 @@ export default function ApprovalsPage() {
       </Card>
 
       <div className="flex items-center justify-between mt-6 text-[10px] text-muted">
-        <span>· SP-API PB2B Quotes Stream: ACTIVE · TLS 1.3 Amazon Business Authenticated · Dry-Run Pipeline Safe (Zero accidental push)</span>
+        <span>Mock approval workflow · no Amazon Business connection or external requests</span>
         <div className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-teal-500" />
           <span className="text-xs text-muted">Node Pod: us-east-1-pod-09</span>
@@ -403,7 +465,7 @@ export default function ApprovalsPage() {
           </div>
           <div className="flex justify-end gap-2 pt-4">
             <Button variant="outline" onClick={() => setDownloadLogOpen(false)}>Cancel</Button>
-            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setDownloadLogOpen(false); setMessage("Approval log exported to downloads."); }}>Download CSV</Button>
+            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={exportApprovalLog}>Download CSV</Button>
           </div>
         </div>
       </Modal>
@@ -449,17 +511,21 @@ export default function ApprovalsPage() {
           <div className="space-y-4">
             <div>
               <div className="text-xs font-semibold text-indigo-900 mb-1">Decision Confirmation</div>
-              <div className="text-[10px] text-muted mb-3">Confirm your decision on this product revision. Approved revisions apply to the catalog; rejected revisions return to needs_optimization.</div>
+              <div className="text-[10px] text-muted mb-3">Confirm this local mock decision. No catalog changes are sent to Amazon.</div>
               <div className="p-3 rounded-md border border-line bg-white/50">
                 <div className="text-[10px] font-bold text-on-surface mb-1">Revision ID</div>
                 <div className="text-xs font-semibold text-indigo-900">{reviewRevisionOpen.id}</div>
                 <div className="text-[10px] font-bold text-on-surface mt-2">Current Status</div>
                 <div className="text-xs font-semibold text-indigo-900">{reviewRevisionOpen.status}</div>
+                <div className="text-[10px] font-bold text-on-surface mt-2">Decision</div>
+                <div className="text-xs font-semibold text-indigo-900">{reviewRevisionOpen.action}</div>
               </div>
             </div>
             <div className="flex justify-end gap-2 pt-4">
               <Button variant="outline" onClick={() => setReviewRevisionOpen(null)}>Cancel</Button>
-              <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => setReviewRevisionOpen(null)}>Confirm</Button>
+              <Button disabled={isSaving} className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { void decideRevision(reviewRevisionOpen.id, reviewRevisionOpen.action); }}>
+                {isSaving ? "Saving…" : "Confirm Mock Decision"}
+              </Button>
             </div>
           </div>
         </Modal>

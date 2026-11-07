@@ -8,8 +8,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Modal } from "@/components/ui/modal";
-import { ClientProductProvider } from "@/lib/provider/client";
+import { clientProductProvider as provider } from "@/lib/provider/client";
 import type { ActivityItem } from "@/lib/provider/types";
+import { downloadCsv } from "@/lib/csv";
 
 function Metric({
   label,
@@ -35,7 +36,6 @@ function Metric({
 }
 
 export default function ActivityPage() {
-  const provider = new ClientProductProvider();
   const [items, setItems] = useState<ActivityItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -66,6 +66,27 @@ export default function ActivityPage() {
   const categories = new Set(items.map((i) => i.category));
   const recent = items.slice(0, 10);
 
+  function exportActivity() {
+    downloadCsv("amzsphere-mock-activity.csv", [
+      ["ID", "Category", "Title", "Detail", "Created"],
+      ...items.map((item) => [item.id, item.category, item.title, item.detail, item.timestamp]),
+    ]);
+    setExportAuditOpen(false);
+    setMessage(`Exported ${items.length} mock activity records to CSV.`);
+  }
+
+  async function runMockSync() {
+    setError("");
+    try {
+      const result = await provider.syncState();
+      setItems(await provider.getActivity());
+      setMessage(`Mock catalog sync completed with status "${result.status}". No external service was contacted.`);
+      setTriggerSyncOpen(false);
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "Mock sync failed");
+    }
+  }
+
   return (
     <main className="min-h-screen bg-canvas px-4 py-6 md:px-10 md:py-10">
       <header className="mb-6 flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-line pb-5">
@@ -84,10 +105,10 @@ export default function ActivityPage() {
           <div className="flex items-center gap-2 text-[10px] font-semibold text-teal-600 bg-teal-50 border border-teal-200 rounded-md px-3 py-1.5 mt-1">
             <span className="inline-flex items-center gap-1">
               <span className="w-2 h-2 rounded-full bg-teal-500" />
-              Celery Workers: 8/10 Online (32 Threads)
+              Local Mock Activity · No external workers
             </span>
           </div>
-          <p className="font-body-md text-body-md text-on-surface-variant mt-2">Real-time Celery/Redis task execution pipeline, SP-API mutation event audit trails, algorithmic guardrails, and transactional outbox telemetry.</p>
+          <p className="font-body-md text-body-md text-on-surface-variant mt-2">Review sample activity records, guardrail examples, and local mock queue status.</p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <div className="flex items-center gap-1 border border-line rounded-md bg-white px-2 py-0.5 text-xs text-muted">
@@ -111,7 +132,7 @@ export default function ActivityPage() {
         <Metric label="Success Rate" value="99.84%" detail="+0.12% (opt) Failed: 76 · 0 dead-letter" accent="green" tag="Optimal" />
         <Metric label="Latency (P95)" value="142 ms" detail="Median wait: 28ms Target: &lt;280ms" accent="teal" tag="Fast (&lt;250ms)" />
         <Metric label="Guardrails" value="18 Blocked" detail="12 Price drops pre… · 6 bids" accent="rose" tag="Active" />
-        <Metric label="SP-API Quota" value="41.6%" detail="Bucket: 30.0 / 50.0 reg/s limit" accent="blue" tag="Healthy" />
+        <Metric label="Mock Quota Example" value="41.6%" detail="Illustrative sample metric · no API quota is tracked" accent="blue" tag="Sample" />
       </div>
 
       <section className="section-grid align-items-stretch mb-6">
@@ -119,7 +140,7 @@ export default function ActivityPage() {
           <div className="panel-header">
             <div>
               <h2 className="panel-title">Worker Throughput &amp; Queue Pacing</h2>
-              <div className="panel-subtitle">Last 60 Minutes Celery ingestion cadence (dispatch vs resolution)</div>
+              <div className="panel-subtitle">Illustrative sample queue cadence (dispatch vs resolution)</div>
             </div>
             <div className="flex items-center gap-1">
               <Badge className="bg-indigo-50 text-indigo-800 border-indigo-200">By Automation Engine</Badge>
@@ -133,7 +154,7 @@ export default function ActivityPage() {
             <div className="mt-3 flex items-center gap-4 p-3 rounded-md bg-indigo-50 border border-indigo-100">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-indigo-600" />
-                <span className="text-xs text-on-surface">Peak Load at Burst Sync: +1,240 SP-API pricing events reconciled without throttle.</span>
+                <span className="text-xs text-on-surface">Sample burst-sync volume: 1,240 illustrative events.</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-teal-500" />
@@ -186,7 +207,7 @@ export default function ActivityPage() {
       <Card className="mb-6">
         <CardHeader className="flex items-center justify-between pb-2">
           <div>
-            <h2 className="panel-title">Live Telemetry &amp; Redis Outbox Event Stream</h2>
+            <h2 className="panel-title">Sample Activity &amp; Mock Outbox Event Stream</h2>
             <div className="panel-subtitle">Search by Task ID (#TSK…), ASIN, Engine, or Event Type…</div>
           </div>
           <div className="flex items-center gap-2">
@@ -261,14 +282,14 @@ export default function ActivityPage() {
         <div className="text-amber-400">[14:46:59.840] GUARDIAL_INTERCEPT · VIOLATION_TRIGGERED proposed bid of $8.90 strictly clamped to $4.50 max CPC.</div>
         <div className="text-teal-400">[14:45:55.792] SP-API_DRIVER · POST /fba/inventory/v1/replenishmentPlan (SIMULATED) status=201_CREATED track=true units=2500</div>
         <div className="text-emerald-400">[14:43:02.190] CELERY_TASK · catalog.inject_generic_keywords(ASIN=B07X81M3L9, tokens=["camping","portable solar","lamp"])</div>
-        <div className="text-slate-400">AmzSphere High-Frequency Repricer Sentinel: Active SP-API OfferChanged notification stream. Zero API throttling detected.</div>
+        <div className="text-slate-400">Sample event row only · no connected notification stream or external API calls.</div>
       </div>
       <div className="flex items-center justify-between mt-2 text-[10px] text-muted">
         <span>Simulated: Circuit Breaker Enforced: Proposed $6.80 CPC Clamped to $4.50 Ceiling (Dry-Run Staged)</span>
         <span>Std Output: Latency=98.1ms</span>
       </div>
       <p className="text-right text-[10px] text-muted mt-4">
-        No unencrypted seller data loaded · API credentials remain server-side in KMS enclave · AmzSphere Engine v2.4.9 · Documentation · System Status
+        Sample events only · no seller credentials or production services · changes are process-local
       </p>
 
       {/* Modals */}
@@ -276,24 +297,7 @@ export default function ActivityPage() {
         <div className="space-y-4">
           <div>
             <div className="text-xs font-semibold text-indigo-900 mb-1">Export Configuration</div>
-            <div className="text-[10px] text-muted mb-3">Export activity log data for compliance review or offline analysis.</div>
-            <div className="grid gap-3 sm:grid-cols-2">
-              <div>
-                <label className="text-[10px] font-bold text-muted block mb-1">Format</label>
-                <select className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px]">
-                  <option>CSV</option>
-                  <option>JSON</option>
-                </select>
-              </div>
-              <div>
-                <label className="text-[10px] font-bold text-muted block mb-1">Date Range</label>
-                <select className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px]">
-                  <option>Last 24 hours</option>
-                  <option>Last 7 days</option>
-                  <option>Last 30 days</option>
-                </select>
-              </div>
-            </div>
+            <div className="text-[10px] text-muted mb-3">Download all {items.length} sample activity records as a CSV file.</div>
           </div>
           <div className="p-3 rounded-md border border-line bg-teal-50">
             <div className="text-[10px] font-bold text-teal-800 mb-1">Capabilities</div>
@@ -305,47 +309,28 @@ export default function ActivityPage() {
           </div>
           <div className="flex justify-end gap-2 pt-4">
             <Button variant="outline" onClick={() => setExportAuditOpen(false)}>Cancel</Button>
-            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setExportAuditOpen(false); setMessage("Activity log exported to downloads."); }}>Export</Button>
+            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={exportActivity}>Download CSV</Button>
           </div>
         </div>
       </Modal>
 
-      <Modal open={triggerSyncOpen} onClose={() => setTriggerSyncOpen(false)} title="Trigger Manual Sync — Setup">
+      <Modal open={triggerSyncOpen} onClose={() => setTriggerSyncOpen(false)} title="Refresh Mock Catalog">
         <div className="space-y-4">
           <div>
-            <div className="text-xs font-semibold text-indigo-900 mb-1">Manual Sync</div>
-            <div className="text-[10px] text-muted mb-3">Force a full SP-API sync of catalog, inventory, and pricing data from Amazon.</div>
-            <div className="grid gap-3 sm:grid-cols-2">
-              <div>
-                <label className="text-[10px] font-bold text-muted block mb-1">Sync Scope</label>
-                <select className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px]">
-                  <option>Full Catalog</option>
-                  <option>Inventory Only</option>
-                  <option>Pricing Only</option>
-                </select>
-              </div>
-              <div>
-                <label className="text-[10px] font-bold text-muted block mb-1">Marketplace</label>
-                <select className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px]">
-                  <option>All Marketplaces</option>
-                  <option>US (.com)</option>
-                  <option>EU</option>
-                </select>
-              </div>
-            </div>
+            <div className="text-xs font-semibold text-indigo-900 mb-1">Local Catalog Refresh</div>
+            <div className="text-[10px] text-muted mb-3">Refresh product records from the bundled local mock catalog. Nothing is requested from Amazon.</div>
           </div>
           <div className="p-3 rounded-md border border-line bg-indigo-50">
             <div className="text-[10px] font-bold text-indigo-800 mb-1">Capabilities</div>
             <ul className="text-[10px] text-muted space-y-1 list-disc pl-4">
-              <li>Force full catalog re-ingestion</li>
-              <li>Refresh inventory and pricing from SP-API</li>
-              <li>Record sync run in activity log</li>
-              <li>Resume from last checkpoint if interrupted</li>
+              <li>Reconcile sample products into mock state</li>
+              <li>Record the sync result in local activity</li>
+              <li>Changes are temporary and process-local</li>
             </ul>
           </div>
           <div className="flex justify-end gap-2 pt-4">
             <Button variant="outline" onClick={() => setTriggerSyncOpen(false)}>Cancel</Button>
-            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setTriggerSyncOpen(false); setMessage("Manual sync queued. Activity will appear in the stream."); }}>Trigger Sync</Button>
+            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { void runMockSync(); }}>Run Mock Sync</Button>
           </div>
         </div>
       </Modal>

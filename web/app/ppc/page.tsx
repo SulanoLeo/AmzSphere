@@ -9,8 +9,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Modal } from "@/components/ui/modal";
-import { ClientProductProvider } from "@/lib/provider/client";
-import type { Dashboard } from "@/lib/provider/types";
+import { clientProductProvider as provider } from "@/lib/provider/client";
+import type { PpcData } from "@/lib/provider/types";
+import { downloadCsv } from "@/lib/csv";
 
 function Metric({
   label,
@@ -36,8 +37,7 @@ function Metric({
 }
 
 export default function PpcPage() {
-  const provider = new ClientProductProvider();
-  const [data, setData] = useState<{ campaigns: any[]; search_terms: any[]; targeted_exact_keywords: any[]; negative_keywords: any[] } | null>(null);
+  const [data, setData] = useState<PpcData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
@@ -49,6 +49,51 @@ export default function PpcPage() {
   const [placementOpen, setPlacementOpen] = useState(false);
   const [daypartingOpen, setDaypartingOpen] = useState(false);
   const [promoteKeywordOpen, setPromoteKeywordOpen] = useState("");
+  const [campaignName, setCampaignName] = useState("");
+  const [campaignBudget, setCampaignBudget] = useState("50");
+  const [campaignTargeting, setCampaignTargeting] = useState<"Automatic" | "Manual">("Automatic");
+  const [maxBidCap, setMaxBidCap] = useState("4.50");
+  const [targetAcos, setTargetAcos] = useState("22.0");
+  const [topSearchModifier, setTopSearchModifier] = useState("45");
+  const [detailPageModifier, setDetailPageModifier] = useState("15");
+
+  function exportSearchTerms() {
+    downloadCsv("amzsphere-search-terms.csv", [
+      ["Search term", "ASIN", "Campaign ID", "Clicks", "Spend", "Conversions", "ACoS", "Automation status"],
+      ...search_terms.map((term) => {
+        const status = exactTerms.has(term.term) ? "Exact target" : negativeTerms.has(term.term) ? "Negative" : "Monitoring";
+        return [term.term, term.asin, term.campaign_id, term.clicks, term.spend, term.conversions, `${term.acos.toFixed(1)}%`, status];
+      }),
+    ]);
+    setExportTermsOpen(false);
+    setMessage(`Exported ${search_terms.length} mock search terms to CSV.`);
+  }
+
+  function createCampaignDraft() {
+    const name = campaignName.trim();
+    const budget = Number(campaignBudget);
+    if (!name || !Number.isFinite(budget) || budget <= 0 || !data) return;
+    const sampleProduct = data.campaigns[0];
+    const draft = {
+      id: `mock-campaign-${crypto.randomUUID()}`,
+      name,
+      asin: sampleProduct?.asin || "MOCK-ASIN",
+      sku: `${campaignTargeting} targeting · $${budget.toFixed(2)}/day`,
+      base_acos: 22,
+      ad_share: 0,
+      avg_cpc: 0,
+      bid_floor: 0,
+      acos_modifier: 1,
+      bid_changes: [],
+      ad_history: [],
+      trailing_acos: null,
+    };
+    setData({ ...data, campaigns: [draft, ...data.campaigns] });
+    setCampaignName("");
+    setCampaignBudget("50");
+    setLaunchCampaignOpen(false);
+    setMessage(`Mock campaign draft "${name}" created locally. Nothing was submitted to Amazon.`);
+  }
 
   useEffect(() => {
     let active = true;
@@ -67,7 +112,6 @@ export default function PpcPage() {
     return () => { active = false; };
   }, [provider]);
 
-  const autonomousBids = true;
   const search_terms = data?.search_terms || [];
   const targeted_exact_keywords = data?.targeted_exact_keywords || [];
   const negative_keywords = data?.negative_keywords || [];
@@ -159,9 +203,9 @@ export default function PpcPage() {
           <h1 className="font-headline-xl text-headline-xl text-on-surface tracking-tight">PPC Ads Engine</h1>
           <div className="flex items-center gap-2 text-[10px] font-semibold text-indigo-600 bg-indigo-50 border border-indigo-200 rounded-md px-3 py-1.5 mt-1">
             <ChartNoAxesCombined size={12} className="mr-1" />
-            Autopilot Bidding: Active
+            Mock Bid Simulator: Ready
           </div>
-          <p className="font-body-md text-body-md text-on-surface-variant mt-2">Autonomous keyword harvesting, algorithmic target bidding &amp; Sponsored Products budget pacing.</p>
+          <p className="font-body-md text-body-md text-on-surface-variant mt-2">Explore sample search terms, campaign metrics, and local bidding configuration examples.</p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <div className="flex items-center gap-1 border border-line rounded-md bg-white px-2 py-0.5 text-xs text-muted">
@@ -308,25 +352,22 @@ export default function PpcPage() {
         <CardHeader className="flex items-center justify-between pb-2">
           <div>
             <h2 className="panel-title">Active Campaign Portfolio</h2>
-            <div className="panel-subtitle">Real-time Amazon Advertising SP-API telemetry &amp; live automated bid interventions.</div>
+            <div className="panel-subtitle">Campaign metrics generated from the local mock dataset.</div>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="outline" onClick={() => {}}>Bulk Adjust Target ACoS</Button>
-            <Button onClick={() => {}}>Reallocate Budget</Button>
+            <Button variant="outline" onClick={() => setBidEngineOpen(true)}>Configure Mock Bidding</Button>
+            <Button onClick={() => setDaypartingOpen(true)}>Review Mock Pacing</Button>
           </div>
         </CardHeader>
         <CardContent className="pt-0">
           <div className="flex items-center gap-4 mb-3">
-            <span className="text-xs font-semibold text-muted">State: All Enabled</span>
-            <span className="text-xs font-semibold text-muted">Format: All (SP, SB, SD)</span>
-            <span className="text-xs font-semibold text-muted">Portfolio: All Lines</span>
-            <Button variant="outline" onClick={() => {}}>Reset Filters</Button>
+            <span className="text-xs font-semibold text-muted">{campaigns.length} sample campaigns</span>
+            <span className="text-xs font-semibold text-muted">No live advertising account connected</span>
           </div>
           <div className="table-wrap">
             <table className="w-full text-left text-xs">
               <thead className="bg-canvas text-[10px] uppercase tracking-wide text-muted">
                 <tr>
-                  <th style={{width:34}}></th>
                   <th className="px-4 py-3">Campaign &amp; Target ASIN</th>
                   <th className="px-4 py-3">Type</th>
                   <th className="px-4 py-3">Status</th>
@@ -339,7 +380,7 @@ export default function PpcPage() {
               </thead>
               <tbody>
                 {loading ? (
-                  <tr><td colSpan={9} className="text-center text-xs text-muted py-4">Loading campaigns…</td></tr>
+                  <tr><td colSpan={8} className="text-center text-xs text-muted py-4">Loading campaigns…</td></tr>
                 ) : campaigns.length ? campaigns.map((c) => {
                   const week = (c.ad_history || []).slice(-7);
                   const spend = week.reduce((sum: number, day: any) => sum + day.spend, 0);
@@ -348,12 +389,11 @@ export default function PpcPage() {
                   const over = acos > 25;
                   return (
                     <tr key={c.name} className="border-t border-line">
-                      <td className="px-4 py-3 tabular-nums text-[10px] text-muted">☐</td>
                       <td className="px-4 py-3">
                         <div className="product-name">{c.name}</div>
                         <div className="product-meta text-[10px]">{c.sku}</div>
                       </td>
-                      <td className="px-4 py-3">{c.type}</td>
+                      <td className="px-4 py-3">Sponsored Products</td>
                       <td className="px-4 py-3"><span className={`status ${over ? "warn" : "good"}`}>{over ? "Over limit" : "Within limit"}</span></td>
                       <td className="px-4 py-3 tabular-nums">${spend.toFixed(0)}</td>
                       <td className="px-4 py-3 tabular-nums">{week.reduce((s: number, d: any) => s + d.impressions, 0)}</td>
@@ -363,14 +403,14 @@ export default function PpcPage() {
                     </tr>
                   );
                 }) : (
-                  <tr><td colSpan={9} className="text-center text-xs text-muted py-4">No campaigns.</td></tr>
+                  <tr><td colSpan={8} className="text-center text-xs text-muted py-4">No campaigns.</td></tr>
                 )}
               </tbody>
             </table>
           </div>
           <div className="flex items-center justify-between mt-3 text-[10px] text-muted">
-            <span>Showing 5 of 52 active campaigns</span>
-            <span className="text-green-700 font-semibold">• All Amazon SP-API sync events verified</span>
+            <span>Showing {campaigns.length} sample campaigns</span>
+            <span className="text-muted font-semibold">Mock data only · no sync events</span>
           </div>
         </CardContent>
       </Card>
@@ -472,21 +512,21 @@ export default function PpcPage() {
         <div className="space-y-4">
           <div>
             <div className="text-xs font-semibold text-indigo-900 mb-1">Campaign Configuration</div>
-            <div className="text-[10px] text-muted mb-3">Create a new Sponsored Products campaign with automated bid rules and budget pacing.</div>
+            <div className="text-[10px] text-muted mb-3">Create a campaign draft visible only in this page session. No ad campaign is launched externally.</div>
             <div className="grid gap-3 sm:grid-cols-2">
               <div>
-                <label className="text-[10px] font-bold text-muted block mb-1">Campaign Name</label>
-                <input className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" placeholder="Q4 Holiday Push" />
+                <label htmlFor="campaign-name" className="text-[10px] font-bold text-muted block mb-1">Campaign Name</label>
+                <input id="campaign-name" value={campaignName} onChange={(event) => setCampaignName(event.target.value)} className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" placeholder="Q4 Holiday Push" />
               </div>
               <div>
-                <label className="text-[10px] font-bold text-muted block mb-1">Daily Budget ($)</label>
-                <input type="number" className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" placeholder="50.00" />
+                <label htmlFor="campaign-budget" className="text-[10px] font-bold text-muted block mb-1">Sample Daily Budget ($)</label>
+                <input id="campaign-budget" type="number" min="0.01" step="0.01" value={campaignBudget} onChange={(event) => setCampaignBudget(event.target.value)} className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" />
               </div>
               <div className="sm:col-span-2">
-                <label className="text-[10px] font-bold text-muted block mb-1">Targeting Type</label>
-                <select className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px]">
-                  <option>Automatic</option>
-                  <option>Manual</option>
+                <label htmlFor="campaign-targeting" className="text-[10px] font-bold text-muted block mb-1">Targeting Type</label>
+                <select id="campaign-targeting" value={campaignTargeting} onChange={(event) => setCampaignTargeting(event.target.value as "Automatic" | "Manual")} className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px]">
+                  <option value="Automatic">Automatic</option>
+                  <option value="Manual">Manual</option>
                 </select>
               </div>
             </div>
@@ -494,15 +534,14 @@ export default function PpcPage() {
           <div className="p-3 rounded-md border border-line bg-indigo-50">
             <div className="text-[10px] font-bold text-indigo-800 mb-1">Capabilities</div>
             <ul className="text-[10px] text-muted space-y-1 list-disc pl-4">
-              <li>Autonomous bid adjustments via PACER</li>
-              <li>Negative keyword auto-harvesting</li>
-              <li>Placement modifiers (Top of Search, PDP)</li>
-              <li>Dayparting boost matrix</li>
+              <li>Draft is added to the sample campaign table</li>
+              <li>Draft disappears when the page is refreshed</li>
+              <li>No ads or Amazon account settings are changed</li>
             </ul>
           </div>
           <div className="flex justify-end gap-2 pt-4">
             <Button variant="outline" onClick={() => setLaunchCampaignOpen(false)}>Cancel</Button>
-            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setLaunchCampaignOpen(false); setMessage("Campaign launched and queued for SP-API submission."); }}>Launch Campaign</Button>
+            <Button disabled={!campaignName.trim() || !Number.isFinite(Number(campaignBudget)) || Number(campaignBudget) <= 0} className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={createCampaignDraft}>Create Mock Draft</Button>
           </div>
         </div>
       </Modal>
@@ -511,25 +550,8 @@ export default function PpcPage() {
         <div className="space-y-4">
           <div>
             <div className="text-xs font-semibold text-indigo-900 mb-1">Export Configuration</div>
-            <div className="text-[10px] text-muted mb-3">Export search term data for offline analysis or upload to external bid management tools.</div>
-            <div className="grid gap-3 sm:grid-cols-2">
-              <div>
-                <label className="text-[10px] font-bold text-muted block mb-1">Format</label>
-                <select className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px]">
-                  <option>CSV</option>
-                  <option>Excel (.xlsx)</option>
-                  <option>JSON</option>
-                </select>
-              </div>
-              <div>
-                <label className="text-[10px] font-bold text-muted block mb-1">Date Range</label>
-                <select className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px]">
-                  <option>Last 7 days</option>
-                  <option>Last 30 days</option>
-                  <option>Last 90 days</option>
-                </select>
-              </div>
-            </div>
+            <div className="text-[10px] text-muted mb-3">Download all {search_terms.length} sample search-term rows, including clicks, spend, conversions, ACoS, and mock status.</div>
+            <p className="text-xs font-semibold text-on-surface">Format: CSV · Scope: all sample rows</p>
           </div>
           <div className="p-3 rounded-md border border-line bg-teal-50">
             <div className="text-[10px] font-bold text-teal-800 mb-1">Capabilities</div>
@@ -541,7 +563,7 @@ export default function PpcPage() {
           </div>
           <div className="flex justify-end gap-2 pt-4">
             <Button variant="outline" onClick={() => setExportTermsOpen(false)}>Cancel</Button>
-            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setExportTermsOpen(false); setMessage("Search terms exported to downloads folder."); }}>Export CSV</Button>
+            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={exportSearchTerms}>Download CSV</Button>
           </div>
         </div>
       </Modal>
@@ -550,30 +572,29 @@ export default function PpcPage() {
         <div className="space-y-4">
           <div>
             <div className="text-xs font-semibold text-indigo-900 mb-1">Bid Engine Settings</div>
-            <div className="text-[10px] text-muted mb-3">Configure the PID 2.4 algorithmic bidding engine that autonomously adjusts bids based on ACoS targets.</div>
+            <div className="text-[10px] text-muted mb-3">Edit local sample settings for the bidding simulator. These values do not change Amazon ads.</div>
             <div className="grid gap-3 sm:grid-cols-2">
               <div>
-                <label className="text-[10px] font-bold text-muted block mb-1">Max Bid Cap ($)</label>
-                <input type="number" step="0.01" className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" defaultValue="4.50" />
+                <label htmlFor="max-bid-cap" className="text-[10px] font-bold text-muted block mb-1">Max Bid Cap ($)</label>
+                <input id="max-bid-cap" type="number" min="0" step="0.01" className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" value={maxBidCap} onChange={(event) => setMaxBidCap(event.target.value)} />
               </div>
               <div>
-                <label className="text-[10px] font-bold text-muted block mb-1">Target ACoS (%)</label>
-                <input type="number" step="0.1" className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" defaultValue="22.0" />
+                <label htmlFor="target-acos" className="text-[10px] font-bold text-muted block mb-1">Target ACoS (%)</label>
+                <input id="target-acos" type="number" min="0" max="100" step="0.1" className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" value={targetAcos} onChange={(event) => setTargetAcos(event.target.value)} />
               </div>
             </div>
           </div>
           <div className="p-3 rounded-md border border-line bg-indigo-50">
             <div className="text-[10px] font-bold text-indigo-800 mb-1">Capabilities</div>
             <ul className="text-[10px] text-muted space-y-1 list-disc pl-4">
-              <li>344 automated bid shifts per day</li>
-              <li>PID 2.4 control loop for ACoS targeting</li>
-              <li>Anti-price-war dampener</li>
-              <li>Hard margin floor protection (18.5%)</li>
+              <li>Configuration remains in this browser session</li>
+              <li>Sample bids are not submitted to an ad account</li>
+              <li>No automated bid shifts are performed</li>
             </ul>
           </div>
           <div className="flex justify-end gap-2 pt-4">
             <Button variant="outline" onClick={() => setBidEngineOpen(false)}>Cancel</Button>
-            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setBidEngineOpen(false); setMessage("Bid engine configuration saved."); }}>Save Configuration</Button>
+            <Button disabled={!Number.isFinite(Number(maxBidCap)) || Number(maxBidCap) < 0 || !Number.isFinite(Number(targetAcos)) || Number(targetAcos) < 0 || Number(targetAcos) > 100} className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setBidEngineOpen(false); setMessage(`Mock bidding settings saved: $${Number(maxBidCap).toFixed(2)} max bid and ${Number(targetAcos).toFixed(1)}% target ACoS.`); }}>Save Mock Settings</Button>
           </div>
         </div>
       </Modal>
@@ -585,12 +606,12 @@ export default function PpcPage() {
             <div className="text-[10px] text-muted mb-3">Adjust bids for specific placement types to control where your ads appear.</div>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-muted">Top of Search (First Page)</span>
-                <input type="number" step="1" className="w-16 h-7 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" defaultValue="45" />%
+                <label htmlFor="top-search-modifier" className="text-muted">Top of Search (First Page)</label>
+                <input id="top-search-modifier" type="number" min="0" max="900" step="1" className="w-16 h-7 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" value={topSearchModifier} onChange={(event) => setTopSearchModifier(event.target.value)} />%
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-muted">Product Detail Pages</span>
-                <input type="number" step="1" className="w-16 h-7 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" defaultValue="15" />%
+                <label htmlFor="detail-page-modifier" className="text-muted">Product Detail Pages</label>
+                <input id="detail-page-modifier" type="number" min="0" max="900" step="1" className="w-16 h-7 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" value={detailPageModifier} onChange={(event) => setDetailPageModifier(event.target.value)} />%
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-muted">Rest of Search</span>

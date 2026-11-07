@@ -8,8 +8,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Modal } from "@/components/ui/modal";
-import { ClientProductProvider } from "@/lib/provider/client";
-import type { Product } from "@/lib/provider/types";
+import { clientProductProvider as provider } from "@/lib/provider/client";
+import { downloadCsv } from "@/lib/csv";
+import type { InventoryScanResult, Product } from "@/lib/provider/types";
 
 function Metric({
   label,
@@ -35,11 +36,28 @@ function Metric({
 }
 
 export default function InventoryPage() {
-  const provider = new ClientProductProvider();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+  const [stockFilter, setStockFilter] = useState("all");
+  const [scanResult, setScanResult] = useState<InventoryScanResult | null>(null);
+  const [shipmentDrafts, setShipmentDrafts] = useState<Array<{
+    id: string;
+    name: string;
+    source: string;
+    destination: string;
+    createdAt: string;
+  }>>([]);
+  const [shipmentName, setShipmentName] = useState("");
+  const [shipmentSource, setShipmentSource] = useState("");
+  const [shipmentDestination, setShipmentDestination] = useState("ONT8 (Moreno Valley, CA)");
+  const [purchaseOrderQuantity, setPurchaseOrderQuantity] = useState("1");
+  const [maxStockValue, setMaxStockValue] = useState("5000");
+  const [bufferDays, setBufferDays] = useState("15");
+  const [leadTimeDays, setLeadTimeDays] = useState("21");
+  const [reorderScope, setReorderScope] = useState<"all" | "critical" | "watch">("all");
+  const [isSaving, setIsSaving] = useState(false);
 
   // Modal states
   const [calculateReorderOpen, setCalculateReorderOpen] = useState(false);
@@ -67,7 +85,115 @@ export default function InventoryPage() {
 
   const lowStock = products.filter((p) => (p.stock / Math.max(p.daily_velocity || 1, 1)) < 15);
   const totalStock = products.reduce((sum, p) => sum + p.stock, 0);
-  const totalVelocity = products.reduce((sum, p) => sum + p.daily_velocity, 0);
+  const stockValue = products.reduce((sum, product) => sum + product.stock * product.unit_cost, 0);
+  const averageSupply = products.length
+    ? products.reduce((sum, product) => sum + product.stock / Math.max(product.daily_velocity, 1), 0) / products.length
+    : 0;
+  const visibleProducts = products.filter((product) => {
+    const days = product.stock / Math.max(product.daily_velocity || 1, 1);
+    if (stockFilter === "critical") return days < 15;
+    if (stockFilter === "watch") return days >= 15 && days < 30;
+    if (stockFilter === "healthy") return days >= 30;
+    return true;
+  });
+
+  async function calculateReorder() {
+    setIsSaving(true);
+    setError("");
+    try {
+      const result = await provider.runInventoryScan("mock-seller", {
+        buffer_days: Number(bufferDays),
+        lead_time_days: Number(leadTimeDays),
+        scope: reorderScope,
+      });
+      const refreshed = await provider.getProducts();
+      setProducts(refreshed.products);
+      setScanResult(result);
+      setMessage(`Mock scan complete: ${result.restock_proposal_count} reorder proposals across ${result.products_scanned} sample SKUs.`);
+      setCalculateReorderOpen(false);
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "Could not calculate mock reorder quantities.");
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
+  function openPurchaseOrder(asin: string) {
+    const product = products.find((item) => item.asin === asin);
+    const targetUnits = product
+      ? Math.max(1, Math.ceil(product.daily_velocity * (product.lead_time_days + 15) - product.stock))
+      : 1;
+    setPurchaseOrderQuantity(String(targetUnits));
+    setCreatePOOpen(asin);
+  }
+
+  async function createPurchaseOrder() {
+    if (!createPOOpen) return;
+    setIsSaving(true);
+    setError("");
+    try {
+      const order = await provider.addPurchaseOrder({
+        product_asin: createPOOpen,
+        units: Number(purchaseOrderQuantity),
+      });
+      setMessage(`Mock purchase order ${order.id} saved as a draft for ${order.units.toLocaleString()} units.`);
+      setCreatePOOpen(null);
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "Could not save purchase-order draft.");
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
+  async function saveMaxStock() {
+    if (!adjustMaxOpen) return;
+    setIsSaving(true);
+    setError("");
+    try {
+      await provider.updateProduct(adjustMaxOpen, { max_stock: Number(maxStockValue) });
+      const refreshed = await provider.getProducts();
+      setProducts(refreshed.products);
+      setMessage(`Mock maximum stock updated for ${adjustMaxOpen}.`);
+      setAdjustMaxOpen(null);
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "Could not update maximum stock.");
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
+  function createShipmentDraft() {
+    const id = `SHIP-${crypto.randomUUID().slice(0, 8).toUpperCase()}`;
+    const draft = {
+      id,
+      name: shipmentName.trim() || "Untitled shipment",
+      source: shipmentSource.trim() || "Unspecified warehouse",
+      destination: shipmentDestination,
+      createdAt: new Date().toLocaleString(),
+    };
+    setShipmentDrafts((existing) => [draft, ...existing]);
+    setMessage(`Mock shipment draft ${id} created locally. No shipment was sent to Amazon.`);
+    setCreateShipmentOpen(false);
+  }
+
+  function exportInventory() {
+    downloadCsv("amzsphere-inventory.csv", [
+      ["ASIN", "SKU", "Product", "Stock", "Daily velocity", "Days of supply", "Status"],
+      ...products.map((product) => {
+        const days = product.stock / Math.max(product.daily_velocity || 1, 1);
+        return [
+          product.asin,
+          product.sku,
+          product.name,
+          product.stock,
+          product.daily_velocity,
+          days.toFixed(1),
+          days < 15 ? "Critical" : days < 30 ? "Watch" : "Optimal",
+        ];
+      }),
+    ]);
+    setMessage(`Exported ${products.length} sample inventory rows to CSV.`);
+  }
 
   return (
     <main className="min-h-screen bg-canvas px-4 py-6 md:px-10 md:py-10">
@@ -86,16 +212,13 @@ export default function InventoryPage() {
           <h1 className="font-headline-xl text-headline-xl text-on-surface tracking-tight">Inventory Hub</h1>
           <div className="flex items-center gap-2 text-[10px] font-semibold text-teal-600 bg-teal-50 border border-teal-200 rounded-md px-3 py-1.5 mt-1">
             <ChartNoAxesCombined size={12} className="mr-1" />
-            Auto-Replenish Sentinel: Active
+            Mock Replenishment Simulator: Ready
           </div>
-          <p className="font-body-md text-body-md text-on-surface-variant mt-2">Multi-channel FBA/FBM pipeline, SKU velocity tracking, low-stock forecasts &amp; warehouse transfer orchestration.</p>
+          <p className="font-body-md text-body-md text-on-surface-variant mt-2">Sample stock, velocity, and reorder proposals calculated from the local mock catalog.</p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <div className="flex items-center gap-1 border border-line rounded-md bg-white px-2 py-0.5 text-xs text-muted">
-            <span>7D</span>
-            <span className="bg-indigo-600 text-white px-1.5 rounded text-[9px]">Last 30 Days</span>
-            <span>90D</span>
-            <span>Projection (60D)</span>
+            <span>Sample stock</span>
           </div>
           <Button variant="outline" onClick={() => setCalculateReorderOpen(true)}>
             Calculate Reorder Quantities
@@ -106,12 +229,30 @@ export default function InventoryPage() {
         </div>
       </header>
 
+      {error && <p role="alert" className="mb-4 rounded-md border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-800">{error}</p>}
+      {message && <p role="status" aria-live="polite" className="mb-4 rounded-md border border-teal-200 bg-teal-50 px-3 py-2 text-sm text-teal-900">{message}</p>}
+      {scanResult && (
+        <section className="mb-6 rounded-lg border border-line bg-white p-4" aria-labelledby="reorder-proposals-heading">
+          <h2 id="reorder-proposals-heading" className="text-sm font-semibold text-on-surface">Latest mock reorder proposals</h2>
+          {scanResult.restock_proposals.length ? (
+            <ul className="mt-2 grid gap-2 text-xs sm:grid-cols-2 lg:grid-cols-3">
+              {scanResult.restock_proposals.map((proposal) => (
+                <li key={proposal.asin} className="rounded border border-line bg-canvas p-2">
+                  <span className="font-semibold">{proposal.name}</span>
+                  <span className="block text-muted">{proposal.restock_qty.toLocaleString()} units · estimated ${proposal.est_restock_cost_usd.toFixed(2)}</span>
+                </li>
+              ))}
+            </ul>
+          ) : <p className="mt-2 text-xs text-muted">No sample SKUs need a reorder.</p>}
+        </section>
+      )}
+
       <div className="metrics metrics-five mb-6">
-        <Metric label="Total Sellable Units" value="48,920" detail="+2.4% vs 30d" accent="blue" tag="IN-STOCK RATE: 99.1%" />
-        <Metric label="Estimated Stock Value" value="$412,850.00" detail="+$514.2k vs last month" accent="teal" tag="COGS: $184.2k" />
-        <Metric label="At-Risk Stock" value="<16 SKUs" detail="Est. last rev: $8,420/wk" accent="rose" tag="IMMEDIATE REORDER REQ." />
-        <Metric label="Average Days of Supply" value="38.5 Days" detail="Target buffer: 30-45 days" accent="teal" tag="Healthy Range" />
-        <Metric label="Inbound &amp; In-Transit" value="14,250 Units" detail="8 Active Shipments" accent="blue" tag="TRANSIT VALUATION: $62.8k" />
+        <Metric label="Total Sample Stock" value={totalStock.toLocaleString()} detail={`Across ${products.length} sample SKUs`} accent="blue" tag="MOCK DATA" />
+        <Metric label="Estimated Stock Cost" value={`$${stockValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`} detail="Calculated from sample unit costs" accent="teal" tag="MOCK COGS" />
+        <Metric label="Critical Stock" value={`${lowStock.length} SKUs`} detail="Under 15 days of sample supply" accent="rose" tag="REORDER REVIEW" />
+        <Metric label="Average Days of Supply" value={`${averageSupply.toFixed(1)} Days`} detail="Computed from local stock and velocity" accent="teal" tag="SAMPLE" />
+        <Metric label="Shipment Drafts" value={shipmentDrafts.length.toLocaleString()} detail="Local demo drafts only" accent="blue" tag="NO AMAZON SUBMISSION" />
       </div>
 
       <section className="section-grid align-items-stretch mb-6">
@@ -240,36 +381,43 @@ export default function InventoryPage() {
             <div className="panel-subtitle">Replenishment calculation including trailing 30d run rate, lead-time buffers, and inbound freight confirmations.</div>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold text-muted">All Stock Statuses</span>
-            <Button variant="outline" onClick={() => {}}>Export CSV</Button>
+            <label className="flex items-center gap-2 text-xs font-semibold text-muted">
+              Stock status
+              <select aria-label="Filter inventory by stock status" className="h-9 rounded-md border border-line bg-white px-2" value={stockFilter} onChange={(event) => setStockFilter(event.target.value)}>
+                <option value="all">All statuses</option>
+                <option value="critical">Critical</option>
+                <option value="watch">Watch</option>
+                <option value="healthy">Healthy</option>
+              </select>
+            </label>
+            <Button variant="outline" onClick={exportInventory}>Export CSV</Button>
             <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => setCalculateReorderOpen(true)}>Bulk PO Generator</Button>
           </div>
         </CardHeader>
         <CardContent className="pt-0">
           <div className="table-wrap">
             <table className="w-full text-left text-xs">
+              <caption className="sr-only">Sample inventory stock levels and reorder actions</caption>
               <thead className="bg-canvas text-[10px] uppercase tracking-wide text-muted">
                 <tr>
-                  <th style={{width:34}}></th>
-                  <th className="px-4 py-3">Product Details</th>
-                  <th className="px-4 py-3">Available Stock</th>
-                  <th className="px-4 py-3">Velocity</th>
-                  <th className="px-4 py-3">Runway</th>
-                  <th className="px-4 py-3">Inbound Suggestion</th>
-                  <th className="px-4 py-3">Status</th>
-                  <th className="px-4 py-3">Action</th>
+                  <th scope="col" className="px-4 py-3">Product Details</th>
+                  <th scope="col" className="px-4 py-3">Available Stock</th>
+                  <th scope="col" className="px-4 py-3">Velocity</th>
+                  <th scope="col" className="px-4 py-3">Runway</th>
+                  <th scope="col" className="px-4 py-3">Inbound Suggestion</th>
+                  <th scope="col" className="px-4 py-3">Status</th>
+                  <th scope="col" className="px-4 py-3">Action</th>
                 </tr>
               </thead>
               <tbody>
                 {loading ? (
-                  <tr><td colSpan={8} className="text-center text-xs text-muted py-4">Loading inventory…</td></tr>
-                ) : products.length ? products.map((product) => {
+                  <tr><td colSpan={7} className="text-center text-xs text-muted py-4">Loading inventory…</td></tr>
+                ) : visibleProducts.length ? visibleProducts.map((product) => {
                   const days = product.stock / Math.max(product.daily_velocity || 1, 1);
                   const fill = Math.min(100, (days / 45) * 100);
                   const tone = days < 15 ? "warn" : days < 30 ? "pending" : "good";
                   return (
                     <tr key={product.asin} className="border-t border-line">
-                      <td className="px-4 py-3 tabular-nums text-[10px] text-muted">☐</td>
                       <td className="px-4 py-3">
                         <div className="product-name">{product.name}</div>
                         <div className="product-meta">{product.sku} · <span className="asin">{product.asin}</span> · Electronics</div>
@@ -311,11 +459,14 @@ export default function InventoryPage() {
                       </td>
                       <td className="px-4 py-3">
                         {days < 15 ? (
-                          <Button variant="outline" onClick={() => setCreatePOOpen(product.asin)}>
+                          <Button variant="outline" onClick={() => openPurchaseOrder(product.asin)}>
                             Create PO
                           </Button>
                         ) : (
-                          <Button variant="outline" onClick={() => setAdjustMaxOpen(product.asin)}>
+                          <Button variant="outline" onClick={() => {
+                            setMaxStockValue(String(product.max_stock ?? 5000));
+                            setAdjustMaxOpen(product.asin);
+                          }}>
                             Adjust Max
                           </Button>
                         )}
@@ -323,28 +474,19 @@ export default function InventoryPage() {
                     </tr>
                   );
                 }) : (
-                  <tr><td colSpan={8} className="text-center text-xs text-muted py-4">No products in catalog.</td></tr>
+                  <tr><td colSpan={7} className="text-center text-xs text-muted py-4">No products match this stock filter.</td></tr>
                 )}
               </tbody>
             </table>
           </div>
           <div className="flex items-center justify-between mt-3 text-[10px] text-muted">
-            <span>Showing 5 of 1,428 tracked items</span>
-            <div className="flex items-center gap-1">
-              <button className="button button-outline button-sm disabled">Previous</button>
-              <button className="button button-primary button-sm">1</button>
-              <button className="button button-outline button-sm">2</button>
-              <button className="button button-outline button-sm">3</button>
-              <span className="px-2 text-[10px]">...</span>
-              <button className="button button-outline button-sm">286</button>
-              <button className="button button-outline button-sm">Next</button>
-            </div>
+            <span>Showing {visibleProducts.length} of {products.length} sample SKUs</span>
           </div>
         </CardContent>
       </Card>
 
       <p className="text-right text-[10px] text-muted">
-        AmzSphere High-Frequency Sentinel Protocol: 256-bit AES KMS SP-API Gated. Safe dry-run verified. · Region: US-EAST-1 · Node: Pod-FBA-04 · Latency: 18ms
+        Inventory scan and stock metrics are simulated from local sample data. No Amazon shipment or inventory request is sent.
       </p>
 
       {/* Modals */}
@@ -352,22 +494,22 @@ export default function InventoryPage() {
         <div className="space-y-4">
           <div>
             <div className="text-xs font-semibold text-indigo-900 mb-1">Reorder Calculation</div>
-            <div className="text-[10px] text-muted mb-3">Calculate optimal reorder quantities based on trailing velocity, lead-time buffers, and inbound freight confirmations.</div>
+            <div className="text-[10px] text-muted mb-3">Calculate sample reorder quantities using mock velocity, lead time, and buffer values.</div>
             <div className="grid gap-3 sm:grid-cols-2">
               <div>
-                <label className="text-[10px] font-bold text-muted block mb-1">Buffer Days</label>
-                <input type="number" step="1" className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" defaultValue="15" />
+                <label htmlFor="buffer-days" className="text-[10px] font-bold text-muted block mb-1">Buffer Days</label>
+                <input id="buffer-days" type="number" min="0" max="365" step="1" className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" value={bufferDays} onChange={(event) => setBufferDays(event.target.value)} />
               </div>
               <div>
-                <label className="text-[10px] font-bold text-muted block mb-1">Lead Time (days)</label>
-                <input type="number" step="1" className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" defaultValue="21" />
+                <label htmlFor="lead-time-days" className="text-[10px] font-bold text-muted block mb-1">Lead Time (days)</label>
+                <input id="lead-time-days" type="number" min="0" max="365" step="1" className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" value={leadTimeDays} onChange={(event) => setLeadTimeDays(event.target.value)} />
               </div>
               <div className="sm:col-span-2">
-                <label className="text-[10px] font-bold text-muted block mb-1">Scope</label>
-                <select className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px]">
-                  <option>All low-stock SKUs</option>
-                  <option>Critical only (&lt;15 days)</option>
-                  <option>Watch only (&lt;30 days)</option>
+                <label htmlFor="reorder-scope" className="text-[10px] font-bold text-muted block mb-1">Scope</label>
+                <select id="reorder-scope" className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px]" value={reorderScope} onChange={(event) => setReorderScope(event.target.value as "all" | "critical" | "watch")}>
+                  <option value="all">All low-stock SKUs</option>
+                  <option value="critical">Critical only (&lt;15 days)</option>
+                  <option value="watch">Watch only (15–30 days)</option>
                 </select>
               </div>
             </div>
@@ -375,15 +517,15 @@ export default function InventoryPage() {
           <div className="p-3 rounded-md border border-line bg-indigo-50">
             <div className="text-[10px] font-bold text-indigo-800 mb-1">Capabilities</div>
             <ul className="text-[10px] text-muted space-y-1 list-disc pl-4">
-              <li>Auto-calculate reorder quantities per SKU</li>
-              <li>Factor in lead-time and buffer days</li>
-              <li>Generate bulk purchase orders</li>
-              <li>Export to CSV or send to vendor</li>
+              <li>Calculate proposals from each SKU's sample velocity</li>
+              <li>Apply the lead-time and buffer days above</li>
+              <li>Review the resulting reorder proposals below</li>
+              <li>Create separate local purchase-order drafts as needed</li>
             </ul>
           </div>
           <div className="flex justify-end gap-2 pt-4">
             <Button variant="outline" onClick={() => setCalculateReorderOpen(false)}>Cancel</Button>
-            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setCalculateReorderOpen(false); setMessage("Reorder quantities calculated and PO drafts generated."); }}>Calculate Reorder</Button>
+            <Button disabled={isSaving || !Number.isInteger(Number(bufferDays)) || Number(bufferDays) < 0 || Number(bufferDays) > 365 || !Number.isInteger(Number(leadTimeDays)) || Number(leadTimeDays) < 0 || Number(leadTimeDays) > 365} className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { void calculateReorder(); }}>{isSaving ? "Calculating…" : "Calculate Reorder"}</Button>
           </div>
         </div>
       </Modal>
@@ -392,19 +534,19 @@ export default function InventoryPage() {
         <div className="space-y-4">
           <div>
             <div className="text-xs font-semibold text-indigo-900 mb-1">Inbound Shipment</div>
-            <div className="text-[10px] text-muted mb-3">Create a new inbound shipment to Amazon FBA fulfillment centers.</div>
+            <div className="text-[10px] text-muted mb-3">Create a local sample shipment draft. This does not submit anything to Amazon.</div>
             <div className="grid gap-3 sm:grid-cols-2">
               <div>
-                <label className="text-[10px] font-bold text-muted block mb-1">Shipment Name</label>
-                <input className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" placeholder="Q4 Holiday Replenishment" />
+                <label htmlFor="shipment-name" className="text-[10px] font-bold text-muted block mb-1">Shipment Name</label>
+                <input id="shipment-name" value={shipmentName} onChange={(event) => setShipmentName(event.target.value)} className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" placeholder="Q4 Holiday Replenishment" />
               </div>
               <div>
-                <label className="text-[10px] font-bold text-muted block mb-1">Ship From</label>
-                <input className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" placeholder="Warehouse West" />
+                <label htmlFor="shipment-source" className="text-[10px] font-bold text-muted block mb-1">Ship From</label>
+                <input id="shipment-source" value={shipmentSource} onChange={(event) => setShipmentSource(event.target.value)} className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" placeholder="Warehouse West" />
               </div>
               <div className="sm:col-span-2">
-                <label className="text-[10px] font-bold text-muted block mb-1">Ship To (FBA)</label>
-                <select className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px]">
+                <label htmlFor="shipment-destination" className="text-[10px] font-bold text-muted block mb-1">Mock Ship To</label>
+                <select id="shipment-destination" value={shipmentDestination} onChange={(event) => setShipmentDestination(event.target.value)} className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px]">
                   <option>ONT8 (Moreno Valley, CA)</option>
                   <option>SBDI (San Bernardino, CA)</option>
                   <option>Other FBA center</option>
@@ -415,15 +557,14 @@ export default function InventoryPage() {
           <div className="p-3 rounded-md border border-line bg-teal-50">
             <div className="text-[10px] font-bold text-teal-800 mb-1">Capabilities</div>
             <ul className="text-[10px] text-muted space-y-1 list-disc pl-4">
-              <li>Create FBA inbound shipments via SP-API</li>
-              <li>Generate shipment labels and BOLs</li>
-              <li>Track receiving status in real-time</li>
-              <li>Auto-adjust inventory on receiving</li>
+              <li>Record a draft in this page's temporary state</li>
+              <li>Review the destination selected above</li>
+              <li>Drafts are cleared when the page is refreshed</li>
             </ul>
           </div>
           <div className="flex justify-end gap-2 pt-4">
             <Button variant="outline" onClick={() => setCreateShipmentOpen(false)}>Cancel</Button>
-            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setCreateShipmentOpen(false); setMessage("Inbound shipment created and queued for SP-API submission."); }}>Create Shipment</Button>
+            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={createShipmentDraft}>Create Mock Draft</Button>
           </div>
         </div>
       </Modal>
@@ -431,7 +572,21 @@ export default function InventoryPage() {
       <Modal open={viewManifestsOpen} onClose={() => setViewManifestsOpen(false)} title="Flight Manifests — View">
         <div className="space-y-4">
           <div className="p-3 rounded-md border border-line bg-white/50">
-            <div className="text-[10px] font-bold text-indigo-900 mb-1">Active Inbound Shipments</div>
+            <div className="text-[10px] font-bold text-indigo-900 mb-1">Local shipment drafts</div>
+            {shipmentDrafts.length ? (
+              <ul className="mb-3 space-y-2" aria-label="Local shipment drafts">
+                {shipmentDrafts.map((draft) => (
+                  <li key={draft.id} className="rounded border border-line bg-white p-2">
+                    <div className="text-[10px] text-muted">{draft.id} · Created {draft.createdAt}</div>
+                    <div className="text-xs font-semibold text-indigo-900">{draft.name}</div>
+                    <div className="text-[10px] text-muted">{draft.source} → {draft.destination}</div>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="mb-3 text-[10px] text-muted">No drafts created in this page session yet.</p>
+            )}
+            <div className="text-[10px] font-bold text-indigo-900 mb-1">Static sample shipment records</div>
             <div className="grid gap-2 sm:grid-cols-3">
               <div className="p-2 rounded border border-line bg-white">
                 <div className="text-[10px] text-muted mb-1">FBA-INB-99412</div>
@@ -461,30 +616,30 @@ export default function InventoryPage() {
           <div className="space-y-4">
             <div>
               <div className="text-xs font-semibold text-indigo-900 mb-1">PO Details</div>
-              <div className="text-[10px] text-muted mb-3">Generate a purchase order draft for critical replenishment.</div>
+              <div className="text-[10px] text-muted mb-3">Save a sample purchase-order draft in local mock state.</div>
               <div className="grid gap-3 sm:grid-cols-2">
                 <div>
                   <label className="text-[10px] font-bold text-muted block mb-1">ASIN</label>
                   <span className="text-xs text-on-surface">{createPOOpen}</span>
                 </div>
                 <div>
-                  <label className="text-[10px] font-bold text-muted block mb-1">Quantity</label>
-                  <input type="number" className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" defaultValue="2500" />
+                  <label htmlFor="purchase-order-quantity" className="text-[10px] font-bold text-muted block mb-1">Quantity</label>
+                  <input id="purchase-order-quantity" type="number" min="1" step="1" value={purchaseOrderQuantity} onChange={(event) => setPurchaseOrderQuantity(event.target.value)} className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" />
                 </div>
               </div>
             </div>
             <div className="p-3 rounded-md border border-line bg-amber-50">
-              <div className="text-[10px] font-bold text-amber-800 mb-1">Capabilities</div>
+              <div className="text-[10px] font-bold text-amber-800 mb-1">Mock workflow</div>
               <ul className="text-[10px] text-muted space-y-1 list-disc pl-4">
                 <li>Draft POs for below-threshold SKUs</li>
-                <li>Auto-calculate quantity based on velocity</li>
-                <li>Route to approver for signoff</li>
-                <li>Track PO status in activity log</li>
+                <li>Quantity starts from the sample demand estimate</li>
+                <li>Draft is held in temporary mock state</li>
+                <li>No vendor or approval service is contacted</li>
               </ul>
             </div>
             <div className="flex justify-end gap-2 pt-4">
               <Button variant="outline" onClick={() => setCreatePOOpen(null)}>Cancel</Button>
-              <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setCreatePOOpen(null); setMessage(`PO draft created for ${createPOOpen}.`); }}>Create PO Draft</Button>
+              <Button disabled={isSaving || !Number.isInteger(Number(purchaseOrderQuantity)) || Number(purchaseOrderQuantity) <= 0} className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { void createPurchaseOrder(); }}>{isSaving ? "Saving…" : "Create Mock PO Draft"}</Button>
             </div>
           </div>
         </Modal>
@@ -502,14 +657,14 @@ export default function InventoryPage() {
                   <span className="text-xs text-on-surface">{adjustMaxOpen}</span>
                 </div>
                 <div>
-                  <label className="text-[10px] font-bold text-muted block mb-1">Max Units</label>
-                  <input type="number" className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" defaultValue="5000" />
+                  <label htmlFor="max-stock-value" className="text-[10px] font-bold text-muted block mb-1">Max Units</label>
+                  <input id="max-stock-value" type="number" min="0" step="1" value={maxStockValue} onChange={(event) => setMaxStockValue(event.target.value)} className="w-full h-9 rounded-md border border-line bg-white px-2 text-[10px] focus:outline-none focus:border-teal-700" />
                 </div>
               </div>
             </div>
             <div className="flex justify-end gap-2 pt-4">
               <Button variant="outline" onClick={() => setAdjustMaxOpen(null)}>Cancel</Button>
-              <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setAdjustMaxOpen(null); setMessage(`Max stock adjusted for ${adjustMaxOpen}.`); }}>Save Adjustment</Button>
+              <Button disabled={isSaving || !Number.isInteger(Number(maxStockValue)) || Number(maxStockValue) < 0} className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { void saveMaxStock(); }}>{isSaving ? "Saving…" : "Save Mock Adjustment"}</Button>
             </div>
           </div>
         </Modal>

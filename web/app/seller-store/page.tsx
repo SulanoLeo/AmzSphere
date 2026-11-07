@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Modal } from "@/components/ui/modal";
-import { ClientProductProvider } from "@/lib/provider/client";
+import { clientProductProvider as provider } from "@/lib/provider/client";
 import type { SellerStoreItem } from "@/lib/provider/types";
 
 function Metric({
@@ -35,12 +35,13 @@ function Metric({
 }
 
 export default function SellerStorePage() {
-  const provider = new ClientProductProvider();
   const [sellerStore, setSellerStore] = useState<SellerStoreItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [sellerStoreAddAsin, setSellerStoreAddAsin] = useState("");
   const [message, setMessage] = useState("");
+  const [sortStockDescending, setSortStockDescending] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
 
   // Modal states
   const [syncInsightsOpen, setSyncInsightsOpen] = useState(false);
@@ -70,13 +71,21 @@ export default function SellerStorePage() {
   const products = sellerStore;
   const visible = products.filter((p) => p.visible);
   const hidden = products.filter((p) => !p.visible);
+  const sortedProducts = [...products].sort((a, b) => sortStockDescending ? b.stock - a.stock : a.stock - b.stock);
 
-  async function toggleVisibility(id: string, visible: boolean) {
+  async function confirmVisibilityChange() {
+    if (!toggleVisibilityOpen) return;
+    setIsSaving(true);
+    setError("");
     try {
-      await provider.toggleSellerStoreVisibility(id, visible);
-      setToggleVisibilityOpen({ id, visible: !visible });
+      await provider.toggleSellerStoreVisibility(toggleVisibilityOpen.id, toggleVisibilityOpen.visible);
+      setSellerStore(await provider.getSellerStore());
+      setMessage(`Sample product ${toggleVisibilityOpen.visible ? "shown" : "hidden"} in the mock storefront.`);
+      setToggleVisibilityOpen(null);
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "Failed to update visibility");
+    } finally {
+      setIsSaving(false);
     }
   }
 
@@ -111,10 +120,10 @@ export default function SellerStorePage() {
           <div className="flex items-center gap-2 text-[10px] font-semibold text-teal-600 bg-teal-50 border border-teal-200 rounded-md px-3 py-1.5 mt-1">
             <span className="inline-flex items-center gap-1">
               <span className="w-2 h-2 rounded-full bg-teal-500" />
-              Store Status: Live on Amazon US
+              Mock Store Preview · No Amazon connection
             </span>
           </div>
-          <p className="font-body-md text-body-md text-on-surface-variant mt-2">Coordinate brand navigation, visual hierarchy, dynamic inventory-synced strategy pages, customer funnels, and real-time Amazon Brand Insights.</p>
+          <p className="font-body-md text-body-md text-on-surface-variant mt-2">Preview sample storefront pages and manage the visibility of products in temporary mock state.</p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <div className="flex items-center gap-1 border border-line rounded-md bg-white px-2 py-0.5 text-xs text-muted">
@@ -125,13 +134,13 @@ export default function SellerStorePage() {
             Sync Store Insights
           </Button>
           <Button variant="outline" onClick={() => setPreviewStorefrontOpen(true)}>
-            Preview Live Storefront
+            Preview Mock Storefront
           </Button>
           <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => setNewPageOpen(true)}>
             + New Page / Subcategory
           </Button>
           <Button className="bg-green-600 text-white hover:bg-green-700" onClick={() => setPublishOpen(true)}>
-            Publish Changes to Amazon
+            Review Mock Changes
           </Button>
         </div>
       </header>
@@ -215,8 +224,8 @@ export default function SellerStorePage() {
             <div className="panel-subtitle">6 Pages / 2 Sub-Levels</div>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold text-muted">Status: All (Live &amp; Draft)</span>
-            <Button variant="outline" onClick={() => {}}>Sort by: 30D Sales (GMV) ▼</Button>
+            <span className="text-xs font-semibold text-muted">Status: All (Sample &amp; Draft)</span>
+            <span className="text-xs font-semibold text-muted">Sample navigation metrics</span>
           </div>
         </CardHeader>
         <CardContent className="pt-0">
@@ -224,7 +233,6 @@ export default function SellerStorePage() {
             <table className="w-full text-left text-xs">
               <thead className="bg-canvas text-[10px] uppercase tracking-wide text-muted">
                 <tr>
-                  <th style={{width:34}}></th>
                   <th className="px-4 py-3">Page Name &amp; URL Path</th>
                   <th className="px-4 py-3">Status</th>
                   <th className="px-4 py-3 tabular-nums">30D Visitors</th>
@@ -237,12 +245,11 @@ export default function SellerStorePage() {
               </thead>
               <tbody>
                 <tr key="home" className="border-t border-line">
-                  <td className="px-4 py-3 tabular-nums text-[10px] text-muted">☐</td>
                   <td className="px-4 py-3">
                     <div className="product-name">Home Page</div>
                     <div className="product-meta text-[10px] text-muted">Path: /</div>
                   </td>
-                  <td className="px-4 py-3"><Badge className="bg-teal-50 text-teal-800 border-teal-200">Live</Badge></td>
+                  <td className="px-4 py-3"><Badge className="bg-teal-50 text-teal-800 border-teal-200">Sample</Badge></td>
                   <td className="px-4 py-3 tabular-nums">69,420</td>
                   <td className="px-4 py-3 tabular-nums">$194,280</td>
                   <td className="px-4 py-3 tabular-nums">5.84%</td>
@@ -256,12 +263,11 @@ export default function SellerStorePage() {
                   </td>
                 </tr>
                 <tr key="audio" className="border-t border-line">
-                  <td className="px-4 py-3 tabular-nums text-[10px] text-muted">☐</td>
                   <td className="px-4 py-3">
                     <div className="product-name">Audio / Acoustics</div>
                     <div className="product-meta text-[10px] text-muted">Path: /audio</div>
                   </td>
-                  <td className="px-4 py-3"><Badge className="bg-teal-50 text-teal-800 border-teal-200">Live</Badge></td>
+                  <td className="px-4 py-3"><Badge className="bg-teal-50 text-teal-800 border-teal-200">Sample</Badge></td>
                   <td className="px-4 py-3 tabular-nums">32,110</td>
                   <td className="px-4 py-3 tabular-nums">$82,410</td>
                   <td className="px-4 py-3 tabular-nums">6.12%</td>
@@ -275,7 +281,6 @@ export default function SellerStorePage() {
                   </td>
                 </tr>
                 <tr key="solar" className="border-t border-line">
-                  <td className="px-4 py-3 tabular-nums text-[10px] text-muted">☐</td>
                   <td className="px-4 py-3">
                     <div className="product-name">Solar Power Hub</div>
                     <div className="product-meta text-[10px] text-muted">Path: /solar-gear · Update</div>
@@ -294,12 +299,11 @@ export default function SellerStorePage() {
                   </td>
                 </tr>
                 <tr key="office" className="border-t border-line">
-                  <td className="px-4 py-3 tabular-nums text-[10px] text-muted">☐</td>
                   <td className="px-4 py-3">
                     <div className="product-name">Office &amp; Desk Setup</div>
                     <div className="product-meta text-[10px] text-muted">Path: /workstation</div>
                   </td>
-                  <td className="px-4 py-3"><Badge className="bg-teal-50 text-teal-800 border-teal-200">Live</Badge></td>
+                  <td className="px-4 py-3"><Badge className="bg-teal-50 text-teal-800 border-teal-200">Sample</Badge></td>
                   <td className="px-4 py-3 tabular-nums">12,640</td>
                   <td className="px-4 py-3 tabular-nums">$31,850</td>
                   <td className="px-4 py-3 tabular-nums">5.40%</td>
@@ -313,12 +317,11 @@ export default function SellerStorePage() {
                   </td>
                 </tr>
                 <tr key="deals" className="border-t border-line">
-                  <td className="px-4 py-3 tabular-nums text-[10px] text-muted">☐</td>
                   <td className="px-4 py-3">
                     <div className="product-name">Deals &amp; Bundles</div>
                     <div className="product-meta text-[10px] text-muted">Path: /deals</div>
                   </td>
-                  <td className="px-4 py-3"><Badge className="bg-teal-50 text-teal-800 border-teal-200">Live</Badge></td>
+                  <td className="px-4 py-3"><Badge className="bg-teal-50 text-teal-800 border-teal-200">Sample</Badge></td>
                   <td className="px-4 py-3 tabular-nums">8,210</td>
                   <td className="px-4 py-3 tabular-nums">$28,120</td>
                   <td className="px-4 py-3 tabular-nums">7.10%</td>
@@ -332,7 +335,6 @@ export default function SellerStorePage() {
                   </td>
                 </tr>
                 <tr key="fitness" className="border-t border-line">
-                  <td className="px-4 py-3 tabular-nums text-[10px] text-muted">☐</td>
                   <td className="px-4 py-3">
                     <div className="product-name">Fitness Essentials</div>
                     <div className="product-meta text-[10px] text-muted">Path: /fitness</div>
@@ -357,6 +359,41 @@ export default function SellerStorePage() {
             <span>Showing 6 of 6 Storefront Pages</span>
             <span className="text-muted">Aggregate 30D Sales: $382,788.00 · Global CVR: 5.62%</span>
           </div>
+        </CardContent>
+      </Card>
+
+      {error && <p role="alert" className="mb-4 rounded-md border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-800">{error}</p>}
+      {message && <p role="status" aria-live="polite" className="mb-4 rounded-md border border-teal-200 bg-teal-50 px-3 py-2 text-sm text-teal-900">{message}</p>}
+
+      <Card className="mb-6">
+        <CardHeader className="flex items-center justify-between pb-2">
+          <div>
+            <h2 className="panel-title">Mock Store Product Visibility</h2>
+            <div className="panel-subtitle">{visible.length} shown · {hidden.length} hidden · changes last only in mock state</div>
+          </div>
+          <Button variant="outline" onClick={() => setSortStockDescending((descending) => !descending)}>
+            Sort sample stock: {sortStockDescending ? "High to low" : "Low to high"}
+          </Button>
+        </CardHeader>
+        <CardContent className="pt-0">
+          {loading ? <p className="py-4 text-center text-xs text-muted">Loading mock products…</p> : sortedProducts.length ? (
+            <ul className="divide-y divide-line">
+              {sortedProducts.map((product) => (
+                <li key={product.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
+                  <div>
+                    <p className="text-xs font-semibold text-on-surface">{product.name}</p>
+                    <p className="text-[10px] text-muted">{product.asin} · {product.stock.toLocaleString()} sample units · {product.visible ? "Shown" : "Hidden"}</p>
+                  </div>
+                  <Button
+                    variant="outline"
+                    onClick={() => setToggleVisibilityOpen({ id: product.id, visible: !product.visible })}
+                  >
+                    {product.visible ? "Hide from mock store" : "Show in mock store"}
+                  </Button>
+                </li>
+              ))}
+            </ul>
+          ) : <p className="py-4 text-center text-xs text-muted">No products in the mock store yet.</p>}
         </CardContent>
       </Card>
 
@@ -390,8 +427,8 @@ export default function SellerStorePage() {
               <div className="text-xs font-semibold text-indigo-900 mb-1">Hero Stockout — GaN65W Charger</div>
               <div className="text-[10px] text-muted mb-3">Featured grid tile only has 68 units remaining in FBA (35 days). One-click auto-swap will replace with next-best performing equivalent from backup inventory, maintaining box dominance.</div>
               <div className="flex gap-2">
-                <Button className="bg-indigo-600 text-white text-[10px] px-3 py-1.5">One-Click Auto-Swap Tile</Button>
-                <Button variant="outline" className="text-[10px] px-3 py-1.5">View Variant Analysis</Button>
+                <Button className="bg-indigo-600 text-white text-[10px] px-3 py-1.5" onClick={() => setMessage("Demo tile swap previewed; no storefront content was changed.")}>One-Click Auto-Swap Tile</Button>
+                <Button variant="outline" className="text-[10px] px-3 py-1.5" onClick={() => setMessage("Variant analysis is illustrative sample data only.")}>View Variant Analysis</Button>
               </div>
             </div>
             <div className="p-4 rounded-md border border-line bg-white/50">
@@ -400,10 +437,10 @@ export default function SellerStorePage() {
                 <Badge className="bg-teal-50 text-teal-800 border-teal-200">ATEP v4.2</Badge>
               </div>
               <div className="text-xs font-semibold text-indigo-900 mb-1">Holiday Header vs Minimalist Brand</div>
-              <div className="text-[10px] text-muted mb-3">Amazon Storefront Experiment #ST-EXP-44 is running. Variant B (Lifestyle Minimalist) is attributing +41.9% attributed GMV over 14 days of live citation.</div>
+              <div className="text-[10px] text-muted mb-3">Illustrative storefront experiment #ST-EXP-44. Variant B shows a sample +41.9% GMV attribution; no live experiment or Amazon data is connected.</div>
               <div className="flex gap-2">
-                <Button className="bg-indigo-600 text-white text-[10px] px-3 py-1.5">View Experiment &amp; Finalize</Button>
-                <Button variant="outline" className="text-[10px] px-3 py-1.5">Review Data</Button>
+                <Button className="bg-indigo-600 text-white text-[10px] px-3 py-1.5" onClick={() => setMessage("Demo experiment preview opened; no storefront changes were applied.")}>View Experiment &amp; Finalize</Button>
+                <Button variant="outline" className="text-[10px] px-3 py-1.5" onClick={() => setMessage("Experiment metrics shown are illustrative sample data.")}>Review Data</Button>
               </div>
             </div>
           </div>
@@ -411,7 +448,7 @@ export default function SellerStorePage() {
       </Card>
 
       <div className="flex items-center justify-between mt-6 text-[10px] text-muted">
-        <span>· SP-API PB2B Quotes Stream: ACTIVE · TLS 1.3 Amazon Business Authenticated · Dry-Run Pipeline Safe (Zero accidental push)</span>
+        <span>Sample storefront data only · no Amazon connection or publishing</span>
         <div className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-teal-500" />
           <span className="text-xs text-muted">Node Pod: us-east-1-pod-09</span>
@@ -424,7 +461,7 @@ export default function SellerStorePage() {
         <div className="space-y-4">
           <div>
             <div className="text-xs font-semibold text-indigo-900 mb-1">Store Insights Sync</div>
-            <div className="text-[10px] text-muted mb-3">Pull traffic, conversion, and revenue metrics from Amazon Brand Analytics and Store Insights API.</div>
+            <div className="text-[10px] text-muted mb-3">Review the bundled sample traffic, conversion, and revenue metrics. No Amazon analytics service is connected.</div>
             <div className="grid gap-3 sm:grid-cols-2">
               <div>
                 <label className="text-[10px] font-bold text-muted block mb-1">Marketplace</label>
@@ -455,24 +492,24 @@ export default function SellerStorePage() {
           </div>
           <div className="flex justify-end gap-2 pt-4">
             <Button variant="outline" onClick={() => setSyncInsightsOpen(false)}>Cancel</Button>
-            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setSyncInsightsOpen(false); setMessage("Store insights synced from Amazon Brand Analytics."); }}>Sync Insights</Button>
+            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setSyncInsightsOpen(false); setMessage("Sample storefront insights are already displayed; no external sync was performed."); }}>Use Sample Insights</Button>
           </div>
         </div>
       </Modal>
 
-      <Modal open={previewStorefrontOpen} onClose={() => setPreviewStorefrontOpen(false)} title="Preview Live Storefront">
+      <Modal open={previewStorefrontOpen} onClose={() => setPreviewStorefrontOpen(false)} title="Preview Sample Storefront">
         <div className="space-y-4">
           <div className="p-3 rounded-md border border-line bg-white/50">
             <div className="text-[10px] font-bold text-indigo-900 mb-1">Storefront Preview</div>
-            <div className="text-[10px] text-muted mb-3">See how your storefront appears to shoppers on Amazon. Preview reflects latest published changes.</div>
+            <div className="text-[10px] text-muted mb-3">Preview the included sample storefront records. Nothing is published or connected to Amazon.</div>
             <div className="grid gap-2 sm:grid-cols-2">
               <div className="p-3 rounded border border-line bg-white">
                 <div className="text-[10px] text-muted mb-1">Home Page</div>
-                <div className="text-xs font-semibold text-indigo-900">Live · 69,420 visitors (30d)</div>
+                <div className="text-xs font-semibold text-indigo-900">Sample · 69,420 visitors (30d)</div>
               </div>
               <div className="p-3 rounded border border-line bg-white">
                 <div className="text-[10px] text-muted mb-1">Audio / Acoustics</div>
-                <div className="text-xs font-semibold text-indigo-900">Live · 32,110 visitors (30d)</div>
+                <div className="text-xs font-semibold text-indigo-900">Sample · 32,110 visitors (30d)</div>
               </div>
             </div>
           </div>
@@ -515,8 +552,8 @@ export default function SellerStorePage() {
             <ul className="text-[10px] text-muted space-y-1 list-disc pl-4">
               <li>Create category and subcategory pages</li>
               <li>Choose layout templates</li>
-              <li>Link Sponsored Brands campaigns</li>
-              <li>Publish to Amazon Store Builder</li>
+              <li>Keep the new page as a sample draft</li>
+              <li>Review the mock page record locally</li>
             </ul>
           </div>
           <div className="flex justify-end gap-2 pt-4">
@@ -526,11 +563,11 @@ export default function SellerStorePage() {
         </div>
       </Modal>
 
-      <Modal open={publishOpen} onClose={() => setPublishOpen(false)} title="Publish Changes to Amazon — Confirm">
+      <Modal open={publishOpen} onClose={() => setPublishOpen(false)} title="Review Mock Store Changes">
         <div className="space-y-4">
           <div>
             <div className="text-xs font-semibold text-indigo-900 mb-1">Publish Storefront</div>
-            <div className="text-[10px] text-muted mb-3">Publish all draft changes to your live Amazon Brand Store. Requires approver role.</div>
+            <div className="text-[10px] text-muted mb-3">This demo can only acknowledge a local mock review; it cannot publish to an Amazon storefront.</div>
             <div className="p-3 rounded-md border border-line bg-amber-50">
               <div className="text-[10px] font-bold text-amber-800 mb-1">Pending Changes</div>
               <ul className="text-[10px] text-muted space-y-1 list-disc pl-4">
@@ -542,7 +579,7 @@ export default function SellerStorePage() {
           </div>
           <div className="flex justify-end gap-2 pt-4">
             <Button variant="outline" onClick={() => setPublishOpen(false)}>Cancel</Button>
-            <Button className="bg-green-600 text-white hover:bg-green-700" onClick={() => { setPublishOpen(false); setMessage("Storefront changes published to Amazon."); }}>Publish</Button>
+            <Button className="bg-green-600 text-white hover:bg-green-700" onClick={() => { setPublishOpen(false); setMessage("Mock storefront changes reviewed locally. Nothing was published."); }}>Mark Reviewed</Button>
           </div>
         </div>
       </Modal>
@@ -577,17 +614,19 @@ export default function SellerStorePage() {
           <div className="space-y-4">
             <div>
               <div className="text-xs font-semibold text-indigo-900 mb-1">Visibility Change</div>
-              <div className="text-[10px] text-muted mb-3">Show or hide this product from shoppers on your seller storefront.</div>
+              <div className="text-[10px] text-muted mb-3">Change this product's visibility in the sample storefront state.</div>
               <div className="p-3 rounded-md border border-line bg-white/50">
                 <div className="text-[10px] font-bold text-on-surface mb-1">Action</div>
                 <div className="text-xs font-semibold text-indigo-900">
-                  {toggleVisibilityOpen.visible ? "Hide product from storefront" : "Show product on storefront"}
+                  {toggleVisibilityOpen.visible ? "Show product in mock storefront" : "Hide product from mock storefront"}
                 </div>
               </div>
             </div>
             <div className="flex justify-end gap-2 pt-4">
               <Button variant="outline" onClick={() => setToggleVisibilityOpen(null)}>Cancel</Button>
-              <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { void provider.toggleSellerStoreVisibility(toggleVisibilityOpen.id, !toggleVisibilityOpen.visible); setToggleVisibilityOpen(null); }}>Confirm</Button>
+              <Button disabled={isSaving} className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { void confirmVisibilityChange(); }}>
+                {isSaving ? "Saving…" : "Confirm Mock Change"}
+              </Button>
             </div>
           </div>
         </Modal>

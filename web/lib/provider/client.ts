@@ -13,6 +13,8 @@ import type {
   ListingVersion,
   Seller,
   SyncState,
+  InventoryScanResult,
+  InventoryScanOptions,
   SellerStoreItem,
   PpcData,
   Review,
@@ -119,6 +121,14 @@ export class ClientProductProvider {
     return json<PurchaseOrder[]>("/api/purchase-orders");
   }
 
+  async addPurchaseOrder(order: Pick<PurchaseOrder, "product_asin" | "units">): Promise<PurchaseOrder> {
+    return json<PurchaseOrder>("/api/purchase-orders", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(order),
+    });
+  }
+
   async getOrders(): Promise<Order[]> {
     return json<Order[]>("/api/orders");
   }
@@ -161,11 +171,11 @@ export class ClientProductProvider {
     return json<SyncState>("/api/sync-state");
   }
 
-  async runInventoryScan(sellerId: string): Promise<any> {
-    return json<any>(`/api/inventory/scan`, {
+  async runInventoryScan(sellerId: string, options: InventoryScanOptions = {}): Promise<InventoryScanResult> {
+    return json<InventoryScanResult>(`/api/inventory/scan`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ seller_id: sellerId }),
+      body: JSON.stringify({ seller_id: sellerId, ...options }),
     });
   }
 
@@ -774,3 +784,5 @@ export class ClientProductProvider {
     return json<BillingPlan[]>("/api/saas/billing-plans");
   }
 }
+
+export const clientProductProvider = new ClientProductProvider();

@@ -14,14 +14,16 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="en">
       <body className="bg-canvas">
         <Providers>
-          <div className="min-h-screen">
-            <div className="md:flex">
-              <aside className="hidden md:flex flex-col w-[240px] shrink-0 border-r border-[#1F2937]">
-                <Sidebar />
-              </aside>
-              <main className="flex-1 min-w-0 overflow-y-auto px-4 md:px-10 py-6 md:py-10 bg-canvas">
+          <div className="min-h-screen md:flex">
+            <Sidebar />
+            <div className="flex-1 min-w-0 overflow-y-auto bg-canvas">
+              <p
+                role="note"
+                className="border-b border-amber-200 bg-amber-50 px-4 py-2 text-center text-xs text-amber-950 md:text-sm"
+              >
+                <strong>Sample data only:</strong> every integration and action is simulated; changes are temporary.
+              </p>
                 {children}
-              </main>
             </div>
           </div>
         </Providers>

@@ -106,6 +106,28 @@ describe("MockProvider seller isolation", () => {
     expect(result.total).toBeGreaterThan(0);
   });
 
+  it("normalizes numeric fields in seeded product records", async () => {
+    const result = await provider.getProducts();
+    for (const product of result.products) {
+      for (const field of [
+        "price",
+        "stock",
+        "sellable_units",
+        "days_of_supply",
+        "daily_velocity",
+        "competitor_price",
+        "market_price",
+        "min_floor",
+        "max_price",
+        "unit_cost",
+        "lead_time_days",
+        "opt_score",
+      ] as const) {
+        expect(Number.isFinite(product[field])).toBe(true);
+      }
+    }
+  });
+
   it("getProduct returns null for a product owned by another seller", async () => {
     // First get a product owned by the active seller
     const mine = await provider.getProducts();

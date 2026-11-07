@@ -9,9 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Modal } from "@/components/ui/modal";
 import { StorefrontView } from "@/components/product/StorefrontView";
-import { ApiIntegrationStatus } from "@/components/ApiIntegrationStatus";
 import { HealthScoreBar } from "@/components/HealthScoreBar";
-import { ClientProductProvider } from "@/lib/provider/client";
+import { clientProductProvider as provider } from "@/lib/provider/client";
 import type { Dashboard, Product } from "@/lib/provider/types";
 
 function Metric({
@@ -38,7 +37,6 @@ function Metric({
 }
 
 function CatalogWorkspace({ sellerId }: { sellerId?: string }) {
-  const provider = new ClientProductProvider();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [asin, setAsin] = useState("");
@@ -252,7 +250,7 @@ function CatalogWorkspace({ sellerId }: { sellerId?: string }) {
         {/* Toolbar */}
         <div className="mb-4 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3 text-xs font-medium text-on-surface-variant">
-            <Badge className="bg-teal-50 text-teal-800 border-teal-200">Catalog Sync: Live · SP-API (v2024-09)</Badge>
+            <Badge className="bg-teal-50 text-teal-800 border-teal-200">Catalog: Local Mock Data</Badge>
             <Badge className="bg-amber-50 text-amber-800 border-amber-200">Algorithmic Listing Health Sentinel</Badge>
           </div>
           <div className="flex items-center gap-2">
@@ -430,7 +428,7 @@ function CatalogWorkspace({ sellerId }: { sellerId?: string }) {
                   <Bot size={14} className="text-indigo-600" />
                   <div>
                     <h3 className="panel-title">AI Copy Generation &amp; Keyword Injection Queue</h3>
-                    <div className="panel-subtitle">Automated search optimization actions ready for SP-API live catalogue push</div>
+                    <div className="panel-subtitle">Sample listing suggestions can be reviewed locally; no catalog push is available.</div>
                   </div>
                 </div>
                 <Badge className="bg-amber-50 text-amber-800 border-amber-200">3 Actionable Proposals</Badge>
@@ -481,8 +479,8 @@ function CatalogWorkspace({ sellerId }: { sellerId?: string }) {
               <div className="flex items-center gap-2 p-3 rounded-md border border-line bg-white/50">
                 <Bot size={13} className="text-indigo-600" />
                 <div className="flex-1 min-w-0">
-                  <div className="text-xs font-semibold text-indigo-900">SP-API Rate Ceiling</div>
-                  <div className="text-[10px] text-muted">18.4 / 20.0 rps</div>
+                  <div className="text-xs font-semibold text-indigo-900">Mock Rate-Limit Example</div>
+                  <div className="text-[10px] text-muted">Illustrative only · no API requests</div>
                 </div>
                 <div className="text-right">
                   <div className="text-[10px] font-semibold text-indigo-900">DAILY TOKEN AI QUOTA</div>
@@ -735,9 +733,8 @@ function CatalogWorkspace({ sellerId }: { sellerId?: string }) {
       <Modal open={integrationsOpen} onClose={() => setIntegrationsOpen(false)} title="API Integration Status — Setup">
         <div className="space-y-4">
           <div className="p-3 rounded-md border border-line bg-white/50">
-            <div className="text-[10px] font-bold text-indigo-900 mb-1">SP-API Integration</div>
-            <div className="text-[10px] text-muted mb-3">Connect Amazon Selling Partner API for real-time data ingestion.</div>
-            <ApiIntegrationStatus onTokenChange={() => {}} token="" mode="free" />
+            <div className="text-[10px] font-bold text-indigo-900 mb-1">Mock-Only Catalog Mode</div>
+            <div className="text-[10px] text-muted mb-3">The catalog is served from bundled sample records. External credentials and integrations are intentionally not supported.</div>
           </div>
           <div className="flex justify-end pt-4">
             <Button onClick={() => setIntegrationsOpen(false)}>Close</Button>

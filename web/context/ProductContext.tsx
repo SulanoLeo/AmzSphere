@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { ClientProductProvider } from "@/lib/provider/client";
+import { clientProductProvider as provider } from "@/lib/provider/client";
 import type { Product } from "@/lib/provider/types";
 
 export interface ProductRecord {
@@ -108,7 +108,6 @@ function computeMetrics(p: ProductRecord): DerivedMetrics {
 const SOURCING_ASIN = "B0C9W7XNQ3";
 
 export function ProductProvider({ children }: { children: React.ReactNode }) {
-  const provider = new ClientProductProvider();
   const [product, setProduct] = useState<ProductRecord>(DEFAULT_PRODUCT);
   const metrics = useMemo(() => computeMetrics(product), [product]);
   const [initialized, setInitialized] = useState(false);

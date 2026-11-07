@@ -12,8 +12,8 @@ function daysOfSupply(stock: number, velocity: number): number {
   return stock / Math.max(velocity || 0.1, 0.1);
 }
 
-function restockQty(daysSupply: number, velocity: number, leadTime: number, minOrderQty: number): number {
-  const coverageTargetDays = 45;
+function restockQty(daysSupply: number, velocity: number, leadTime: number, minOrderQty: number, bufferDays: number): number {
+  const coverageTargetDays = leadTime + bufferDays;
   const neededDays = Math.max(coverageTargetDays - daysSupply, leadTime);
   const qty = Math.ceil(neededDays * Math.max(velocity || 0.1, 0.1));
   return Math.max(qty, minOrderQty);
@@ -28,6 +28,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ detail: parsed.error.flatten().fieldErrors }, { status: 422 });
   }
   const sellerId = parsed.data.seller_id;
+  const bufferDays = parsed.data.buffer_days;
+  const scope = parsed.data.scope;
 
   const state = readMockState();
   const sim = new MockSimulator();
@@ -53,9 +55,9 @@ export async function POST(request: Request) {
     const reorderFlag = daysSupply < 15;
     const supplierId = p.supplier_id || null;
     const supplier = supplierId ? suppliersById[supplierId] : null;
-    const leadTime = supplier ? Number(supplier.lead_time_days) : Number(p.lead_time_days) || 21;
+    const leadTime = parsed.data.lead_time_days ?? (supplier ? Number(supplier.lead_time_days) : Number(p.lead_time_days) || 21);
     const minOrderQty = supplier ? Number(supplier.min_order_qty) : 1;
-    const qty = restockQty(daysSupply, velocity, leadTime, minOrderQty);
+    const qty = restockQty(daysSupply, velocity, leadTime, minOrderQty, bufferDays);
     const lc = landedByProductId[p.id];
     const unitCost = lc ? Number(lc.total_landed_cost) : Number(p.unit_cost) || 0;
     const estCost = qty * unitCost;
@@ -83,7 +85,12 @@ export async function POST(request: Request) {
   const lowStock = products.filter((p) => p.reorder_flag);
   const totalStock = products.reduce((sum, p) => sum + p.stock, 0);
   const totalVelocity = products.reduce((sum, p) => sum + p.daily_velocity, 0);
-  const restockProposals = products.filter((p) => p.reorder_flag);
+  const restockProposals = products.filter((p) => {
+    const daysSupply = Number(p.days_of_supply);
+    if (scope === "critical") return daysSupply < 15;
+    if (scope === "watch") return daysSupply >= 15 && daysSupply < 30;
+    return daysSupply < 30;
+  });
   const totalEstRestockCost = restockProposals.reduce((sum, p) => sum + p.est_restock_cost_usd, 0);
 
   writeMockState(state);

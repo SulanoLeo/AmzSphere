@@ -21,6 +21,7 @@ export interface Product {
   images: string[];
   sellable_units: number;
   stock: number;
+  max_stock?: number;
   days_of_supply: number;
   daily_velocity: number;
   competitor_price: number;
@@ -71,6 +72,7 @@ export interface PurchaseOrder {
   status: string;
   created_at: string;
   seller_id: string;
+  created_by?: string;
 }
 
 export interface Order {
@@ -155,6 +157,40 @@ export interface SyncState {
   started_at?: string;
   completed_at?: string;
   products_synced?: number;
+}
+
+export interface InventoryRestockProposal {
+  sku: string;
+  asin: string;
+  name: string;
+  stock: number;
+  daily_velocity: number;
+  days_of_supply: number;
+  supplier_name: string | null;
+  lead_time_days: number;
+  min_order_qty: number;
+  restock_qty: number;
+  unit_landed_cost_usd: number;
+  est_restock_cost_usd: number;
+}
+
+export interface InventoryScanResult {
+  operation_id: string;
+  status: string;
+  seller_id: string;
+  products_scanned: number;
+  low_stock_count: number;
+  total_stock: number;
+  total_velocity: number;
+  restock_proposal_count: number;
+  total_est_restock_cost_usd: number;
+  restock_proposals: InventoryRestockProposal[];
+}
+
+export interface InventoryScanOptions {
+  buffer_days?: number;
+  lead_time_days?: number;
+  scope?: "all" | "critical" | "watch";
 }
 
 export interface SellerStoreItem {

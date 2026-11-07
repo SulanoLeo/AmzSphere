@@ -1,4 +1,4 @@
-import { readMockState } from "./mock-state";
+import { readMockState, writeMockState } from "./mock-state";
 
 export interface QueueStatusCounts {
   pending: number;
@@ -18,6 +18,7 @@ export interface QueueTelemetry {
   amazon_write_outbox: QueueStatusCounts;
   average_execution_latency_seconds: number | null;
   top_errors: QueueErrorEntry[];
+  backoff_items: OutboxBackoffItem[];
   total_outbox_rows: number;
   generated_at: string;
 }
@@ -31,6 +32,15 @@ export interface OutboxBackoffItem {
   available_at: string | null;
   last_error: string | null;
   status: string;
+}
+
+interface MockQueueEntry {
+  id: string;
+  status?: string;
+  attempt_count?: number;
+  created_at?: string;
+  updated_at?: string;
+  last_error?: string | null;
 }
 
 function statusCounts(items: any[]): QueueStatusCounts {
@@ -88,15 +98,30 @@ export async function fetchQueueTelemetry(): Promise<QueueTelemetry> {
     amazon_write_outbox: outbox,
     average_execution_latency_seconds: null,
     top_errors: topErrors,
+    backoff_items: backoffItems,
     total_outbox_rows: queue.length,
     generated_at: now.toISOString(),
   };
 }
 
-export async function forceRetryOutboxItem(_outboxId: string): Promise<void> {
-  return;
+export async function forceRetryOutboxItem(outboxId: string): Promise<void> {
+  const state = readMockState();
+  const queue: MockQueueEntry[] = state.execution_queue || [];
+  const item = queue.find((entry) => entry.id === outboxId);
+  if (!item) throw new Error(`Queue item ${outboxId} was not found`);
+  item.status = "pending";
+  item.attempt_count = (Number(item.attempt_count) || 0) + 1;
+  item.created_at = new Date().toISOString();
+  item.last_error = null;
+  writeMockState(state);
 }
 
-export async function deadLetterOutboxItem(_outboxId: string): Promise<void> {
-  return;
+export async function deadLetterOutboxItem(outboxId: string): Promise<void> {
+  const state = readMockState();
+  const queue: MockQueueEntry[] = state.execution_queue || [];
+  const item = queue.find((entry) => entry.id === outboxId);
+  if (!item) throw new Error(`Queue item ${outboxId} was not found`);
+  item.status = "dead_letter";
+  item.updated_at = new Date().toISOString();
+  writeMockState(state);
 }

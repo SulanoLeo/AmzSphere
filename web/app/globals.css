@@ -1,8 +1,33 @@
 @import "tailwindcss";
 
 @theme {
-  /* Material Design color tokens from reference design system */
-  --mock-navy: #0B0F19;
+  --color-ink: #202735;
+  --color-muted: #667085;
+  --color-line: #e2e6ec;
+  --color-canvas: #f3f5f8;
+  --color-primary: #4338ca;
+  --color-on-surface: #0b1c30;
+  --color-on-surface-variant: #464555;
+  --color-indigo-950: #202844;
+  --color-indigo-900: #252e52;
+  --color-indigo-800: #34416f;
+  --color-teal-700: #007185;
+  --color-teal-50: #e9f5f5;
+  --text-headline-xl: 22px;
+  --text-headline-xl--line-height: 1.2;
+  --font-headline: "Plus Jakarta Sans", sans-serif;
+  --font-body: "Inter", sans-serif;
+}
+
+:root {
+  color-scheme: light;
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+  background: #f3f5f8;
+  color: #0b1c30;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+
+  --mock-navy: #0b0f19;
   --mock-navy-soft: #111827;
   --mock-orange: #ffb95f;
   --mock-orange-soft: #ffedd5;
@@ -11,18 +36,17 @@
   --mock-ink: #0b1c30;
   --mock-muted: #464555;
   --mock-quiet: #777587;
-  --mock-line: #E2E8F0;
-  --mock-paper: #FFFFFF;
+  --mock-line: #e2e8f0;
+  --mock-paper: #ffffff;
   --mock-canvas: #f8f9ff;
-  --mock-green: #10B981;
+  --mock-green: #10b981;
   --mock-green-soft: #d1f2e8;
   --mock-red: #ba1a1a;
   --mock-red-soft: #ffdad6;
   --mock-blue: #3525cd;
   --mock-blue-soft: #e2dfff;
-
-  /* Surface tokens */
-  --surface-card: #FFFFFF;
+  --surface-card: #ffffff;
+  --surface-border: #e2e8f0;
   --surface-container: #e5eeff;
   --surface-container-low: #eff4ff;
   --surface-container-lowest: #ffffff;
@@ -31,26 +55,19 @@
   --surface-dim: #cbdbf5;
   --surface-tint: #4d44e3;
   --surface-bright: #f8f9ff;
-  --workspace-bg: #F8FAFC;
-  --sidebar-surface: #0B0F19;
+  --workspace-bg: #f8fafc;
+  --sidebar-surface: #0b0f19;
   --sidebar-card: #111827;
-  --sidebar-active: #4338CA;
-  --sidebar-border: #1F2937;
-
-  /* Status colors */
-  --status-emerald: #10B981;
-  --status-amber: #F59E0B;
-  --status-rose: #F43F5E;
-  --status-indigo: #6366F1;
-}
-
-:root {
-  color-scheme: light;
-  font-family: "Inter", "Segoe UI", Arial, sans-serif;
-  background: #f8f9ff;
-  color: #0b1c30;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
+  --sidebar-active: #4338ca;
+  --sidebar-border: #1f2937;
+  --status-emerald: #10b981;
+  --status-amber: #f59e0b;
+  --status-rose: #f43f5e;
+  --status-indigo: #6366f1;
+  --on-surface: #0b1c30;
+  --on-surface-variant: #464555;
+  --font-ui: "Inter", sans-serif;
+  --primary: #3525cd;
 }
 
 * { box-sizing: border-box; }
@@ -67,26 +84,6 @@ a { color: inherit; text-decoration: none; }
 .font-body-sm { font-family: "Inter", sans-serif; font-weight: 400; font-size: 13px; line-height: 1.5; }
 .font-mono-code-sm { font-family: "JetBrains Mono", monospace; font-weight: 500; font-size: 11px; line-height: 1.4; }
 .font-mono-metric-lg { font-family: "JetBrains Mono", monospace; font-weight: 600; font-size: 24px; line-height: 1.2; }
-
-/* Mock palette variables */
---mock-navy: #0B0F19;
---mock-navy-soft: #111827;
---mock-orange: #ffb95f;
---mock-orange-soft: #ffedd5;
---mock-teal: #006a63;
---mock-teal-soft: #d1f2e8;
---mock-ink: #0b1c30;
---mock-muted: #464555;
---mock-quiet: #777587;
---mock-line: #E2E8F0;
---mock-paper: #FFFFFF;
---mock-canvas: #f8f9ff;
---mock-green: #10B981;
---mock-green-soft: #d1f2e8;
---mock-red: #ba1a1a;
---mock-red-soft: #ffdad6;
---mock-blue: #3525cd;
---mock-blue-soft: #e2dfff;
 
 /* Shell */
 .layout { min-height: 100vh; display: grid; grid-template-columns: 246px minmax(0, 1fr); }

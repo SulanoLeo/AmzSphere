@@ -62,6 +62,20 @@ import { ProductProvider } from "./interface";
 
 const US_MARKETPLACE_ID = "ATVPDKIKX0DER";
 const DEFAULT_SELLER_ID = "mock-seller";
+const NUMERIC_PRODUCT_FIELDS = [
+  "price",
+  "stock",
+  "sellable_units",
+  "days_of_supply",
+  "daily_velocity",
+  "competitor_price",
+  "market_price",
+  "min_floor",
+  "max_price",
+  "unit_cost",
+  "lead_time_days",
+  "opt_score",
+] as const;
 
 function productDefaults(product: any): any {
   product.id = product.id ?? crypto.randomUUID();
@@ -74,6 +88,10 @@ function productDefaults(product: any): any {
   product.images = product.images ?? [];
   product.sellable_units = product.sellable_units ?? product.stock ?? 0;
   product.days_of_supply = product.days_of_supply ?? 0;
+  for (const field of NUMERIC_PRODUCT_FIELDS) {
+    const value = Number(product[field] ?? 0);
+    product[field] = Number.isFinite(value) ? value : 0;
+  }
   return product;
 }
 

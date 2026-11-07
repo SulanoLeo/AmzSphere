@@ -50,7 +50,7 @@ export default function HowPage() {
             <CardHeader>
               <div>
                 <h3 className="panel-title">Single source of truth: products</h3>
-                <div className="panel-subtitle">Every page reads and writes one product record. The flow is the same in mock and in the later SP-API swap.</div>
+                <div className="panel-subtitle">Pages read and update sample product records through Next.js API routes backed by process-local mock state.</div>
               </div>
               <Badge className="bg-teal-50 text-teal-800 border-teal-200">Shared product record</Badge>
             </CardHeader>
@@ -215,10 +215,10 @@ export default function HowPage() {
               </CardHeader>
               <CardContent>
                 <blockquote className="insight-quote text-[10px] text-muted italic mb-3">
-                  "Live won't run without SP-API credentials, PostgreSQL, Redis, and Google OAuth."
+                  "This repository is a mock-only Next.js work sample. It has no production integrations."
                 </blockquote>
                 <p className="insight-body text-[10px] text-muted mb-3">
-                  The Next.js/FastAPI/Celery scaffold keeps the same product model and endpoints; only the sync source swaps from the mock catalog to real SP-API Listings/Catalog/FBA Inventory calls when credentials are added.
+                  The project uses Next.js route handlers and bundled JSON sample data. Mutations are temporary and reset when the server process restarts; production integrations are out of scope.
                 </p>
                 <div className="recommendation p-3 rounded-md border border-line bg-amber-50">
                   <div className="text-[10px] font-bold text-amber-800 mb-1">Safety boundary</div>
@@ -245,7 +245,7 @@ export default function HowPage() {
                 <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-600 text-white text-[10px] font-bold flex items-center justify-center">1</span>
                 <div className="flex-1 min-w-0">
                   <div className="text-xs font-semibold text-indigo-900">Ingest Product</div>
-                  <div className="text-[10px] text-muted">ASIN/SKU lookup via SP-API or manual creation. Upserts are idempotent.</div>
+                  <div className="text-[10px] text-muted">ASIN/SKU lookup uses the local sample catalog. Writes remain in process-local mock state.</div>
                 </div>
               </div>
               <div className="flex items-start gap-3 p-3 rounded-md border border-line bg-white/50">
