@@ -45,7 +45,7 @@ export default function SeoToolsPage() {
   const [telemetryOpen, setTelemetryOpen] = useState(false);
 
   return (
-    <main className="min-h-screen bg-canvas px-4 py-6 md:px-10 md:py-10">
+    <main className="workspace-page bg-canvas">
       <header className="mb-6 flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-line pb-5">
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2 text-primary font-label-md uppercase tracking-wider">

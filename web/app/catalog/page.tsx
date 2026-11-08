@@ -272,7 +272,7 @@ function CatalogWorkspace({ sellerId }: { sellerId?: string }) {
 
   return (
     <Suspense fallback={<div className="min-h-screen bg-canvas px-4 py-6 md:px-10 md:py-10">Loading catalog…</div>}>
-      <main className="min-h-screen w-full bg-canvas px-3 py-6 md:px-6 lg:px-8 xl:px-10">
+      <main className="workspace-page bg-canvas">
         {/* Header */}
         <header className="mb-6 w-full flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-line pb-5">
           <div className="flex flex-col gap-1">

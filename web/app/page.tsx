@@ -237,7 +237,7 @@ export default function DashboardPage() {
   const pendingCount = data?.pending_purchase_orders.length ?? 0;
 
   return (
-    <main className="min-h-screen bg-canvas px-4 py-6 md:px-10 md:py-10">
+    <main className="workspace-page bg-canvas">
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-[10px] font-semibold text-muted uppercase tracking-wider mb-1">
         <Link href="/" className="flex items-center gap-1">

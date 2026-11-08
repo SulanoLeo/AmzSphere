@@ -23,7 +23,7 @@ function SourcingWorkspace() {
   }
 
   return (
-    <main className="min-h-screen bg-canvas px-4 py-6 md:px-10 md:py-10">
+    <main className="workspace-page bg-canvas">
       <Link href="/" className="mb-7 inline-flex items-center gap-2 text-xs font-semibold text-muted hover:text-ink">
         <ArrowLeft size={15} />Operations overview
       </Link>

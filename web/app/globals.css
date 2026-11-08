@@ -89,6 +89,7 @@ a { color: inherit; text-decoration: none; }
 .layout { min-height: 100vh; display: grid; grid-template-columns: 246px minmax(0, 1fr); }
 .sidebar { position: sticky; top: 0; height: 100vh; padding: 24px 15px 18px; display: flex; flex-direction: column; background: var(--sidebar-surface); color: #d6dee5; }
 .workspace { min-width: 0; }
+.workspace-page { width: 100%; max-width: 1600px; min-width: 0; min-height: 100vh; margin-inline: auto; padding: 24px 16px 40px; }
 .topbar { min-height: 68px; padding: 0 38px; display: flex; align-items: center; justify-content: space-between; gap: 20px; border-bottom: 1px solid var(--mock-line); background: var(--mock-paper); }
 .main { width: 100%; max-width: 1600px; margin: 0 auto; padding: 32px 38px 54px; }
 .footer-note { padding-top: 15px; color: var(--mock-quiet); font-size: 9px; text-align: right; }
@@ -135,6 +136,7 @@ a { color: inherit; text-decoration: none; }
 .section:last-child { margin-bottom: 0; }
 .section-grid { margin-bottom: 24px; display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(280px, .9fr); gap: 24px; }
 .section-grid.equal { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.section-grid > * { min-width: 0; }
 .section-grid > .panel + .panel { margin-top: 0; }
 .section-title { font-family: "Plus Jakarta Sans", sans-serif; font-weight: 600; font-size: 14px; color: var(--mock-navy); margin-bottom: 16px; }
 
@@ -272,6 +274,24 @@ a { color: inherit; text-decoration: none; }
 .feed-item .feed-dot.sync { background: var(--mock-quiet); }
 .feed-title { font-family: "Plus Jakarta Sans", sans-serif; font-weight: 600; font-size: 11px; color: var(--mock-navy); margin-bottom: 2px; }
 .feed-detail { font-size: 10px; color: var(--mock-muted); line-height: 1.5; }
+
+@media (min-width: 768px) {
+  .workspace-page { padding: 40px; }
+}
+
+@media (min-width: 768px) and (max-width: 1279px) {
+  .metrics,
+  .metrics-five { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (max-width: 767px) {
+  .section-grid,
+  .section-grid.equal { grid-template-columns: minmax(0, 1fr); }
+  .metrics,
+  .metrics-five { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .metric { padding: 16px 14px; }
+  .metric-value { font-size: 24px; }
+}
 
 /* Alert banners */
 .alert-banner { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; border-radius: 12px; margin-bottom: 20px; }

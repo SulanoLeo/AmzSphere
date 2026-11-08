@@ -1,0 +1,32 @@
+{
+  "skill": "keyboard-navigator",
+  "scope": [
+    "web/app/page.tsx",
+    "web/app/catalog/page.tsx",
+    "web/app/inventory/page.tsx",
+    "web/app/ppc/page.tsx",
+    "web/app/globals.css",
+    "web/app/layout.tsx",
+    "web/components/Sidebar.tsx"
+  ],
+  "findings": [
+    {
+      "rule": "KEYBOARD-ORDER-001",
+      "wcag": "2.4.3 A",
+      "severity": "moderate",
+      "confidence": "high",
+      "location": "web/app/catalog/page.tsx:667",
+      "summary": "At narrow viewports, the catalog editor reverses the action buttons visually while keyboard focus follows their DOM order.",
+      "fix": "Remove flex-col-reverse so the stacked visual order matches the DOM order, or change the DOM order to match the intended visual order at narrow widths."
+    }
+  ],
+  "passed": [
+    "The shared content-width and grid rules do not reorder elements or change DOM-based tab order.",
+    "No positive tabindex values or other CSS order utilities were found in the scoped pages.",
+    "The shared sidebar and page shell retain source order across their responsive layouts."
+  ],
+  "notes": [
+    "Static source review only; focus visibility was not runtime-tested at different viewport sizes.",
+    "The catalog editor button-order finding predates and is unrelated to the width changes."
+  ]
+}

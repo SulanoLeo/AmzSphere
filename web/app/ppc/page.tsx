@@ -196,7 +196,7 @@ export default function PpcPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-canvas px-4 py-6 md:px-10 md:py-10">
+    <main className="workspace-page bg-canvas">
       <header className="mb-6 flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-line pb-5">
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2 text-primary font-label-md uppercase tracking-wider">
@@ -246,7 +246,7 @@ export default function PpcPage() {
       </div>
 
       <section className="section-grid align-items-stretch mb-6">
-        <div className="panel lg:col-span-2 flex flex-col h-full">
+        <div className="panel flex flex-col h-full">
           <div className="panel-header flex items-center justify-between pb-2">
             <div>
               <h2 className="panel-title">ACoS vs Spend &amp; Attributed Revenue Trend</h2>
