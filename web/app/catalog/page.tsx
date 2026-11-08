@@ -273,7 +273,7 @@ function CatalogWorkspace({ sellerId }: { sellerId?: string }) {
         </div>
 
         {/* Listings Optimization & Search Frequency */}
-        <div className="grid gap-6 lg:grid-cols-[1fr_380px]">
+        <div className="grid w-full grid-cols-1 gap-6">
           <div className="space-y-6">
             <Card>
               <CardHeader className="flex items-center justify-between pb-2">

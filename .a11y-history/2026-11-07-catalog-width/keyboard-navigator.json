@@ -1,0 +1,16 @@
+{
+  "skill": "keyboard-navigator",
+  "scope": [
+    "web/app/catalog/page.tsx"
+  ],
+  "findings": [],
+  "passed": [
+    "The width change adds w-full to the main and header; it does not change DOM order, tabindex values, or CSS ordering, so it does not alter keyboard tab order.",
+    "The responsive content grid remains two columns at large breakpoints. Its right column contains static content, so widening does not introduce a new focus-order mismatch.",
+    "The width change does not modify focus styles or add clipping/positioning that would obscure focus indicators."
+  ],
+  "notes": [
+    "Skip-link behavior cannot be verified within the scoped file because the skip link is outside it. The page main at line 219 has no id or tabindex; confirm the shared skip link targets an appropriate focusable destination.",
+    "The grid at line 276 remains lg:grid-cols-[1fr_380px]; the reviewed width change does not convert it to full-width panels."
+  ]
+}
