@@ -30,6 +30,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Modal } from "@/components/ui/modal";
 import { clientProductProvider as provider } from "@/lib/provider/client";
 import type { Dashboard, Seller } from "@/lib/provider/types";
+import { useAmzStore } from "@/lib/useAmzStore";
 
 const RADIAL_COLORS = ["#006a63", "#3525cd", "#ffb95f", "#777587", "#10B981"];
 
@@ -129,6 +130,8 @@ function SetupStep({ number, title, desc }: { number: string; title: string; des
 
 export default function DashboardPage() {
   const [data, setData] = useState<Dashboard | null>(null);
+  const products = useAmzStore((state) => state.products);
+  const hydrateProducts = useAmzStore((state) => state.hydrateProducts);
   const [sellers, setSellers] = useState<Seller[]>([]);
   const [selectedSeller, setSelectedSeller] = useState("");
   const [isApprover, setIsApprover] = useState(true);
@@ -146,15 +149,20 @@ export default function DashboardPage() {
   const loadDashboard = useCallback(async (sellerId: string) => {
     setLoading(true);
     try {
-      const payload = await provider.getDashboard();
+      const [payload, catalog, ppc] = await Promise.all([
+        provider.getDashboard(),
+        provider.getProducts({ page_size: 200 }),
+        provider.getPpcData(),
+      ]);
       setData(payload);
+      hydrateProducts(catalog.products, ppc.campaigns);
       setError("");
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "Dashboard API unavailable");
     } finally {
       setLoading(false);
     }
-  }, [provider]);
+  }, [hydrateProducts]);
 
   async function decidePurchaseOrder(id: string, action: "approve" | "deny") {
     setPoMessage("");
@@ -219,27 +227,13 @@ export default function DashboardPage() {
     if (selectedSeller) void loadDashboard(selectedSeller);
   }, [selectedSeller, loadDashboard]);
 
-  const reorderRows = (data?.products || []).filter((product) => product.reorder_flag);
-  const totalStock = (data?.products || []).reduce(
-    (total, product) => total + (product.stock ?? 0),
-    0,
-  );
-  const chartData = (data?.products || []).map((product) => ({
-    sku: product.sku,
-    velocity: product.velocity_30d,
-  }));
-
   const connected = data?.sync_status === "completed";
-  const avgScore =
-    data?.products.length
-      ? Math.round(
-          (data.products.reduce((s, p) => s + (p.opt_score ?? 0), 0) /
-            Math.max(data.products.length, 1)) * 10,
-        ) / 10
-      : 0;
-
-  const needsOptCount = data?.products.filter((p) => p.opt_score && p.opt_score < 70).length ?? 0;
-  const urgentCount = reorderRows.length;
+  const activeListingCount = products.filter((product) => !product.suppressed).length;
+  const totalStock = products.reduce((total, product) => total + product.stockLevel, 0);
+  const needsOptCount = products.filter(
+    (product) => product.missingAssets.bullets || product.missingAssets.images,
+  ).length;
+  const urgentCount = products.filter((product) => product.daysSupply < 10).length;
   const pendingCount = data?.pending_purchase_orders.length ?? 0;
 
   return (
@@ -311,14 +305,14 @@ export default function DashboardPage() {
       <div className="metrics metrics-five align-items-stretch mb-8">
         <Metric
           label="CATALOG"
-          value={String(data?.products.length ?? "—")}
-          detail="120 Active listings"
+          value={loading && products.length === 0 ? "—" : String(activeListingCount)}
+          detail="Active listings"
           accent="blue"
           tag="CATALOG"
         />
         <Metric
           label="INVENTORY"
-          value={data ? data.products.reduce((total, item) => total + (item.stock ?? 0), 0).toLocaleString() : "—"}
+          value={loading && products.length === 0 ? "—" : totalStock.toLocaleString()}
           detail="In-stock items across warehouses"
           accent="teal"
           tag="INVENTORY"
@@ -333,7 +327,7 @@ export default function DashboardPage() {
         <Metric
           label="URGENT"
           value={String(urgentCount)}
-          detail="1 item running out of stock"
+          detail={`${urgentCount} item${urgentCount === 1 ? "" : "s"} under 10 days of supply`}
           accent="red"
           tag="Stockout danger"
         />
@@ -490,18 +484,25 @@ export default function DashboardPage() {
                 </tr>
               </thead>
               <tbody>
-                {(data?.products || []).map((product) => (
+                {products.map((product) => {
+                  const dashboardProduct = data?.products.find((item) => item.sku === product.sku);
+                  const needsReorder = product.daysSupply < 15;
+                  return (
                   <tr key={`${product.asin}-${product.sku}`} className="border-t border-line">
                     <td className="px-4 py-3">
                       <strong>{product.sku}</strong>
                       <span className="mt-1 block text-[10px] text-muted">{product.asin}</span>
                     </td>
-                    <td className="px-4 py-3 tabular-nums">{product.stock?.toLocaleString() ?? "Unknown"}</td>
-                    <td className="px-4 py-3 tabular-nums">{product.velocity_7d} / {product.velocity_30d} / {product.velocity_90d}</td>
-                    <td className="px-4 py-3">{product.days_supply ?? "Unknown"}</td>
-                    <td className="px-4 py-3">{product.vendor || "Vendor not mapped"}</td>
+                    <td className="px-4 py-3 tabular-nums">{product.stockLevel.toLocaleString()}</td>
+                    <td className="px-4 py-3 tabular-nums">
+                      {dashboardProduct
+                        ? `${dashboardProduct.velocity_7d} / ${dashboardProduct.velocity_30d} / ${dashboardProduct.velocity_90d}`
+                        : `${Math.round(product.daily_velocity * 7)} / ${Math.round(product.velocity30d)} / ${Math.round(product.daily_velocity * 90)}`}
+                    </td>
+                    <td className="px-4 py-3">{Number.isFinite(product.daysSupply) ? product.daysSupply.toFixed(1) : "Unknown"}</td>
+                    <td className="px-4 py-3">{product.supplier || "Vendor not mapped"}</td>
                     <td className="px-4 py-3">
-                      {product.reorder_flag ? (
+                      {needsReorder ? (
                         <Badge className="bg-amber-50 text-amber-800">Needs PO draft</Badge>
                       ) : (
                         <Badge className="bg-teal-50 text-teal-800">In queue</Badge>
@@ -512,14 +513,14 @@ export default function DashboardPage() {
                         variant="outline"
                         className="text-[10px] px-2"
                         onClick={() => setReviewPoOpen(product.asin)}
-                        disabled={!product.reorder_flag}
+                        disabled={!needsReorder}
                       >
                         Review PO
                       </Button>
                     </td>
                   </tr>
-                ))}
-                {!data?.products.length && (
+                );})}
+                {!products.length && (
                   <tr>
                     <td className="px-4 py-8 text-center text-muted" colSpan={7}>
                       {loading ? "Loading catalog…" : "Connect a seller and ingest catalog/inventory data to populate this table."}

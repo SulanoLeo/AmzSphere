@@ -12,6 +12,7 @@ import { Modal } from "@/components/ui/modal";
 import { clientProductProvider as provider } from "@/lib/provider/client";
 import type { PpcData } from "@/lib/provider/types";
 import { downloadCsv } from "@/lib/csv";
+import { useAmzStore } from "@/lib/useAmzStore";
 
 function Metric({
   label,
@@ -38,6 +39,9 @@ function Metric({
 
 export default function PpcPage() {
   const [data, setData] = useState<PpcData | null>(null);
+  const products = useAmzStore((state) => state.products);
+  const hydrateProducts = useAmzStore((state) => state.hydrateProducts);
+  const togglePpcStatus = useAmzStore((state) => state.togglePpcStatus);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
@@ -100,8 +104,13 @@ export default function PpcPage() {
     const loadPpc = async () => {
       setLoading(true);
       try {
-        const payload = await provider.getPpcData();
+        const [payload, catalog] = await Promise.all([
+          provider.getPpcData(),
+          provider.getProducts({ page_size: 200 }),
+        ]);
+        if (active) hydrateProducts(catalog.products, payload.campaigns);
         if (active) setData(payload);
+        if (active) setError("");
       } catch (cause) {
         if (active) setError(cause instanceof Error ? cause.message : "Failed to load PPC data");
       } finally {
@@ -110,7 +119,7 @@ export default function PpcPage() {
     };
     void loadPpc();
     return () => { active = false; };
-  }, [provider]);
+  }, [hydrateProducts]);
 
   const search_terms = data?.search_terms || [];
   const targeted_exact_keywords = data?.targeted_exact_keywords || [];
@@ -222,6 +231,11 @@ export default function PpcPage() {
           </Button>
         </div>
       </header>
+
+      {error && <p role="alert" className="mb-4 rounded-md border border-rose-300 bg-rose-50 px-3 py-2 text-sm text-rose-900">{error}</p>}
+      <p role="status" aria-live="polite" className={message ? "mb-4 rounded-md border border-line bg-white px-3 py-2 text-sm text-on-surface-variant" : "sr-only"}>
+        {message}
+      </p>
 
       <div className="metrics metrics-five mb-6">
         <Metric label="Ad Spend" value="$24,850.40" detail="+4.2% vs prev 30d" accent="blue" tag="Pacing" />
@@ -376,19 +390,22 @@ export default function PpcPage() {
                   <th className="px-4 py-3 tabular-nums">Clicks</th>
                   <th className="px-4 py-3 tabular-nums">CPC</th>
                   <th className="px-4 py-3 tabular-nums">SPEN</th>
+                  <th className="px-4 py-3">PPC state</th>
                 </tr>
               </thead>
-              <tbody>
-                {loading ? (
-                  <tr><td colSpan={8} className="text-center text-xs text-muted py-4">Loading campaigns…</td></tr>
-                ) : campaigns.length ? campaigns.map((c) => {
-                  const week = (c.ad_history || []).slice(-7);
-                  const spend = week.reduce((sum: number, day: any) => sum + day.spend, 0);
-                  const sales = week.reduce((sum: number, day: any) => sum + day.sales, 0);
-                  const acos = sales ? (spend / sales) * 100 : 0;
-                  const over = acos > 25;
-                  return (
-                    <tr key={c.name} className="border-t border-line">
+                <tbody aria-busy={loading}>
+                  {loading ? (
+                    <tr><td colSpan={9} className="text-center text-xs text-muted py-4">Loading campaigns…</td></tr>
+                  ) : campaigns.length ? campaigns.map((c) => {
+                    const week = (c.ad_history || []).slice(-7);
+                    const spend = week.reduce((sum: number, day: any) => sum + day.spend, 0);
+                    const sales = week.reduce((sum: number, day: any) => sum + day.sales, 0);
+                    const acos = sales ? (spend / sales) * 100 : 0;
+                    const over = acos > 25;
+                    const product = products.find((item) => item.sku === c.sku);
+                    const adStatus = product?.adStatus ?? "inactive";
+                    return (
+                      <tr key={c.name} className="border-t border-line">
                       <td className="px-4 py-3">
                         <div className="product-name">{c.name}</div>
                         <div className="product-meta text-[10px]">{c.sku}</div>
@@ -400,10 +417,29 @@ export default function PpcPage() {
                       <td className="px-4 py-3 tabular-nums">{week.reduce((s: number, d: any) => s + d.clicks, 0)}</td>
                       <td className="px-4 py-3 tabular-nums">${c.bid_floor}</td>
                       <td className="px-4 py-3 tabular-nums">${acos.toFixed(1)}%</td>
+                      <td className="px-4 py-3">
+                        {product ? (
+                          <div className="flex flex-col items-start gap-2">
+                            <span className={`status ${adStatus === "active" ? "good" : adStatus === "inactive" ? "denied" : "pending"}`}>
+                              {adStatus === "active" ? "Active" : adStatus === "inactive" ? "Inactive" : "Paused"}
+                            </span>
+                            <button
+                              className="rounded-md border border-muted px-2 py-1 text-[10px] font-semibold text-on-surface-variant focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1"
+                              type="button"
+                              onClick={() => {
+                                togglePpcStatus(c.sku);
+                                setMessage(`Mock ads ${adStatus === "active" ? "paused" : "resumed"} for ${c.sku}.`);
+                              }}
+                            >
+                              {adStatus === "active" ? "Pause ads" : "Resume ads"}
+                            </button>
+                          </div>
+                        ) : <span className="text-xs text-muted">Product unavailable</span>}
+                      </td>
                     </tr>
                   );
                 }) : (
-                  <tr><td colSpan={8} className="text-center text-xs text-muted py-4">No campaigns.</td></tr>
+                  <tr><td colSpan={9} className="text-center text-xs text-muted py-4">No campaigns.</td></tr>
                 )}
               </tbody>
             </table>

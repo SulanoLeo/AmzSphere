@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState, Suspense } from "react";
+import { useCallback, useEffect, useId, useRef, useState, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { ArrowLeft, Bot, LoaderCircle, Search, ToggleRight, ToggleLeft } from "lucide-react";
@@ -10,8 +10,17 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Modal } from "@/components/ui/modal";
 import { StorefrontView } from "@/components/product/StorefrontView";
 import { HealthScoreBar } from "@/components/HealthScoreBar";
+import { SyncButtonSimulation } from "@/components/catalog/SyncButtonSimulation";
 import { clientProductProvider as provider } from "@/lib/provider/client";
 import type { Dashboard, Product } from "@/lib/provider/types";
+import { useAmzStore } from "@/lib/useAmzStore";
+
+type SeoDraft = {
+  title: string;
+  bullets: string;
+  backendKeywords: string;
+  description: string;
+};
 
 function Metric({
   label,
@@ -37,7 +46,10 @@ function Metric({
 }
 
 function CatalogWorkspace({ sellerId }: { sellerId?: string }) {
-  const [products, setProducts] = useState<Product[]>([]);
+  const products = useAmzStore((state) => state.products);
+  const hydrateProducts = useAmzStore((state) => state.hydrateProducts);
+  const upsertProducts = useAmzStore((state) => state.upsertProducts);
+  const updateProductSEO = useAmzStore((state) => state.updateProductSEO);
   const [loading, setLoading] = useState(true);
   const [asin, setAsin] = useState("");
   const [sku, setSku] = useState("");
@@ -51,8 +63,16 @@ function CatalogWorkspace({ sellerId }: { sellerId?: string }) {
   const [helium10Token, setHelium10Token] = useState("");
   const [drawerId, setDrawerId] = useState("");
   const [drawerMode, setDrawerMode] = useState<"view" | "optimize">("optimize");
+  const [seoDraft, setSeoDraft] = useState<SeoDraft>({
+    title: "",
+    bullets: "",
+    backendKeywords: "",
+    description: "",
+  });
   const [addModal, setAddModal] = useState(false);
   const [addTab, setAddTab] = useState<"import" | "manual">("import");
+  const editorDialogRef = useRef<HTMLDialogElement>(null);
+  const editorId = useId();
 
   // Setup modals
   const [bulkRewriteOpen, setBulkRewriteOpen] = useState(false);
@@ -74,17 +94,25 @@ function CatalogWorkspace({ sellerId }: { sellerId?: string }) {
     const loadProducts = async () => {
       setLoading(true);
       try {
-        const payload = await provider.getProducts();
-        if (active) setProducts(payload.products);
-      } catch {
-        if (active) setProducts([]);
+        const [payload, ppc] = await Promise.all([
+          provider.getProducts({ page_size: 200 }),
+          provider.getPpcData(),
+        ]);
+        if (active) hydrateProducts(payload.products, ppc.campaigns);
+      } catch (cause) {
+        if (active) setMessage(cause instanceof Error ? cause.message : "Unable to load catalog products");
       } finally {
         if (active) setLoading(false);
       }
     };
     void loadProducts();
     return () => { active = false; };
-  }, [provider]);
+  }, [hydrateProducts]);
+
+  useEffect(() => {
+    const dialog = editorDialogRef.current;
+    if (drawerId && dialog && !dialog.open) dialog.showModal();
+  }, [drawerId]);
 
   useEffect(() => {
     if (!operation || ["review_required", "failed", "succeeded", "needs_review"].includes(operationStatus)) return;
@@ -190,8 +218,8 @@ function CatalogWorkspace({ sellerId }: { sellerId?: string }) {
       });
       setAddModal(false);
       setMessage("Product added.");
-      const payload = await provider.getProducts();
-      setProducts(payload.products);
+      const payload = await provider.getProducts({ page_size: 200 });
+      hydrateProducts(payload.products);
     } catch (cause) {
       setMessage(cause instanceof Error ? cause.message : "Failed to add product");
     } finally {
@@ -203,15 +231,43 @@ function CatalogWorkspace({ sellerId }: { sellerId?: string }) {
   async function sendToApproval(productId: string) {
     try {
       await provider.updateProduct(productId, { opt_status: "pending_approval" });
-      setDrawerId("");
-      const payload = await provider.getProducts();
-      setProducts(payload.products);
+      editorDialogRef.current?.close();
+      const payload = await provider.getProducts({ page_size: 200 });
+      hydrateProducts(payload.products);
       setMessage("Sent to approval.");
     } catch (cause) {
       setMessage(cause instanceof Error ? cause.message : "Failed to send to approval");
     }
   }
 
+  function openEditor(product: Product) {
+    setSeoDraft({
+      title: product.title,
+      bullets: product.bullets.join("\n"),
+      backendKeywords: product.backend_keywords.join(", "),
+      description: product.description,
+    });
+    setDrawerId(product.id);
+    setDrawerMode("optimize");
+  }
+
+  async function saveSeoDraft() {
+    const product = products.find((item) => item.id === drawerId);
+    if (!product) throw new Error("The selected catalog product is no longer available.");
+
+    const updatedFields = {
+      title: seoDraft.title.trim(),
+      bullets: seoDraft.bullets.split("\n").map((bullet) => bullet.trim()).filter(Boolean),
+      backend_keywords: seoDraft.backendKeywords.split(",").map((keyword) => keyword.trim()).filter(Boolean),
+      description: seoDraft.description.trim(),
+    };
+    const updatedProduct = await provider.updateProduct(product.id, updatedFields);
+    upsertProducts([updatedProduct]);
+    updateProductSEO(product.sku, updatedFields);
+    setMessage(`Mock listing ${product.sku} saved. No Amazon listing was changed.`);
+  }
+
+  const selectedProduct = products.find((product) => product.id === drawerId);
   const suggestion = (operationResult?.suggestion as Record<string, unknown> | undefined) ?? {};
 
   return (
@@ -246,6 +302,9 @@ function CatalogWorkspace({ sellerId }: { sellerId?: string }) {
             </Button>
           </div>
         </header>
+        <p role="status" aria-live="polite" className={message ? "mb-4 rounded-md border border-line bg-white px-3 py-2 text-xs text-on-surface-variant" : "sr-only"}>
+          {message}
+        </p>
 
         {/* Toolbar */}
         <div className="mb-4 flex items-center justify-between gap-3">
@@ -310,7 +369,13 @@ function CatalogWorkspace({ sellerId }: { sellerId?: string }) {
                     </div>
                   </div>
                   <div className="relative h-full">
-                    <svg className="w-full h-full" viewBox="0 0 400 200" preserveAspectRatio="none">
+                    <svg
+                      aria-label="Illustrative average organic rank trend improving from 18.4 on day 1 to 9.2 today over 30 days."
+                      className="w-full h-full"
+                      role="img"
+                      viewBox="0 0 400 200"
+                      preserveAspectRatio="none"
+                    >
                       <defs>
                         <linearGradient id="rankGrad" x1="0" y1="0" x2="0" y2="1">
                           <stop offset="0" stop-color="#6366F1" />
@@ -361,6 +426,9 @@ function CatalogWorkspace({ sellerId }: { sellerId?: string }) {
                   </div>
                 </CardHeader>
                 <CardContent>
+                  <p role="status" aria-live="polite" className="sr-only">
+                    {loading ? "Loading catalog products." : `${products.length} catalog products loaded.`}
+                  </p>
                   <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
                     <span className="text-[10px] font-bold uppercase tracking-wide text-muted">Filters</span>
                     <div className="flex items-center gap-1 border border-line rounded-md bg-canvas p-1 text-xs">
@@ -373,7 +441,8 @@ function CatalogWorkspace({ sellerId }: { sellerId?: string }) {
                     </button>
                   </div>
                   <div className="overflow-x-auto">
-                    <table className="w-full text-left text-xs">
+                    <table aria-busy={loading} className="w-full text-left text-xs">
+                      <caption className="sr-only">Catalog products with optimization score, inventory, and edit actions</caption>
                       <thead className="bg-canvas text-[10px] uppercase tracking-wide text-muted">
                         <tr>
                           <th style={{width:34}}></th>
@@ -403,12 +472,12 @@ function CatalogWorkspace({ sellerId }: { sellerId?: string }) {
                               <td className="px-4 py-3">{product.title}</td>
                               <td className="px-4 py-3">{product.category}</td>
                               <td className="px-4 py-3"><span className={statusClass}>{product.opt_status}</span></td>
-                              <td className="px-4 py-3 tabular-nums">{product.opt_score}</td>
+                              <td className="px-4 py-3 tabular-nums">{product.seoScore}</td>
                               <td className="px-4 py-3 issue-cell">{product.opt_issues.length ? product.opt_issues.map((issue: string) => <span className="issue-tag" key={issue}>{issue}</span>) : <span className="issue-tag muted">—</span>}</td>
-                              <td className="px-4 py-3 tabular-nums">{product.stock}</td>
-                              <td className="px-4 py-3 tabular-nums">{product.days_of_supply}</td>
+                              <td className="px-4 py-3 tabular-nums">{product.stockLevel}</td>
+                              <td className="px-4 py-3 tabular-nums">{Number.isFinite(product.daysSupply) ? product.daysSupply.toFixed(1) : "—"}</td>
                               <td className="px-4 py-3 tabular-nums">${product.price.toFixed(2)}</td>
-                              <td className="px-4 py-3"><button className="button button-outline button-sm" type="button" onClick={() => { setDrawerId(product.id); setDrawerMode("optimize"); }}>Optimize</button></td>
+                              <td className="px-4 py-3"><button className="button button-outline button-sm" type="button" onClick={() => openEditor(product)}>Optimize</button></td>
                             </tr>
                           );
                         }) : (
@@ -427,7 +496,7 @@ function CatalogWorkspace({ sellerId }: { sellerId?: string }) {
                 <div className="flex items-center gap-2">
                   <Bot size={14} className="text-indigo-600" />
                   <div>
-                    <h3 className="panel-title">AI Copy Generation &amp; Keyword Injection Queue</h3>
+                    <h2 className="panel-title">AI Copy Generation &amp; Keyword Injection Queue</h2>
                     <div className="panel-subtitle">Sample listing suggestions can be reviewed locally; no catalog push is available.</div>
                   </div>
                 </div>
@@ -493,71 +562,124 @@ function CatalogWorkspace({ sellerId }: { sellerId?: string }) {
       </div>
       </main>
 
-      {drawerId && (
-        <>
-          <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40" onClick={() => setDrawerId("")} />
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <div className="relative w-full max-w-2xl max-h-[90vh] bg-white rounded-xl border border-line shadow-2xl flex flex-col">
-              <div className="flex items-center justify-between px-6 py-4 border-b border-line bg-white/90 sticky top-0 z-10">
-                <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wide text-muted">{drawerMode === "view" ? "View listing" : "Optimize listing"}</span>
-                  <span className="text-[10px] text-muted truncate block">{drawerId} · {drawerId}</span>
-                </div>
-                <button className="p-1.5 rounded-md text-muted hover:bg-canvas hover:text-indigo-950 transition-colors" onClick={() => setDrawerId("")}>
-                  <span className="sr-only">Close</span>
-                  <span className="block w-5 h-5"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></span>
-                </button>
+      {drawerId && selectedProduct && (
+        <dialog
+          ref={editorDialogRef}
+          aria-labelledby={`${editorId}-title`}
+          className="fixed inset-0 z-50 m-0 max-h-[90dvh] w-[calc(100%-2rem)] max-w-4xl overflow-hidden rounded-xl border border-muted bg-white p-0 shadow-2xl backdrop:bg-black/40"
+          onClose={() => setDrawerId("")}
+          onClick={(event) => {
+            if (event.target === event.currentTarget) editorDialogRef.current?.close();
+          }}
+        >
+          <div className="flex max-h-[90dvh] flex-col">
+            <header className="sticky top-0 z-10 flex items-center justify-between gap-4 border-b border-line bg-white px-4 py-4 sm:px-6">
+              <div className="min-w-0">
+                <h2 id={`${editorId}-title`} className="text-sm font-bold text-on-surface">
+                  {drawerMode === "view" ? "View listing" : "Optimize listing"}
+                </h2>
+                <p className="truncate text-xs text-on-surface-variant">
+                  {selectedProduct.sku} · {selectedProduct.asin}
+                </p>
               </div>
-              <div className="flex-1 overflow-y-auto p-6">
-                <div className="grid gap-6 md:grid-cols-2">
-                  <div>
-                    <div className="compare-head">Current · score —</div>
-                    <div className="space-y-3">
-                      <div className="compare-field"><span>Title</span><div className="field-value">—</div></div>
-                      <div className="compare-field"><span>Bullets</span><ul className="field-list"><li>—</li></ul></div>
-                      <div className="compare-field"><span>Backend keywords</span><div className="field-value">—</div></div>
-                      <div className="compare-field"><span>Description</span><div className="field-value">—</div></div>
-                      <div className="compare-field"><span>Images</span><div className="field-value">0 main</div></div>
+              <button
+                aria-label="Close listing editor"
+                className="button button-outline button-sm shrink-0"
+                type="button"
+                onClick={() => editorDialogRef.current?.close()}
+              >
+                Close
+              </button>
+            </header>
+            <div className="flex-1 overflow-y-auto p-4 sm:p-6">
+              <div className="grid gap-6 md:grid-cols-2">
+                <section aria-labelledby={`${editorId}-current-heading`}>
+                  <h3 id={`${editorId}-current-heading`} className="mb-3 text-xs font-bold text-on-surface">
+                    Current listing · SEO score {selectedProduct.seoScore}
+                  </h3>
+                  <div className="space-y-3 text-xs">
+                    <div className="compare-field"><span>Title</span><div className="field-value">{selectedProduct.title}</div></div>
+                    <div className="compare-field">
+                      <span>Bullets</span>
+                      <ul className="field-list">
+                        {selectedProduct.bullets.length
+                          ? selectedProduct.bullets.map((bullet, index) => <li key={`${index}-${bullet}`}>{bullet}</li>)
+                          : <li>No bullets</li>}
+                      </ul>
                     </div>
+                    <div className="compare-field"><span>Backend keywords</span><div className="field-value">{selectedProduct.backend_keywords.join(", ") || "None"}</div></div>
+                    <div className="compare-field"><span>Description</span><div className="field-value">{selectedProduct.description || "None"}</div></div>
+                    <div className="compare-field"><span>Images</span><div className="field-value">{selectedProduct.images.length} main images</div></div>
                   </div>
-                  <div>
-                    <form className="optimize-form" data-product-id={drawerId}>
-                      <div className="space-y-3">
-                        <div className="compare-field">
-                          <span>Title</span>
-                          <textarea name="title" required className="w-full min-h-[44px] p-2 border border-line rounded-md text-[10px] focus:outline-none focus:border-teal-700" />
-                        </div>
-                        <div className="compare-field">
-                          <span>Bullets (one per line)</span>
-                          <textarea name="bullets" required className="w-full min-h-[88px] p-2 border border-line rounded-md text-[10px] focus:outline-none focus:border-teal-700" />
-                        </div>
-                        <div className="compare-field">
-                          <span>Backend keywords (comma-separated)</span>
-                          <input name="backend_keywords" defaultValue="" className="w-full min-h-[30px] p-2 border border-line rounded-md text-[10px] focus:outline-none focus:border-teal-700" />
-                        </div>
-                        <div className="compare-field">
-                          <span>Description</span>
-                          <textarea name="description" className="w-full min-h-[66px] p-2 border border-line rounded-md text-[10px] focus:outline-none focus:border-teal-700" />
-                        </div>
-                        <div className="compare-actions flex justify-end gap-2 pt-4">
-                          {drawerMode === "view" ? (
-                            <button className="button button-outline" type="button" onClick={() => setDrawerId("")}>Close</button>
-                          ) : (
-                            <>
-                              <button className="button button-outline" type="button" onClick={() => setDrawerId("")}>Cancel</button>
-                              <button className="button button-outline" type="button">Save draft</button>
-                              <button className="button button-primary" type="button" onClick={() => void sendToApproval(drawerId)}>Send to approval</button>
-                            </>
-                          )}
-                        </div>
+                </section>
+                <section aria-labelledby={`${editorId}-edit-heading`}>
+                  <h3 id={`${editorId}-edit-heading`} className="mb-3 text-xs font-bold text-on-surface">Edit listing content</h3>
+                  <p className="mb-3 text-xs text-on-surface-variant">Fields marked (required) must be completed before saving.</p>
+                  <form
+                    className="optimize-form"
+                    data-product-id={drawerId}
+                    onSubmit={(event) => event.preventDefault()}
+                  >
+                    <div className="space-y-3">
+                      <div className="compare-field">
+                        <label htmlFor={`${editorId}-seo-title`} className="mb-1 block text-xs font-medium text-on-surface-variant">Title (required)</label>
+                        <textarea
+                          autoFocus
+                          id={`${editorId}-seo-title`}
+                          name="title"
+                          required
+                          value={seoDraft.title}
+                          onChange={(event) => setSeoDraft((draft) => ({ ...draft, title: event.target.value }))}
+                          className="w-full min-h-[44px] rounded-md border border-muted bg-white p-2 text-xs text-on-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1"
+                        />
                       </div>
-                    </form>
-                  </div>
-                </div>
+                      <div className="compare-field">
+                        <label htmlFor={`${editorId}-seo-bullets`} className="mb-1 block text-xs font-medium text-on-surface-variant">Bullets, one per line (required)</label>
+                        <textarea
+                          id={`${editorId}-seo-bullets`}
+                          name="bullets"
+                          required
+                          value={seoDraft.bullets}
+                          onChange={(event) => setSeoDraft((draft) => ({ ...draft, bullets: event.target.value }))}
+                          className="w-full min-h-[88px] rounded-md border border-muted bg-white p-2 text-xs text-on-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1"
+                        />
+                      </div>
+                      <div className="compare-field">
+                        <label htmlFor={`${editorId}-seo-keywords`} className="mb-1 block text-xs font-medium text-on-surface-variant">Backend keywords, comma-separated</label>
+                        <input
+                          id={`${editorId}-seo-keywords`}
+                          name="backend_keywords"
+                          value={seoDraft.backendKeywords}
+                          onChange={(event) => setSeoDraft((draft) => ({ ...draft, backendKeywords: event.target.value }))}
+                          className="w-full min-h-[36px] rounded-md border border-muted bg-white p-2 text-xs text-on-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1"
+                        />
+                      </div>
+                      <div className="compare-field">
+                        <label htmlFor={`${editorId}-seo-description`} className="mb-1 block text-xs font-medium text-on-surface-variant">Description</label>
+                        <textarea
+                          id={`${editorId}-seo-description`}
+                          name="description"
+                          value={seoDraft.description}
+                          onChange={(event) => setSeoDraft((draft) => ({ ...draft, description: event.target.value }))}
+                          className="w-full min-h-[66px] rounded-md border border-muted bg-white p-2 text-xs text-on-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1"
+                        />
+                      </div>
+                      <div className="flex flex-col-reverse justify-end gap-3 pt-2 sm:flex-row sm:items-center">
+                        <button className="button button-outline" type="button" onClick={() => editorDialogRef.current?.close()}>
+                          Cancel
+                        </button>
+                        <button className="button button-outline" type="button" onClick={() => void sendToApproval(drawerId)}>
+                          Send to approval
+                        </button>
+                        <SyncButtonSimulation onSync={saveSeoDraft} />
+                      </div>
+                    </div>
+                  </form>
+                </section>
               </div>
             </div>
           </div>
-        </>
+        </dialog>
       )}
       {addModal && (
         <>

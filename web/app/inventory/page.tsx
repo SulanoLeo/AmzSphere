@@ -11,6 +11,7 @@ import { Modal } from "@/components/ui/modal";
 import { clientProductProvider as provider } from "@/lib/provider/client";
 import { downloadCsv } from "@/lib/csv";
 import type { InventoryScanResult, Product } from "@/lib/provider/types";
+import { useAmzStore } from "@/lib/useAmzStore";
 
 function Metric({
   label,
@@ -36,7 +37,10 @@ function Metric({
 }
 
 export default function InventoryPage() {
-  const [products, setProducts] = useState<Product[]>([]);
+  const products = useAmzStore((state) => state.products);
+  const hydrateProducts = useAmzStore((state) => state.hydrateProducts);
+  const upsertProducts = useAmzStore((state) => state.upsertProducts);
+  const togglePpcStatus = useAmzStore((state) => state.togglePpcStatus);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
@@ -71,8 +75,11 @@ export default function InventoryPage() {
     const loadProducts = async () => {
       setLoading(true);
       try {
-        const payload = await provider.getProducts();
-        if (active) setProducts(payload.products);
+        const [payload, ppc] = await Promise.all([
+          provider.getProducts({ page_size: 200 }),
+          provider.getPpcData(),
+        ]);
+        if (active) hydrateProducts(payload.products, ppc.campaigns);
       } catch (cause) {
         if (active) setError(cause instanceof Error ? cause.message : "Failed to load inventory");
       } finally {
@@ -81,16 +88,17 @@ export default function InventoryPage() {
     };
     void loadProducts();
     return () => { active = false; };
-  }, [provider]);
+  }, [hydrateProducts]);
 
-  const lowStock = products.filter((p) => (p.stock / Math.max(p.daily_velocity || 1, 1)) < 15);
-  const totalStock = products.reduce((sum, p) => sum + p.stock, 0);
-  const stockValue = products.reduce((sum, product) => sum + product.stock * product.unit_cost, 0);
-  const averageSupply = products.length
-    ? products.reduce((sum, product) => sum + product.stock / Math.max(product.daily_velocity, 1), 0) / products.length
+  const lowStock = products.filter((product) => product.daysSupply < 15);
+  const totalStock = products.reduce((sum, product) => sum + product.stockLevel, 0);
+  const stockValue = products.reduce((sum, product) => sum + product.stockLevel * product.unit_cost, 0);
+  const productsWithFiniteSupply = products.filter((product) => Number.isFinite(product.daysSupply));
+  const averageSupply = productsWithFiniteSupply.length
+    ? productsWithFiniteSupply.reduce((sum, product) => sum + product.daysSupply, 0) / productsWithFiniteSupply.length
     : 0;
   const visibleProducts = products.filter((product) => {
-    const days = product.stock / Math.max(product.daily_velocity || 1, 1);
+    const days = product.daysSupply;
     if (stockFilter === "critical") return days < 15;
     if (stockFilter === "watch") return days >= 15 && days < 30;
     if (stockFilter === "healthy") return days >= 30;
@@ -107,7 +115,7 @@ export default function InventoryPage() {
         scope: reorderScope,
       });
       const refreshed = await provider.getProducts();
-      setProducts(refreshed.products);
+      hydrateProducts(refreshed.products);
       setScanResult(result);
       setMessage(`Mock scan complete: ${result.restock_proposal_count} reorder proposals across ${result.products_scanned} sample SKUs.`);
       setCalculateReorderOpen(false);
@@ -150,9 +158,8 @@ export default function InventoryPage() {
     setIsSaving(true);
     setError("");
     try {
-      await provider.updateProduct(adjustMaxOpen, { max_stock: Number(maxStockValue) });
-      const refreshed = await provider.getProducts();
-      setProducts(refreshed.products);
+      const updatedProduct = await provider.updateProduct(adjustMaxOpen, { max_stock: Number(maxStockValue) });
+      upsertProducts([updatedProduct]);
       setMessage(`Mock maximum stock updated for ${adjustMaxOpen}.`);
       setAdjustMaxOpen(null);
     } catch (cause) {
@@ -180,12 +187,12 @@ export default function InventoryPage() {
     downloadCsv("amzsphere-inventory.csv", [
       ["ASIN", "SKU", "Product", "Stock", "Daily velocity", "Days of supply", "Status"],
       ...products.map((product) => {
-        const days = product.stock / Math.max(product.daily_velocity || 1, 1);
+        const days = product.daysSupply;
         return [
           product.asin,
           product.sku,
           product.name,
-          product.stock,
+          product.stockLevel,
           product.daily_velocity,
           days.toFixed(1),
           days < 15 ? "Critical" : days < 30 ? "Watch" : "Optimal",
@@ -251,7 +258,7 @@ export default function InventoryPage() {
         <Metric label="Total Sample Stock" value={totalStock.toLocaleString()} detail={`Across ${products.length} sample SKUs`} accent="blue" tag="MOCK DATA" />
         <Metric label="Estimated Stock Cost" value={`$${stockValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`} detail="Calculated from sample unit costs" accent="teal" tag="MOCK COGS" />
         <Metric label="Critical Stock" value={`${lowStock.length} SKUs`} detail="Under 15 days of sample supply" accent="rose" tag="REORDER REVIEW" />
-        <Metric label="Average Days of Supply" value={`${averageSupply.toFixed(1)} Days`} detail="Computed from local stock and velocity" accent="teal" tag="SAMPLE" />
+        <Metric label="Average Days of Supply" value={productsWithFiniteSupply.length ? `${averageSupply.toFixed(1)} Days` : "—"} detail="Computed from local stock and velocity" accent="teal" tag="SAMPLE" />
         <Metric label="Shipment Drafts" value={shipmentDrafts.length.toLocaleString()} detail="Local demo drafts only" accent="blue" tag="NO AMAZON SUBMISSION" />
       </div>
 
@@ -406,14 +413,15 @@ export default function InventoryPage() {
                   <th scope="col" className="px-4 py-3">Runway</th>
                   <th scope="col" className="px-4 py-3">Inbound Suggestion</th>
                   <th scope="col" className="px-4 py-3">Status</th>
+                  <th scope="col" className="px-4 py-3">PPC ads</th>
                   <th scope="col" className="px-4 py-3">Action</th>
                 </tr>
               </thead>
               <tbody>
                 {loading ? (
-                  <tr><td colSpan={7} className="text-center text-xs text-muted py-4">Loading inventory…</td></tr>
+                  <tr><td colSpan={8} className="text-center text-xs text-muted py-4">Loading inventory…</td></tr>
                 ) : visibleProducts.length ? visibleProducts.map((product) => {
-                  const days = product.stock / Math.max(product.daily_velocity || 1, 1);
+                  const days = product.daysSupply;
                   const fill = Math.min(100, (days / 45) * 100);
                   const tone = days < 15 ? "warn" : days < 30 ? "pending" : "good";
                   return (
@@ -424,7 +432,7 @@ export default function InventoryPage() {
                       </td>
                       <td className="px-4 py-3 tabular-nums">
                         <div className="stock-cell">
-                          <div className="stock-number"><span>{product.stock} units</span><span>{days.toFixed(1)}d</span></div>
+                          <div className="stock-number"><span>{product.stockLevel} units</span><span>{days.toFixed(1)}d</span></div>
                           <div className="stock-track"><div className={`stock-fill ${tone}`} style={{ width: `${fill}%` }} /></div>
                         </div>
                       </td>
@@ -458,6 +466,27 @@ export default function InventoryPage() {
                         )}
                       </td>
                       <td className="px-4 py-3">
+                        {product.adStatus === "inactive" ? (
+                          <span className="text-[10px] text-muted">No active campaign</span>
+                        ) : (
+                          <div className="flex flex-col items-start gap-2">
+                            <span className={`status ${product.adStatus === "active" ? "good" : "pending"}`}>
+                              {product.adStatus === "active" ? "Active" : "Paused"}
+                            </span>
+                            <button
+                              className="rounded-md border border-muted px-2 py-1 text-[10px] font-semibold text-on-surface-variant focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1"
+                              type="button"
+                              onClick={() => {
+                                togglePpcStatus(product.sku);
+                                setMessage(`Mock ads ${product.adStatus === "active" ? "paused" : "resumed"} for ${product.sku}.`);
+                              }}
+                            >
+                              {product.adStatus === "active" ? "Pause ads" : "Resume ads"}
+                            </button>
+                          </div>
+                        )}
+                      </td>
+                      <td className="px-4 py-3">
                         {days < 15 ? (
                           <Button variant="outline" onClick={() => openPurchaseOrder(product.asin)}>
                             Create PO
@@ -474,7 +503,7 @@ export default function InventoryPage() {
                     </tr>
                   );
                 }) : (
-                  <tr><td colSpan={7} className="text-center text-xs text-muted py-4">No products match this stock filter.</td></tr>
+                  <tr><td colSpan={8} className="text-center text-xs text-muted py-4">No products match this stock filter.</td></tr>
                 )}
               </tbody>
             </table>
