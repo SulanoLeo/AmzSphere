@@ -71,7 +71,7 @@ describe("useAmzStore", () => {
     ]);
 
     expect(useAmzStore.getState().products[0]).toMatchObject({
-      seoScore: 75,
+      seoScore: 70,
       missingAssets: { bullets: true, images: true },
     });
 
@@ -84,6 +84,81 @@ describe("useAmzStore", () => {
       seoScore: 98,
       missingAssets: { bullets: false, images: false },
     });
+  });
+
+  it("adds a local product with calculated listing and inventory metrics", () => {
+    const product = useAmzStore.getState().addProduct({
+      title: "Desk Organizer",
+      sku: "DESK-01",
+      asin: "B0NEW00001",
+      price: 24.99,
+      stockLevel: 100,
+      bullets: ["One", "Two", "Three", "Four", "Five"],
+      imagesUploaded: true,
+    });
+
+    expect(product).toMatchObject({
+      id: "local-DESK-01",
+      name: "Desk Organizer",
+      title: "Desk Organizer",
+      seoScore: 98,
+      opt_score: 98,
+      missingAssets: { bullets: false, images: false },
+      stockLevel: 100,
+      daily_velocity: 10,
+      daysSupply: 10,
+      images: expect.arrayContaining(["/mock-product-images/DESK-01/1.jpg"]),
+      isClientCreated: true,
+    });
+    expect(product.images).toHaveLength(7);
+    expect(useAmzStore.getState().products).toHaveLength(1);
+  });
+
+  it("scores incomplete local products and retains them through catalog hydration", () => {
+    useAmzStore.getState().addProduct({
+      title: "Incomplete Listing",
+      sku: "INCOMPLETE-01",
+      asin: "B0NEW00002",
+      price: 12.5,
+      stockLevel: 30,
+      bullets: ["Only one bullet"],
+      imagesUploaded: false,
+    });
+
+    expect(useAmzStore.getState().products[0]).toMatchObject({
+      seoScore: 70,
+      missingAssets: { bullets: true, images: true },
+      daysSupply: 3,
+      opt_status: "needs_optimization",
+    });
+
+    useAmzStore.getState().hydrateProducts([makeProduct()]);
+    expect(useAmzStore.getState().products.map((product) => product.sku)).toEqual([
+      "TEST-01",
+      "INCOMPLETE-01",
+    ]);
+  });
+
+  it("rejects duplicate SKU and ASIN values", () => {
+    useAmzStore.getState().addProduct({
+      title: "Desk Organizer",
+      sku: "DESK-01",
+      asin: "B0NEW00001",
+      price: 24.99,
+      stockLevel: 10,
+      bullets: [],
+      imagesUploaded: false,
+    });
+
+    expect(() => useAmzStore.getState().addProduct({
+      title: "Another Product",
+      sku: "desk-01",
+      asin: "B0NEW00002",
+      price: 10,
+      stockLevel: 10,
+      bullets: [],
+      imagesUploaded: false,
+    })).toThrow("A product with SKU desk-01 already exists.");
   });
 
   it("preserves PPC status across hydration and toggles only the matching SKU", () => {

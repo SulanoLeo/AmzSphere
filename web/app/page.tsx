@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import {
   PackageSearch,
+  Plus,
   RefreshCw,
   TriangleAlert,
 } from "lucide-react";
@@ -28,6 +29,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Modal } from "@/components/ui/modal";
+import { AddProductModal } from "@/components/product/AddProductModal";
 import { clientProductProvider as provider } from "@/lib/provider/client";
 import type { Dashboard, Seller } from "@/lib/provider/types";
 import { useAmzStore } from "@/lib/useAmzStore";
@@ -139,7 +141,9 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [poMessage, setPoMessage] = useState("");
   const [syncMessage, setSyncMessage] = useState("");
+  const [productAddedMessage, setProductAddedMessage] = useState("");
 
+  const [addProductOpen, setAddProductOpen] = useState(false);
   const [connectSellerOpen, setConnectSellerOpen] = useState(false);
   const [syncStatusOpen, setSyncStatusOpen] = useState(false);
   const [refreshStatusOpen, setRefreshStatusOpen] = useState(false);
@@ -259,6 +263,10 @@ export default function DashboardPage() {
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
+          <Button onClick={() => setAddProductOpen(true)}>
+            <Plus size={15} aria-hidden="true" />
+            Add Product
+          </Button>
           {sellers.length > 1 && (
             <select aria-label="Seller account" className="h-9 max-w-56 rounded-md border border-line bg-white px-2 text-xs" value={selectedSeller} onChange={(event) => setSelectedSeller(event.target.value)}>
               {sellers.map((seller) => (
@@ -300,6 +308,12 @@ export default function DashboardPage() {
       {syncMessage && (
         <p role="status" className="mb-4 rounded-md border border-line bg-white px-4 py-3 text-xs">{syncMessage}</p>
       )}
+      <p role="status" aria-live="polite" aria-atomic="true" className="sr-only">
+        {`${activeListingCount} active listings, ${totalStock.toLocaleString()} stock units, and ${urgentCount} items under 10 days of supply.`}
+      </p>
+      <p role="status" aria-live="polite" aria-atomic="true" className="sr-only">
+        {productAddedMessage}
+      </p>
 
       {/* Metrics row */}
       <div className="metrics metrics-five align-items-stretch mb-8">
@@ -471,16 +485,17 @@ export default function DashboardPage() {
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[780px] text-left text-xs">
+            <table aria-busy={loading} className="w-full min-w-[780px] text-left text-xs">
+              <caption className="sr-only">Catalog products with stock, velocity, supply, and reorder status</caption>
               <thead className="bg-canvas text-[10px] uppercase tracking-wide text-muted">
                 <tr>
-                  <th className="px-4 py-3">SKU / ASIN</th>
-                  <th className="px-4 py-3">Stock level</th>
-                  <th className="px-4 py-3">Velocity 7 / 30 / 90d</th>
-                  <th className="px-4 py-3">Days supply</th>
-                  <th className="px-4 py-3">Vendor</th>
-                  <th className="px-4 py-3">Status</th>
-                  <th className="px-4 py-3">Action</th>
+                  <th scope="col" className="px-4 py-3">SKU / ASIN</th>
+                  <th scope="col" className="px-4 py-3">Stock level</th>
+                  <th scope="col" className="px-4 py-3">Velocity 7 / 30 / 90d</th>
+                  <th scope="col" className="px-4 py-3">Days supply</th>
+                  <th scope="col" className="px-4 py-3">Vendor</th>
+                  <th scope="col" className="px-4 py-3">Status</th>
+                  <th scope="col" className="px-4 py-3">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -489,10 +504,10 @@ export default function DashboardPage() {
                   const needsReorder = product.daysSupply < 15;
                   return (
                   <tr key={`${product.asin}-${product.sku}`} className="border-t border-line">
-                    <td className="px-4 py-3">
+                    <th scope="row" className="px-4 py-3 text-left">
                       <strong>{product.sku}</strong>
                       <span className="mt-1 block text-[10px] text-muted">{product.asin}</span>
-                    </td>
+                    </th>
                     <td className="px-4 py-3 tabular-nums">{product.stockLevel.toLocaleString()}</td>
                     <td className="px-4 py-3 tabular-nums">
                       {dashboardProduct
@@ -583,6 +598,12 @@ export default function DashboardPage() {
       </p>
 
       {/* Modals */}
+      <AddProductModal
+        open={addProductOpen}
+        onClose={() => setAddProductOpen(false)}
+        onProductAdded={(title) => setProductAddedMessage(`${title} added to the local mock catalog.`)}
+      />
+
       <Modal open={connectSellerOpen} onClose={() => setConnectSellerOpen(false)} title="Load Mock Seller Data">
         <div className="space-y-4">
           <div>

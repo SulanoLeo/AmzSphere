@@ -46,6 +46,8 @@ npm run build
 
 The committed seed data is `web/mock_db.json`. The app loads it into an in-memory cache; mutations do not write to the seed file and are lost when the process restarts. Serverless invocations do not share that memory. Integration, publishing, campaign, and synchronization actions are simulated and have no external side effects.
 
+Products created with the Add Product form are held in client-side Zustand state so they appear across the Overview, Catalog, and Inventory Hub during client-side navigation. They are not written to the mock seed or server and reset when the page is refreshed.
+
 Keep `AMZ_DATA_MODE=mock`. Do not add production credentials or enable a live integration. Product Research is a known feature gap and is intentionally deferred.
 
 See [PROJECT_GUIDE.md](./PROJECT_GUIDE.md), [ARCHITECTURE.md](./ARCHITECTURE.md), and [PRODUCTION_SETUP.md](./PRODUCTION_SETUP.md).

@@ -237,7 +237,7 @@ export default function InventoryPage() {
       </header>
 
       {error && <p role="alert" className="mb-4 rounded-md border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-800">{error}</p>}
-      {message && <p role="status" aria-live="polite" className="mb-4 rounded-md border border-teal-200 bg-teal-50 px-3 py-2 text-sm text-teal-900">{message}</p>}
+      {message && <p role="status" aria-live="polite" aria-atomic="true" className="mb-4 rounded-md border border-teal-200 bg-teal-50 px-3 py-2 text-sm text-teal-900">{message}</p>}
       {scanResult && (
         <section className="mb-6 rounded-lg border border-line bg-white p-4" aria-labelledby="reorder-proposals-heading">
           <h2 id="reorder-proposals-heading" className="text-sm font-semibold text-on-surface">Latest mock reorder proposals</h2>
@@ -403,7 +403,7 @@ export default function InventoryPage() {
         </CardHeader>
         <CardContent className="pt-0">
           <div className="table-wrap">
-            <table className="w-full text-left text-xs">
+            <table aria-busy={loading} className="w-full text-left text-xs">
               <caption className="sr-only">Sample inventory stock levels and reorder actions</caption>
               <thead className="bg-canvas text-[10px] uppercase tracking-wide text-muted">
                 <tr>
@@ -426,10 +426,10 @@ export default function InventoryPage() {
                   const tone = days < 15 ? "warn" : days < 30 ? "pending" : "good";
                   return (
                     <tr key={product.asin} className="border-t border-line">
-                      <td className="px-4 py-3">
+                      <th scope="row" className="px-4 py-3 text-left">
                         <div className="product-name">{product.name}</div>
                         <div className="product-meta">{product.sku} · <span className="asin">{product.asin}</span> · Electronics</div>
-                      </td>
+                      </th>
                       <td className="px-4 py-3 tabular-nums">
                         <div className="stock-cell">
                           <div className="stock-number"><span>{product.stockLevel} units</span><span>{days.toFixed(1)}d</span></div>
@@ -509,7 +509,9 @@ export default function InventoryPage() {
             </table>
           </div>
           <div className="flex items-center justify-between mt-3 text-[10px] text-muted">
-            <span>Showing {visibleProducts.length} of {products.length} sample SKUs</span>
+            <span role="status" aria-live="polite" aria-atomic="true">
+              Showing {visibleProducts.length} of {products.length} sample SKUs
+            </span>
           </div>
         </CardContent>
       </Card>

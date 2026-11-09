@@ -3,11 +3,12 @@
 import { useCallback, useEffect, useId, useRef, useState, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { ArrowLeft, Bot, LoaderCircle, Search, ToggleRight, ToggleLeft } from "lucide-react";
+import { ArrowLeft, Bot, LoaderCircle, Plus, Search, ToggleRight, ToggleLeft } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Modal } from "@/components/ui/modal";
+import { AddProductModal } from "@/components/product/AddProductModal";
 import { StorefrontView } from "@/components/product/StorefrontView";
 import { HealthScoreBar } from "@/components/HealthScoreBar";
 import { SyncButtonSimulation } from "@/components/catalog/SyncButtonSimulation";
@@ -69,8 +70,7 @@ function CatalogWorkspace({ sellerId }: { sellerId?: string }) {
     backendKeywords: "",
     description: "",
   });
-  const [addModal, setAddModal] = useState(false);
-  const [addTab, setAddTab] = useState<"import" | "manual">("import");
+  const [addProductOpen, setAddProductOpen] = useState(false);
   const editorDialogRef = useRef<HTMLDialogElement>(null);
   const editorId = useId();
 
@@ -156,75 +156,6 @@ function CatalogWorkspace({ sellerId }: { sellerId?: string }) {
       setMessage(cause instanceof Error ? cause.message : "Request failed");
     } finally {
       setBusy(false);
-    }
-  }
-
-  async function handleAddProduct(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const form = event.currentTarget;
-    const formData = new FormData(form);
-    const name = String(formData.get("add-name") || "").trim();
-    const newSku = String(formData.get("add-sku") || "").trim();
-    const newAsin = String(formData.get("add-asin") || "").trim();
-    const title = String(formData.get("add-title") || "").trim() || name;
-    const category = String(formData.get("add-category") || "").trim() || "General";
-    const price = Number(formData.get("add-price")) || 0;
-    const stock = Number(formData.get("add-stock")) || 0;
-    const velocity = Number(formData.get("add-velocity")) || 0;
-
-    if (!name || !newSku || !newAsin) {
-      setMessage("Name, SKU, and ASIN are required.");
-      return;
-    }
-
-    try {
-      setBusy(true);
-      await provider.addProduct({
-        asin: newAsin,
-        sku: newSku,
-        marketplace_id: "ATVPDKIKX0DER",
-        seller_id: "mock-seller",
-        source: "manual",
-        name,
-        title,
-        category,
-        price,
-        bullets: [],
-        description: "",
-        backend_keywords: [],
-        images: [],
-        sellable_units: stock,
-        stock,
-        days_of_supply: Math.round(stock / Math.max(velocity || 1, 0.1)) || 0,
-        daily_velocity: velocity,
-        competitor_price: price,
-        market_price: price,
-        min_floor: Math.round(price * 0.8),
-        max_price: Math.round(price * 1.2),
-        unit_cost: Math.round(price * 0.5),
-        lead_time_days: 21,
-        supplier: "Manual entry",
-        parent_asin: null,
-        variation_theme: null,
-        supplier_id: null,
-        po_draft_id: null,
-        suppressed: false,
-        last_synced_at: null,
-        sync_status: "synced",
-        last_optimized_at: null,
-        opt_score: 0,
-        opt_issues: [],
-        opt_status: "needs_optimization",
-      });
-      setAddModal(false);
-      setMessage("Product added.");
-      const payload = await provider.getProducts({ page_size: 200 });
-      hydrateProducts(payload.products);
-    } catch (cause) {
-      setMessage(cause instanceof Error ? cause.message : "Failed to add product");
-    } finally {
-      setBusy(false);
-      form.reset();
     }
   }
 
@@ -435,9 +366,11 @@ function CatalogWorkspace({ sellerId }: { sellerId?: string }) {
                       <button className="px-2 py-1 rounded-md text-[10px] font-semibold bg-amber-50 text-amber-800 border-amber-200">Suppression Status: All</button>
                       <button className="px-2 py-1 rounded-md text-[10px] font-semibold text-muted border-transparent hover:bg-canvas">Brand: All (3)</button>
                     </div>
-                    <div className="text-right text-[10px] text-muted">Showing 5 of 1,428 tracked products</div>
-                    <button className="button button-outline button-sm" type="button" onClick={() => { setAddTab("import"); setAddModal(true); }}>
-                      Bulk AI Rewrite
+                    <div className="text-right text-[10px] text-muted">
+                      Showing {products.length.toLocaleString()} tracked product{products.length === 1 ? "" : "s"}
+                    </div>
+                    <button className="button button-outline button-sm" type="button" onClick={() => setAddProductOpen(true)}>
+                      <Plus size={13} aria-hidden="true" /> Add Product
                     </button>
                   </div>
                   <div className="overflow-x-auto">
@@ -445,29 +378,27 @@ function CatalogWorkspace({ sellerId }: { sellerId?: string }) {
                       <caption className="sr-only">Catalog products with optimization score, inventory, and edit actions</caption>
                       <thead className="bg-canvas text-[10px] uppercase tracking-wide text-muted">
                         <tr>
-                          <th style={{width:34}}></th>
-                          <th className="px-4 py-3">ASIN</th>
-                          <th className="px-4 py-3">SKU</th>
-                          <th style={{minWidth:220}} className="px-4 py-3">Title</th>
-                          <th className="px-4 py-3">Category</th>
-                          <th className="px-4 py-3">Status</th>
-                          <th className="px-4 py-3 tabular-nums">Score</th>
-                          <th style={{width:300}} className="px-4 py-3">Issues</th>
-                          <th className="px-4 py-3 tabular-nums">Stock</th>
-                          <th className="px-4 py-3 tabular-nums">Days of supply</th>
-                          <th className="px-4 py-3 tabular-nums">Price</th>
-                          <th style={{width:170}} className="px-4 py-3">Actions</th>
+                          <th scope="col" style={{minWidth:120}} className="px-4 py-3">ASIN</th>
+                          <th scope="col" className="px-4 py-3">SKU</th>
+                          <th scope="col" style={{minWidth:220}} className="px-4 py-3">Title</th>
+                          <th scope="col" className="px-4 py-3">Category</th>
+                          <th scope="col" className="px-4 py-3">Status</th>
+                          <th scope="col" className="px-4 py-3 tabular-nums">Score</th>
+                          <th scope="col" style={{width:300}} className="px-4 py-3">Issues</th>
+                          <th scope="col" className="px-4 py-3 tabular-nums">Stock</th>
+                          <th scope="col" className="px-4 py-3 tabular-nums">Days of supply</th>
+                          <th scope="col" className="px-4 py-3 tabular-nums">Price</th>
+                          <th scope="col" style={{width:170}} className="px-4 py-3">Actions</th>
                         </tr>
                       </thead>
                       <tbody>
                         {loading ? (
-                          <tr><td colSpan={12} className="text-center text-xs text-muted py-4">Loading products…</td></tr>
+                          <tr><td colSpan={11} className="text-center text-xs text-muted py-4">Loading products…</td></tr>
                         ) : products.length ? products.map((product) => {
                           const statusClass = product.opt_status === "optimized" ? "status good" : "status warn";
                           return (
                             <tr key={product.asin} className="border-t border-line">
-                              <td className="px-4 py-3 tabular-nums text-[10px] text-muted">☐</td>
-                              <td className="px-4 py-3">{product.asin}</td>
+                              <th scope="row" className="px-4 py-3 text-left">{product.asin}</th>
                               <td className="px-4 py-3">{product.sku}</td>
                               <td className="px-4 py-3">{product.title}</td>
                               <td className="px-4 py-3">{product.category}</td>
@@ -481,7 +412,7 @@ function CatalogWorkspace({ sellerId }: { sellerId?: string }) {
                             </tr>
                           );
                         }) : (
-                          <tr><td colSpan={12} className="text-center text-xs text-muted py-4">No products in catalog.</td></tr>
+                          <tr><td colSpan={11} className="text-center text-xs text-muted py-4">No products in catalog.</td></tr>
                         )}
                       </tbody>
                     </table>
@@ -681,82 +612,11 @@ function CatalogWorkspace({ sellerId }: { sellerId?: string }) {
           </div>
         </dialog>
       )}
-      {addModal && (
-        <>
-          <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40" onClick={() => setAddModal(false)} />
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <div className="relative w-full max-w-md max-h-[92vh] bg-white rounded-xl border border-line shadow-2xl flex flex-col">
-              <div className="flex items-center justify-between px-6 py-4 border-b border-line bg-white/90 sticky top-0 z-10">
-                <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wide text-muted">Add product</span>
-                  <span className="text-[10px] text-muted block">Import from Amazon or create manually</span>
-                </div>
-                <button className="p-1.5 rounded-md text-muted hover:bg-canvas hover:text-indigo-950 transition-colors" onClick={() => setAddModal(false)}>
-                  <span className="sr-only">Close</span>
-                  <span className="block w-5 h-5"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></span>
-                </button>
-              </div>
-              <div className="flex-1 overflow-y-auto p-6">
-                <div className="tabs mb-4">
-                  <button className={`tab ${addTab === "import" ? "tab-active" : ""}`} type="button" onClick={() => setAddTab("import")}>Import from Amazon</button>
-                  <button className={`tab ${addTab === "manual" ? "tab-active" : ""}`} type="button" onClick={() => setAddTab("manual")}>Create manually</button>
-                </div>
-                {addTab === "import" && (
-                  <div className="tab-panel" id="add-tab-import">
-                    <p className="hint text-[10px] text-muted mb-3">Look up a product by ASIN or SKU. Re-importing upserts by ASIN + marketplace.</p>
-                    <form id="add-import-form" className="flex gap-2 align-end mb-4" onSubmit={(e) => { e.preventDefault(); }}>
-                      <input name="ref" type="text" placeholder="ASIN or SKU" required className="flex-1 min-h-[34px] px-3 border border-line rounded-md text-[10px] focus:outline-none focus:border-teal-700" />
-                      <button type="submit" className="button button-primary min-h-[36px]">Import</button>
-                    </form>
-                  </div>
-                )}
-                {addTab === "manual" && (
-                  <div className="tab-panel" id="add-tab-manual">
-                    <form id="add-manual-form" className="grid grid-cols-1 sm:grid-cols-2 gap-4" onSubmit={handleAddProduct}>
-                      <div className="sm:col-span-2">
-                        <label className="form-label text-[10px] font-bold text-muted">Product name</label>
-                        <input name="add-name" type="text" placeholder="e.g. Bamboo Desk Organizer" required className="w-full min-h-[30px] px-2 border border-line rounded-md text-[10px] focus:outline-none focus:border-teal-700" />
-                      </div>
-                      <div>
-                        <label className="form-label text-[10px] font-bold text-muted">SKU</label>
-                        <input name="add-sku" type="text" placeholder="e.g. BD-OG-01" required className="w-full min-h-[30px] px-2 border border-line rounded-md text-[10px] focus:outline-none focus:border-teal-700" />
-                      </div>
-                      <div>
-                        <label className="form-label text-[10px] font-bold text-muted">ASIN</label>
-                        <input name="add-asin" type="text" placeholder="e.g. B0XYZ12345" required className="w-full min-h-[30px] px-2 border border-line rounded-md text-[10px] focus:outline-none focus:border-teal-700" />
-                      </div>
-                      <div>
-                        <label className="form-label text-[10px] font-bold text-muted">Listing title</label>
-                        <input name="add-title" type="text" placeholder="Defaults to product name" className="w-full min-h-[30px] px-2 border border-line rounded-md text-[10px] focus:outline-none focus:border-teal-700" />
-                      </div>
-                      <div>
-                        <label className="form-label text-[10px] font-bold text-muted">Category</label>
-                        <input name="add-category" type="text" placeholder="e.g. Office" className="w-full min-h-[30px] px-2 border border-line rounded-md text-[10px] focus:outline-none focus:border-teal-700" />
-                      </div>
-                      <div>
-                        <label className="form-label text-[10px] font-bold text-muted">Price ($)</label>
-                        <input name="add-price" type="number" step="0.01" placeholder="24.99" className="w-full min-h-[30px] px-2 border border-line rounded-md text-[10px] focus:outline-none focus:border-teal-700" />
-                      </div>
-                      <div>
-                        <label className="form-label text-[10px] font-bold text-muted">Stock units</label>
-                        <input name="add-stock" type="number" step="1" placeholder="500" className="w-full min-h-[30px] px-2 border border-line rounded-md text-[10px] focus:outline-none focus:border-teal-700" />
-                      </div>
-                      <div>
-                        <label className="form-label text-[10px] font-bold text-muted">Daily velocity</label>
-                        <input name="add-velocity" type="number" step="0.1" placeholder="15" className="w-full min-h-[30px] px-2 border border-line rounded-md text-[10px] focus:outline-none focus:border-teal-700" />
-                      </div>
-                      <div className="sm:col-span-2 flex gap-2 pt-4">
-                        <button type="button" className="button button-outline flex-1" onClick={() => setAddModal(false)}>Cancel</button>
-                        <button type="submit" form="add-manual-form" className="button button-primary flex-1">Create product</button>
-                      </div>
-                    </form>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </>
-      )}
+      <AddProductModal
+        open={addProductOpen}
+        onClose={() => setAddProductOpen(false)}
+        onProductAdded={(title) => setMessage(`${title} added to the local mock catalog.`)}
+      />
 
       {/* Modals */}
       <Modal open={bulkRewriteOpen} onClose={() => setBulkRewriteOpen(false)} title="Bulk AI Rewrite — Setup & Capabilities">
@@ -794,7 +654,7 @@ function CatalogWorkspace({ sellerId }: { sellerId?: string }) {
           </div>
           <div className="flex justify-end gap-2 pt-4">
             <Button variant="outline" onClick={() => setBulkRewriteOpen(false)}>Cancel</Button>
-            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => { setBulkRewriteOpen(false); setAddModal(false); }}>Start Bulk Rewrite</Button>
+            <Button className="bg-indigo-600 text-white hover:bg-indigo-700" onClick={() => setBulkRewriteOpen(false)}>Start Bulk Rewrite</Button>
           </div>
         </div>
       </Modal>
