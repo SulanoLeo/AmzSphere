@@ -1,0 +1,12 @@
+{
+  "skill": "alt-text-headings",
+  "scope": [
+    "/home/lkkolokoy/AmzSphere/web/components/ComingSoon.tsx",
+    "/home/lkkolokoy/AmzSphere/web/app/*/*/page.tsx"
+  ],
+  "findings": [],
+  "passed": [],
+  "notes": [
+    "The specialist ran before implementation and found the component/routes were not yet present. Its recommendation was followed: the shared component renders one semantic main landmark with one h1 naming the unavailable area and avoids promising a delivery date."
+  ]
+}

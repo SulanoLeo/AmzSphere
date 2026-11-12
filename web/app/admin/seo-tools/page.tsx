@@ -58,6 +58,7 @@ export default function SeoToolsAdminPage() {
   const [editingCategoryId, setEditingCategoryId] = useState<SeoToolCategory | null>(null);
   const [newCategoryId, setNewCategoryId] = useState<SeoToolCategory | null>(null);
   const [categoryForm, setCategoryForm] = useState({ label: "", description: "", is_active: true });
+  const [accessAllowed, setAccessAllowed] = useState<boolean | null>(null);
 
   const availableToAdd = useMemo(
     () => SEO_CATEGORIES.filter((c) => !categories.some((existing) => existing.id === c.id)),
@@ -69,6 +70,49 @@ export default function SeoToolsAdminPage() {
       setNewCategoryId(availableToAdd[0].id);
     }
   }, [editingCategoryId, availableToAdd, newCategoryId]);
+
+  useEffect(() => {
+    let active = true;
+    void fetch("/api/access", { cache: "no-store" })
+      .then((response) => {
+        if (!response.ok) throw new Error("Access check failed");
+        return response.json();
+      })
+      .then((payload) => {
+        if (!active) return;
+        setAccessAllowed(Boolean(payload.isApprover));
+      })
+      .catch(() => {
+        if (!active) return;
+        setAccessAllowed(false);
+      });
+    return () => { active = false; };
+  }, []);
+
+  if (accessAllowed === null) {
+    return (
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-24 flex flex-col items-center justify-center text-center">
+        <div className="rounded-md border border-line bg-white p-6">
+          <h2 className="text-sm font-semibold text-indigo-950">SEO Tool Admin</h2>
+          <p className="mt-1 text-xs text-muted">Checking access…</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!accessAllowed) {
+    return (
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-24 flex flex-col items-center justify-center text-center">
+        <div className="rounded-md border border-line bg-white p-6">
+          <ShieldCheck size={24} className="mx-auto mb-3 text-rose-600" aria-hidden="true" />
+          <h2 className="text-sm font-semibold text-indigo-950">Access denied</h2>
+          <p className="mt-1 text-xs text-muted">
+            The SEO Tool Admin page requires approver role. Your account is not on the admin allowlist.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   useEffect(() => {
     let active = true;

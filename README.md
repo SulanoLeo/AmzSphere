@@ -31,16 +31,24 @@ npm run build
 
 ## Demo routes
 
-- `/` — overview
-- `/catalog` — catalog and listing workflow
-- `/inventory` — mock stock and reorder controls
-- `/ppc` — sample campaigns and search terms
-- `/approvals` — purchase-order and listing approvals
-- `/seller-store` — sample storefront controls
-- `/repricer` — simulated price monitoring
-- `/activity` — sample activity feed
-- `/seo-tools` and `/admin/seo-tools` — sample tool selector and local admin
-- `/how` — how the demo works
+- `/` — Overview
+- `/catalog/products` — Products / Listings
+- `/catalog/seo` — Listing Optimization / SEO
+- `/catalog/seo/tools` — SEO Tools
+- `/catalog/seo/preview` — Buyer Preview
+- `/catalog/pricing` — Pricing
+- `/supply/inventory` — Inventory
+- `/supply/replenishment` — Replenishment (the existing combined inventory view until Phase 3)
+- `/supply/purchasing` — Purchasing & Suppliers; legacy approvals redirect here with `?tab=approvals`
+- `/marketing/ppc` — Advertising / PPC
+- `/admin/audit` — Audit Log
+- `/admin/help` — Help / Onboarding
+- `/admin/seo-tools` — role-gated SEO Tool Admin, not in the sidebar
+- `/sales/orders`, `/sales/returns`, `/finance/profit`, `/compliance/health`, `/ops/tasks`, `/ops/alerts`, `/admin/sync`, and `/admin/settings` — shared coming-soon placeholder
+
+Legacy page URLs redirect to their canonical destinations, including `/catalog`,
+`/seo-triage`, `/seo-tools`, `/seller-store`, `/repricer`, `/inventory`,
+`/approvals`, `/ppc`, `/activity`, `/how`, and `/sourcing`.
 
 ## Mock-only behavior
 

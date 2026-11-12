@@ -1,0 +1,16 @@
+{
+  "skill": "keyboard-navigator",
+  "scope": [
+    "/home/lkkolokoy/AmzSphere/web/components/Sidebar.tsx",
+    "/home/lkkolokoy/AmzSphere/web/src/config/nav.ts",
+    "/home/lkkolokoy/AmzSphere/web/tests/sidebar.test.tsx"
+  ],
+  "findings": [],
+  "passed": [
+    "Sidebar destinations are rendered as native links, and the collapse control is a native button, so they retain standard keyboard operation.",
+    "Navigation links and the collapse button have focus-visible ring styles; focusing a link while collapsed expands the sidebar."
+  ],
+  "notes": [
+    "The specialist recommended preserving the SEO hierarchy with native links and exact aria-current state; Phase 2 tests cover canonical parent and child URLs."
+  ]
+}

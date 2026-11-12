@@ -1,0 +1,11 @@
+{
+  "skill": "contrast-master",
+  "scope": [
+    "/home/lkkolokoy/AmzSphere/web/components/ComingSoon.tsx"
+  ],
+  "findings": [],
+  "passed": [],
+  "notes": [
+    "The specialist ran before implementation and the component file was not yet present. After implementation, token color contrast was checked: #0b1c30 on #f3f5f8 is 15.72:1 and #464555 on #f3f5f8 is 8.57:1; both pass WCAG AA normal-text contrast."
+  ]
+}

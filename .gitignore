@@ -15,3 +15,5 @@ backend/var/
 *.tsbuildinfo
 .vercel
 .env*
+/docs/plans/AmzSphere Master Plan v2 Prototype Merged with the Platform Plan.md
+/docs/restructure-plan.md

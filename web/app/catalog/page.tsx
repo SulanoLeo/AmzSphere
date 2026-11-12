@@ -41,7 +41,6 @@ function Metric({
       <div className="metric-label"><span>{label}</span>{tag && <span className="mini-tag">{tag}</span>}</div>
       <div className="metric-value">{value}</div>
       <div className="metric-foot">{detail}</div>
-      <div className={`metric-accent ${accent}`}></div>
     </section>
   );
 }
@@ -746,7 +745,6 @@ function Metric2({ label, value, detail, accent, tag }: { label: string; value: 
       <div className="metric-label"><span>{label}</span>{tag && <span className="mini-tag">{tag}</span>}</div>
       <div className="metric-value">{value}</div>
       <div className="metric-foot">{detail}</div>
-      <div className={`metric-accent ${accent}`}></div>
     </section>
   );
 }

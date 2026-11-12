@@ -4,8 +4,6 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import {
   PackageSearch,
-  Plus,
-  RefreshCw,
   TriangleAlert,
 } from "lucide-react";
 import {
@@ -29,55 +27,11 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Modal } from "@/components/ui/modal";
-import { AddProductModal } from "@/components/product/AddProductModal";
 import { clientProductProvider as provider } from "@/lib/provider/client";
 import type { Dashboard, Seller } from "@/lib/provider/types";
 import { useAmzStore } from "@/lib/useAmzStore";
 
 const RADIAL_COLORS = ["#006a63", "#3525cd", "#ffb95f", "#777587", "#10B981"];
-
-const velocityHistory = [
-  { day: "Sep 04", units: 112 },
-  { day: "Sep 08", units: 145 },
-  { day: "Sep 12", units: 98 },
-  { day: "Sep 16", units: 168 },
-  { day: "Sep 20", units: 124 },
-  { day: "Sep 24", units: 190 },
-  { day: "Sep 28", units: 155 },
-  { day: "Oct 02", units: 210 },
-  { day: "Oct 06", units: 175 },
-  { day: "Oct 10", units: 230 },
-  { day: "Oct 14", units: 200 },
-  { day: "Oct 18", units: 255 },
-  { day: "Oct 22", units: 220 },
-  { day: "Oct 26", units: 280 },
-];
-
-const acosHistory = [
-  { day: "Sep 24", acos: 23.4 },
-  { day: "Sep 26", acos: 21.8 },
-  { day: "Sep 28", acos: 24.1 },
-  { day: "Sep 30", acos: 22.0 },
-  { day: "Oct 2", acos: 22.5 },
-  { day: "Oct 4", acos: 21.2 },
-  { day: "Oct 6", acos: 22.8 },
-  { day: "Oct 8", acos: 23.6 },
-  { day: "Oct 10", acos: 22.2 },
-  { day: "Oct 12", acos: 24.0 },
-  { day: "Oct 14", acos: 22.4 },
-  { day: "Oct 16", acos: 21.9 },
-  { day: "Oct 18", acos: 22.6 },
-  { day: "Oct 20", acos: 20.8 },
-  { day: "Oct 22", acos: 22.1 },
-];
-
-const procurementMix = [
-  { name: "Dropship", value: 40, color: "#006a63" },
-  { name: "Managed Vendor", value: 30, color: "#3525cd" },
-  { name: "In Transit", value: 15, color: "#ffb95f" },
-  { name: "Backordered", value: 10, color: "#777587" },
-  { name: "Direct", value: 5, color: "#10B981" },
-];
 
 function Metric({
   label,
@@ -85,23 +39,28 @@ function Metric({
   detail,
   accent,
   tag,
+  href,
 }: {
   label: string;
   value: string;
   detail: string;
   accent: string;
   tag?: string;
+  href?: string;
 }) {
-  return (
+  const content = (
     <section className="metric" data-accent={accent}>
-      <div className="metric-label">
-        <span>{label}</span>
-        {tag && <span className="mini-tag">{tag}</span>}
-      </div>
+      <div className="metric-label"><span>{label}</span>{tag && <span className="mini-tag">{tag}</span>}</div>
       <div className="metric-value">{value}</div>
       <div className="metric-foot">{detail}</div>
-      <div className={`metric-accent ${accent}`}></div>
     </section>
+  );
+
+  if (!href) return content;
+  return (
+    <Link href={href} className="block">
+      {content}
+    </Link>
   );
 }
 
@@ -140,15 +99,10 @@ export default function DashboardPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [poMessage, setPoMessage] = useState("");
-  const [syncMessage, setSyncMessage] = useState("");
   const [productAddedMessage, setProductAddedMessage] = useState("");
-
-  const [addProductOpen, setAddProductOpen] = useState(false);
-  const [connectSellerOpen, setConnectSellerOpen] = useState(false);
-  const [syncStatusOpen, setSyncStatusOpen] = useState(false);
-  const [refreshStatusOpen, setRefreshStatusOpen] = useState(false);
   const [reviewPoOpen, setReviewPoOpen] = useState("");
   const [approvePoOpen, setApprovePoOpen] = useState("");
+  const [ppcData, setPpcData] = useState<{ campaigns: Array<{ base_acos?: number; trailing_acos?: number; ad_share?: number; avg_cpc?: number }>; search_terms: Array<{ spend?: number; sales?: number; order_value?: number; conversions?: number; acos?: number }> } | null>(null);
 
   const loadDashboard = useCallback(async (sellerId: string) => {
     setLoading(true);
@@ -160,6 +114,7 @@ export default function DashboardPage() {
       ]);
       setData(payload);
       hydrateProducts(catalog.products, ppc.campaigns);
+      setPpcData(ppc);
       setError("");
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "Dashboard API unavailable");
@@ -176,17 +131,6 @@ export default function DashboardPage() {
       if (selectedSeller) await loadDashboard(selectedSeller);
     } catch (cause) {
       setPoMessage(cause instanceof Error ? cause.message : "Purchase-order decision failed");
-    }
-  }
-
-  async function syncSeller() {
-    setSyncMessage("");
-    try {
-      await provider.syncState();
-      setSyncMessage("Seller sync queued.");
-      setSyncStatusOpen(true);
-    } catch (cause) {
-      setSyncMessage(cause instanceof Error ? cause.message : "Could not queue seller sync");
     }
   }
 
@@ -240,6 +184,38 @@ export default function DashboardPage() {
   const urgentCount = products.filter((product) => product.daysSupply < 10).length;
   const pendingCount = data?.pending_purchase_orders.length ?? 0;
 
+  // Procurement mix derived from pending POs grouped by vendor
+  const procurementByVendor = data?.pending_purchase_orders.reduce<Record<string, number>>((acc, po) => {
+    acc[po.vendor] = (acc[po.vendor] || 0) + (po.total_amount_minor / 100);
+    return acc;
+  }, {}) || {};
+  const procurementTotal = Object.values(procurementByVendor).reduce((sum, v) => sum + v, 0);
+  const procurementMix = procurementTotal > 0
+    ? Object.entries(procurementByVendor).map(([name, value]) => ({
+        name,
+        value: Math.round((value / procurementTotal) * 100),
+      }))
+    : [];
+
+  // Advertising metrics derived from PPC data
+  const campaigns = ppcData?.campaigns ?? [];
+  const searchTerms = ppcData?.search_terms ?? [];
+  const totalSpend = searchTerms.reduce((sum, t) => sum + (Number(t.spend) || 0), 0);
+  const totalSalesValue = searchTerms.reduce((sum, t) => sum + (Number(t.sales) || 0) * (Number(t.order_value) || 0), 0);
+  const acosPct = totalSalesValue > 0 ? (totalSpend / totalSalesValue * 100).toFixed(1) : "—";
+  const roasVal = totalSpend > 0 ? (totalSalesValue / totalSpend).toFixed(1) : "—";
+
+  // Velocity data from dashboard aggregates
+  const velocity7d = data?.sales_velocity?.units_7d ?? 0;
+  const velocity30d = data?.sales_velocity?.units_30d ?? 0;
+  const velocity90d = data?.sales_velocity?.units_90d ?? 0;
+  const hasVelocityData = data != null && data.products.length > 0 && (velocity7d || velocity30d || velocity90d);
+
+  const hasPpcData = searchTerms.length > 0 || campaigns.length > 0;
+  const hasProcurementData = procurementTotal > 0;
+
+  const rateLimited = data?.sync_status === "rate_limited";
+
   return (
     <main className="workspace-page bg-canvas">
       {/* Breadcrumb */}
@@ -263,24 +239,7 @@ export default function DashboardPage() {
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <Button onClick={() => setAddProductOpen(true)}>
-            <Plus size={15} aria-hidden="true" />
-            Add Product
-          </Button>
-          {sellers.length > 1 && (
-            <select aria-label="Seller account" className="h-9 max-w-56 rounded-md border border-line bg-white px-2 text-xs" value={selectedSeller} onChange={(event) => setSelectedSeller(event.target.value)}>
-              {sellers.map((seller) => (
-                <option key={seller.id} value={seller.id}>{seller.merchant_id} · {seller.marketplace_id}</option>
-              ))}
-            </select>
-          )}
-          <Badge className={connected ? "bg-teal-50 text-teal-800" : "bg-amber-50 text-amber-800"}>
-            {connected ? `Mock sync · ${data?.last_synced_at ? new Date(data.last_synced_at).toISOString() : "complete"}` : "Sample data"}
-          </Badge>
-          <Button variant="outline" onClick={syncSeller} disabled={!selectedSeller || loading}>
-            <RefreshCw size={15} /> Sync seller data
-          </Button>
-          <Badge className="bg-teal-50 text-teal-800 border-teal-200">Buy Box owned</Badge>
+          <Badge className="bg-amber-50 text-amber-800">Sample data</Badge>
         </div>
       </header>
 
@@ -298,16 +257,10 @@ export default function DashboardPage() {
           </div>
           <div className="flex items-start gap-2">
             <Badge className="bg-teal-50 text-teal-800 border-teal-200">Mock engine live</Badge>
-            <Button onClick={() => setConnectSellerOpen(true)} disabled={loading}>
-              Connect seller account
-            </Button>
           </div>
         </div>
       )}
 
-      {syncMessage && (
-        <p role="status" className="mb-4 rounded-md border border-line bg-white px-4 py-3 text-xs">{syncMessage}</p>
-      )}
       <p role="status" aria-live="polite" aria-atomic="true" className="sr-only">
         {`${activeListingCount} active listings, ${totalStock.toLocaleString()} stock units, and ${urgentCount} items under 10 days of supply.`}
       </p>
@@ -319,6 +272,7 @@ export default function DashboardPage() {
       <div className="metrics metrics-five align-items-stretch mb-8">
         <Metric
           label="CATALOG"
+          href="/catalog/products"
           value={loading && products.length === 0 ? "—" : String(activeListingCount)}
           detail="Active listings"
           accent="blue"
@@ -326,6 +280,7 @@ export default function DashboardPage() {
         />
         <Metric
           label="INVENTORY"
+          href="/supply/inventory"
           value={loading && products.length === 0 ? "—" : totalStock.toLocaleString()}
           detail="In-stock items across warehouses"
           accent="teal"
@@ -333,13 +288,15 @@ export default function DashboardPage() {
         />
         <Metric
           label="NEEDS OPTIMIZATION"
+          href="/catalog/seo"
           value={String(needsOptCount)}
           detail="Missing bullets or imagery"
           accent="orange"
-          tag="+70 score"
+          tag="OPTIMIZE"
         />
         <Metric
           label="URGENT"
+          href="/supply/replenishment"
           value={String(urgentCount)}
           detail={`${urgentCount} item${urgentCount === 1 ? "" : "s"} under 10 days of supply`}
           accent="red"
@@ -347,6 +304,7 @@ export default function DashboardPage() {
         />
         <Metric
           label="APPROVALS"
+          href="/supply/purchasing?tab=approvals"
           value={String(pendingCount)}
           detail="Revisions awaiting decision"
           accent="teal"
@@ -362,111 +320,116 @@ export default function DashboardPage() {
               <h2 className="panel-title">30-day unit velocity</h2>
               <div className="panel-subtitle">Calculated from ingested daily sales records</div>
             </div>
-            <span className="category-pill">Rate-Limited</span>
+            {rateLimited && <span className="category-pill">Rate-Limited</span>}
           </div>
           <div className="panel-content min-h-full flex-1">
-            <div className="h-64 w-full">
-              {velocityHistory.length ? (
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={velocityHistory} margin={{ top: 12, right: 12, bottom: 4, left: -16 }}>
-                    <defs>
-                      <linearGradient id="colorVelocity" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#3525cd" stopOpacity={0.35} />
-                        <stop offset="95%" stopColor="#3525cd" stopOpacity={0} />
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid vertical={false} stroke="#e7ebf0" />
-                    <XAxis dataKey="day" tickLine={false} axisLine={false} tick={{ fontSize: 10 }} />
-                    <YAxis tickLine={false} axisLine={false} tick={{ fontSize: 10 }} />
-                    <Tooltip />
-                    <Area type="monotone" dataKey="units" stroke="#3525cd" strokeWidth={2} fillOpacity={1} fill="url(#colorVelocity)" dot={false} />
-                  </AreaChart>
-                </ResponsiveContainer>
-              ) : (
-                <div className="grid h-full place-items-center text-sm text-muted">No inventory history ingested yet.</div>
-              )}
-            </div>
+            {hasVelocityData ? (
+              <div className="grid grid-cols-3 gap-3 mt-4">
+                <StatCard label="7-Day Units" value={velocity7d.toLocaleString()} detail="Trailing 7-day units" color="#3525cd" />
+                <StatCard label="30-Day Units" value={velocity30d.toLocaleString()} detail="Trailing 30-day units" color="#006a63" />
+                <StatCard label="90-Day Units" value={velocity90d.toLocaleString()} detail="Trailing 90-day units" color="#ffb95f" />
+              </div>
+            ) : (
+              <div className="grid h-full place-items-center text-sm text-muted">No sales velocity data available yet.</div>
+            )}
           </div>
         </div>
 
-        <div className="panel flex flex-col h-full">
-          <div className="panel-header flex items-center justify-between">
-            <div>
-              <h2 className="panel-title">Procurement mix</h2>
-              <div className="panel-subtitle">Open · Approved</div>
-            </div>
-            <div className="text-right">
-              <div className="font-mono-metric-lg text-on-surface">$142,388</div>
-              <span className="text-[10px] text-muted">Target lead-time fulfillment</span>
-            </div>
-          </div>
-          <div className="panel-content min-h-full flex-1">
-            <div className="flex items-center justify-between">
-              <div className="w-32 h-32 flex items-center justify-center">
-                <PieChart width={140} height={140}>
-                  <Pie
-                    data={procurementMix}
-                    dataKey="value"
-                    nameKey="name"
-                    cx={70}
-                    cy={70}
-                    innerRadius={42}
-                    outerRadius={62}
-                  >
-                    {procurementMix.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Pie>
-                </PieChart>
-                <div className="absolute flex flex-col items-center">
-                  <span className="font-mono-metric-lg text-on-surface">4</span>
-                  <span className="text-[10px] text-muted uppercase">CHANNELS</span>
-                </div>
+        <Link href="/supply/purchasing">
+          <div className="panel flex flex-col h-full">
+            <div className="panel-header flex items-center justify-between">
+              <div>
+                <h2 className="panel-title">Procurement mix</h2>
+                <div className="panel-subtitle">Open · Approved</div>
               </div>
-              <div className="space-y-2 text-left">
-                {procurementMix.map((entry, index) => (
-                  <div key={entry.name} className="flex items-center gap-2 text-[10px]">
-                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: entry.color }} />
-                    <span className="text-on-surface">{entry.name}</span>
-                    <span className="ml-auto font-mono-code-sm text-muted">{entry.value}%</span>
+              <div className="text-right">
+                <div className="font-mono-metric-lg text-on-surface">{hasProcurementData ? `$${procurementTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : "—"}</div>
+                <span className="text-[10px] text-muted">Target lead-time fulfillment</span>
+              </div>
+            </div>
+            <div className="panel-content min-h-full flex-1">
+              {hasProcurementData ? (
+                <div className="flex items-center justify-between">
+                  <div className="w-32 h-32 flex items-center justify-center">
+                    <PieChart width={140} height={140}>
+                      <Pie
+                        data={procurementMix}
+                        dataKey="value"
+                        nameKey="name"
+                        cx={70}
+                        cy={70}
+                        innerRadius={42}
+                        outerRadius={62}
+                      >
+                        {procurementMix.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={RADIAL_COLORS[index % RADIAL_COLORS.length]} />
+                        ))}
+                      </Pie>
+                    </PieChart>
+                    <div className="absolute flex flex-col items-center">
+                      <span className="font-mono-metric-lg text-on-surface">{procurementMix.length}</span>
+                      <span className="text-[10px] text-muted uppercase">CHANNELS</span>
+                    </div>
                   </div>
-                ))}
-              </div>
+                  <div className="space-y-2 text-left">
+                    {procurementMix.map((entry, index) => (
+                      <div key={entry.name} className="flex items-center gap-2 text-[10px]">
+                        <span className="w-2 h-2 rounded-full" style={{ backgroundColor: RADIAL_COLORS[index % RADIAL_COLORS.length] }} />
+                        <span className="text-on-surface">{entry.name}</span>
+                        <span className="ml-auto font-mono-code-sm text-muted">{entry.value}%</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="grid h-full place-items-center text-sm text-muted">No pending purchase orders to compute procurement mix.</div>
+              )}
             </div>
           </div>
-        </div>
+        </Link>
       </section>
 
       {/* Chart row: Advertising efficiency */}
       <section className="mb-8">
-        <div className="panel flex flex-col h-full">
-          <div className="panel-header flex items-center justify-between">
-            <div>
-              <h2 className="panel-title">Advertising efficiency</h2>
-              <div className="panel-subtitle">Portfolio ACoS · 30-day trend</div>
+        <Link href="/marketing/ppc">
+          <div className="panel flex flex-col h-full">
+            <div className="panel-header flex items-center justify-between">
+              <div>
+                <h2 className="panel-title">Advertising efficiency</h2>
+                <div className="panel-subtitle">Portfolio ACoS · 30-day trend</div>
+              </div>
+              <span className="category-pill">ACoS</span>
             </div>
-            <span className="category-pill">ACoS</span>
+            <div className="panel-content min-h-full flex-1">
+              {hasPpcData ? (
+                <>
+                  <div className="grid grid-cols-4 gap-3 mb-4">
+                    <StatCard label="ACoS Target" value="22%" detail="Target portfolio efficiency" color="#006a63" />
+                    <StatCard label="ACoS" value={`${acosPct}%`} detail="Last 30-day average" color="#3525cd" />
+                    <StatCard label="RoAS" value={`${roasVal}x`} detail="Return on ad spend" color="#ffb95f" />
+                    <StatCard label="Spend" value={`$${totalSpend.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`} detail="30-day ad spend" color="#10B981" />
+                  </div>
+                  <div className="h-64 w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart
+                        data={searchTerms.map((t, i) => ({ day: `T${i + 1}`, acos: Number(t.acos) || 0 }))}
+                        margin={{ top: 12, right: 12, bottom: 4, left: -16 }}
+                      >
+                        <CartesianGrid vertical={false} stroke="#e7ebf0" />
+                        <XAxis dataKey="day" tickLine={false} axisLine={false} tick={{ fontSize: 10 }} />
+                        <YAxis tickLine={false} axisLine={false} tick={{ fontSize: 10 }} domain={["auto", "auto"]} />
+                        <Tooltip />
+                        <Line dataKey="acos" stroke="#007185" strokeWidth={2} dot={false} />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
+                </>
+              ) : (
+                <div className="grid h-full place-items-center text-sm text-muted">No advertising data available yet.</div>
+              )}
+            </div>
           </div>
-          <div className="panel-content min-h-full flex-1">
-            <div className="grid grid-cols-4 gap-3 mb-4">
-              <StatCard label="ACoS Target" value="22%" detail="Target portfolio efficiency" color="#006a63" />
-              <StatCard label="ACoS" value="24.1%" detail="Last 30-day average" color="#3525cd" />
-              <StatCard label="RoAS" value="4.2x" detail="Return on ad spend" color="#ffb95f" />
-              <StatCard label="Spend" value="$142,388" detail="30-day ad spend" color="#10B981" />
-            </div>
-            <div className="h-64 w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={acosHistory} margin={{ top: 12, right: 12, bottom: 4, left: -16 }}>
-                  <CartesianGrid vertical={false} stroke="#e7ebf0" />
-                  <XAxis dataKey="day" tickLine={false} axisLine={false} tick={{ fontSize: 10 }} />
-                  <YAxis tickLine={false} axisLine={false} tick={{ fontSize: 10 }} domain={["auto", "auto"]} />
-                  <Tooltip />
-                  <Line dataKey="acos" stroke="#007185" strokeWidth={2} dot={false} />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-        </div>
+        </Link>
       </section>
 
       {/* Autonomous procurement queue */}
@@ -477,10 +440,12 @@ export default function DashboardPage() {
             <p className="panel-subtitle">Trailing 7/30/90-day velocity · replenishment proposals require review</p>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-[10px] font-semibold text-muted uppercase">Live Mode</span>
             <Button variant="outline" className="text-[10px] px-2" disabled={!selectedSeller || loading} onClick={runInventoryScan}>
               Run inventory scan
             </Button>
+            <Link href="/supply/replenishment" className="text-[10px] font-semibold text-indigo-600 hover:underline">
+              View all →
+            </Link>
           </div>
         </CardHeader>
         <CardContent>
@@ -555,7 +520,12 @@ export default function DashboardPage() {
             <h2 className="panel-title">Purchase orders awaiting review</h2>
             <p className="panel-subtitle">Vendor-formatted PDF drafts · approval does not automatically transmit an order to external EDI</p>
           </div>
-          <Badge>{pendingCount} drafts</Badge>
+          <div className="flex items-center gap-2">
+            <Badge>{pendingCount} drafts</Badge>
+            <Link href="/supply/purchasing?tab=approvals" className="text-[10px] font-semibold text-indigo-600 hover:underline">
+              Review all →
+            </Link>
+          </div>
         </CardHeader>
         <CardContent>
           {poMessage && (
@@ -596,91 +566,6 @@ export default function DashboardPage() {
       <p className="text-right text-[10px] text-muted">
         {totalStock ? `${totalStock.toLocaleString()} sample units represented` : "No mock seller data loaded"} · Changes use temporary mock state
       </p>
-
-      {/* Modals */}
-      <AddProductModal
-        open={addProductOpen}
-        onClose={() => setAddProductOpen(false)}
-        onProductAdded={(title) => setProductAddedMessage(`${title} added to the local mock catalog.`)}
-      />
-
-      <Modal open={connectSellerOpen} onClose={() => setConnectSellerOpen(false)} title="Load Mock Seller Data">
-        <div className="space-y-4">
-          <div>
-            <div className="text-xs font-semibold text-indigo-900 mb-1">Demo seller profile</div>
-            <div className="text-[10px] text-muted mb-3">Use the bundled sample seller and catalog. No API credentials, seller account, or external service is contacted.</div>
-          </div>
-          <div className="p-3 rounded-md border border-line bg-amber-50">
-            <div className="text-[10px] font-bold text-amber-800 mb-1">Mock workflow</div>
-            <ul className="text-[10px] text-muted space-y-1 list-disc pl-4">
-              <li>Load sample catalog and inventory records</li>
-              <li>Review PPC and replenishment examples</li>
-              <li>Try local purchase-order approval flows</li>
-              <li>Data mutations remain process-local</li>
-            </ul>
-          </div>
-          <div className="flex justify-end gap-2 pt-4">
-            <Button variant="outline" onClick={() => setConnectSellerOpen(false)}>Cancel</Button>
-            <Button onClick={() => { setConnectSellerOpen(false); void syncSeller(); }}>Load Sample Seller</Button>
-          </div>
-        </div>
-      </Modal>
-
-      <Modal open={syncStatusOpen} onClose={() => setSyncStatusOpen(false)} title="Sync Status">
-        <div className="space-y-4">
-          <div className="flex items-center justify-between text-xs">
-            <span className="text-muted">Last sync</span>
-            <span className="text-on-surface">{data?.last_synced_at ? new Date(data.last_synced_at).toISOString() : "No mock sync recorded"}</span>
-          </div>
-          <div className="flex items-center justify-between text-xs">
-            <span className="text-muted">Status</span>
-            <span className="text-teal-700 font-semibold">Completed</span>
-          </div>
-          <div className="flex items-center justify-between text-xs">
-            <span className="text-muted">Products synced</span>
-            <span className="text-on-surface tabular-nums">{data?.products.length ?? 0}</span>
-          </div>
-          <div className="flex items-center justify-between text-xs">
-            <span className="text-muted">Orders synced</span>
-            <span className="text-on-surface tabular-nums">{data?.pending_purchase_orders.length ?? 0}</span>
-          </div>
-          <div className="p-3 rounded-md border border-line bg-teal-50">
-            <div className="text-[10px] font-bold text-teal-800 mb-1">What sync does</div>
-            <ul className="text-[10px] text-muted space-y-1 list-disc pl-4">
-              <li>Reads the bundled sample catalog and inventory</li>
-              <li>Refreshes temporary mock records for this process</li>
-              <li>Does not contact Amazon or persist changes across restarts</li>
-            </ul>
-          </div>
-          <div className="flex justify-end pt-4">
-            <Button onClick={() => setSyncStatusOpen(false)}>Done</Button>
-          </div>
-        </div>
-      </Modal>
-
-      <Modal open={refreshStatusOpen} onClose={() => setRefreshStatusOpen(false)} title="Refresh Dashboard">
-        <div className="space-y-4">
-          <div className="flex items-center justify-between text-xs">
-            <span className="text-muted">Dashboard state</span>
-            <span className="text-on-surface">Current mock state</span>
-          </div>
-          <div className="flex items-center justify-between text-xs">
-            <span className="text-muted">Dashboard data</span>
-            <span className="text-teal-700 font-semibold">Current</span>
-          </div>
-          <div className="p-3 rounded-md border border-line bg-indigo-50">
-            <div className="text-[10px] font-bold text-indigo-800 mb-1">What refresh does</div>
-            <ul className="text-[10px] text-muted space-y-1 list-disc pl-4">
-              <li>Recomputes all metric cards from latest data</li>
-              <li>Refreshes velocity charts and procurement queue</li>
-              <li>Updates ACoS trend and optimization scores</li>
-            </ul>
-          </div>
-          <div className="flex justify-end pt-4">
-            <Button onClick={() => setRefreshStatusOpen(false)}>Done</Button>
-          </div>
-        </div>
-      </Modal>
 
       {reviewPoOpen && (
         <Modal open={true} onClose={() => setReviewPoOpen("")} title="Review Purchase Order">

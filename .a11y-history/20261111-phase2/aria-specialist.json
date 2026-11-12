@@ -1,0 +1,27 @@
+{
+  "skill": "aria-specialist",
+  "scope": [
+    "/home/lkkolokoy/AmzSphere/web/components/Sidebar.tsx",
+    "/home/lkkolokoy/AmzSphere/web/src/config/nav.ts",
+    "/home/lkkolokoy/AmzSphere/web/tests/sidebar.test.tsx"
+  ],
+  "findings": [
+    {
+      "rule": "NAV-001",
+      "wcag": "n/a",
+      "severity": "moderate",
+      "confidence": "high",
+      "location": "/home/lkkolokoy/AmzSphere/web/src/config/nav.ts:68",
+      "summary": "The hidden status renders Listing Optimization / SEO as a heading instead of a link, so users cannot navigate to its canonical route or receive its current-page indication.",
+      "fix": "Set this parent item to status: \"live\" so Sidebar renders its native link with exact-path aria-current; update sidebar.test.tsx to verify the parent link at /catalog/seo and that nested Tools and Buyer Preview remain distinct links and alone become current on their routes.",
+      "evidence": "href: \"/catalog/seo\", status: \"hidden\"; the test expects a non-clickable heading."
+    }
+  ],
+  "passed": [
+    "Sidebar uses a named native navigation landmark and native links; decorative icons are hidden from assistive technology.",
+    "aria-current is applied only when the pathname exactly matches the link destination."
+  ],
+  "notes": [
+    "This was the pre-implementation review. NAV-001 was addressed by making the parent a canonical live link and adding tests for parent and child active-route states."
+  ]
+}
