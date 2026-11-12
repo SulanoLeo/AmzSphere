@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useId, useRef, useState, Suspense } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft, Bot, LoaderCircle, Plus, Search, ToggleRight, ToggleLeft } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -56,10 +56,12 @@ export default function SeoPage() {
 function SeoWithParams() {
   const searchParams = useSearchParams();
   const sellerId = searchParams.get("seller_id") || "";
-  return <SeoWorkspace sellerId={sellerId} />;
+  const productId = searchParams.get("product") || "";
+  return <SeoWorkspace sellerId={sellerId} productId={productId} />;
 }
 
-function SeoWorkspace({ sellerId }: { sellerId?: string }) {
+function SeoWorkspace({ sellerId, productId }: { sellerId?: string; productId?: string }) {
+  const router = useRouter();
   const products = useAmzStore((state) => state.products);
   const hydrateProducts = useAmzStore((state) => state.hydrateProducts);
   const upsertProducts = useAmzStore((state) => state.upsertProducts);
@@ -85,6 +87,23 @@ function SeoWorkspace({ sellerId }: { sellerId?: string }) {
   const [addProductOpen, setAddProductOpen] = useState(false);
   const editorDialogRef = useRef<HTMLDialogElement>(null);
   const editorId = useId();
+
+  // Auto-open editor when productId is passed via URL (e.g., from Products page Optimize button)
+  useEffect(() => {
+    if (productId && products.length > 0 && !drawerId) {
+      const product = products.find((p) => p.id === productId);
+      if (product) {
+        openEditor(product);
+      }
+    }
+  }, [productId, products, drawerId]);
+
+  // Clear URL param after opening dialog
+  useEffect(() => {
+    if (drawerId && productId) {
+      router.replace(`/catalog/seo?seller_id=${sellerId || ""}`);
+    }
+  }, [drawerId, productId, router, sellerId]);
 
   // Revision approval state
   const [revisions, setRevisions] = useState<ProductRevision[]>([]);

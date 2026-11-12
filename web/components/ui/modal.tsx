@@ -37,13 +37,14 @@ export function Modal({
   return (
     <dialog
       ref={dialogRef}
+      open={open}
       aria-labelledby={titleId}
       onClose={onClose}
       onClick={(event) => {
         if (event.target === event.currentTarget) dialogRef.current?.close();
       }}
       className={cn(
-        "fixed m-auto max-h-[90vh] w-[calc(100%-2rem)] max-w-2xl overflow-hidden rounded-xl border border-line bg-white p-0 text-ink shadow-2xl backdrop:bg-black/50 backdrop:backdrop-blur-sm",
+        "fixed inset-0 z-50 flex items-center justify-center m-auto max-h-[90vh] w-[calc(100%-2rem)] max-w-2xl overflow-hidden rounded-xl border border-line bg-white p-0 text-ink shadow-2xl backdrop:bg-black/50 backdrop:backdrop-blur-sm",
         className,
       )}
     >

@@ -307,7 +307,7 @@
       "marketplace_id": "ATVPDKIKX0DER",
       "source": "amazon_sync",
       "name": "Clear Essential Mount",
-      "title": "Clear Essential Mount · Clear Mount",
+      "title": "Clear Essential Mount \u00b7 Clear Mount",
       "category": "Sports",
       "price": 14.12,
       "bullets": [
@@ -405,7 +405,7 @@
       "marketplace_id": "ATVPDKIKX0DER",
       "source": "amazon_sync",
       "name": "Tough Grip Holder",
-      "title": "Tough Grip Holder — Tough Holder for Grip",
+      "title": "Tough Grip Holder \u2014 Tough Holder for Grip",
       "category": "Electronics",
       "price": 43.89,
       "bullets": [
@@ -524,7 +524,7 @@
       "marketplace_id": "ATVPDKIKX0DER",
       "source": "amazon_sync",
       "name": "Pro Max Case",
-      "title": "Pro Max Case · Pro Case",
+      "title": "Pro Max Case \u00b7 Pro Case",
       "category": "Lighting",
       "price": 33.69,
       "bullets": [
@@ -622,7 +622,7 @@
       "marketplace_id": "ATVPDKIKX0DER",
       "source": "amazon_sync",
       "name": "Smart Home Mouse",
-      "title": "Smart Home Mouse — Smart Mouse for Home",
+      "title": "Smart Home Mouse \u2014 Smart Mouse for Home",
       "category": "Sports",
       "price": 46.27,
       "bullets": [
@@ -741,7 +741,7 @@
       "marketplace_id": "ATVPDKIKX0DER",
       "source": "amazon_sync",
       "name": "Swift Travel Lamp",
-      "title": "Swift Travel Lamp · Swift Lamp",
+      "title": "Swift Travel Lamp \u00b7 Swift Lamp",
       "category": "Electronics",
       "price": 27.75,
       "bullets": [
@@ -839,7 +839,7 @@
       "marketplace_id": "ATVPDKIKX0DER",
       "source": "amazon_sync",
       "name": "Clear Essential Mount",
-      "title": "Clear Essential Mount — Clear Mount for Essential",
+      "title": "Clear Essential Mount \u2014 Clear Mount for Essential",
       "category": "Lighting",
       "price": 30.07,
       "bullets": [
@@ -958,7 +958,7 @@
       "marketplace_id": "ATVPDKIKX0DER",
       "source": "amazon_sync",
       "name": "Tough Grip Holder",
-      "title": "Tough Grip Holder · Tough Holder",
+      "title": "Tough Grip Holder \u00b7 Tough Holder",
       "category": "Sports",
       "price": 45.71,
       "bullets": [
@@ -1056,7 +1056,7 @@
       "marketplace_id": "ATVPDKIKX0DER",
       "source": "amazon_sync",
       "name": "Pro Max Case",
-      "title": "Pro Max Case — Pro Case for Max",
+      "title": "Pro Max Case \u2014 Pro Case for Max",
       "category": "Electronics",
       "price": 30.64,
       "bullets": [
@@ -1175,7 +1175,7 @@
       "marketplace_id": "ATVPDKIKX0DER",
       "source": "amazon_sync",
       "name": "Smart Home Mouse",
-      "title": "Smart Home Mouse · Smart Mouse",
+      "title": "Smart Home Mouse \u00b7 Smart Mouse",
       "category": "Lighting",
       "price": 36.3,
       "bullets": [
@@ -1273,7 +1273,7 @@
       "marketplace_id": "ATVPDKIKX0DER",
       "source": "amazon_sync",
       "name": "Swift Travel Lamp",
-      "title": "Swift Travel Lamp — Swift Lamp for Travel",
+      "title": "Swift Travel Lamp \u2014 Swift Lamp for Travel",
       "category": "Sports",
       "price": 46.24,
       "bullets": [
@@ -1392,7 +1392,7 @@
       "marketplace_id": "ATVPDKIKX0DER",
       "source": "amazon_sync",
       "name": "Clear Essential Mount",
-      "title": "Clear Essential Mount · Clear Mount",
+      "title": "Clear Essential Mount \u00b7 Clear Mount",
       "category": "Electronics",
       "price": 20.53,
       "bullets": [
@@ -1490,7 +1490,7 @@
       "marketplace_id": "ATVPDKIKX0DER",
       "source": "amazon_sync",
       "name": "Tough Grip Holder",
-      "title": "Tough Grip Holder — Tough Holder for Grip",
+      "title": "Tough Grip Holder \u2014 Tough Holder for Grip",
       "category": "Lighting",
       "price": 9.17,
       "bullets": [
@@ -1609,7 +1609,7 @@
       "marketplace_id": "ATVPDKIKX0DER",
       "source": "amazon_sync",
       "name": "Pro Max Case",
-      "title": "Pro Max Case · Pro Case",
+      "title": "Pro Max Case \u00b7 Pro Case",
       "category": "Sports",
       "price": 50.1,
       "bullets": [
@@ -2145,6 +2145,265 @@
       "opt_status": "needs_optimization",
       "id": "c064de21-2fd2-4034-8a0d-897bad4e2d3d",
       "supplier_id": "SUP-0001"
+    },
+    {
+      "id": "mock-prod-001",
+      "asin": "B0MOCK001",
+      "sku": "MOCK-ECO-01",
+      "marketplace_id": "ATVPDKIKX0DER",
+      "seller_id": "mock-seller",
+      "source": "amazon_sync",
+      "name": "EcoBamboo Desk Organizer",
+      "title": "Desk Organizer",
+      "category": "Office",
+      "price": 24.99,
+      "bullets": [
+        "Keeps your desk tidy"
+      ],
+      "description": "A bamboo desk organizer for pens and supplies.",
+      "backend_keywords": [],
+      "images": [
+        "/mock-product-images/MOCK-ECO-01/1.jpg"
+      ],
+      "sellable_units": 12,
+      "stock": 12,
+      "max_stock": 100,
+      "days_of_supply": 8,
+      "daily_velocity": 1.5,
+      "competitor_price": 28.5,
+      "market_price": 24.99,
+      "min_floor": 15.0,
+      "max_price": 35.0,
+      "unit_cost": 8.5,
+      "lead_time_days": 14,
+      "supplier": "GreenOffice Supplies Co.",
+      "supplier_id": "supp-001",
+      "po_draft_id": null,
+      "parent_asin": null,
+      "variation_theme": null,
+      "suppressed": false,
+      "last_synced_at": "2026-11-10T10:00:00Z",
+      "sync_status": "synced",
+      "last_optimized_at": null,
+      "opt_score": 55,
+      "opt_issues": [
+        "Missing bullet points",
+        "Missing images"
+      ],
+      "opt_status": "needs_optimization"
+    },
+    {
+      "id": "mock-prod-002",
+      "asin": "B0MOCK002",
+      "sku": "MOCK-TECH-02",
+      "marketplace_id": "ATVPDKIKX0DER",
+      "seller_id": "mock-seller",
+      "source": "amazon_sync",
+      "name": "NovaCharge USB-C Hub",
+      "title": "NovaCharge 7-in-1 USB-C Hub with HDMI and SD Card Reader",
+      "category": "Electronics",
+      "price": 49.99,
+      "bullets": [
+        "7-in-1 connectivity for modern laptops",
+        "HDMI 4K output for external displays",
+        "SD and microSD card readers",
+        "Aluminum alloy housing for heat dissipation",
+        "Plug and play, no drivers required",
+        "Compact travel-friendly design",
+        "18-month warranty"
+      ],
+      "description": "Expand your laptop connectivity with this 7-in-1 USB-C hub featuring HDMI, USB-A, SD card readers, and pass-through charging.",
+      "backend_keywords": [
+        "usb c hub",
+        "hdmi adapter",
+        "laptop accessories",
+        "sd card reader",
+        "dongle"
+      ],
+      "images": [
+        "/mock-product-images/MOCK-TECH-02/1.jpg",
+        "/mock-product-images/MOCK-TECH-02/2.jpg",
+        "/mock-product-images/MOCK-TECH-02/3.jpg"
+      ],
+      "sellable_units": 3,
+      "stock": 3,
+      "max_stock": 50,
+      "days_of_supply": 2,
+      "daily_velocity": 1.5,
+      "competitor_price": 54.99,
+      "market_price": 49.99,
+      "min_floor": 35.0,
+      "max_price": 65.0,
+      "unit_cost": 22.0,
+      "lead_time_days": 10,
+      "supplier": "TechHub Manufacturing",
+      "supplier_id": "supp-002",
+      "po_draft_id": null,
+      "parent_asin": null,
+      "variation_theme": null,
+      "suppressed": false,
+      "last_synced_at": "2026-11-10T10:00:00Z",
+      "sync_status": "synced",
+      "last_optimized_at": null,
+      "opt_score": 92,
+      "opt_issues": [],
+      "opt_status": "optimized"
+    },
+    {
+      "id": "mock-prod-003",
+      "asin": "B0MOCK003",
+      "sku": "MOCK-HOME-03",
+      "marketplace_id": "ATVPDKIKX0DER",
+      "seller_id": "mock-seller",
+      "source": "amazon_sync",
+      "name": "PureBreeze Air Purifier Filter",
+      "title": "Air Filter Replacement",
+      "category": "Home & Kitchen",
+      "price": 18.99,
+      "bullets": [
+        "Replacement filter for air purifiers"
+      ],
+      "description": "Replacement HEPA filter compatible with most air purifier models.",
+      "backend_keywords": [],
+      "images": [],
+      "sellable_units": 0,
+      "stock": 0,
+      "max_stock": 200,
+      "days_of_supply": 0,
+      "daily_velocity": 0.5,
+      "competitor_price": 22.99,
+      "market_price": 18.99,
+      "min_floor": 12.0,
+      "max_price": 28.0,
+      "unit_cost": 6.0,
+      "lead_time_days": 7,
+      "supplier": "CleanAir Filters Inc.",
+      "supplier_id": "supp-003",
+      "po_draft_id": null,
+      "parent_asin": null,
+      "variation_theme": null,
+      "suppressed": true,
+      "last_synced_at": "2026-11-09T14:30:00Z",
+      "sync_status": "synced",
+      "last_optimized_at": null,
+      "opt_score": 30,
+      "opt_issues": [
+        "Missing bullet points",
+        "Missing images",
+        "Out of stock"
+      ],
+      "opt_status": "needs_optimization"
+    },
+    {
+      "id": "mock-prod-004",
+      "asin": "B0MOCK004",
+      "sku": "MOCK-FIT-04",
+      "marketplace_id": "ATVPDKIKX0DER",
+      "seller_id": "mock-seller",
+      "source": "amazon_sync",
+      "name": "FitBand Pro Resistance Bands",
+      "title": "FitBand Pro Resistance Bands Set - 5 Levels for Home Workout and Physical Therapy",
+      "category": "Sports & Outdoors",
+      "price": 29.99,
+      "bullets": [
+        "5 resistance levels from light to extra heavy",
+        "Includes door anchor and ankle straps",
+        "Natural latex material, non-slip handles",
+        "Carrying bag for travel and storage",
+        "Exercise guide included",
+        "Suitable for yoga, pilates, and physical therapy",
+        "Lifetime replacement guarantee"
+      ],
+      "description": "Complete resistance band set for home workouts, physical therapy, and strength training. Five resistance levels with door anchor, ankle straps, and carrying bag.",
+      "backend_keywords": [
+        "resistance bands",
+        "workout equipment",
+        "home gym",
+        "physical therapy",
+        "exercise bands"
+      ],
+      "images": [
+        "/mock-product-images/MOCK-FIT-04/1.jpg",
+        "/mock-product-images/MOCK-FIT-04/2.jpg"
+      ],
+      "sellable_units": 45,
+      "stock": 45,
+      "max_stock": 500,
+      "days_of_supply": 22,
+      "daily_velocity": 2.0,
+      "competitor_price": 34.99,
+      "market_price": 29.99,
+      "min_floor": 18.0,
+      "max_price": 40.0,
+      "unit_cost": 10.5,
+      "lead_time_days": 12,
+      "supplier": "FitGear Wholesale",
+      "supplier_id": "supp-004",
+      "po_draft_id": null,
+      "parent_asin": null,
+      "variation_theme": null,
+      "suppressed": false,
+      "last_synced_at": "2026-11-11T08:00:00Z",
+      "sync_status": "synced",
+      "last_optimized_at": null,
+      "opt_score": 85,
+      "opt_issues": [],
+      "opt_status": "optimized"
+    },
+    {
+      "id": "mock-prod-005",
+      "asin": "B0MOCK005",
+      "sku": "MOCK-KIT-05",
+      "marketplace_id": "ATVPDKIKX0DER",
+      "seller_id": "mock-seller",
+      "source": "amazon_sync",
+      "name": "ChefMaster Kitchen Knife Set",
+      "title": "ChefMaster Stainless Steel Kitchen Knife Set 5-Piece",
+      "category": "Home & Kitchen",
+      "price": 79.99,
+      "bullets": [
+        "High-carbon stainless steel blades",
+        "Ergonomic non-slip handles",
+        "Includes chef, bread, utility, paring, and santoku knives",
+        "Razor-sharp edge stays sharp longer",
+        "Knife block for safe storage",
+        "Dishwasher safe",
+        "Lifetime warranty"
+      ],
+      "description": "Professional 5-piece kitchen knife set with high-carbon stainless steel blades and ergonomic handles.",
+      "backend_keywords": [
+        "kitchen knife set",
+        "chef knife",
+        "cooking utensils",
+        "stainless steel knives",
+        "kitchen tools"
+      ],
+      "images": [
+        "/mock-product-images/MOCK-KIT-05/1.jpg"
+      ],
+      "sellable_units": 250,
+      "stock": 250,
+      "max_stock": 300,
+      "days_of_supply": 50,
+      "daily_velocity": 5.0,
+      "competitor_price": 89.99,
+      "market_price": 79.99,
+      "min_floor": 55.0,
+      "max_price": 95.0,
+      "unit_cost": 30.0,
+      "lead_time_days": 18,
+      "supplier": "CulinaryPro Distributors",
+      "supplier_id": "supp-005",
+      "po_draft_id": null,
+      "parent_asin": null,
+      "variation_theme": null,
+      "suppressed": false,
+      "last_synced_at": "2026-11-11T09:00:00Z",
+      "sync_status": "synced",
+      "last_optimized_at": null,
+      "opt_score": 88,
+      "opt_issues": [],
+      "opt_status": "optimized"
     }
   ],
   "global_products": [
@@ -2443,7 +2702,7 @@
       "marketplace_id": "ATVPDKIKX0DER",
       "source": "amazon_sync",
       "name": "Clear Essential Mount",
-      "title": "Clear Essential Mount · Clear Mount",
+      "title": "Clear Essential Mount \u00b7 Clear Mount",
       "category": "Sports",
       "price": 14.12,
       "bullets": [
@@ -2539,7 +2798,7 @@
       "marketplace_id": "ATVPDKIKX0DER",
       "source": "amazon_sync",
       "name": "Tough Grip Holder",
-      "title": "Tough Grip Holder — Tough Holder for Grip",
+      "title": "Tough Grip Holder \u2014 Tough Holder for Grip",
       "category": "Electronics",
       "price": 43.89,
       "bullets": [
@@ -2656,7 +2915,7 @@
       "marketplace_id": "ATVPDKIKX0DER",
       "source": "amazon_sync",
       "name": "Pro Max Case",
-      "title": "Pro Max Case · Pro Case",
+      "title": "Pro Max Case \u00b7 Pro Case",
       "category": "Lighting",
       "price": 33.69,
       "bullets": [
@@ -2752,7 +3011,7 @@
       "marketplace_id": "ATVPDKIKX0DER",
       "source": "amazon_sync",
       "name": "Smart Home Mouse",
-      "title": "Smart Home Mouse — Smart Mouse for Home",
+      "title": "Smart Home Mouse \u2014 Smart Mouse for Home",
       "category": "Sports",
       "price": 46.27,
       "bullets": [
@@ -2869,7 +3128,7 @@
       "marketplace_id": "ATVPDKIKX0DER",
       "source": "amazon_sync",
       "name": "Swift Travel Lamp",
-      "title": "Swift Travel Lamp · Swift Lamp",
+      "title": "Swift Travel Lamp \u00b7 Swift Lamp",
       "category": "Electronics",
       "price": 27.75,
       "bullets": [
@@ -2965,7 +3224,7 @@
       "marketplace_id": "ATVPDKIKX0DER",
       "source": "amazon_sync",
       "name": "Clear Essential Mount",
-      "title": "Clear Essential Mount — Clear Mount for Essential",
+      "title": "Clear Essential Mount \u2014 Clear Mount for Essential",
       "category": "Lighting",
       "price": 30.07,
       "bullets": [
@@ -3082,7 +3341,7 @@
       "marketplace_id": "ATVPDKIKX0DER",
       "source": "amazon_sync",
       "name": "Tough Grip Holder",
-      "title": "Tough Grip Holder · Tough Holder",
+      "title": "Tough Grip Holder \u00b7 Tough Holder",
       "category": "Sports",
       "price": 45.71,
       "bullets": [
@@ -3178,7 +3437,7 @@
       "marketplace_id": "ATVPDKIKX0DER",
       "source": "amazon_sync",
       "name": "Pro Max Case",
-      "title": "Pro Max Case — Pro Case for Max",
+      "title": "Pro Max Case \u2014 Pro Case for Max",
       "category": "Electronics",
       "price": 30.64,
       "bullets": [
@@ -3295,7 +3554,7 @@
       "marketplace_id": "ATVPDKIKX0DER",
       "source": "amazon_sync",
       "name": "Smart Home Mouse",
-      "title": "Smart Home Mouse · Smart Mouse",
+      "title": "Smart Home Mouse \u00b7 Smart Mouse",
       "category": "Lighting",
       "price": 36.3,
       "bullets": [
@@ -3391,7 +3650,7 @@
       "marketplace_id": "ATVPDKIKX0DER",
       "source": "amazon_sync",
       "name": "Swift Travel Lamp",
-      "title": "Swift Travel Lamp — Swift Lamp for Travel",
+      "title": "Swift Travel Lamp \u2014 Swift Lamp for Travel",
       "category": "Sports",
       "price": 46.24,
       "bullets": [
@@ -3508,7 +3767,7 @@
       "marketplace_id": "ATVPDKIKX0DER",
       "source": "amazon_sync",
       "name": "Clear Essential Mount",
-      "title": "Clear Essential Mount · Clear Mount",
+      "title": "Clear Essential Mount \u00b7 Clear Mount",
       "category": "Electronics",
       "price": 20.53,
       "bullets": [
@@ -3604,7 +3863,7 @@
       "marketplace_id": "ATVPDKIKX0DER",
       "source": "amazon_sync",
       "name": "Tough Grip Holder",
-      "title": "Tough Grip Holder — Tough Holder for Grip",
+      "title": "Tough Grip Holder \u2014 Tough Holder for Grip",
       "category": "Lighting",
       "price": 9.17,
       "bullets": [
@@ -3721,7 +3980,7 @@
       "marketplace_id": "ATVPDKIKX0DER",
       "source": "amazon_sync",
       "name": "Pro Max Case",
-      "title": "Pro Max Case · Pro Case",
+      "title": "Pro Max Case \u00b7 Pro Case",
       "category": "Sports",
       "price": 50.1,
       "bullets": [
@@ -4389,7 +4648,7 @@
       "sku": "GEN-SPORTS-05",
       "platform": "Amazon US",
       "status": "Live & In Sync",
-      "title": "Clear Essential Mount · Clear Mount",
+      "title": "Clear Essential Mount \u00b7 Clear Mount",
       "description": "A clear essential mount for everyday tasks."
     },
     {
@@ -4398,7 +4657,7 @@
       "sku": "GEN-SPORTS-05",
       "platform": "Amazon UK",
       "status": "Live & In Sync",
-      "title": "Clear Essential Mount · Clear Mount",
+      "title": "Clear Essential Mount \u00b7 Clear Mount",
       "description": "A clear essential mount for everyday tasks."
     },
     {
@@ -4407,7 +4666,7 @@
       "sku": "GEN-SPORTS-05",
       "platform": "Walmart",
       "status": "Live & In Sync",
-      "title": "Clear Essential Mount · Clear Mount",
+      "title": "Clear Essential Mount \u00b7 Clear Mount",
       "description": "A clear essential mount for everyday tasks."
     },
     {
@@ -4443,7 +4702,7 @@
       "sku": "GEN-ELECTRONICS-07",
       "platform": "Amazon US",
       "status": "Suppressed",
-      "title": "Tough Grip Holder — Tough Holder for Grip",
+      "title": "Tough Grip Holder \u2014 Tough Holder for Grip",
       "description": "A practical tough grip holder with simple controls and easy maintenance."
     },
     {
@@ -4452,7 +4711,7 @@
       "sku": "GEN-ELECTRONICS-07",
       "platform": "Amazon UK",
       "status": "Suppressed",
-      "title": "Tough Grip Holder — Tough Holder for Grip",
+      "title": "Tough Grip Holder \u2014 Tough Holder for Grip",
       "description": "A practical tough grip holder with simple controls and easy maintenance."
     },
     {
@@ -4461,7 +4720,7 @@
       "sku": "GEN-ELECTRONICS-07",
       "platform": "Walmart",
       "status": "Suppressed",
-      "title": "Tough Grip Holder — Tough Holder for Grip",
+      "title": "Tough Grip Holder \u2014 Tough Holder for Grip",
       "description": "A practical tough grip holder with simple controls and easy maintenance."
     },
     {
@@ -4497,7 +4756,7 @@
       "sku": "GEN-LIGHTING-09",
       "platform": "Amazon US",
       "status": "Live & In Sync",
-      "title": "Pro Max Case · Pro Case",
+      "title": "Pro Max Case \u00b7 Pro Case",
       "description": "A pro max case for everyday tasks."
     },
     {
@@ -4506,7 +4765,7 @@
       "sku": "GEN-LIGHTING-09",
       "platform": "Amazon UK",
       "status": "Live & In Sync",
-      "title": "Pro Max Case · Pro Case",
+      "title": "Pro Max Case \u00b7 Pro Case",
       "description": "A pro max case for everyday tasks."
     },
     {
@@ -4515,7 +4774,7 @@
       "sku": "GEN-LIGHTING-09",
       "platform": "Walmart",
       "status": "Live & In Sync",
-      "title": "Pro Max Case · Pro Case",
+      "title": "Pro Max Case \u00b7 Pro Case",
       "description": "A pro max case for everyday tasks."
     },
     {
@@ -4551,7 +4810,7 @@
       "sku": "GEN-SPORTS-11",
       "platform": "Amazon US",
       "status": "Suppressed",
-      "title": "Smart Home Mouse — Smart Mouse for Home",
+      "title": "Smart Home Mouse \u2014 Smart Mouse for Home",
       "description": "A practical smart home mouse with simple controls and easy maintenance."
     },
     {
@@ -4560,7 +4819,7 @@
       "sku": "GEN-SPORTS-11",
       "platform": "Amazon UK",
       "status": "Suppressed",
-      "title": "Smart Home Mouse — Smart Mouse for Home",
+      "title": "Smart Home Mouse \u2014 Smart Mouse for Home",
       "description": "A practical smart home mouse with simple controls and easy maintenance."
     },
     {
@@ -4569,7 +4828,7 @@
       "sku": "GEN-SPORTS-11",
       "platform": "Walmart",
       "status": "Suppressed",
-      "title": "Smart Home Mouse — Smart Mouse for Home",
+      "title": "Smart Home Mouse \u2014 Smart Mouse for Home",
       "description": "A practical smart home mouse with simple controls and easy maintenance."
     },
     {
@@ -4605,7 +4864,7 @@
       "sku": "GEN-ELECTRONICS-13",
       "platform": "Amazon US",
       "status": "Live & In Sync",
-      "title": "Swift Travel Lamp · Swift Lamp",
+      "title": "Swift Travel Lamp \u00b7 Swift Lamp",
       "description": "A swift travel lamp for everyday tasks."
     },
     {
@@ -4614,7 +4873,7 @@
       "sku": "GEN-ELECTRONICS-13",
       "platform": "Amazon UK",
       "status": "Live & In Sync",
-      "title": "Swift Travel Lamp · Swift Lamp",
+      "title": "Swift Travel Lamp \u00b7 Swift Lamp",
       "description": "A swift travel lamp for everyday tasks."
     },
     {
@@ -4623,7 +4882,7 @@
       "sku": "GEN-ELECTRONICS-13",
       "platform": "Walmart",
       "status": "Live & In Sync",
-      "title": "Swift Travel Lamp · Swift Lamp",
+      "title": "Swift Travel Lamp \u00b7 Swift Lamp",
       "description": "A swift travel lamp for everyday tasks."
     },
     {
@@ -4659,7 +4918,7 @@
       "sku": "GEN-LIGHTING-15",
       "platform": "Amazon US",
       "status": "Suppressed",
-      "title": "Clear Essential Mount — Clear Mount for Essential",
+      "title": "Clear Essential Mount \u2014 Clear Mount for Essential",
       "description": "A practical clear essential mount with simple controls and easy maintenance."
     },
     {
@@ -4668,7 +4927,7 @@
       "sku": "GEN-LIGHTING-15",
       "platform": "Amazon UK",
       "status": "Suppressed",
-      "title": "Clear Essential Mount — Clear Mount for Essential",
+      "title": "Clear Essential Mount \u2014 Clear Mount for Essential",
       "description": "A practical clear essential mount with simple controls and easy maintenance."
     },
     {
@@ -4677,7 +4936,7 @@
       "sku": "GEN-LIGHTING-15",
       "platform": "Walmart",
       "status": "Suppressed",
-      "title": "Clear Essential Mount — Clear Mount for Essential",
+      "title": "Clear Essential Mount \u2014 Clear Mount for Essential",
       "description": "A practical clear essential mount with simple controls and easy maintenance."
     },
     {
@@ -4713,7 +4972,7 @@
       "sku": "GEN-SPORTS-17",
       "platform": "Amazon US",
       "status": "Live & In Sync",
-      "title": "Tough Grip Holder · Tough Holder",
+      "title": "Tough Grip Holder \u00b7 Tough Holder",
       "description": "A tough grip holder for everyday tasks."
     },
     {
@@ -4722,7 +4981,7 @@
       "sku": "GEN-SPORTS-17",
       "platform": "Amazon UK",
       "status": "Live & In Sync",
-      "title": "Tough Grip Holder · Tough Holder",
+      "title": "Tough Grip Holder \u00b7 Tough Holder",
       "description": "A tough grip holder for everyday tasks."
     },
     {
@@ -4731,7 +4990,7 @@
       "sku": "GEN-SPORTS-17",
       "platform": "Walmart",
       "status": "Live & In Sync",
-      "title": "Tough Grip Holder · Tough Holder",
+      "title": "Tough Grip Holder \u00b7 Tough Holder",
       "description": "A tough grip holder for everyday tasks."
     },
     {
@@ -4767,7 +5026,7 @@
       "sku": "GEN-ELECTRONICS-19",
       "platform": "Amazon US",
       "status": "Suppressed",
-      "title": "Pro Max Case — Pro Case for Max",
+      "title": "Pro Max Case \u2014 Pro Case for Max",
       "description": "A practical pro max case with simple controls and easy maintenance."
     },
     {
@@ -4776,7 +5035,7 @@
       "sku": "GEN-ELECTRONICS-19",
       "platform": "Amazon UK",
       "status": "Suppressed",
-      "title": "Pro Max Case — Pro Case for Max",
+      "title": "Pro Max Case \u2014 Pro Case for Max",
       "description": "A practical pro max case with simple controls and easy maintenance."
     },
     {
@@ -4785,7 +5044,7 @@
       "sku": "GEN-ELECTRONICS-19",
       "platform": "Walmart",
       "status": "Suppressed",
-      "title": "Pro Max Case — Pro Case for Max",
+      "title": "Pro Max Case \u2014 Pro Case for Max",
       "description": "A practical pro max case with simple controls and easy maintenance."
     },
     {
@@ -4821,7 +5080,7 @@
       "sku": "GEN-LIGHTING-21",
       "platform": "Amazon US",
       "status": "Live & In Sync",
-      "title": "Smart Home Mouse · Smart Mouse",
+      "title": "Smart Home Mouse \u00b7 Smart Mouse",
       "description": "A smart home mouse for everyday tasks."
     },
     {
@@ -4830,7 +5089,7 @@
       "sku": "GEN-LIGHTING-21",
       "platform": "Amazon UK",
       "status": "Live & In Sync",
-      "title": "Smart Home Mouse · Smart Mouse",
+      "title": "Smart Home Mouse \u00b7 Smart Mouse",
       "description": "A smart home mouse for everyday tasks."
     },
     {
@@ -4839,7 +5098,7 @@
       "sku": "GEN-LIGHTING-21",
       "platform": "Walmart",
       "status": "Live & In Sync",
-      "title": "Smart Home Mouse · Smart Mouse",
+      "title": "Smart Home Mouse \u00b7 Smart Mouse",
       "description": "A smart home mouse for everyday tasks."
     },
     {
@@ -4875,7 +5134,7 @@
       "sku": "GEN-SPORTS-23",
       "platform": "Amazon US",
       "status": "Suppressed",
-      "title": "Swift Travel Lamp — Swift Lamp for Travel",
+      "title": "Swift Travel Lamp \u2014 Swift Lamp for Travel",
       "description": "A practical swift travel lamp with simple controls and easy maintenance."
     },
     {
@@ -4884,7 +5143,7 @@
       "sku": "GEN-SPORTS-23",
       "platform": "Amazon UK",
       "status": "Suppressed",
-      "title": "Swift Travel Lamp — Swift Lamp for Travel",
+      "title": "Swift Travel Lamp \u2014 Swift Lamp for Travel",
       "description": "A practical swift travel lamp with simple controls and easy maintenance."
     },
     {
@@ -4893,7 +5152,7 @@
       "sku": "GEN-SPORTS-23",
       "platform": "Walmart",
       "status": "Suppressed",
-      "title": "Swift Travel Lamp — Swift Lamp for Travel",
+      "title": "Swift Travel Lamp \u2014 Swift Lamp for Travel",
       "description": "A practical swift travel lamp with simple controls and easy maintenance."
     },
     {
@@ -4929,7 +5188,7 @@
       "sku": "GEN-ELECTRONICS-25",
       "platform": "Amazon US",
       "status": "Live & In Sync",
-      "title": "Clear Essential Mount · Clear Mount",
+      "title": "Clear Essential Mount \u00b7 Clear Mount",
       "description": "A clear essential mount for everyday tasks."
     },
     {
@@ -4938,7 +5197,7 @@
       "sku": "GEN-ELECTRONICS-25",
       "platform": "Amazon UK",
       "status": "Live & In Sync",
-      "title": "Clear Essential Mount · Clear Mount",
+      "title": "Clear Essential Mount \u00b7 Clear Mount",
       "description": "A clear essential mount for everyday tasks."
     },
     {
@@ -4947,7 +5206,7 @@
       "sku": "GEN-ELECTRONICS-25",
       "platform": "Walmart",
       "status": "Live & In Sync",
-      "title": "Clear Essential Mount · Clear Mount",
+      "title": "Clear Essential Mount \u00b7 Clear Mount",
       "description": "A clear essential mount for everyday tasks."
     },
     {
@@ -4983,7 +5242,7 @@
       "sku": "GEN-LIGHTING-27",
       "platform": "Amazon US",
       "status": "Suppressed",
-      "title": "Tough Grip Holder — Tough Holder for Grip",
+      "title": "Tough Grip Holder \u2014 Tough Holder for Grip",
       "description": "A practical tough grip holder with simple controls and easy maintenance."
     },
     {
@@ -4992,7 +5251,7 @@
       "sku": "GEN-LIGHTING-27",
       "platform": "Amazon UK",
       "status": "Suppressed",
-      "title": "Tough Grip Holder — Tough Holder for Grip",
+      "title": "Tough Grip Holder \u2014 Tough Holder for Grip",
       "description": "A practical tough grip holder with simple controls and easy maintenance."
     },
     {
@@ -5001,7 +5260,7 @@
       "sku": "GEN-LIGHTING-27",
       "platform": "Walmart",
       "status": "Suppressed",
-      "title": "Tough Grip Holder — Tough Holder for Grip",
+      "title": "Tough Grip Holder \u2014 Tough Holder for Grip",
       "description": "A practical tough grip holder with simple controls and easy maintenance."
     },
     {
@@ -5037,7 +5296,7 @@
       "sku": "GEN-SPORTS-29",
       "platform": "Amazon US",
       "status": "Live & In Sync",
-      "title": "Pro Max Case · Pro Case",
+      "title": "Pro Max Case \u00b7 Pro Case",
       "description": "A pro max case for everyday tasks."
     },
     {
@@ -5046,7 +5305,7 @@
       "sku": "GEN-SPORTS-29",
       "platform": "Amazon UK",
       "status": "Live & In Sync",
-      "title": "Pro Max Case · Pro Case",
+      "title": "Pro Max Case \u00b7 Pro Case",
       "description": "A pro max case for everyday tasks."
     },
     {
@@ -5055,7 +5314,7 @@
       "sku": "GEN-SPORTS-29",
       "platform": "Walmart",
       "status": "Live & In Sync",
-      "title": "Pro Max Case · Pro Case",
+      "title": "Pro Max Case \u00b7 Pro Case",
       "description": "A pro max case for everyday tasks."
     }
   ],
@@ -6275,12 +6534,172 @@
       10,
       10,
       10
+    ],
+    "MOCK-ECO-01": [
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5
+    ],
+    "MOCK-TECH-02": [
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5,
+      1.5
+    ],
+    "MOCK-HOME-03": [
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5
+    ],
+    "MOCK-FIT-04": [
+      2.0,
+      2.0,
+      2.0,
+      2.0,
+      2.0,
+      2.0,
+      2.0,
+      2.0,
+      2.0,
+      2.0,
+      2.0,
+      2.0,
+      2.0,
+      2.0,
+      2.0,
+      2.0,
+      2.0,
+      2.0,
+      2.0,
+      2.0,
+      2.0,
+      2.0,
+      2.0,
+      2.0,
+      2.0,
+      2.0,
+      2.0,
+      2.0,
+      2.0,
+      2.0
+    ],
+    "MOCK-KIT-05": [
+      5.0,
+      5.0,
+      5.0,
+      5.0,
+      5.0,
+      5.0,
+      5.0,
+      5.0,
+      5.0,
+      5.0,
+      5.0,
+      5.0,
+      5.0,
+      5.0,
+      5.0,
+      5.0,
+      5.0,
+      5.0,
+      5.0,
+      5.0,
+      5.0,
+      5.0,
+      5.0,
+      5.0,
+      5.0,
+      5.0,
+      5.0,
+      5.0,
+      5.0,
+      5.0
     ]
   },
   "campaigns": [
     {
       "id": "CMP-AF",
-      "name": "ArcFold Stand · Exact + Phrase",
+      "name": "ArcFold Stand \u00b7 Exact + Phrase",
       "asin": "B0C8Q4M2K7",
       "sku": "AF-LS-02",
       "bid_floor": 0.55,
@@ -6474,7 +6893,7 @@
     },
     {
       "id": "CMP-QC",
-      "name": "QuietClick Mouse · Auto",
+      "name": "QuietClick Mouse \u00b7 Auto",
       "asin": "B0B7P9R3W1",
       "sku": "QC-M-11",
       "bid_floor": 0.39,
@@ -6683,7 +7102,7 @@
     },
     {
       "id": "CMP-TG",
-      "name": "TerraGrip Sleeve · Broad",
+      "name": "TerraGrip Sleeve \u00b7 Broad",
       "asin": "B0D2L6T8N4",
       "sku": "TG-BS-04",
       "bid_floor": 0.32,
@@ -6877,7 +7296,7 @@
     },
     {
       "id": "CMP-LM",
-      "name": "Luma Desk Light · Exact",
+      "name": "Luma Desk Light \u00b7 Exact",
       "asin": "B0A9H5X3J6",
       "sku": "LM-DL-08",
       "bid_floor": 0.48,
@@ -7071,7 +7490,7 @@
     },
     {
       "id": "CMP-SD",
-      "name": "SnapDock Organizer · Auto",
+      "name": "SnapDock Organizer \u00b7 Auto",
       "asin": "B0C3F7Y1V9",
       "sku": "SD-CO-06",
       "bid_floor": 0.22,
@@ -7658,7 +8077,7 @@
       "submitted_by": "Jordan Lee",
       "submitted_at": "2026-10-21T18:10:05Z",
       "status": "pending",
-      "reason": "Q4 replenishment · 34 days of cover",
+      "reason": "Q4 replenishment \u00b7 34 days of cover",
       "seller_id": "mock-seller"
     },
     {
@@ -7671,7 +8090,7 @@
       "submitted_by": "Avery Patel",
       "submitted_at": "2026-10-21T17:10:05Z",
       "status": "pending",
-      "reason": "Velocity increase · 13% week over week",
+      "reason": "Velocity increase \u00b7 13% week over week",
       "seller_id": "mock-seller"
     },
     {
@@ -7684,7 +8103,7 @@
       "submitted_by": "Morgan Diaz",
       "submitted_at": "2026-10-21T16:10:05Z",
       "status": "pending",
-      "reason": "Supplier lead time · 41 days",
+      "reason": "Supplier lead time \u00b7 41 days",
       "seller_id": "mock-seller"
     },
     {
@@ -7697,7 +8116,7 @@
       "submitted_by": "Jordan Lee",
       "submitted_at": "2026-10-20T15:10:05Z",
       "status": "pending",
-      "reason": "Low stock · 12 days of cover",
+      "reason": "Low stock \u00b7 12 days of cover",
       "seller_id": "mock-seller"
     },
     {
@@ -7710,7 +8129,7 @@
       "submitted_by": "Avery Patel",
       "submitted_at": "2026-10-20T14:10:05Z",
       "status": "pending",
-      "reason": "Low stock · 12 days of cover",
+      "reason": "Low stock \u00b7 12 days of cover",
       "seller_id": "mock-seller"
     },
     {
@@ -7755,7 +8174,7 @@
       "submitted_by": "Avery Patel",
       "submitted_at": "2026-10-13T16:10:05Z",
       "status": "approved",
-      "reason": "Velocity increase · 13% week over week",
+      "reason": "Velocity increase \u00b7 13% week over week",
       "reviewed_by": "User",
       "reviewed_at": "2026-10-14T18:10:05Z",
       "review_note": "Approved at requested quantity",
@@ -7787,7 +8206,7 @@
       "submitted_by": "Jordan Lee",
       "submitted_at": "2026-10-10T14:10:05Z",
       "status": "approved",
-      "reason": "Q4 replenishment · 34 days of cover",
+      "reason": "Q4 replenishment \u00b7 34 days of cover",
       "reviewed_by": "User",
       "reviewed_at": "2026-10-11T18:10:05Z",
       "review_note": "Approved",
@@ -7803,7 +8222,7 @@
       "submitted_by": "Avery Patel",
       "submitted_at": "2026-10-06T18:10:05Z",
       "status": "approved",
-      "reason": "Low stock · 12 days of cover",
+      "reason": "Low stock \u00b7 12 days of cover",
       "reviewed_by": "User",
       "reviewed_at": "2026-10-07T18:10:05Z",
       "review_note": "Approved",
@@ -8733,6 +9152,53 @@
       "currentBullets": [],
       "optimizedTitle": "Pro Max Case",
       "optimizedBullets": []
+    },
+    "B0MOCK001": {
+      "asin": "B0MOCK001",
+      "category": "Office",
+      "brand": "GreenOffice Supplies Co.",
+      "optimization_status": "needs_optimization",
+      "listing_quality_score": 55,
+      "issues": [
+        "Missing bullet points",
+        "Missing images"
+      ]
+    },
+    "B0MOCK002": {
+      "asin": "B0MOCK002",
+      "category": "Electronics",
+      "brand": "TechHub Manufacturing",
+      "optimization_status": "optimized",
+      "listing_quality_score": 92,
+      "issues": []
+    },
+    "B0MOCK003": {
+      "asin": "B0MOCK003",
+      "category": "Home & Kitchen",
+      "brand": "CleanAir Filters Inc.",
+      "optimization_status": "needs_optimization",
+      "listing_quality_score": 30,
+      "issues": [
+        "Missing bullet points",
+        "Missing images",
+        "Out of stock"
+      ]
+    },
+    "B0MOCK004": {
+      "asin": "B0MOCK004",
+      "category": "Sports & Outdoors",
+      "brand": "FitGear Wholesale",
+      "optimization_status": "optimized",
+      "listing_quality_score": 85,
+      "issues": []
+    },
+    "B0MOCK005": {
+      "asin": "B0MOCK005",
+      "category": "Home & Kitchen",
+      "brand": "CulinaryPro Distributors",
+      "optimization_status": "optimized",
+      "listing_quality_score": 88,
+      "issues": []
     }
   },
   "acos_history": [
@@ -8773,7 +9239,7 @@
       "timestamp": "2026-10-23T03:07:27.838750+00:00",
       "category": "ppc",
       "title": "Bid guardrail triggered",
-      "detail": "QuietClick Mouse · Auto trailing 7-day ACoS was 31.3% (limit 25%). Bid lowered from $0.44 to $0.39."
+      "detail": "QuietClick Mouse \u00b7 Auto trailing 7-day ACoS was 31.3% (limit 25%). Bid lowered from $0.44 to $0.39."
     },
     {
       "id": "eca41390-7d91-42da-bafd-850bb244f386",
@@ -10096,7 +10562,7 @@
       "asin": "B0GEN05X",
       "sku": "GEN-SPORTS-05",
       "marketplace_id": "ATVPDKIKX0DER",
-      "title": "Clear Essential Mount · Clear Mount",
+      "title": "Clear Essential Mount \u00b7 Clear Mount",
       "bullets": [
         "A clear essential mount for daily use.",
         "Simple design with essential in mind."
@@ -10131,7 +10597,7 @@
       "asin": "B0GEN07X",
       "sku": "GEN-ELECTRONICS-07",
       "marketplace_id": "ATVPDKIKX0DER",
-      "title": "Tough Grip Holder — Tough Holder for Grip",
+      "title": "Tough Grip Holder \u2014 Tough Holder for Grip",
       "bullets": [
         "A practical tough grip holder for everyday use around the home or office.",
         "Simple to set up and keep clean with regular care."
@@ -10191,7 +10657,7 @@
       "asin": "B0GEN09X",
       "sku": "GEN-LIGHTING-09",
       "marketplace_id": "ATVPDKIKX0DER",
-      "title": "Pro Max Case · Pro Case",
+      "title": "Pro Max Case \u00b7 Pro Case",
       "bullets": [
         "A pro max case for daily use.",
         "Simple design with max in mind."
@@ -10226,7 +10692,7 @@
       "asin": "B0GEN11X",
       "sku": "GEN-SPORTS-11",
       "marketplace_id": "ATVPDKIKX0DER",
-      "title": "Smart Home Mouse — Smart Mouse for Home",
+      "title": "Smart Home Mouse \u2014 Smart Mouse for Home",
       "bullets": [
         "A practical smart home mouse for everyday use around the home or office.",
         "Simple to set up and keep clean with regular care."
@@ -10286,7 +10752,7 @@
       "asin": "B0GEN13X",
       "sku": "GEN-ELECTRONICS-13",
       "marketplace_id": "ATVPDKIKX0DER",
-      "title": "Swift Travel Lamp · Swift Lamp",
+      "title": "Swift Travel Lamp \u00b7 Swift Lamp",
       "bullets": [
         "A swift travel lamp for daily use.",
         "Simple design with travel in mind."
@@ -10321,7 +10787,7 @@
       "asin": "B0GEN15X",
       "sku": "GEN-LIGHTING-15",
       "marketplace_id": "ATVPDKIKX0DER",
-      "title": "Clear Essential Mount — Clear Mount for Essential",
+      "title": "Clear Essential Mount \u2014 Clear Mount for Essential",
       "bullets": [
         "A practical clear essential mount for everyday use around the home or office.",
         "Simple to set up and keep clean with regular care."
@@ -10381,7 +10847,7 @@
       "asin": "B0GEN17X",
       "sku": "GEN-SPORTS-17",
       "marketplace_id": "ATVPDKIKX0DER",
-      "title": "Tough Grip Holder · Tough Holder",
+      "title": "Tough Grip Holder \u00b7 Tough Holder",
       "bullets": [
         "A tough grip holder for daily use.",
         "Simple design with grip in mind."
@@ -10416,7 +10882,7 @@
       "asin": "B0GEN19X",
       "sku": "GEN-ELECTRONICS-19",
       "marketplace_id": "ATVPDKIKX0DER",
-      "title": "Pro Max Case — Pro Case for Max",
+      "title": "Pro Max Case \u2014 Pro Case for Max",
       "bullets": [
         "A practical pro max case for everyday use around the home or office.",
         "Simple to set up and keep clean with regular care."
@@ -10476,7 +10942,7 @@
       "asin": "B0GEN21X",
       "sku": "GEN-LIGHTING-21",
       "marketplace_id": "ATVPDKIKX0DER",
-      "title": "Smart Home Mouse · Smart Mouse",
+      "title": "Smart Home Mouse \u00b7 Smart Mouse",
       "bullets": [
         "A smart home mouse for daily use.",
         "Simple design with home in mind."
@@ -10511,7 +10977,7 @@
       "asin": "B0GEN23X",
       "sku": "GEN-SPORTS-23",
       "marketplace_id": "ATVPDKIKX0DER",
-      "title": "Swift Travel Lamp — Swift Lamp for Travel",
+      "title": "Swift Travel Lamp \u2014 Swift Lamp for Travel",
       "bullets": [
         "A practical swift travel lamp for everyday use around the home or office.",
         "Simple to set up and keep clean with regular care."
@@ -10571,7 +11037,7 @@
       "asin": "B0GEN25X",
       "sku": "GEN-ELECTRONICS-25",
       "marketplace_id": "ATVPDKIKX0DER",
-      "title": "Clear Essential Mount · Clear Mount",
+      "title": "Clear Essential Mount \u00b7 Clear Mount",
       "bullets": [
         "A clear essential mount for daily use.",
         "Simple design with essential in mind."
@@ -10606,7 +11072,7 @@
       "asin": "B0GEN27X",
       "sku": "GEN-LIGHTING-27",
       "marketplace_id": "ATVPDKIKX0DER",
-      "title": "Tough Grip Holder — Tough Holder for Grip",
+      "title": "Tough Grip Holder \u2014 Tough Holder for Grip",
       "bullets": [
         "A practical tough grip holder for everyday use around the home or office.",
         "Simple to set up and keep clean with regular care."
@@ -10666,7 +11132,7 @@
       "asin": "B0GEN29X",
       "sku": "GEN-SPORTS-29",
       "marketplace_id": "ATVPDKIKX0DER",
-      "title": "Pro Max Case · Pro Case",
+      "title": "Pro Max Case \u00b7 Pro Case",
       "bullets": [
         "A pro max case for daily use.",
         "Simple design with max in mind."

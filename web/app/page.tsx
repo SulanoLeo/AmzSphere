@@ -568,7 +568,7 @@ export default function DashboardPage() {
       </p>
 
       {reviewPoOpen && (
-        <Modal open={true} onClose={() => setReviewPoOpen("")} title="Review Purchase Order">
+        <Modal open={Boolean(reviewPoOpen)} onClose={() => setReviewPoOpen("")} title="Review Purchase Order">
           <div className="space-y-4">
             <div>
               <div className="text-xs font-semibold text-indigo-900 mb-1">PO Details</div>
@@ -596,7 +596,7 @@ export default function DashboardPage() {
       )}
 
       {approvePoOpen && (
-        <Modal open={true} onClose={() => setApprovePoOpen("")} title="Approve Purchase Order">
+        <Modal open={Boolean(approvePoOpen)} onClose={() => setApprovePoOpen("")} title="Approve Purchase Order">
           <div className="space-y-4">
             <div>
               <div className="text-xs font-semibold text-indigo-900 mb-1">Confirmation</div>
