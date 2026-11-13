@@ -37,11 +37,12 @@ export function Modal({
   return (
     <dialog
       ref={dialogRef}
-      open={open}
       aria-labelledby={titleId}
       onClose={onClose}
       onClick={(event) => {
-        if (event.target === event.currentTarget) dialogRef.current?.close();
+        if (event.target === event.currentTarget) {
+          onClose();
+        }
       }}
       className={cn(
         "fixed inset-0 z-50 flex items-center justify-center m-auto max-h-[90vh] w-[calc(100%-2rem)] max-w-2xl overflow-hidden rounded-xl border border-line bg-white p-0 text-ink shadow-2xl backdrop:bg-black/50 backdrop:backdrop-blur-sm",
@@ -56,7 +57,7 @@ export function Modal({
             <button
               type="button"
               className="p-1.5 rounded-md text-muted hover:bg-canvas hover:text-indigo-950 transition-colors"
-              onClick={() => dialogRef.current?.close()}
+              onClick={onClose}
               aria-label="Close modal"
             >
               <span className="sr-only">Close</span>
