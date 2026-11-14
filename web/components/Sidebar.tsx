@@ -197,9 +197,9 @@ export function Sidebar({ roles, demoMode = true }: SidebarProps = {}) {
         onFocusCapture={(event) => {
           if (collapsed && event.target instanceof HTMLAnchorElement) setCollapsed(false);
         }}
-        className="flex min-w-0 flex-1 gap-3 overflow-x-auto px-3 py-2 md:min-h-0 md:flex-col md:gap-0 md:overflow-hidden md:py-3"
+        className="flex min-w-0 flex-1 gap-3 overflow-x-auto px-3 py-2 md:min-h-0 md:flex-col md:gap-0 md:overflow-hidden md:py-3 scrollbar-hide"
       >
-        <div className="flex shrink-0 gap-3 md:min-h-0 md:flex-1 md:flex-col md:gap-3 md:overflow-x-hidden md:overflow-y-auto">
+        <div className="flex shrink-0 gap-3 md:min-h-0 md:flex-1 md:flex-col md:gap-3 md:overflow-x-hidden md:overflow-y-auto scrollbar-hide">
           {workspaceGroups.map((group) => (
             <NavigationGroup
               key={group.id}

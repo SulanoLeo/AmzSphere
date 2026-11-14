@@ -69,6 +69,7 @@ function Header() {
     try {
       await provider.syncState();
       setSyncMessage("Seller sync queued.");
+      setRefreshStatusOpen(false);
       setSyncStatusOpen(true);
       const refreshed = await provider.getDashboard();
       setDashboard(refreshed);
@@ -83,6 +84,7 @@ function Header() {
       const refreshed = await provider.getDashboard();
       setDashboard(refreshed);
       setRefreshMessage("Dashboard refreshed from latest mock state.");
+      setSyncStatusOpen(false);
       setRefreshStatusOpen(true);
     } catch (cause) {
       setRefreshMessage(cause instanceof Error ? cause.message : "Could not refresh dashboard");

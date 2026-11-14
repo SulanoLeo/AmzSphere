@@ -31,7 +31,7 @@ import { clientProductProvider as provider } from "@/lib/provider/client";
 import type { Dashboard, Seller } from "@/lib/provider/types";
 import { useAmzStore } from "@/lib/useAmzStore";
 
-const RADIAL_COLORS = ["#006a63", "#3525cd", "#ffb95f", "#777587", "#10B981"];
+const RADIAL_COLORS = ["#0F3D47", "#F59E7B", "#0F3D47", "#F59E7B", "#10B981"];
 
 function Metric({
   label,
@@ -49,8 +49,11 @@ function Metric({
   href?: string;
 }) {
   const content = (
-    <section className="metric" data-accent={accent}>
-      <div className="metric-label"><span>{label}</span>{tag && <span className="mini-tag">{tag}</span>}</div>
+    <section className="metric h-full" data-accent={accent}>
+      <div className="metric-label">
+        <span className={`box-title box-title-${accent}`}>{label}</span>
+        {tag && tag !== label && <span className="mini-tag">{tag}</span>}
+      </div>
       <div className="metric-value">{value}</div>
       <div className="metric-foot">{detail}</div>
     </section>
@@ -217,7 +220,7 @@ export default function DashboardPage() {
   const rateLimited = data?.sync_status === "rate_limited";
 
   return (
-    <main className="workspace-page bg-canvas">
+    <main className="workspace-page bg-ice-white">
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-[10px] font-semibold text-muted uppercase tracking-wider mb-1">
         <Link href="/" className="flex items-center gap-1">
@@ -231,15 +234,15 @@ export default function DashboardPage() {
       {/* Header */}
       <header className="mb-8 flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-line pb-6">
         <div className="flex flex-col gap-1">
-          <h1 className="font-headline-xl text-headline-xl text-on-surface tracking-tight mt-0 lg:mt-2 lg:ml-4 lg:border-l lg:border-line lg:pl-4">
+          <h1 className="font-headline-xl text-headline-xl text-deep-teal tracking-tight mt-0 lg:mt-2 lg:ml-4 lg:border-l lg:border-line lg:pl-4">
             Operations overview
           </h1>
-          <p className="font-body-md text-body-md text-on-surface-variant mt-2 lg:mt-0 lg:ml-5">
+          <p className="font-body-md text-body-md text-deep-teal mt-2 lg:mt-0 lg:ml-5">
             Inventory health and human-review work queue.
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <Badge className="bg-amber-50 text-amber-800">Sample data</Badge>
+          <Badge className="bg-soft-peach/20 text-deep-teal border border-soft-peach/30">Sample data</Badge>
         </div>
       </header>
 
@@ -256,7 +259,7 @@ export default function DashboardPage() {
             </div>
           </div>
           <div className="flex items-start gap-2">
-            <Badge className="bg-teal-50 text-teal-800 border-teal-200">Mock engine live</Badge>
+            <Badge className="bg-deep-teal/10 text-deep-teal border border-deep-teal/20">Mock engine live</Badge>
           </div>
         </div>
       )}
@@ -275,7 +278,7 @@ export default function DashboardPage() {
           href="/catalog/products"
           value={loading && products.length === 0 ? "—" : String(activeListingCount)}
           detail="Active listings"
-          accent="blue"
+          accent="deep-teal"
           tag="CATALOG"
         />
         <Metric
@@ -283,7 +286,7 @@ export default function DashboardPage() {
           href="/supply/inventory"
           value={loading && products.length === 0 ? "—" : totalStock.toLocaleString()}
           detail="In-stock items across warehouses"
-          accent="teal"
+          accent="deep-teal"
           tag="INVENTORY"
         />
         <Metric
@@ -291,7 +294,7 @@ export default function DashboardPage() {
           href="/catalog/seo"
           value={String(needsOptCount)}
           detail="Missing bullets or imagery"
-          accent="orange"
+          accent="soft-peach"
           tag="OPTIMIZE"
         />
         <Metric
@@ -299,7 +302,7 @@ export default function DashboardPage() {
           href="/supply/replenishment"
           value={String(urgentCount)}
           detail={`${urgentCount} item${urgentCount === 1 ? "" : "s"} under 10 days of supply`}
-          accent="red"
+          accent="soft-peach"
           tag="Stockout danger"
         />
         <Metric
@@ -307,7 +310,7 @@ export default function DashboardPage() {
           href="/supply/purchasing?tab=approvals"
           value={String(pendingCount)}
           detail="Revisions awaiting decision"
-          accent="teal"
+          accent="deep-teal"
           tag={`${pendingCount} in queue`}
         />
       </div>
@@ -325,9 +328,9 @@ export default function DashboardPage() {
           <div className="panel-content min-h-full flex-1">
             {hasVelocityData ? (
               <div className="grid grid-cols-3 gap-3 mt-4">
-                <StatCard label="7-Day Units" value={velocity7d.toLocaleString()} detail="Trailing 7-day units" color="#3525cd" />
-                <StatCard label="30-Day Units" value={velocity30d.toLocaleString()} detail="Trailing 30-day units" color="#006a63" />
-                <StatCard label="90-Day Units" value={velocity90d.toLocaleString()} detail="Trailing 90-day units" color="#ffb95f" />
+                <StatCard label="7-Day Units" value={velocity7d.toLocaleString()} detail="Trailing 7-day units" color="#0F3D47" />
+                <StatCard label="30-Day Units" value={velocity30d.toLocaleString()} detail="Trailing 30-day units" color="#0F3D47" />
+                <StatCard label="90-Day Units" value={velocity90d.toLocaleString()} detail="Trailing 90-day units" color="#F59E7B" />
               </div>
             ) : (
               <div className="grid h-full place-items-center text-sm text-muted">No sales velocity data available yet.</div>
@@ -404,10 +407,10 @@ export default function DashboardPage() {
               {hasPpcData ? (
                 <>
                   <div className="grid grid-cols-4 gap-3 mb-4">
-                    <StatCard label="ACoS Target" value="22%" detail="Target portfolio efficiency" color="#006a63" />
-                    <StatCard label="ACoS" value={`${acosPct}%`} detail="Last 30-day average" color="#3525cd" />
-                    <StatCard label="RoAS" value={`${roasVal}x`} detail="Return on ad spend" color="#ffb95f" />
-                    <StatCard label="Spend" value={`$${totalSpend.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`} detail="30-day ad spend" color="#10B981" />
+                    <StatCard label="ACoS Target" value="22%" detail="Target portfolio efficiency" color="#0F3D47" />
+                    <StatCard label="ACoS" value={`${acosPct}%`} detail="Last 30-day average" color="#0F3D47" />
+                    <StatCard label="RoAS" value={`${roasVal}x`} detail="Return on ad spend" color="#F59E7B" />
+                    <StatCard label="Spend" value={`$${totalSpend.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`} detail="30-day ad spend" color="#0F3D47" />
                   </div>
                   <div className="h-64 w-full">
                     <ResponsiveContainer width="100%" height="100%">
@@ -419,7 +422,7 @@ export default function DashboardPage() {
                         <XAxis dataKey="day" tickLine={false} axisLine={false} tick={{ fontSize: 10 }} />
                         <YAxis tickLine={false} axisLine={false} tick={{ fontSize: 10 }} domain={["auto", "auto"]} />
                         <Tooltip />
-                        <Line dataKey="acos" stroke="#007185" strokeWidth={2} dot={false} />
+                        <Line dataKey="acos" stroke="#0F3D47" strokeWidth={2} dot={false} />
                       </LineChart>
                     </ResponsiveContainer>
                   </div>
@@ -433,7 +436,7 @@ export default function DashboardPage() {
       </section>
 
       {/* Autonomous procurement queue */}
-      <Card className="mb-8">
+      <Card className="mb-8 h-full">
         <CardHeader className="flex items-center justify-between">
           <div>
             <h2 className="panel-title">Autonomous procurement queue</h2>
@@ -483,9 +486,9 @@ export default function DashboardPage() {
                     <td className="px-4 py-3">{product.supplier || "Vendor not mapped"}</td>
                     <td className="px-4 py-3">
                       {needsReorder ? (
-                        <Badge className="bg-amber-50 text-amber-800">Needs PO draft</Badge>
+                        <Badge className="bg-soft-peach/20 text-deep-teal border border-soft-peach/30">Needs PO draft</Badge>
                       ) : (
-                        <Badge className="bg-teal-50 text-teal-800">In queue</Badge>
+                        <Badge className="bg-deep-teal/10 text-deep-teal border border-deep-teal/20">In queue</Badge>
                       )}
                     </td>
                     <td className="px-4 py-3">
@@ -514,7 +517,7 @@ export default function DashboardPage() {
       </Card>
 
       {/* Purchase orders awaiting review */}
-      <Card className="mb-8">
+      <Card className="mb-8 h-full">
         <CardHeader className="flex items-center justify-between">
           <div>
             <h2 className="panel-title">Purchase orders awaiting review</h2>
@@ -580,7 +583,7 @@ export default function DashboardPage() {
                 </div>
                 <div>
                   <label className="text-[10px] font-bold text-muted block mb-1">Status</label>
-                  <Badge className="bg-amber-50 text-amber-800 border-amber-200">Pending Review</Badge>
+                  <Badge className="bg-soft-peach/20 text-deep-teal border border-soft-peach/30">Pending Review</Badge>
                 </div>
               </div>
             </div>

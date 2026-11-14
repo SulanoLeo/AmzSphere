@@ -29,10 +29,10 @@ export function Modal({
       dialog.querySelector<HTMLElement>(
         "[autofocus], button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex='-1'])",
       )?.focus();
-    } else if (!open && dialog.open) {
-      dialog.close();
     }
   }, [open]);
+
+  if (!open) return null;
 
   return (
     <dialog
